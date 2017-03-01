@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no, maximum-scale=1.0, user-scalable=no">
+	<title>ORDaR</title>
+	<link rel="stylesheet" type="text/css" href="../../Frontend/css/semantic/dist/semantic.min.css">
+	<link rel="stylesheet" type="text/css" href="../../Frontend/css/style.css">
+	<link rel="stylesheet" type="text/css" href="../../Frontend/css/jquery.range.css">
+	<link rel="stylesheet" type="text/css" href="../../Frontend/css/jquery-ui.css">
+	<script src="../../Frontend/js/jquery.min.js"></script>
+	<script src="../../Frontend/js/jquery-ui.js"></script>
+	<script src="../../Frontend/js/jquery.range-min.js"></script>
+	<script src="../../Frontend/css/semantic/dist/semantic.min.js"></script>
+	<script src="../../Frontend/js/jquery.easyPaginate.js"></script>
+	<script src="../../Frontend/js/search.js"></script>
+
+</head>
+
+<body>
+
+ <div class="ui fixed inverted menu">
+    <div class="ui container">
+      <a href="#" class="header item">
+        ORDaR
+      </a>
+      <a href="accueil" class="item">Home</a>
+      {% if mail %}
+      <a href="logout" class="item">Logout</a>
+      <a href="upload" class="item"  >Upload</a>
+      <a href="mypublications" class="item"  >My dataset</a>
+      {% else %}
+       <a href="login" class="item">Login</a>
+ 	 {% endif %}
+    </div>
+  </div>
+

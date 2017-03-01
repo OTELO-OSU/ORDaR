@@ -1,0 +1,112 @@
+{% include 'head.html.twig' %}
+
+
+<div class="ui internally celled grid">
+  <div class="row">
+      <div class="ui ten wide column centered">
+<h1> {{title}}</h1>
+    <div class="content">
+      {% if accessright == "Closed" %}
+        <div class="ui red label" >{{accessright}}</div>
+      {% elseif accessright == "Embargoed" %}
+        <div class="ui red label" data-tooltip="Available as Open Access after {{publicationdate}}">{{accessright}}</div>
+      {% elseif accessright == "Open" %}
+        <div class="ui green label" >{{accessright}}</div>
+      {% endif %}
+    
+
+
+      <div class="ui blue label">{{creationdate}}</div>
+       <div class="ui blue label">DOI : {{doi}}</div>
+    
+      <div class="row">
+      
+    <div class="meta"><h4>Description:</h4>
+    <span class="data">{{datadescription}}</span>
+    </div><div class="row"></div><h4><i class="user icon"></i>Authors:</h4>
+
+<ul>
+    {% for author in authors %}
+        <li><a href="mailto:{{author.MAIL}}">{{ author.NAME}}</a></li>
+    {% endfor %}
+</ul>
+
+<div class="ui container cards">
+  <div class="ui fluid card"> 
+    <div class="content files">
+      <div class="header ">Files</div>
+      {% if accessright == "Closed" %}
+        {% if files == NULL %}
+         <div class="ui red message">Data are not available</div>
+         {% else %}
+          <div class="ui list">
+       {% for filename in files %}
+          <div class="item">
+            <i class="file icon"></i>
+            <div class="content">
+              <div class="header"><a href="files/{{doi}}/{{filename.DATA_URL}}">{{filename.DATA_URL}}</a><a href="files/{{doi}}/{{filename.DATA_URL}}"><input value="Download" type="button" class="ui button" ></input></a><input value="Preview" onclick="APP.modules.preview.previewdocument('preview/{{doi}}/{{filename.DATA_URL}}')" type="button" class="ui button" ></input></div>
+            </div>
+          </div>
+      {% endfor %}
+      </div>
+        {% endif %}
+      {% elseif accessright == "Embargoed" %}
+        {% if files == NULL %}
+         <div class="ui red message">Data are not available</div>
+         {% else %}
+          <div class="ui list">
+       {% for filename in files %}
+          <div class="item">
+            <i class="file icon"></i>
+            <div class="content">
+            <div class="header"><a href="files/{{doi}}/{{filename.DATA_URL}}">{{filename.DATA_URL}}</a><a href="files/{{doi}}/{{filename.DATA_URL}}"><input value="Download" type="button" class="ui button" ></input></a><input value="Preview"onclick="APP.modules.preview.previewdocument('preview/{{doi}}/{{filename.DATA_URL}}')" type="button" class="ui button" ></input></div>            
+            </div>
+          </div>
+      {% endfor %}
+      </div>
+        {% endif %}     
+      {% elseif accessright == "Open" %}
+      <div class="ui list">
+       {% for filename in files %}
+          <div class="item">
+            <i class="file icon"></i>
+            <div class="content">
+              <div class="header"><a href="files/{{doi}}/{{filename.DATA_URL}}">{{filename.DATA_URL}}</a><a href="files/{{doi}}/{{filename.DATA_URL}}"><input value="Download" type="button" class="ui button" ></input></a><input value="Preview" onclick="APP.modules.preview.previewdocument('preview/{{doi}}/{{filename.DATA_URL}}')" type="button" class="ui button" ></input></div>
+            </div>
+          </div>
+      {% endfor %}
+      </div>
+      {% endif %}
+ 
+      </div>
+    </div>
+     <div class="ui fluid card">
+    <div class="content">
+      <div class="header" >Preview</div>
+      <div id="preview">
+    
+        
+      </div>
+
+      </div>
+    </div>
+  <div class="ui fluid card">
+    <div class="content">
+      <div class="header">Export</div>
+      </div>
+    </div>
+
+    <p>Uploaded on {{uploaddate}}</p></div>
+  </div>
+  </div>
+</div>
+    </div>
+   
+  </div>
+ 
+</div>
+ 
+
+{% include 'footer.html.twig' %}
+
+      

@@ -1,0 +1,57 @@
+<div class="ui grid container">
+<div class="row"></div>
+	<div class="facets " id="facets">
+		
+    <form method="get" action="searchresult">
+	<div class="row"></div>
+	<div class="ui  card  " >
+	  <div class="content ui list" id="samplekind"></div>
+	</div>
+	<div class="ui  card " >
+	  <div class="content ui list" id="authors"></div>
+	</div>
+	<div class="ui  card " >
+	  <div class="content ui list" id="keywords"></div>
+	</div>
+	<div class="ui  card " >
+	  <div class="content ui list" id="scientificfield"></div>
+	</div>
+	<div class="ui  card " >
+	  <div class="content ui list" id="language"></div>
+	</div>
+	<div class="ui  card " >
+	  <div class="content ui list" id="filetype"></div>
+	</div>
+	<div class="ui  card " >
+	  <div class="content ui list" id="accesright"></div>
+	</div>
+	<div class="ui  card " >
+	  <div class="content" id="date"></div>
+	</div>
+		<div class="row"></div>
+
+	
+</div>
+
+    <div class="ten wide centered column">
+		<div class="ui search">
+	  		<div class="ui icon input">
+	   			<input class="prompt" type="text" id="query" name="query" placeholder="Search a term">
+	    		<i class="search icon"></i>
+	  		</div>
+	  		<button class="ui button primary" id="search" >Search</button>
+	  	</div>
+
+
+		<div class="ui message" id="info" ></div>
+
+
+
+    </form>
+
+
+	  	<div id="results" class="ui divided items"></div>
+	</div>
+
+  
+</div>
