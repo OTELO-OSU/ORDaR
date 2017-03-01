@@ -17,14 +17,24 @@ session_start();
 $app->get('/accueil', function (Request $req,Response $responseSlim) {
 $loader = new Twig_Loader_Filesystem('search/templates');
 $twig = new Twig_Environment($loader);
+if ($_SESSION) {
 echo $twig->render('accueil.html.twig',['name'=>$_SESSION['name'],'firstname'=>$_SESSION['firstname'],'mail'=>$_SESSION['mail']]);
+}
+else{
+	echo $twig->render('accueil.html.twig');
+}
 });
 
 
 $app->get('/searchresult', function (Request $req,Response $responseSlim) {
 $loader = new Twig_Loader_Filesystem('search/templates');
 $twig = new Twig_Environment($loader);
+if ($_SESSION) {
 echo $twig->render('accueil.html.twig',['name'=>$_SESSION['name'],'firstname'=>$_SESSION['firstname'],'mail'=>$_SESSION['mail']]);
+}
+else{
+	echo $twig->render('accueil.html.twig');
+}
 });
 
 $app->get('/login', function (Request $req,Response $responseSlim) {
@@ -34,6 +44,13 @@ $app->get('/login', function (Request $req,Response $responseSlim) {
 	$_SESSION['name'] = 'GUIOT';
 	$_SESSION['firstname'] = 'Antho';
 	$_SESSION['mail'] = 'anthony@mail.fr';
+	if ($_SERVER['HTTP_REFERER']) {
+	return $responseSlim->withRedirect($_SERVER['HTTP_REFERER']);
+	}	
+	else{
+		return $responseSlim->withRedirect('accueil');
+	}
+
 });
 
 $app->get('/logout', function (Request $req,Response $responseSlim) {
@@ -41,14 +58,19 @@ $app->get('/logout', function (Request $req,Response $responseSlim) {
 	$twig = new Twig_Environment($loader);
 	//echo $twig->render('login.html.twig');
 	session_destroy();
-		return $responseSlim->withRedirect('accueil');
+	return $responseSlim->withRedirect('accueil');
 
 });
 
 $app->get('/mypublications', function (Request $req,Response $responseSlim) {
     $loader = new Twig_Loader_Filesystem('search/templates');
 	$twig = new Twig_Environment($loader);
+	if ($_SESSION) {
 	echo $twig->render('mypublications.html.twig',['name'=>$_SESSION['name'],'firstname'=>$_SESSION['firstname'],'mail'=>$_SESSION['mail']]);
+	}
+	else{
+		return $responseSlim->withRedirect('accueil');
+	}
 
 });
 
