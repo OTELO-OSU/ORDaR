@@ -125,7 +125,7 @@ $app->get('/record', function (Request $req,Response $responseSlim) {
 	else{
 		$files=NULL;
 	}
-	return $twig->render('viewdatadetails.html.twig', [
+	return @$twig->render('viewdatadetails.html.twig', [
         'doi'=> $response['_id'],'title' => $response['_source']['INTRO']['TITLE'],'datadescription'=>$response['_source']['INTRO']['DATA_DESCRIPTION'],'accessright'=>$response['_source']['INTRO']['ACCESS_RIGHT'],'publicationdate'=> $response['_source']['INTRO']['PUBLICATION_DATE'],'uploaddate'=>$response['_source']['INTRO']['UPLOAD_DATE'],'creationdate'=>$response['_source']['INTRO']['CREATION_DATE'],'authors'=>$response['_source']['INTRO']['FILE_CREATOR'],'files'=> $files,'mail'=>$_SESSION['mail'],
     	]);
 });

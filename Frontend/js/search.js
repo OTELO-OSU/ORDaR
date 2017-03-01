@@ -544,6 +544,7 @@ return{
 	checkformbutton:function(){
 			    if (document.getElementById('embargoed').checked) {
 			        document.getElementById('date_end').style.display = 'block';
+			        document.getElementById('date_end').required = true;
 			    }
 			    else document.getElementById('date_end').style.display = 'none';
 	}
