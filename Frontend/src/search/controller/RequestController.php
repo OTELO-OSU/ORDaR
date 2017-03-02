@@ -66,7 +66,7 @@ class RequestController
 		        }
 		    }
 		}';
-		$url='http://localhost/ordar/_search?q='.$query.'&size=10000';
+		$url='http://localhost/ordar/_search?q='.$query.'%20AND%20NOT%20INTRO.ACCESS_RIGHT:Unpublished&size=10000';
 		$curlopt=array(CURLOPT_RETURNTRANSFER => true,
 			  CURLOPT_PORT=> 9200,
 			  CURLOPT_ENCODING => "",

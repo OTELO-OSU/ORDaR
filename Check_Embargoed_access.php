@@ -10,7 +10,6 @@ foreach ( $cursor as $id => $value )
     $embargoeddate=$value['INTRO']['PUBLICATION_DATE'];
     if($embargoeddate <= $now) {
     	$update = $collection->update(array("_id" => $value['_id']), array('$set' => array("INTRO.ACCESS_RIGHT" => "Open")));
-
     }
 
 }

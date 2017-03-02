@@ -108,9 +108,14 @@ $app->post('/upload', function (Request $req,Response $responseSlim) {
 
 $app->post('/getmypublications', function (Request $req,Response $responseSlim) {
 	$request = new RequestApi();
-	$authors= $_SESSION['name'];
-	$response=$request->getPublicationsofUser($authors);
+	if ($_SESSION) {
+		$authors= $_SESSION['name'];
+		$response=$request->getPublicationsofUser($authors);
    	return $response;
+	}
+	else{
+		return $responseSlim->withRedirect('accueil');
+	}
 });
 
 $app->get('/record', function (Request $req,Response $responseSlim) {
