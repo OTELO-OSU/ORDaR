@@ -31,7 +31,7 @@ class RequestController
 		        },
 		        "keywords" : { 
 		            "terms" : { 
-		              "field" : "INTRO.KEYWORDS"
+		              "field" : "INTRO.KEYWORDS.NAME"
 		            }
 		        },
 				 "authors" : { 
@@ -187,13 +187,20 @@ class RequestController
 
 
 		}
-			
+
+		elseif ($response["_source"]["INTRO"]["ACCESS_RIGHT"]=="Unpublished"){
+			foreach ($response["_source"]["INTRO"]["FILE_CREATOR"] as $key => $value) {
+					if (@$_SESSION["mail"]==$value["MAIL"]) {
+						return $response;
+					}
+					else{
+					return false;
+				
+				}
+			}
 
 
-
-
-
-		//return $response;
+		}
 		
 	}
 

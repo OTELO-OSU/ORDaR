@@ -41,9 +41,9 @@ $app->get('/login', function (Request $req,Response $responseSlim) {
 	$loader = new Twig_Loader_Filesystem('search/templates');
 	$twig = new Twig_Environment($loader);
 	echo $twig->render('login.html.twig');
-	$_SESSION['name'] = 'GUIOT';
+	$_SESSION['name'] = 'Kanbar';
 	$_SESSION['firstname'] = 'Antho';
-	$_SESSION['mail'] = 'anthony@mail.fr';
+	$_SESSION['mail'] = 'hussein.kanbar@univ-lorraine.fr';
 	if ($_SERVER['HTTP_REFERER']) {
 	return $responseSlim->withRedirect($_SERVER['HTTP_REFERER']);
 	}	
@@ -130,10 +130,47 @@ $app->get('/record', function (Request $req,Response $responseSlim) {
 	else{
 		$files=NULL;
 	}
+	if ($response==false) {
+				return $responseSlim->withRedirect('accueil');
+
+	}
+	else{
 	return @$twig->render('viewdatadetails.html.twig', [
         'doi'=> $response['_id'],'title' => $response['_source']['INTRO']['TITLE'],'datadescription'=>$response['_source']['INTRO']['DATA_DESCRIPTION'],'accessright'=>$response['_source']['INTRO']['ACCESS_RIGHT'],'publicationdate'=> $response['_source']['INTRO']['PUBLICATION_DATE'],'uploaddate'=>$response['_source']['INTRO']['UPLOAD_DATE'],'creationdate'=>$response['_source']['INTRO']['CREATION_DATE'],'authors'=>$response['_source']['INTRO']['FILE_CREATOR'],'files'=> $files,'mail'=>$_SESSION['mail'],
     	]);
+	}
 });
+
+
+$app->get('/editrecord', function (Request $req,Response $responseSlim) {
+	$loader = new Twig_Loader_Filesystem('search/templates');
+	$twig = new Twig_Environment($loader);
+   	$request= new RequestApi();
+   	$id  = $req->getparam('id');
+	$response=$request->get_info_for_dataset($id);
+	if ($response==false) {
+		return $responseSlim->withRedirect('accueil');
+	}
+	else{
+	return @$twig->render('edit_dataset.html.twig', [
+        'doi'=>$id,'title' => $response['_source']['INTRO']['TITLE'],'description'=>$response['_source']['INTRO']['DATA_DESCRIPTION'],'creation_date'=>$response['_source']['INTRO']['CREATION_DATE'],'authors'=>$response['_source']['INTRO']['FILE_CREATOR'],'keywords'=>$response['_source']['INTRO']['KEYWORDS'],'sample_kind'=>$response['_source']['INTRO']['SAMPLE_KIND'][0]['NAME'],'scientific_field'=>$response['_source']['INTRO']['SCIENTIFIC_FIELD'][0]['NAME'],'institutions'=>$response['_source']['INTRO']['INSTITUTION'],'language'=>$response['_source']['INTRO']['LANGUAGE']
+    	]);
+	}
+});
+
+$app->post('/editrecord/{doi}', function (Request $req,Response $responseSlim,$args) {
+	 $loader = new Twig_Loader_Filesystem('search/templates');
+	$twig = new Twig_Environment($loader);
+   	$save = new Save();
+   	$doi  = $args['doi'];
+   	$request= new RequestApi();
+	$response=$request->get_info_for_dataset($doi);
+	$collection=$response['_type'];
+	$response=$save->Editdatasheet($collection);
+});
+
+
+
 
 $app->post('/getinfo', function (Request $req,Response $responseSlim) {
     $request = new RequestApi();

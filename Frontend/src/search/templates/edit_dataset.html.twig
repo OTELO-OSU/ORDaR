@@ -3,19 +3,15 @@
 <div class="ui grid container">
 <div class="row"></div>
 <div class="row">
-<h1> New upload </h1>
+<h1> Edit document </h1>
 	
 </div>
 <div class="ui ten wide column centered">
 	
 
-<form class="ui form" method="post" enctype="multipart/form-data" >
- <div class="required field">
-<input type="file" name="file[]" required="">
-</div>
-<div class="required field" id="files">
-</div>
-<input type="button" class="ui button active" id="addfile" value="Add a file"></input>
+<form class="ui form" action="editrecord/{{doi}}" method="post" enctype="multipart/form-data" >
+
+
 <div class="row"></div>
   <div class="required field">
       <label>Creation date</label>
@@ -33,34 +29,53 @@
   </div>
 <div class="required field">
     <label>Language</label>
- <select class="ui dropdown" name="language">
-	  <option value="0">FRENCH</option>
-	  <option value="1">ENGLISH</option>
-</select>
+    {% if language == "ENGLISH" %}
+       <select class="ui dropdown" name="language">
+      	  <option value="1">ENGLISH</option>
+          <option value="0">FRENCH</option>
+       </select>
+    {% else %}
+     <select class="ui dropdown" name="language">
+      <option value="0">FRENCH</option>
+      <option value="1">ENGLISH</option>
+      </select>
+    {% endif %}
 
   </div>  
   <div class="required field">
     <label>Authors</label>
-<div class="required field" id="items">
-	 <div><input type="text" value="{{firstname}}" name="authors-firstname[]" placeholder="First Name" required=""></div>
-	 <div><input type="text" value="{{name}}" name="authors-name[]" placeholder="Family Name, Given names" required=""></div>
-	 <div><input type="email" name="authors-email[]" value="{{mail}}" placeholder="Email" required></div>
-</div>
+    {% for author in authors %}
+   <div class="required field" id="items">
+   <div>
+	 <div><input type="text" value="{{author.FIRST_NAME}}" name="authors-firstname[]" placeholder="First Name" required=""></div>
+	 <div><input type="text" value="{{author.NAME}}" name="authors-name[]" placeholder="Family Name, Given names" required=""></div>
+	 <div><input type="email" name="authors-email[]" value="{{author.MAIL}}" placeholder="Email" required></div>
+   <button class="ui icon button delete"><i class="remove icon"></i></button>
+   </div>
+   </div>
+   {% endfor %}
   <input type="button" class="ui button active" id="addauthors" value="Add a new authors"></input>
+
   </div>
-    <div class=" field">
+  <div class=" field">
       <label>Institution</label>
   <div class=" field" id="institution">
-     <div><input type="text" name="institution[]" placeholder="Institution"></div>
+    {% for institution in institutions %}
+     <div><input type="text" name="institution[]" value="{{institution.NAME}}" placeholder="Institution"><button class="ui icon button delete"><i class="remove icon"></i></button></div>
+     {% endfor %}
   </div>
+    <input type="button" class="ui button active" id="addinstitution" value="Add a new institution"></input>
+
 </div>
-  <input type="button" class="ui button active" id="addinstitution" value="Add a new institution"></input>
   <div class=" field">
     <label>Keywords</label>
 <div class=" field" id="keywords">
-	 <div><input type="text" name="keywords[]" placeholder="Keyword"></div>
+  {% for keyword in keywords %}
+	 <div><input type="text" name="keywords[]" value="{{keyword.NAME}}" placeholder="Keyword"><button class="ui icon button delete"><i class="remove icon"></i></button></div>
+   {% endfor %}
+
 </div>
-  <input type="button" class="ui button active" id="addkeywords" value="Add a new keyword"></input>
+     <input type="button" class="ui button active" id="addkeywords" value="Add a new keyword"></input>
   </div>
    <div class="required field">
     <label>Description</label>
@@ -71,16 +86,20 @@
     <input type="text" name="scientific_field" value="{{scientific_field}}" required=""></input>
   </div>
 
+
  <div class="field" >
   <label>Station</label>
       <div id="stations">
-
+    <div>
+      
   <div> <input type="text" name="station_name[]" placeholder="Name" ></input></div>
   <div><input type="text" name="station_abbreviation[]"  placeholder="abbreviation"></input></div>
   <div><input type="text" name="station_longitude[]" placeholder="longitude" ></input></div>
   <div><input type="text" name="station_latitude[]"  placeholder="latitude"></input></div>
   <div><input type="text" name="station_elevation[]"  placeholder="elevation"></input></div>
   <div><textarea name="station_description[]"  placeholder="description"></textarea></div>
+  <button class="ui icon button delete"><i class="remove icon"></i></button>
+    </div>
   </div>
   <input type="button" class="ui button active" id="addstation" value="Add a new station"></input>
   </div>
@@ -90,13 +109,15 @@
   <div class="required field" >
     <label>Measurement</label>
     <div id="measurements">
+    <div>
     <div><input type="text" name="measurement_nature[]" placeholder="Nature" required="" ></input></div>
     <div><input type="text" name="measurement_abbreviation[]"  placeholder="Abbreviation" required=""></div></input>
     <div><input type="text" name="measurement_unit[]" placeholder="Unit" required=""></input></div>
+    <button class="ui icon button delete"><i class="remove icon"></i></button>
+    </div>
     </div>
     <input type="button" class="ui button active" id="addmeasurement" value="Add a new measurement"></input>
   </div>
-
 
 
    <div class="required field">

@@ -111,6 +111,97 @@ class SaveController
 	 if ($key=="scientific_field") {
 	 	$array["SCIENTIFIC_FIELD"]["NAME"]=$value;
 	 }
+	  if ($key=="station_name") {
+	 	if (count($value)>1) {
+	 		foreach ($value as $key => $value) {
+	 		$array["STATION"][$key]["NAME"]=$value;
+	 		}
+	 	}
+	 	else{
+	 	$array["STATION"][0]["NAME"]=$value[0];
+	 	}
+	 }
+	 if ($key=="station_abbreviation") {
+	 	if (count($value)>1) {
+	 		foreach ($value as $key => $value) {
+	 		$array["STATION"][$key]["ABBREVIATION"]=$value;
+	 		}
+	 	}
+	 	else{
+	 	$array["STATION"][0]["ABBREVIATION"]=$value[0];
+	 	}
+	 }
+	 if ($key=="station_longitude") {
+	 	if (count($value)>1) {
+	 		foreach ($value as $key => $value) {
+	 		$array["STATION"][$key]["LONGITUDE"]=$value;
+	 		}
+	 	}
+	 	else{
+	 	$array["STATION"][0]["LONGITUDE"]=$value[0];
+	 	}
+	 }
+	 if ($key=="station_latitude") {
+	 	if (count($value)>1) {
+	 		foreach ($value as $key => $value) {
+	 		$array["STATION"][$key]["LATITUDE"]=$value;
+	 		}
+	 	}
+	 	else{
+	 	$array["STATION"][0]["LATITUDE"]=$value[0];
+	 	}
+	 }
+	 if ($key=="station_elevation") {
+	 	if (count($value)>1) {
+	 		foreach ($value as $key => $value) {
+	 		$array["STATION"][$key]["ELEVATION"]=$value;
+	 		}
+	 	}
+	 	else{
+	 	$array["STATION"][0]["ELEVATION"]=$value[0];
+	 	}
+	 }
+	 if ($key=="station_description") {
+	 	if (count($value)>1) {
+	 		foreach ($value as $key => $value) {
+	 		$array["STATION"][$key]["DESCRIPTION"]=$value;
+	 		}
+	 	}
+	 	else{
+	 	$array["STATION"][0]["DESCRIPTION"]=$value[0];
+	 	}
+	 }
+
+	  if ($key=="measurement_nature") {
+	 	if (count($value)>1) {
+	 		foreach ($value as $key => $value) {
+	 		$array["MEASUREMENT"][$key]["NATURE"]=$value;
+	 		}
+	 	}
+	 	else{
+	 	$array["MEASUREMENT"][0]["NATURE"]=$value[0];
+	 	}
+	 }
+	  if ($key=="measurement_abbreviation") {
+	 	if (count($value)>1) {
+	 		foreach ($value as $key => $value) {
+	 		$array["MEASUREMENT"][$key]["ABBREVIATION"]=$value;
+	 		}
+	 	}
+	 	else{
+	 	$array["MEASUREMENT"][0]["ABBREVIATION"]=$value[0];
+	 	}
+	 }
+	 if ($key=="measurement_unit") {
+	 	if (count($value)>1) {
+	 		foreach ($value as $key => $value) {
+	 		$array["MEASUREMENT"][$key]["UNIT"]=$value;
+	 		}
+	 	}
+	 	else{
+	 	$array["MEASUREMENT"][0]["UNIT"]=$value[0];
+	 	}
+	 }
 	
 	  if ($key=="authors-firstname") {
 	 	if (count($value)>1) {
@@ -145,7 +236,7 @@ class SaveController
 	 if ($key=="keywords") {
 	 	if (count($value<=3)) {
 	 		foreach ($value as $key => $value) {
-	 		$array["KEYWORDS"][$key]=$value;
+	 		$array["KEYWORDS"][$key]["NAME"]=$value;
 	 		}
 	 	}
 	 	else{
@@ -174,7 +265,7 @@ class SaveController
 	 
 	 }
 	 if ($key=="sample_kind") {
-	 	$array["SAMPLE_KIND"]["NAME"]=$value;
+	 	$array["SAMPLE_KIND"][]["NAME"]=$value;
 	 }
 
 	 $array["UPLOAD_DATE"]=date('Y-m-d');
@@ -216,6 +307,205 @@ class SaveController
 				return true;
 	}
 	
+
+
+
+	function Editdatasheet($collection)
+	{
+	$this->db = new MongoClient("mongodb://localhost:27017");
+	foreach ($_POST as $key => $value){	
+	 if ($key=="creation_date") {
+	 $array["CREATION_DATE"]=$value;
+	 }
+	 if ($key=="title") {
+	 $array["TITLE"]=$value;
+	 }
+	 if ($key=="language") {
+	 	if ($value=='0') {
+	 		$language="FRENCH";
+	 	}
+	 	if ($value=="1") {
+	 		$language="FRENCH";
+	 	}
+	 	$array["LANGUAGE"]=$language;
+	 }
+	 if ($key=="scientific_field") {
+	 	$array["SCIENTIFIC_FIELD"]["NAME"]=$value;
+	 }
+	
+	  if ($key=="station_name") {
+	 	if (count($value)>1) {
+	 		foreach ($value as $key => $value) {
+	 		$array["STATION"][$key]["NAME"]=$value;
+	 		}
+	 	}
+	 	else{
+	 	$array["STATION"][0]["NAME"]=$value[0];
+	 	}
+	 }
+	 if ($key=="station_abbreviation") {
+	 	if (count($value)>1) {
+	 		foreach ($value as $key => $value) {
+	 		$array["STATION"][$key]["ABBREVIATION"]=$value;
+	 		}
+	 	}
+	 	else{
+	 	$array["STATION"][0]["ABBREVIATION"]=$value[0];
+	 	}
+	 }
+	 if ($key=="station_longitude") {
+	 	if (count($value)>1) {
+	 		foreach ($value as $key => $value) {
+	 		$array["STATION"][$key]["LONGITUDE"]=$value;
+	 		}
+	 	}
+	 	else{
+	 	$array["STATION"][0]["LONGITUDE"]=$value[0];
+	 	}
+	 }
+	 if ($key=="station_latitude") {
+	 	if (count($value)>1) {
+	 		foreach ($value as $key => $value) {
+	 		$array["STATION"][$key]["LATITUDE"]=$value;
+	 		}
+	 	}
+	 	else{
+	 	$array["STATION"][0]["LATITUDE"]=$value[0];
+	 	}
+	 }
+	 if ($key=="station_elevation") {
+	 	if (count($value)>1) {
+	 		foreach ($value as $key => $value) {
+	 		$array["STATION"][$key]["ELEVATION"]=$value;
+	 		}
+	 	}
+	 	else{
+	 	$array["STATION"][0]["ELEVATION"]=$value[0];
+	 	}
+	 }
+	 if ($key=="station_description") {
+	 	if (count($value)>1) {
+	 		foreach ($value as $key => $value) {
+	 		$array["STATION"][$key]["DESCRIPTION"]=$value;
+	 		}
+	 	}
+	 	else{
+	 	$array["STATION"][0]["DESCRIPTION"]=$value[0];
+	 	}
+	 }
+
+	  if ($key=="measurement_nature") {
+	 	if (count($value)>1) {
+	 		foreach ($value as $key => $value) {
+	 		$array["MEASUREMENT"][$key]["NATURE"]=$value;
+	 		}
+	 	}
+	 	else{
+	 	$array["MEASUREMENT"][0]["NATURE"]=$value[0];
+	 	}
+	 }
+	  if ($key=="measurement_abbreviation") {
+	 	if (count($value)>1) {
+	 		foreach ($value as $key => $value) {
+	 		$array["MEASUREMENT"][$key]["ABBREVIATION"]=$value;
+	 		}
+	 	}
+	 	else{
+	 	$array["MEASUREMENT"][0]["ABBREVIATION"]=$value[0];
+	 	}
+	 }
+	 if ($key=="measurement_unit") {
+	 	if (count($value)>1) {
+	 		foreach ($value as $key => $value) {
+	 		$array["MEASUREMENT"][$key]["UNIT"]=$value;
+	 		}
+	 	}
+	 	else{
+	 	$array["MEASUREMENT"][0]["UNIT"]=$value[0];
+	 	}
+	 }
+
+	 if ($key=="authors-firstname") {
+		 	if (count($value)>1) {
+		 		foreach ($value as $key => $value) {
+		 		$array["FILE_CREATOR"][$key]["FIRST_NAME"]=$value;
+		 		}
+		 	}
+		 	else{
+		 	$array["FILE_CREATOR"][0]["FIRST_NAME"]=$value[0];
+		 	}
+		 }
+
+
+	 if ($key=="authors-name") {
+	 	if (count($value)>1) {
+	 		foreach ($value as $key => $value) {
+	 		$array["FILE_CREATOR"][$key]["NAME"]=$value;
+	 		}
+	 	}
+	 	else{
+	 	$array["FILE_CREATOR"][0]["NAME"]=$value[0];
+	 	}
+	 }
+	  if ($key=="authors-email") {
+	 	if (count($value)>1) {
+	 		foreach ($value as $key => $value) {
+	 		$array["FILE_CREATOR"][$key]["MAIL"]=$value;
+	 		}
+	 	}
+	 	else{
+	 	$array["FILE_CREATOR"][0]["MAIL"]=$value[0];
+	 	}
+	 }
+	 if ($key=="keywords") {
+	 	if (count($value<=3)) {
+	 		foreach ($value as $key => $value) {
+	 		$array["KEYWORDS"][$key]["NAME"]=$value;
+	 		}
+	 	}
+	 	else{
+	 	$array["KEYWORDS"]["NAME"]=$value;
+	 	}
+	 }
+	 if ($key=="description") {
+	 $array["DATA_DESCRIPTION"]=$value;
+	 }
+	 if ($key=="license") {
+	 $array["LICENSE"]=$value;
+	 }
+	 if ($key=="access_right") {
+	 $array["ACCESS_RIGHT"]=$value;
+	 	if ($value=="Closed") {
+	 		$publication_date="9999-12-31";
+	 	}
+	 	if ($value=="Open") {
+	 		$publication_date=date('Y-m-d');
+	 	}
+	 	if ($value=="Embargoed") {
+	 		$publication_date=$_POST["publication_date"];
+	 	}
+
+	 $array["PUBLICATION_DATE"]=$publication_date;
+	 
+	 }
+	 if ($key=="sample_kind") {
+	 	$array["SAMPLE_KIND"][]["NAME"]=$value;
+	 }
+
+	 $array["UPLOAD_DATE"]=date('Y-m-d');
+	 
+	}
+        $doi=rand(5, 15000);
+		var_dump($array);
+		$collectionObject = $this->db->selectCollection('ORDaR', $collection);
+		$json=array('_id' => $doi, "INTRO" => $array);//voir pour DOI
+		$collectionObject->insert($json);
+		return true;
+	}
+	
+
+
+
 
 }
 
