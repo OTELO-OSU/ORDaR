@@ -91,7 +91,7 @@ $app->post('/upload', function (Request $req,Response $responseSlim) {
    	$save = new Save();
 	$response=$save->Newdatasheet();
 	if ($response==false) {
-		echo $twig->render('upload.html.twig',['name'=>$_SESSION['name'],'mail'=>$_SESSION['mail'],'firstname'=>$_SESSION['firstname'],'creation_date'=>$_POST['creation_date'],'language'=> $_POST['language'],'sample_kind'=> $_POST['sample_kind'],'title'=> $_POST['title'],'description'=> $_POST['description'],'scientific_field' => $_POST['scientific_field']]);
+		echo $twig->render('upload.html.twig',['error'=>"true",'name'=>$_SESSION['name'],'mail'=>$_SESSION['mail'],'firstname'=>$_SESSION['firstname'],'creation_date'=>$_POST['creation_date'],'language'=> $_POST['language'],'sample_kind'=> $_POST['sample_kind'],'title'=> $_POST['title'],'description'=> $_POST['description'],'scientific_field' => $_POST['scientific_field']]);
 	}
 	else{
 	$loader = new Twig_Loader_Filesystem('search/templates');
@@ -153,20 +153,21 @@ $app->get('/editrecord', function (Request $req,Response $responseSlim) {
 	}
 	else{
 	return @$twig->render('edit_dataset.html.twig', [
-        'doi'=>$id,'title' => $response['_source']['INTRO']['TITLE'],'description'=>$response['_source']['INTRO']['DATA_DESCRIPTION'],'creation_date'=>$response['_source']['INTRO']['CREATION_DATE'],'authors'=>$response['_source']['INTRO']['FILE_CREATOR'],'keywords'=>$response['_source']['INTRO']['KEYWORDS'],'sample_kind'=>$response['_source']['INTRO']['SAMPLE_KIND'][0]['NAME'],'scientific_field'=>$response['_source']['INTRO']['SCIENTIFIC_FIELD'][0]['NAME'],'institutions'=>$response['_source']['INTRO']['INSTITUTION'],'language'=>$response['_source']['INTRO']['LANGUAGE']
+        'doi'=>$id,'title' => $response['_source']['INTRO']['TITLE'],'description'=>$response['_source']['INTRO']['DATA_DESCRIPTION'],'creation_date'=>$response['_source']['INTRO']['CREATION_DATE'],'sampling_date'=>$response['_source']['INTRO']['SAMPLING_DATE'][0],'authors'=>$response['_source']['INTRO']['FILE_CREATOR'],'keywords'=>$response['_source']['INTRO']['KEYWORDS'],'sample_kind'=>$response['_source']['INTRO']['SAMPLE_KIND'][0]['NAME'],'scientific_field'=>$response['_source']['INTRO']['SCIENTIFIC_FIELD']['NAME'],'institutions'=>$response['_source']['INTRO']['INSTITUTION'],'language'=>$response['_source']['INTRO']['LANGUAGE'],'stations'=>$response['_source']['INTRO']['STATION'],'measurements'=>$response['_source']['INTRO']['MEASUREMENT']
     	]);
 	}
 });
 
 $app->post('/editrecord/{doi}', function (Request $req,Response $responseSlim,$args) {
-	 $loader = new Twig_Loader_Filesystem('search/templates');
+	$loader = new Twig_Loader_Filesystem('search/templates');
 	$twig = new Twig_Environment($loader);
    	$save = new Save();
    	$doi  = $args['doi'];
    	$request= new RequestApi();
 	$response=$request->get_info_for_dataset($doi);
 	$collection=$response['_type'];
-	$response=$save->Editdatasheet($collection);
+	$doi= $response['_id'];
+	$response=$save->Editdatasheet($collection,$doi);
 });
 
 
@@ -177,6 +178,18 @@ $app->post('/getinfo', function (Request $req,Response $responseSlim) {
 	$query  = $req->getparam('query');
 	$response=$request->requestToAPI($query);
    	return $response;
+});
+
+$app->get('/remove/{doi}', function (Request $req,Response $responseSlim,$args) {
+	$save = new Save();
+	$request= new RequestApi();
+   	$doi  = $args['doi'];
+   	$response=$request->get_info_for_dataset($doi);
+	$collection=$response['_type'];
+	$doi= $response['_id'];
+   	$save->removeUnpublishedDatasheet($collection,$doi);
+
+
 });
 
 

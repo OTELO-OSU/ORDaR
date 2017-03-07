@@ -15,12 +15,17 @@
 <div class="row"></div>
   <div class="required field">
       <label>Creation date</label>
-  <input type="text" class="date" name="creation_date" value="{{creation_date}}" required="">
+  <input type="text" class="date" name="creation_date" value="{{creation_date}}" placeholder="Creation date" required="">
   </div>
    <div class="field">
 
     <label>Sample kind</label>
     <input type="text" name="sample_kind" placeholder="Sample kind" value="{{sample_kind}}">
+  </div>
+     <div class="field">
+
+    <label>Sampling date</label>
+    <input type="text"  class="date" name="sampling_date" placeholder="Sampling date" value="{{sampling_date}}">
   </div>
   <div class="required field">
 
@@ -83,23 +88,24 @@
   </div>
    <div class="required field">
     <label>Scientific field</label>
-    <input type="text" name="scientific_field" value="{{scientific_field}}" required=""></input>
+    <input type="text" name="scientific_field" value="{{scientific_field}}" placeholder="Scientific field" required=""></input>
   </div>
 
 
  <div class="field" >
   <label>Station</label>
       <div id="stations">
-    <div>
-      
-  <div> <input type="text" name="station_name[]" placeholder="Name" ></input></div>
-  <div><input type="text" name="station_abbreviation[]"  placeholder="abbreviation"></input></div>
-  <div><input type="text" name="station_longitude[]" placeholder="longitude" ></input></div>
-  <div><input type="text" name="station_latitude[]"  placeholder="latitude"></input></div>
-  <div><input type="text" name="station_elevation[]"  placeholder="elevation"></input></div>
-  <div><textarea name="station_description[]"  placeholder="description"></textarea></div>
-  <button class="ui icon button delete"><i class="remove icon"></i></button>
-    </div>
+        {% for station in stations %}
+          <div>
+        <div> <input type="text" value="{{station.NAME}}" name="station_name[]" placeholder="Name" ></input></div>
+        <div><input type="text" value="{{station.ABBREVIATION}}" name="station_abbreviation[]"  placeholder="abbreviation"></input></div>
+        <div><input type="text" value="{{station.LONGITUDE}}" name="station_longitude[]" placeholder="longitude" ></input></div>
+        <div><input type="text" value="{{station.LATITUDE}}" name="station_latitude[]"  placeholder="latitude"></input></div>
+        <div><input type="text" value="{{station.ELEVATION}}" name="station_elevation[]"  placeholder="elevation"></input></div>
+        <div><textarea name="station_description[]"  placeholder="description">{{station.DESCRIPTION}}</textarea></div>
+        <button class="ui icon button delete"><i class="remove icon"></i></button>
+          </div>
+        {% endfor %}
   </div>
   <input type="button" class="ui button active" id="addstation" value="Add a new station"></input>
   </div>
@@ -109,12 +115,14 @@
   <div class="required field" >
     <label>Measurement</label>
     <div id="measurements">
+    {% for measurement in measurements %}
     <div>
-    <div><input type="text" name="measurement_nature[]" placeholder="Nature" required="" ></input></div>
-    <div><input type="text" name="measurement_abbreviation[]"  placeholder="Abbreviation" required=""></div></input>
-    <div><input type="text" name="measurement_unit[]" placeholder="Unit" required=""></input></div>
+    <div><input type="text" value="{{measurement.NATURE}}" name="measurement_nature[]" placeholder="Nature" required="" ></input></div>
+    <div><input type="text" value="{{measurement.ABBREVIATION}}" name="measurement_abbreviation[]"  placeholder="Abbreviation" required=""></div></input>
+    <div><input type="text" value="{{measurement.UNIT}}" name="measurement_unit[]" placeholder="Unit" required=""></input></div>
     <button class="ui icon button delete"><i class="remove icon"></i></button>
     </div>
+    {% endfor %}
     </div>
     <input type="button" class="ui button active" id="addmeasurement" value="Add a new measurement"></input>
   </div>

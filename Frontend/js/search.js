@@ -542,17 +542,14 @@ return{
 });
 
 $("#addinstitution").click(function (e) {
-	i = $('#institution input').length;
-	if (i <= 2) {
  	$("#institution").append('<div><input type="text" name="institution[]"  placeholder="Institution"><button class="ui icon button delete"><i class="remove icon"></i></button></div>'); 
-	}
 });
 	$("body").on("click", ".delete", function (e) {
 	$(this).parent("div").remove();
 });
 
 $("#addstation").click(function (e) {
- 	$("#stations").append('<div> <div> <input type="text" name="station_name[]" placeholder="Name" ></input></div><div><input type="text" name="station_abbreviation[]"  placeholder="abbreviation"></input></div><div><input type="text" name="station_longitude[]" placeholder="longitude" ></input></div><div><input type="text" name="station_latitude[]"  placeholder="latitude"></input></div><div><input type="text" name="station_elevation[]"  placeholder="elevation"></input></div><div><textarea name="station_description[]"  placeholder="description"></textarea></div><button class="ui icon button delete"><i class="remove icon"></i></button></div>'); });
+ 	$("#stations").append('<div> <div> <input type="text" name="station_name[]" placeholder="Name" ></input></div>  <div><input type="text" name="station_coordonate_system[]"  placeholder="coordonate sytem"></input></div><div><input type="text" name="station_abbreviation[]"  placeholder="abbreviation"></input></div><div><input type="text" name="station_longitude[]" placeholder="longitude" ></input></div><div><input type="text" name="station_latitude[]"  placeholder="latitude"></input></div><div><input type="text" name="station_elevation[]"  placeholder="elevation"></input></div><div><textarea name="station_description[]"  placeholder="description"></textarea></div><button class="ui icon button delete"><i class="remove icon"></i></button></div>'); });
 	$("body").on("click", ".delete", function (e) {
 	$(this).parent("div").remove();
 });

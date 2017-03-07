@@ -43,234 +43,304 @@ class SaveController
     		$mime="application/pdf";
     		header('Content-Type:  '.$mime);
     	}
-    	elseif ($mime=='txt' OR $mime=='csv') {
-    		$readfile=readfile($file);
-    		$mime="text/plain";
-    		header('Content-Type:  '.$mime);
-    	}
-    	elseif($mime=='png'){
-			$readfile=readfile($file);
-    		$mime="image/png";
-    		header('Content-Type:  '.$mime);
-    	}
-    	elseif($mime =='zip'){
-    		     $mime="application/zip";
-    		    // $url = $file;
-			header('Content-Type:  '.$mime);
+    	elseif ($mime=='csv') {
+    		$file = fopen($file, "r");
+			$firstTimeHeader = true;
+			$firstTimeBody = true;
+			echo "<table border='1'>";
+			while(! feof($file))
+			{
+			    $data = fgetcsv($file);
+			    
+			    if($firstTimeHeader)
+			    {
+			        echo "<thead>";
+			    }
+			    else
+			    {
+			        if($firstTimeBody)
+			        {
+			            echo "</thead>";
+			            echo "<tbody>";
+			            $firstTimeBody = false;
+			        }
+			    }
+			    echo "<tr>";
+			    
+			    foreach ($data as $value)
+			    {
+			        if($firstTimeHeader)
+			        {
+			            echo "<th>" . $value . "</th>";
+			        }
+			        else
+			        {
+			            echo "<td>" . $value . "</td>";
+			        }
+			    }
+			    
+			    echo "</tr>";
+			    if($firstTimeHeader)
+			    {
+			        $firstTimeHeader = false;
+			    }
+			}
+			echo "</table>";
+		    	}
+		    	elseif ($mime=='txt' OR $mime=='sh' OR $mime=='py') {
+		    	$readfile=readfile($file);
+    			$mime="text/plain";
+    			header('Content-Type:  '.$mime);
+		    	}
+		    	elseif($mime=='png'){
+					$readfile=readfile($file);
+		    		$mime="image/png";
+		    		header('Content-Type:  '.$mime);
+		    	}
+		    	elseif($mime=='jpg'){
+					$readfile=readfile($file);
+		    		$mime="image/jpg";
+		    		header('Content-Type:  '.$mime);
+		    	}
+		    	elseif($mime=='gif'){
+					$readfile=readfile($file);
+		    		$mime="image/gif";
+		    		header('Content-Type:  '.$mime);
+		    	}
 
-    	
+		    	else{
+		    		echo "<h1>Cannot preview file</h1> <p>Sorry, we are unfortunately not able to preview this file.<p>";
+		    		$readfile=false;
+		    		header('Content-Type:  text/html');
+		    	}
 
-    	}
-
-    	else{
-    		echo "<h1>Cannot preview file</h1> <p>Sorry, we are unfortunately not able to preview this file.<p>";
-    		$readfile=false;
-    		header('Content-Type:  text/html');
-    	}
-
-		if ($readfile==false) {
-			return false;
-		}
-		else{
-			return true;
-		}
-		exit;
-		}
+				if ($readfile==false) {
+					return false;
+				}
+				else{
+					return true;
+				}
+				exit;
+				}
 		
 	}
-
-	function mime2ext($mime){
-  $all_mimes = '{"png":["image\/png","image\/x-png"],"bmp":["image\/bmp","image\/x-bmp","image\/x-bitmap","image\/x-xbitmap","image\/x-win-bitmap","image\/x-windows-bmp","image\/ms-bmp","image\/x-ms-bmp","application\/bmp","application\/x-bmp","application\/x-win-bitmap"],"gif":["image\/gif"],"jpeg":["image\/jpeg","image\/pjpeg"],"xspf":["application\/xspf+xml"],"vlc":["application\/videolan"],"wmv":["video\/x-ms-wmv","video\/x-ms-asf"],"au":["audio\/x-au"],"ac3":["audio\/ac3"],"flac":["audio\/x-flac"],"ogg":["audio\/ogg","video\/ogg","application\/ogg"],"kmz":["application\/vnd.google-earth.kmz"],"kml":["application\/vnd.google-earth.kml+xml"],"rtx":["text\/richtext"],"rtf":["text\/rtf"],"jar":["application\/java-archive","application\/x-java-application","application\/x-jar"],"zip":["application\/x-zip","application\/zip","application\/x-zip-compressed","application\/s-compressed","multipart\/x-zip"],"7zip":["application\/x-compressed"],"xml":["application\/xml","text\/xml"],"svg":["image\/svg+xml"],"3g2":["video\/3gpp2"],"3gp":["video\/3gp","video\/3gpp"],"mp4":["video\/mp4"],"m4a":["audio\/x-m4a"],"f4v":["video\/x-f4v"],"flv":["video\/x-flv"],"webm":["video\/webm"],"aac":["audio\/x-acc"],"m4u":["application\/vnd.mpegurl"],"pdf":["application\/pdf"],"pptx":["application\/vnd.openxmlformats-officedocument.presentationml.presentation"],"ppt":["application\/powerpoint","application\/vnd.ms-powerpoint","application\/vnd.ms-office","application\/msword"],"docx":["application\/vnd.openxmlformats-officedocument.wordprocessingml.document"],"xlsx":["application\/vnd.openxmlformats-officedocument.spreadsheetml.sheet","application\/vnd.ms-excel"],"xl":["application\/excel"],"xls":["application\/msexcel","application\/x-msexcel","application\/x-ms-excel","application\/x-excel","application\/x-dos_ms_excel","application\/xls","application\/x-xls"],"xsl":["text\/xsl"],"mpeg":["video\/mpeg"],"mov":["video\/quicktime"],"avi":["video\/x-msvideo","video\/msvideo","video\/avi","application\/x-troff-msvideo"],"movie":["video\/x-sgi-movie"],"log":["text\/x-log"],"txt":["text\/plain"],"css":["text\/css"],"html":["text\/html"],"wav":["audio\/x-wav","audio\/wave","audio\/wav"],"xhtml":["application\/xhtml+xml"],"tar":["application\/x-tar"],"tgz":["application\/x-gzip-compressed"],"psd":["application\/x-photoshop","image\/vnd.adobe.photoshop"],"exe":["application\/x-msdownload"],"js":["application\/x-javascript"],"mp3":["audio\/mpeg","audio\/mpg","audio\/mpeg3","audio\/mp3"],"rar":["application\/x-rar","application\/rar","application\/x-rar-compressed"],"gzip":["application\/x-gzip"],"hqx":["application\/mac-binhex40","application\/mac-binhex","application\/x-binhex40","application\/x-mac-binhex40"],"cpt":["application\/mac-compactpro"],"bin":["application\/macbinary","application\/mac-binary","application\/x-binary","application\/x-macbinary"],"oda":["application\/oda"],"ai":["application\/postscript"],"smil":["application\/smil"],"mif":["application\/vnd.mif"],"wbxml":["application\/wbxml"],"wmlc":["application\/wmlc"],"dcr":["application\/x-director"],"dvi":["application\/x-dvi"],"gtar":["application\/x-gtar"],"php":["application\/x-httpd-php","application\/php","application\/x-php","text\/php","text\/x-php","application\/x-httpd-php-source"],"swf":["application\/x-shockwave-flash"],"sit":["application\/x-stuffit"],"z":["application\/x-compress"],"mid":["audio\/midi"],"aif":["audio\/x-aiff","audio\/aiff"],"ram":["audio\/x-pn-realaudio"],"rpm":["audio\/x-pn-realaudio-plugin"],"ra":["audio\/x-realaudio"],"rv":["video\/vnd.rn-realvideo"],"jp2":["image\/jp2","video\/mj2","image\/jpx","image\/jpm"],"tiff":["image\/tiff"],"eml":["message\/rfc822"],"pem":["application\/x-x509-user-cert","application\/x-pem-file"],"p10":["application\/x-pkcs10","application\/pkcs10"],"p12":["application\/x-pkcs12"],"p7a":["application\/x-pkcs7-signature"],"p7c":["application\/pkcs7-mime","application\/x-pkcs7-mime"],"p7r":["application\/x-pkcs7-certreqresp"],"p7s":["application\/pkcs7-signature"],"crt":["application\/x-x509-ca-cert","application\/pkix-cert"],"crl":["application\/pkix-crl","application\/pkcs-crl"],"pgp":["application\/pgp"],"gpg":["application\/gpg-keys"],"rsa":["application\/x-pkcs7"],"ics":["text\/calendar"],"zsh":["text\/x-scriptzsh"],"cdr":["application\/cdr","application\/coreldraw","application\/x-cdr","application\/x-coreldraw","image\/cdr","image\/x-cdr","zz-application\/zz-winassoc-cdr"],"wma":["audio\/x-ms-wma"],"vcf":["text\/x-vcard"],"srt":["text\/srt"],"vtt":["text\/vtt"],"ico":["image\/x-icon","image\/x-ico","image\/vnd.microsoft.icon"],"csv":["text\/x-comma-separated-values","text\/comma-separated-values","application\/vnd.msexcel","text\/csv"],"json":["application\/json","text\/json"]}';
-  $all_mimes = json_decode($all_mimes,true);
-  foreach ($all_mimes as $key => $value) {
-    if(array_search($mime,$value) !== false) return $key;
-  }
-  return false;
-}
 
 
 	function Newdatasheet()
 	{
 	$this->db = new MongoClient("mongodb://localhost:27017");
-	foreach ($_POST as $key => $value){	
-	 if ($key=="creation_date") {
-	 $array["CREATION_DATE"]=$value;
-	 }
-	 if ($key=="title") {
-	 $array["TITLE"]=$value;
-	 }
-	 if ($key=="language") {
-	 	if ($value=='0') {
-	 		$language="French";
-	 	}
-	 	if ($value=="1") {
-	 		$language="English";
-	 	}
-	 	$array["LANGUAGE"]=$language;
-	 }
-	 if ($key=="scientific_field") {
-	 	$array["SCIENTIFIC_FIELD"]["NAME"]=$value;
-	 }
-	  if ($key=="station_name") {
-	 	if (count($value)>1) {
-	 		foreach ($value as $key => $value) {
-	 		$array["STATION"][$key]["NAME"]=$value;
-	 		}
-	 	}
-	 	else{
-	 	$array["STATION"][0]["NAME"]=$value[0];
-	 	}
-	 }
-	 if ($key=="station_abbreviation") {
-	 	if (count($value)>1) {
-	 		foreach ($value as $key => $value) {
-	 		$array["STATION"][$key]["ABBREVIATION"]=$value;
-	 		}
-	 	}
-	 	else{
-	 	$array["STATION"][0]["ABBREVIATION"]=$value[0];
-	 	}
-	 }
-	 if ($key=="station_longitude") {
-	 	if (count($value)>1) {
-	 		foreach ($value as $key => $value) {
-	 		$array["STATION"][$key]["LONGITUDE"]=$value;
-	 		}
-	 	}
-	 	else{
-	 	$array["STATION"][0]["LONGITUDE"]=$value[0];
-	 	}
-	 }
-	 if ($key=="station_latitude") {
-	 	if (count($value)>1) {
-	 		foreach ($value as $key => $value) {
-	 		$array["STATION"][$key]["LATITUDE"]=$value;
-	 		}
-	 	}
-	 	else{
-	 	$array["STATION"][0]["LATITUDE"]=$value[0];
-	 	}
-	 }
-	 if ($key=="station_elevation") {
-	 	if (count($value)>1) {
-	 		foreach ($value as $key => $value) {
-	 		$array["STATION"][$key]["ELEVATION"]=$value;
-	 		}
-	 	}
-	 	else{
-	 	$array["STATION"][0]["ELEVATION"]=$value[0];
-	 	}
-	 }
-	 if ($key=="station_description") {
-	 	if (count($value)>1) {
-	 		foreach ($value as $key => $value) {
-	 		$array["STATION"][$key]["DESCRIPTION"]=$value;
-	 		}
-	 	}
-	 	else{
-	 	$array["STATION"][0]["DESCRIPTION"]=$value[0];
-	 	}
-	 }
-
-	  if ($key=="measurement_nature") {
-	 	if (count($value)>1) {
-	 		foreach ($value as $key => $value) {
-	 		$array["MEASUREMENT"][$key]["NATURE"]=$value;
-	 		}
-	 	}
-	 	else{
-	 	$array["MEASUREMENT"][0]["NATURE"]=$value[0];
-	 	}
-	 }
-	  if ($key=="measurement_abbreviation") {
-	 	if (count($value)>1) {
-	 		foreach ($value as $key => $value) {
-	 		$array["MEASUREMENT"][$key]["ABBREVIATION"]=$value;
-	 		}
-	 	}
-	 	else{
-	 	$array["MEASUREMENT"][0]["ABBREVIATION"]=$value[0];
-	 	}
-	 }
-	 if ($key=="measurement_unit") {
-	 	if (count($value)>1) {
-	 		foreach ($value as $key => $value) {
-	 		$array["MEASUREMENT"][$key]["UNIT"]=$value;
-	 		}
-	 	}
-	 	else{
-	 	$array["MEASUREMENT"][0]["UNIT"]=$value[0];
-	 	}
-	 }
-	
-	  if ($key=="authors-firstname") {
-	 	if (count($value)>1) {
-	 		foreach ($value as $key => $value) {
-	 		$array["FILE_CREATOR"][$key]["FIRST_NAME"]=$value;
-	 		}
-	 	}
-	 	else{
-	 	$array["FILE_CREATOR"][0]["FIRST_NAME"]=$value[0];
-	 	}
-	 }
-	 if ($key=="authors-name") {
-	 	if (count($value)>1) {
-	 		foreach ($value as $key => $value) {
-	 		$array["FILE_CREATOR"][$key]["NAME"]=$value;
-	 		}
-	 	}
-	 	else{
-	 	$array["FILE_CREATOR"][0]["NAME"]=$value[0];
-	 	}
-	 }
-	  if ($key=="authors-email") {
-	 	if (count($value)>1) {
-	 		foreach ($value as $key => $value) {
-	 		$array["FILE_CREATOR"][$key]["MAIL"]=$value;
-	 		}
-	 	}
-	 	else{
-	 	$array["FILE_CREATOR"][0]["MAIL"]=$value[0];
-	 	}
-	 }
-	 if ($key=="keywords") {
-	 	if (count($value<=3)) {
-	 		foreach ($value as $key => $value) {
-	 		$array["KEYWORDS"][$key]["NAME"]=$value;
-	 		}
-	 	}
-	 	else{
-	 	$array["KEYWORDS"]["NAME"]=$value;
-	 	}
-	 }
-	 if ($key=="description") {
-	 $array["DATA_DESCRIPTION"]=$value;
-	 }
-	 if ($key=="license") {
-	 $array["LICENSE"]=$value;
-	 }
-	 if ($key=="access_right") {
-	 $array["ACCESS_RIGHT"]=$value;
-	 	if ($value=="Closed") {
-	 		$publication_date="9999-12-31";
-	 	}
-	 	if ($value=="Open") {
-	 		$publication_date=date('Y-m-d');
-	 	}
-	 	if ($value=="Embargoed") {
-	 		$publication_date=$_POST["publication_date"];
-	 	}
-
-	 $array["PUBLICATION_DATE"]=$publication_date;
-	 
-	 }
-	 if ($key=="sample_kind") {
-	 	$array["SAMPLE_KIND"][]["NAME"]=$value;
-	 }
-
-	 $array["UPLOAD_DATE"]=date('Y-m-d');
-	 
+	$required = array('title','creation_date','language','authors-name','authors-firstname','authors-email','description','scientific_field','measurement_nature','measurement_abbreviation','measurement_unit','license');
+	foreach($required as $field) {
+	  if (empty($_POST[$field])) {
+	    $error = true;
+	  }
 	}
+	if ($error) {
+	}
+	else{
+		foreach ($_POST as $key => $value){	
+		 if ($key=="creation_date") {
+		 $array["CREATION_DATE"]=$value;
+		 }
+		 if ($key=="title") {
+		 $array["TITLE"]=$value;
+		 }
+		  if ($key=="sampling_date") {
+		 $array["SAMPLING_DATE"][]=$value;
+		 }
+		 if ($key=="language") {
+		 	if ($value=='0') {
+		 		$language="French";
+		 	}
+		 	if ($value=="1") {
+		 		$language="English";
+		 	}
+		 	$array["LANGUAGE"]=$language;
+		 }
+		 if ($key=="scientific_field") {
+		 	$array["SCIENTIFIC_FIELD"]["NAME"]=$value;
+		 }
+		  if ($key=="station_name") {
+		 	if (count($value)>1) {
+		 		foreach ($value as $key => $value) {
+		 		$array["STATION"][$key]["NAME"]=$value;
+		 		}
+		 	}
+		 	else{
+		 	$array["STATION"][0]["NAME"]=$value[0];
+		 	}
+		 }
+		  if ($key=="station_coordonate_system") {
+			 	if (count($value)>1) {
+			 		foreach ($value as $key => $value) {
+			 		$array["STATION"][$key]["COORDONATE_SYSTEM"]=$value;
+			 		}
+			 	}
+			 	else{
+			 	$array["STATION"][0]["ABBREVIATION"]=$value[0];
+			 	}
+			 }
+		 if ($key=="station_abbreviation") {
+		 	if (count($value)>1) {
+		 		foreach ($value as $key => $value) {
+		 		$array["STATION"][$key]["ABBREVIATION"]=$value;
+		 		}
+		 	}
+		 	else{
+		 	$array["STATION"][0]["ABBREVIATION"]=$value[0];
+		 	}
+		 }
+		 if ($key=="station_longitude") {
+		 	if (count($value)>1) {
+		 		foreach ($value as $key => $value) {
+		 		$array["STATION"][$key]["LONGITUDE"]=$value;
+		 		}
+		 	}
+		 	else{
+		 	$array["STATION"][0]["LONGITUDE"]=$value[0];
+		 	}
+		 }
+		 if ($key=="station_latitude") {
+		 	if (count($value)>1) {
+		 		foreach ($value as $key => $value) {
+		 		$array["STATION"][$key]["LATITUDE"]=$value;
+		 		}
+		 	}
+		 	else{
+		 	$array["STATION"][0]["LATITUDE"]=$value[0];
+		 	}
+		 }
+		 if ($key=="station_elevation") {
+		 	if (count($value)>1) {
+		 		foreach ($value as $key => $value) {
+		 		$array["STATION"][$key]["ELEVATION"]=$value;
+		 		}
+		 	}
+		 	else{
+		 	$array["STATION"][0]["ELEVATION"]=$value[0];
+		 	}
+		 }
+		 if ($key=="station_description") {
+		 	if (count($value)>1) {
+		 		foreach ($value as $key => $value) {
+		 		$array["STATION"][$key]["DESCRIPTION"]=$value;
+		 		}
+		 	}
+		 	else{
+		 	$array["STATION"][0]["DESCRIPTION"]=$value[0];
+		 	}
+		 }
+
+		  if ($key=="measurement_nature") {
+		 	if (count($value)>1) {
+		 		foreach ($value as $key => $value) {
+		 		$array["MEASUREMENT"][$key]["NATURE"]=$value;
+		 		}
+		 	}
+		 	else{
+		 	$array["MEASUREMENT"][0]["NATURE"]=$value[0];
+		 	}
+		 }
+		  if ($key=="measurement_abbreviation") {
+		 	if (count($value)>1) {
+		 		foreach ($value as $key => $value) {
+		 		$array["MEASUREMENT"][$key]["ABBREVIATION"]=$value;
+		 		}
+		 	}
+		 	else{
+		 	$array["MEASUREMENT"][0]["ABBREVIATION"]=$value[0];
+		 	}
+		 }
+		 if ($key=="measurement_unit") {
+		 	if (count($value)>1) {
+		 		foreach ($value as $key => $value) {
+		 		$array["MEASUREMENT"][$key]["UNIT"]=$value;
+		 		}
+		 	}
+		 	else{
+		 	$array["MEASUREMENT"][0]["UNIT"]=$value[0];
+		 	}
+		 }
+
+		 if ($key=="sample_kind") {
+		 	$array["SAMPLE_KIND"][]["NAME"]=$value;
+		 }
+		   if ($key=="institution") {
+		 	if (count($value)>1) {
+		 		foreach ($value as $key => $value) {
+		 		$array["INSTITUTION"][$key]["NAME"]=$value;
+		 		}
+		 	}
+		 	else{
+		 	$array["INSTITUTION"][0]["NAME"]=$value[0];
+		 	}
+		 }
+		
+		  if ($key=="authors-firstname") {
+		 	if (count($value)>1) {
+		 		foreach ($value as $key => $value) {
+		 		$array["FILE_CREATOR"][$key]["FIRST_NAME"]=$value;
+		 		}
+		 	}
+		 	else{
+		 	$array["FILE_CREATOR"][0]["FIRST_NAME"]=$value[0];
+		 	}
+		 }
+		 if ($key=="authors-name") {
+		 	if (count($value)>1) {
+		 		foreach ($value as $key => $value) {
+		 		$array["FILE_CREATOR"][$key]["NAME"]=$value;
+		 		}
+		 	}
+		 	else{
+		 	$array["FILE_CREATOR"][0]["NAME"]=$value[0];
+		 	}
+		 }
+		  if ($key=="authors-email") {
+		 	if (count($value)>1) {
+		 		foreach ($value as $key => $value) {
+		 		$array["FILE_CREATOR"][$key]["MAIL"]=$value;
+		 		}
+		 	}
+		 	else{
+		 	$array["FILE_CREATOR"][0]["MAIL"]=$value[0];
+		 	}
+		 }
+		 if ($key=="keywords") {
+		 	if (count($value<=3)) {
+		 		foreach ($value as $key => $value) {
+		 		$array["KEYWORDS"][$key]["NAME"]=$value;
+		 		}
+		 	}
+		 	else{
+		 	$array["KEYWORDS"]["NAME"]=$value;
+		 	}
+		 }
+		 if ($key=="description") {
+		 $array["DATA_DESCRIPTION"]=$value;
+		 }
+		 if ($key=="license") {
+		 $array["LICENSE"]=$value;
+		 }
+		 if ($key=="access_right") {
+		 $array["ACCESS_RIGHT"]=$value;
+		 	if ($value=="Closed") {
+		 		$publication_date="9999-12-31";
+		 	}
+		 	if ($value=="Open") {
+		 		$publication_date=date('Y-m-d');
+		 	}
+		 	if ($value=="Embargoed") {
+		 		$publication_date=$_POST["publication_date"];
+		 	}
+
+		 $array["PUBLICATION_DATE"]=$publication_date;
+		 
+		 }
+
+		 $array["UPLOAD_DATE"]=date('Y-m-d');
+		 
+		}
         $doi=rand(5, 15000);
 	for($i=0; $i<count($_FILES['file']['name']); $i++) {
 		$repertoireDestination = UPLOAD_FOLDER;
@@ -285,14 +355,10 @@ class SaveController
 				mkdir($repertoireDestination.$doi);
 			}
 			    if (rename($_FILES["file"]["tmp_name"][$i],$repertoireDestination.$doi."/".$nomDestination)) {
-			
-			                $type=mime_content_type($repertoireDestination.$doi."/".$nomDestination);
-			                $filetype=self::mime2ext($type);
-							if ($filetype==!false) {
-					            $filetypes=$filetype;
-					        }
-					         else {
-					            $filetypes='unknow';
+					        $extension= new \SplFileInfo($repertoireDestination.$doi."/".$nomDestination);
+					        $filetypes=$extension->getExtension();
+					        if (strlen($filetypes)==0 OR strlen($filetypes)>4) {
+					        	$filetypes='unknow';
 					        }
 				$data["FILES"][$i]["FILETYPE"]=$filetypes;
 				$collection ="Manual_Depot";
@@ -306,205 +372,287 @@ class SaveController
 				$collectionObject->insert($json);
 				return true;
 	}
+}
 	
 
 
 
-	function Editdatasheet($collection)
+	function Editdatasheet($collection,$doi)
 	{
 	$this->db = new MongoClient("mongodb://localhost:27017");
-	foreach ($_POST as $key => $value){	
-	 if ($key=="creation_date") {
-	 $array["CREATION_DATE"]=$value;
-	 }
-	 if ($key=="title") {
-	 $array["TITLE"]=$value;
-	 }
-	 if ($key=="language") {
-	 	if ($value=='0') {
-	 		$language="FRENCH";
-	 	}
-	 	if ($value=="1") {
-	 		$language="FRENCH";
-	 	}
-	 	$array["LANGUAGE"]=$language;
-	 }
-	 if ($key=="scientific_field") {
-	 	$array["SCIENTIFIC_FIELD"]["NAME"]=$value;
-	 }
-	
-	  if ($key=="station_name") {
-	 	if (count($value)>1) {
-	 		foreach ($value as $key => $value) {
-	 		$array["STATION"][$key]["NAME"]=$value;
-	 		}
-	 	}
-	 	else{
-	 	$array["STATION"][0]["NAME"]=$value[0];
-	 	}
-	 }
-	 if ($key=="station_abbreviation") {
-	 	if (count($value)>1) {
-	 		foreach ($value as $key => $value) {
-	 		$array["STATION"][$key]["ABBREVIATION"]=$value;
-	 		}
-	 	}
-	 	else{
-	 	$array["STATION"][0]["ABBREVIATION"]=$value[0];
-	 	}
-	 }
-	 if ($key=="station_longitude") {
-	 	if (count($value)>1) {
-	 		foreach ($value as $key => $value) {
-	 		$array["STATION"][$key]["LONGITUDE"]=$value;
-	 		}
-	 	}
-	 	else{
-	 	$array["STATION"][0]["LONGITUDE"]=$value[0];
-	 	}
-	 }
-	 if ($key=="station_latitude") {
-	 	if (count($value)>1) {
-	 		foreach ($value as $key => $value) {
-	 		$array["STATION"][$key]["LATITUDE"]=$value;
-	 		}
-	 	}
-	 	else{
-	 	$array["STATION"][0]["LATITUDE"]=$value[0];
-	 	}
-	 }
-	 if ($key=="station_elevation") {
-	 	if (count($value)>1) {
-	 		foreach ($value as $key => $value) {
-	 		$array["STATION"][$key]["ELEVATION"]=$value;
-	 		}
-	 	}
-	 	else{
-	 	$array["STATION"][0]["ELEVATION"]=$value[0];
-	 	}
-	 }
-	 if ($key=="station_description") {
-	 	if (count($value)>1) {
-	 		foreach ($value as $key => $value) {
-	 		$array["STATION"][$key]["DESCRIPTION"]=$value;
-	 		}
-	 	}
-	 	else{
-	 	$array["STATION"][0]["DESCRIPTION"]=$value[0];
-	 	}
-	 }
-
-	  if ($key=="measurement_nature") {
-	 	if (count($value)>1) {
-	 		foreach ($value as $key => $value) {
-	 		$array["MEASUREMENT"][$key]["NATURE"]=$value;
-	 		}
-	 	}
-	 	else{
-	 	$array["MEASUREMENT"][0]["NATURE"]=$value[0];
-	 	}
-	 }
-	  if ($key=="measurement_abbreviation") {
-	 	if (count($value)>1) {
-	 		foreach ($value as $key => $value) {
-	 		$array["MEASUREMENT"][$key]["ABBREVIATION"]=$value;
-	 		}
-	 	}
-	 	else{
-	 	$array["MEASUREMENT"][0]["ABBREVIATION"]=$value[0];
-	 	}
-	 }
-	 if ($key=="measurement_unit") {
-	 	if (count($value)>1) {
-	 		foreach ($value as $key => $value) {
-	 		$array["MEASUREMENT"][$key]["UNIT"]=$value;
-	 		}
-	 	}
-	 	else{
-	 	$array["MEASUREMENT"][0]["UNIT"]=$value[0];
-	 	}
-	 }
-
-	 if ($key=="authors-firstname") {
+	$required = array('title','creation_date','language','authors-name','authors-firstname','authors-email','description','scientific_field','measurement_nature','measurement_abbreviation','measurement_unit','license');
+	foreach($required as $field) {
+	  if (empty($_POST[$field])) {
+	    $error = true;
+	  }
+	}
+	if ($error) {
+		//echo "all are required";
+	}
+	else{
+		foreach ($_POST as $key => $value){	
+		 if ($key=="creation_date") {
+		 $array["CREATION_DATE"]=$value;
+		 }
+		 if ($key=="title") {
+		 $array["TITLE"]=$value;
+		 }
+		 if ($key=="sampling_date") {
+		 $array["SAMPLING_DATE"][]=$value;
+		 }
+		 if ($key=="language") {
+		 	if ($value=='0') {
+		 		$language="FRENCH";
+		 	}
+		 	if ($value=="1") {
+		 		$language="FRENCH";
+		 	}
+		 	$array["LANGUAGE"]=$language;
+		 }
+		 if ($key=="scientific_field") {
+		 	$array["SCIENTIFIC_FIELD"]["NAME"]=$value;
+		 }
+		
+		  if ($key=="station_name") {
 		 	if (count($value)>1) {
 		 		foreach ($value as $key => $value) {
-		 		$array["FILE_CREATOR"][$key]["FIRST_NAME"]=$value;
+		 		$array["STATION"][$key]["NAME"]=$value;
 		 		}
 		 	}
 		 	else{
-		 	$array["FILE_CREATOR"][0]["FIRST_NAME"]=$value[0];
+		 	$array["STATION"][0]["NAME"]=$value[0];
+		 	}
+		 }
+		  if ($key=="station_coordonate_system") {
+		 	if (count($value)>1) {
+		 		foreach ($value as $key => $value) {
+		 		$array["STATION"][$key]["COORDONATE_SYSTEM"]=$value;
+		 		}
+		 	}
+		 	else{
+		 	$array["STATION"][0]["ABBREVIATION"]=$value[0];
+		 	}
+		 }
+		 if ($key=="station_abbreviation") {
+		 	if (count($value)>1) {
+		 		foreach ($value as $key => $value) {
+		 		$array["STATION"][$key]["ABBREVIATION"]=$value;
+		 		}
+		 	}
+		 	else{
+		 	$array["STATION"][0]["ABBREVIATION"]=$value[0];
+		 	}
+		 }
+		 if ($key=="station_longitude") {
+		 	if (count($value)>1) {
+		 		foreach ($value as $key => $value) {
+		 		$array["STATION"][$key]["LONGITUDE"]=$value;
+		 		}
+		 	}
+		 	else{
+		 	$array["STATION"][0]["LONGITUDE"]=$value[0];
+		 	}
+		 }
+		 if ($key=="station_latitude") {
+		 	if (count($value)>1) {
+		 		foreach ($value as $key => $value) {
+		 		$array["STATION"][$key]["LATITUDE"]=$value;
+		 		}
+		 	}
+		 	else{
+		 	$array["STATION"][0]["LATITUDE"]=$value[0];
+		 	}
+		 }
+		 if ($key=="station_elevation") {
+		 	if (count($value)>1) {
+		 		foreach ($value as $key => $value) {
+		 		$array["STATION"][$key]["ELEVATION"]=$value;
+		 		}
+		 	}
+		 	else{
+		 	$array["STATION"][0]["ELEVATION"]=$value[0];
+		 	}
+		 }
+		 if ($key=="station_description") {
+		 	if (count($value)>1) {
+		 		foreach ($value as $key => $value) {
+		 		$array["STATION"][$key]["DESCRIPTION"]=$value;
+		 		}
+		 	}
+		 	else{
+		 	$array["STATION"][0]["DESCRIPTION"]=$value[0];
 		 	}
 		 }
 
+		  if ($key=="measurement_nature") {
+		 	if (count($value)>1) {
+		 		foreach ($value as $key => $value) {
+		 		$array["MEASUREMENT"][$key]["NATURE"]=$value;
+		 		}
+		 	}
+		 	else{
+		 	$array["MEASUREMENT"][0]["NATURE"]=$value[0];
+		 	}
+		 }
+		  if ($key=="measurement_abbreviation") {
+		 	if (count($value)>1) {
+		 		foreach ($value as $key => $value) {
+		 		$array["MEASUREMENT"][$key]["ABBREVIATION"]=$value;
+		 		}
+		 	}
+		 	else{
+		 	$array["MEASUREMENT"][0]["ABBREVIATION"]=$value[0];
+		 	}
+		 }
+		 if ($key=="measurement_unit") {
+		 	if (count($value)>1) {
+		 		foreach ($value as $key => $value) {
+		 		$array["MEASUREMENT"][$key]["UNIT"]=$value;
+		 		}
+		 	}
+		 	else{
+		 	$array["MEASUREMENT"][0]["UNIT"]=$value[0];
+		 	}
+		 }
 
-	 if ($key=="authors-name") {
-	 	if (count($value)>1) {
-	 		foreach ($value as $key => $value) {
-	 		$array["FILE_CREATOR"][$key]["NAME"]=$value;
-	 		}
-	 	}
-	 	else{
-	 	$array["FILE_CREATOR"][0]["NAME"]=$value[0];
-	 	}
-	 }
-	  if ($key=="authors-email") {
-	 	if (count($value)>1) {
-	 		foreach ($value as $key => $value) {
-	 		$array["FILE_CREATOR"][$key]["MAIL"]=$value;
-	 		}
-	 	}
-	 	else{
-	 	$array["FILE_CREATOR"][0]["MAIL"]=$value[0];
-	 	}
-	 }
-	 if ($key=="keywords") {
-	 	if (count($value<=3)) {
-	 		foreach ($value as $key => $value) {
-	 		$array["KEYWORDS"][$key]["NAME"]=$value;
-	 		}
-	 	}
-	 	else{
-	 	$array["KEYWORDS"]["NAME"]=$value;
-	 	}
-	 }
-	 if ($key=="description") {
-	 $array["DATA_DESCRIPTION"]=$value;
-	 }
-	 if ($key=="license") {
-	 $array["LICENSE"]=$value;
-	 }
-	 if ($key=="access_right") {
-	 $array["ACCESS_RIGHT"]=$value;
-	 	if ($value=="Closed") {
-	 		$publication_date="9999-12-31";
-	 	}
-	 	if ($value=="Open") {
-	 		$publication_date=date('Y-m-d');
-	 	}
-	 	if ($value=="Embargoed") {
-	 		$publication_date=$_POST["publication_date"];
-	 	}
+		   if ($key=="institution") {
+		 	if (count($value)>1) {
+		 		foreach ($value as $key => $value) {
+		 		$array["INSTITUTION"][$key]["NAME"]=$value;
+		 		}
+		 	}
+		 	else{
+		 	$array["INSTITUTION"][0]["NAME"]=$value[0];
+		 	}
+		 }
+		 if ($key=="sample_kind") {
+		 	$array["SAMPLE_KIND"][]["NAME"]=$value;
+		 }
 
-	 $array["PUBLICATION_DATE"]=$publication_date;
-	 
-	 }
-	 if ($key=="sample_kind") {
-	 	$array["SAMPLE_KIND"][]["NAME"]=$value;
-	 }
+		 if ($key=="authors-firstname") {
+			 	if (count($value)>1) {
+			 		foreach ($value as $key => $value) {
+			 		$array["FILE_CREATOR"][$key]["FIRST_NAME"]=$value;
+			 		}
+			 	}
+			 	else{
+			 	$array["FILE_CREATOR"][0]["FIRST_NAME"]=$value[0];
+			 	}
+			 }
 
-	 $array["UPLOAD_DATE"]=date('Y-m-d');
-	 
+
+		 if ($key=="authors-name") {
+		 	if (count($value)>1) {
+		 		foreach ($value as $key => $value) {
+		 		$array["FILE_CREATOR"][$key]["NAME"]=$value;
+		 		}
+		 	}
+		 	else{
+		 	$array["FILE_CREATOR"][0]["NAME"]=$value[0];
+		 	}
+		 }
+		  if ($key=="authors-email") {
+		 	if (count($value)>1) {
+		 		foreach ($value as $key => $value) {
+		 		$array["FILE_CREATOR"][$key]["MAIL"]=$value;
+		 		}
+		 	}
+		 	else{
+		 	$array["FILE_CREATOR"][0]["MAIL"]=$value[0];
+		 	}
+		 }
+		 if ($key=="keywords") {
+		 	if (count($value<=3)) {
+		 		foreach ($value as $key => $value) {
+		 		$array["KEYWORDS"][$key]["NAME"]=$value;
+		 		}
+		 	}
+		 	else{
+		 	$array["KEYWORDS"]["NAME"]=$value;
+		 	}
+		 }
+		 if ($key=="description") {
+		 $array["DATA_DESCRIPTION"]=$value;
+		 }
+		 if ($key=="license") {
+		 $array["LICENSE"]=$value;
+		 }
+		 if ($key=="access_right") {
+		 $array["ACCESS_RIGHT"]=$value;
+		 	if ($value=="Closed") {
+		 		$publication_date="9999-12-31";
+		 	}
+		 	if ($value=="Open") {
+		 		$publication_date=date('Y-m-d');
+		 	}
+		 	if ($value=="Embargoed") {
+		 		$publication_date=$_POST["publication_date"];
+		 	}
+
+		 $array["PUBLICATION_DATE"]=$publication_date;
+		 
+		 }
+
+		 $array["UPLOAD_DATE"]=date('Y-m-d');
+		 
+		}
 	}
-        $doi=rand(5, 15000);
-		var_dump($array);
 		$collectionObject = $this->db->selectCollection('ORDaR', $collection);
-		$json=array('_id' => $doi, "INTRO" => $array);//voir pour DOI
-		$collectionObject->insert($json);
+		if (is_numeric($doi)==true) {
+			$doi=$doi;
+
+		// Quand les vrai DOI seront implanté il faudra modifier ici
+
+		$collectionObject->update(array('_id' => new \MongoInt32($doi)),array('$set'=>array("INTRO" => $array)));
+		}
+		else{
+	        $newdoi=rand(5, 15000);
+	        mkdir(UPLOAD_FOLDER.$newdoi,0777,true);
+	        $query=array('_id' => $doi);
+	       	$cursor = $collectionObject->find($query);
+	       	foreach ($cursor as $key => $value) {
+	       		$ORIGINAL_DATA_URL=$value["DATA"]["FILES"][0]["ORIGINAL_DATA_URL"];
+	       	}
+	        unlink($ORIGINAL_DATA_URL);
+	        //unlink(UPLOAD_FOLDER.$doi.'/'.$doi.'_INTRO.csv')
+			//$collectionObject->insert(array('_id' => new \MongoInt32($doi)),array("INTRO" => $array));
+	        rename(UPLOAD_FOLDER.$doi.'/'.$doi.'_DATA.csv',UPLOAD_FOLDER.$newdoi."/".$doi.'_DATA.csv');
+	        rmdir(UPLOAD_FOLDER.$doi);
+			$collectionObject->update(array('_id' => $doi),array('$set'=>array("INTRO" => $array)));
+			$olddata = $collectionObject->find(array('_id' => $doi));
+			foreach ($olddata as $key => $value) {
+				$INTRO=$value["INTRO"];
+				$value["DATA"]["FILES"][0]["ORIGINAL_DATA_URL"]=NULL;
+				$DATA=$value["DATA"];
+			}
+			$collectionObject->remove(array('_id' => $doi));
+			$collectionObject->insert(array('_id' => $newdoi,"INTRO" => $INTRO,"DATA" => $DATA));	
+		}
 		return true;
 	}
 	
+function removeUnpublishedDatasheet($collection,$doi){
+	if (is_numeric($doi)==true) {
+		print("test");
+	}
+	else{
+	$this->db = new MongoClient("mongodb://localhost:27017");
+	$collectionObject = $this->db->selectCollection('ORDaR', $collection);
+	$query=array('_id' => $doi);
+   	$cursor = $collectionObject->find($query);
+   	foreach ($cursor as $key => $value) {
+   		$ORIGINAL_DATA_URL=$value["DATA"]["FILES"][0]["ORIGINAL_DATA_URL"];
+   	}
+   	unlink($ORIGINAL_DATA_URL);
+	$collectionObject->remove(array('_id' => $doi));
+	unlink(UPLOAD_FOLDER.$doi.'/'.$doi.'_DATA.csv');
+	rmdir(UPLOAD_FOLDER.$doi);
+	print("erase");
+	}
 
 
+
+}
 
 
 }

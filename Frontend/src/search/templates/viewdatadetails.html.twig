@@ -35,7 +35,7 @@
   <div class="ui fluid card"> 
     <div class="content files">
       <div class="header ">Files</div>
-      {% if accessright == "Closed" %}
+      {% if accessright == "Closed" or accessright == "Unpublished" %}
         {% if files == NULL %}
          <div class="ui red message">Data are not available</div>
          {% else %}
@@ -102,6 +102,11 @@
 </div>
     </div>
     </div>
+      {% if accessright == "Unpublished" %}
+       </div> <a href="remove/{{doi}}"><div class="ui right floated primary button" >Remove<i class="remove icon"></i></div></a
+  </div>
+
+      {% endif %}
 
    </div> <a href="editrecord?id={{doi}}"><div class="ui right floated primary button" >Edit<i class="right chevron icon"></i></div></a
   </div>
