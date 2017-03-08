@@ -71,8 +71,11 @@
     <div class=" field">
       <label>Institution</label>
   <div class=" field" id="institution">
-    <div class="ui dropdown fluid search selection  optgroup" ">
-      <input type="hidden" name="institution[]">
+  {% if institutions %}
+    {% for institution in institutions %}
+    <div>
+    <div class="ui dropdown fluid search selection  optgroup institution" ">
+      <input value="{{institution.NAME}}" type="hidden" name="institution[]">
     <div  class="text">Select</div>
     <i class="dropdown icon"></i>
     <div class="menu">
@@ -121,13 +124,75 @@
           <div class="item">RENATER Réseau national pour la technologie, l'enseignement et la recherche</div>
     </div>
   </div>
+      <button class="ui icon button delete"><i class="remove icon"></i></button>
+</div>
+
+    {% endfor %}
+    {% else %}
+     <div>
+     <div class="ui dropdown fluid search selection  optgroup institution" ">
+      <input value="{{institution.NAME}}" type="hidden" name="institution[]">
+    <div  class="text">Select</div>
+    <i class="dropdown icon"></i>
+    <div class="menu">
+        <div class="ui horizontal divider">Etablissements publics à caractère scientifique et technologique (EPST)</div>
+          <div class="item">CEMAGREF Centre national du machinisme agricole, du génie rural, des eaux et des forêts</div>
+          <div class="item">CNRS Centre national de la recherche scientifique</div>
+          <div class="item">INED Institut national d'études démographiques</div>
+          <div class="item">INRA Institut national de la recherche agronomique</div>
+          <div class="item">INRETS Institut national de recherche sur les transports et leur sécurité</div>
+          <div class="item">INRIA Institut national de recherche en informatique et en automatique</div>
+          <div class="item">INSERM Institut national de la santé et de la recherche médicale</div>
+          <div class="item">IRD Institut de recherche pour le développement</div>
+          <div class="item">LCPC Laboratoire central des ponts et chaussées</div>
+        <div class="ui horizontal divider">Etablissements publics à caractère industriel et commercial (EPIC)</div>
+          <div class="item">ADEME Agence de l'environnement et de la maîtrise de l'énergie</div>
+          <div class="item">ADIT Agence pour la diffusion de l'information technologique</div>
+          <div class="item">ANDRA Agence nationale de gestion des déchets radioactifs</div>
+          <div class="item">ANVAR Agence nationale de valorisation de la recherche</div>
+          <div class="item">BRGM Bureau de recherches géologiques et minières</div>
+          <div class="item">CEA Commissariat à l'énergie atomique</div>
+          <div class="item">CIRAD Centre de coopération international en recherche agronomique</div>
+          <div class="item">CNDP Centre national de documentation pédagogique</div>
+          <div class="item">CNED Centre national d'enseignement à distance</div>
+          <div class="item">CNES Centre national d'études spatiales</div>
+          <div class="item">CSI Cité des sciences et de l'industrie</div>
+          <div class="item">CSTB Centre scientifique et technique du bâtiment</div>
+          <div class="item">CIFREMER Institut français de recherche pour l'exploitation de la mer</div>
+          <div class="item">CNERIS Institut national de l'environnement industriel et des risques</div>
+          <div class="item">ONERA Office national d'études et de recherches aérospatiales</div>
+        <div class="ui horizontal divider">Etablissements publics à caractère administratif (EPA)</div>
+          <div class="item">CEE Centre d'études de l'emploi</div>
+          <div class="item">CINES Centre informatique national de l'enseignement supérieur</div>
+          <div class="item">INRP Institut national de recherche pédagogique</div>
+          <div class="item">EPA Jussieu : désamiantage, mise en sécurité et rénovation du site</div>
+        <div class="ui horizontal divider">Fondations</div>
+          <div class="item">CEPH Centre d'étude du polymorphisme humain</div>
+          <div class="item">Institut Curie</div>
+          <div class="item">Institut Pasteur</div>
+        <div class="ui horizontal divider">Groupements d'intérêt public (GIP)</div>
+          <div class="item">ANRS Agence nationale de la recherche contre le SIDA</div>
+          <div class="item">CNG Centre national de génotypage</div>
+          <div class="item">CNS Génoscope - Centre national de séquençage</div>
+          <div class="item">CHMR Fonds de recherche Hoechst Marion Roussel</div>
+          <div class="item">IFRTP Institut pour la recherche et la technologie polaires</div>
+          <div class="item">OST Observatoire des sciences et techniques</div>
+          <div class="item">RENATER Réseau national pour la technologie, l'enseignement et la recherche</div>
+    </div>
+  </div>
+    <button class="ui icon button delete"><i class="remove icon"></i></button>
+</div>
+
+  {% endif %}
+
+
 </div>
 </div>
   <input type="button" class="ui button active" id="addinstitution" value="Add a new institution"></input>
   <div class=" field">
     <label>Keywords</label>
 <div class=" field" id="keywords">
-{% if keyword %}
+{% if keywords %}
   {% for keyword in keywords %}
    <div><input type="text" name="keywords[]" value="{{keyword.NAME}}" placeholder="Keyword"><button class="ui icon button delete"><i class="remove icon"></i></button></div>
    {% endfor %}
@@ -141,49 +206,98 @@
   </div>
    <div class="required field">
     <label>Description</label>
-    <textarea name="description" required="">{{description}}</textarea>
+    <textarea name="description" >{{description}}</textarea>
   </div>
    <div class="required field">
     <label>Scientific field</label>
- <select class="ui fluid search dropdown" name="scientific_field" required="" > 
-    <option value="">Select a field</option>
-    <option value="Addresses">Addresses</option>
-    <option value="Hydrography">  Hydrography</option>
-    <option value="Administrative units"> Administrative units</option>
-    <option value="Land cover"> Land cover</option>
-    <option value="Agricultural and aquaculture facilities">  Agricultural and aquaculture facilities</option>
-    <option value="Land use"> Land use</option>
-    <option value="Area management/restriction/regulation zones and reporting units"> Area management/restriction/regulation zones and reporting units</option>
-    <option value="Meteorological geographical features"> Meteorological geographical features</option>
-    <option value="Atmospheric conditions"> Atmospheric conditions</option>
-    <option value="Mineral resources"> Mineral resources</option>
-    <option value="Bio-geographical regions"> Bio-geographical regions</option>
-    <option value="Natural risk zones"> Natural risk zones</option>
-    <option value="Buildings"> Buildings</option>
-    <option value="Oceanographic geographical features"> Oceanographic geographical features</option>
-    <option value="Cadastral parcels"> Cadastral parcels</option>
-    <option value="Orthoimagery"> Orthoimagery</option>
-    <option value="Coordinate reference systems">Coordinate reference systems</option>
-    <option value="Population distribution — demography">Population distribution — demography</option>
-    <option value="Elevation">Elevation</option>
-    <option value="Production and industrial facilities">Production and industrial facilities</option>
-    <option value="Energy resources">Energy resources</option>
-    <option value="Protected sites">Protected sites</option>
-    <option value="Environmental monitoring facilities">Environmental monitoring facilities</option>
-    <option value="Sea regions">Sea regions</option>
-    <option value="Geographical grid systems">Geographical grid systems</option>
-    <option value="Soil">Soil</option>
-    <option value="Geographical names">Geographical names</option>
-    <option value="Species distribution">Species distribution</option>
-    <option value="Geology">Geology</option>
-    <option value="Statistical units">Statistical units</option>
-    <option value="Habitats and biotopes">Habitats and biotopes</option>
-    <option value="Transport networks">Transport networks</option>
-    <option value="Human health and safety">Human health and safety</option>
-    <option value="Utility and governmental services">Utility and governmental services</option>
-
-</select>
-
+    <div class=" field" id="scientificfields">
+ {% if scientific_fields %}
+ {% for scientific_field in scientific_fields %}
+ <div>
+       <select class="ui fluid search dropdown scientific_field" name="scientific_field[]"  > 
+          <option value="{{scientific_field.NAME}}">{{scientific_field.NAME}}</option>
+          <option value="Addresses">Addresses</option>
+          <option value="Hydrography">  Hydrography</option>
+          <option value="Administrative units"> Administrative units</option>
+          <option value="Land cover"> Land cover</option>
+          <option value="Agricultural and aquaculture facilities">  Agricultural and aquaculture facilities</option>
+          <option value="Land use"> Land use</option>
+          <option value="Area management/restriction/regulation zones and reporting units"> Area management/restriction/regulation zones and reporting units</option>
+          <option value="Meteorological geographical features"> Meteorological geographical features</option>
+          <option value="Atmospheric conditions"> Atmospheric conditions</option>
+          <option value="Mineral resources"> Mineral resources</option>
+          <option value="Bio-geographical regions"> Bio-geographical regions</option>
+          <option value="Natural risk zones"> Natural risk zones</option>
+          <option value="Buildings"> Buildings</option>
+          <option value="Oceanographic geographical features"> Oceanographic geographical features</option>
+          <option value="Cadastral parcels"> Cadastral parcels</option>
+          <option value="Orthoimagery"> Orthoimagery</option>
+          <option value="Coordinate reference systems">Coordinate reference systems</option>
+          <option value="Population distribution — demography">Population distribution — demography</option>
+          <option value="Elevation">Elevation</option>
+          <option value="Production and industrial facilities">Production and industrial facilities</option>
+          <option value="Energy resources">Energy resources</option>
+          <option value="Protected sites">Protected sites</option>
+          <option value="Environmental monitoring facilities">Environmental monitoring facilities</option>
+          <option value="Sea regions">Sea regions</option>
+          <option value="Geographical grid systems">Geographical grid systems</option>
+          <option value="Soil">Soil</option>
+          <option value="Geographical names">Geographical names</option>
+          <option value="Species distribution">Species distribution</option>
+          <option value="Geology">Geology</option>
+          <option value="Statistical units">Statistical units</option>
+          <option value="Habitats and biotopes">Habitats and biotopes</option>
+          <option value="Transport networks">Transport networks</option>
+          <option value="Human health and safety">Human health and safety</option>
+          <option value="Utility and governmental services">Utility and governmental services</option>
+      </select>
+     <button class="ui icon button delete"><i class="remove icon"></i></button>
+     </div>
+      {% endfor %}
+      {% else %}
+      <div>
+     <select class="ui fluid search dropdown scientific_field" name="scientific_field[]"  > 
+          <option value="">Select a field</option>
+          <option value="Addresses">Addresses</option>
+          <option value="Hydrography">  Hydrography</option>
+          <option value="Administrative units"> Administrative units</option>
+          <option value="Land cover"> Land cover</option>
+          <option value="Agricultural and aquaculture facilities">  Agricultural and aquaculture facilities</option>
+          <option value="Land use"> Land use</option>
+          <option value="Area management/restriction/regulation zones and reporting units"> Area management/restriction/regulation zones and reporting units</option>
+          <option value="Meteorological geographical features"> Meteorological geographical features</option>
+          <option value="Atmospheric conditions"> Atmospheric conditions</option>
+          <option value="Mineral resources"> Mineral resources</option>
+          <option value="Bio-geographical regions"> Bio-geographical regions</option>
+          <option value="Natural risk zones"> Natural risk zones</option>
+          <option value="Buildings"> Buildings</option>
+          <option value="Oceanographic geographical features"> Oceanographic geographical features</option>
+          <option value="Cadastral parcels"> Cadastral parcels</option>
+          <option value="Orthoimagery"> Orthoimagery</option>
+          <option value="Coordinate reference systems">Coordinate reference systems</option>
+          <option value="Population distribution — demography">Population distribution — demography</option>
+          <option value="Elevation">Elevation</option>
+          <option value="Production and industrial facilities">Production and industrial facilities</option>
+          <option value="Energy resources">Energy resources</option>
+          <option value="Protected sites">Protected sites</option>
+          <option value="Environmental monitoring facilities">Environmental monitoring facilities</option>
+          <option value="Sea regions">Sea regions</option>
+          <option value="Geographical grid systems">Geographical grid systems</option>
+          <option value="Soil">Soil</option>
+          <option value="Geographical names">Geographical names</option>
+          <option value="Species distribution">Species distribution</option>
+          <option value="Geology">Geology</option>
+          <option value="Statistical units">Statistical units</option>
+          <option value="Habitats and biotopes">Habitats and biotopes</option>
+          <option value="Transport networks">Transport networks</option>
+          <option value="Human health and safety">Human health and safety</option>
+          <option value="Utility and governmental services">Utility and governmental services</option>
+      </select>
+      <button class="ui icon button delete"><i class="remove icon"></i></button>
+      </div>
+      {% endif %} 
+    </div>
+        <input type="button" class="ui button active" id="addscientificfields" value="Add a new scientific field"></input>
   </div>
 
  <div class="field" >
@@ -247,7 +361,7 @@
 
    <div class="required field">
       <label>License</label>
-    <select  class="ui fluid search dropdown" name="license" required>
+    <select class="ui fluid search dropdown license" name="license" required>
     <option value="{{license}}">Select a license</option>
     <option value="1">Attribution alone (CC BY)</option>
     <option value="2">Attribution + ShareAlike (CC BY-SA)</option>
@@ -267,7 +381,7 @@
     </div>
     <div class="field">
   <div class="ui radio checkbox">
-    <input type="radio"  onclick="APP.modules.upload.checkformbutton()" name="access_right" id="closed" value="Closed" checked> 
+    <input type="radio"  onclick="APP.modules.upload.checkformbutton()" name="access_right" id="closed" value="Closed"> 
     <label>Closed</label>
     </div>
     </div>
