@@ -128,199 +128,220 @@ class SaveController
 
 	function Newdatasheet()
 	{
+	$error=NULL;
 	$this->db = new MongoClient("mongodb://localhost:27017");
 	$required = array('title','creation_date','language','authors-name','authors-firstname','authors-email','description','scientific_field','measurement_nature','measurement_abbreviation','measurement_unit','license');
 	foreach($required as $field) {
 	  if (empty($_POST[$field])) {
+	  	print $field;
 	    $error = true;
 	  }
 	}
-	if ($error) {
+	if ($error==true) {
 	}
 	else{
 		foreach ($_POST as $key => $value){	
 		 if ($key=="creation_date") {
-		 $array["CREATION_DATE"]=$value;
+		 $array["CREATION_DATE"]=htmlspecialchars($value, ENT_QUOTES);;
 		 }
 		 if ($key=="title") {
-		 $array["TITLE"]=$value;
+		 $array["TITLE"]= htmlspecialchars($value, ENT_QUOTES);
 		 }
 		  if ($key=="sampling_date") {
-		 $array["SAMPLING_DATE"][]=$value;
+		 $array["SAMPLING_DATE"][]=htmlspecialchars($value, ENT_QUOTES);;
 		 }
 		 if ($key=="language") {
 		 	if ($value=='0') {
-		 		$language="French";
+		 		$language="FRENCH";
 		 	}
 		 	if ($value=="1") {
-		 		$language="English";
+		 		$language="ENGLISH";
 		 	}
 		 	$array["LANGUAGE"]=$language;
 		 }
 		 if ($key=="scientific_field") {
-		 	$array["SCIENTIFIC_FIELD"]["NAME"]=$value;
+		 	$array["SCIENTIFIC_FIELD"]["NAME"]=htmlspecialchars($value, ENT_QUOTES);;
 		 }
 		  if ($key=="station_name") {
 		 	if (count($value)>1) {
 		 		foreach ($value as $key => $value) {
-		 		$array["STATION"][$key]["NAME"]=$value;
+		 		$array["STATION"][$key]["NAME"]=htmlspecialchars($value, ENT_QUOTES);;
 		 		}
 		 	}
 		 	else{
-		 	$array["STATION"][0]["NAME"]=$value[0];
+		 	$array["STATION"][0]["NAME"]=htmlspecialchars($value[0], ENT_QUOTES);;
 		 	}
 		 }
 		  if ($key=="station_coordonate_system") {
 			 	if (count($value)>1) {
 			 		foreach ($value as $key => $value) {
-			 		$array["STATION"][$key]["COORDONATE_SYSTEM"]=$value;
+			 		$array["STATION"][$key]["COORDONATE_SYSTEM"]=htmlspecialchars($value, ENT_QUOTES);;
 			 		}
 			 	}
 			 	else{
-			 	$array["STATION"][0]["ABBREVIATION"]=$value[0];
+			 	$array["STATION"][0]["ABBREVIATION"]=htmlspecialchars($value[0], ENT_QUOTES);;
 			 	}
 			 }
 		 if ($key=="station_abbreviation") {
 		 	if (count($value)>1) {
 		 		foreach ($value as $key => $value) {
-		 		$array["STATION"][$key]["ABBREVIATION"]=$value;
+		 		$array["STATION"][$key]["ABBREVIATION"]=htmlspecialchars($value, ENT_QUOTES);;
 		 		}
 		 	}
 		 	else{
-		 	$array["STATION"][0]["ABBREVIATION"]=$value[0];
+		 	$array["STATION"][0]["ABBREVIATION"]=htmlspecialchars($value[0], ENT_QUOTES);;
 		 	}
 		 }
 		 if ($key=="station_longitude") {
 		 	if (count($value)>1) {
 		 		foreach ($value as $key => $value) {
-		 		$array["STATION"][$key]["LONGITUDE"]=$value;
+		 		$array["STATION"][$key]["LONGITUDE"]=htmlspecialchars($value, ENT_QUOTES);;
 		 		}
 		 	}
 		 	else{
-		 	$array["STATION"][0]["LONGITUDE"]=$value[0];
+		 	$array["STATION"][0]["LONGITUDE"]=htmlspecialchars($value[0], ENT_QUOTES);;
 		 	}
 		 }
 		 if ($key=="station_latitude") {
 		 	if (count($value)>1) {
 		 		foreach ($value as $key => $value) {
-		 		$array["STATION"][$key]["LATITUDE"]=$value;
+		 		$array["STATION"][$key]["LATITUDE"]=htmlspecialchars($value, ENT_QUOTES);;
 		 		}
 		 	}
 		 	else{
-		 	$array["STATION"][0]["LATITUDE"]=$value[0];
+		 	$array["STATION"][0]["LATITUDE"]=htmlspecialchars($value[0], ENT_QUOTES);;
 		 	}
 		 }
 		 if ($key=="station_elevation") {
 		 	if (count($value)>1) {
 		 		foreach ($value as $key => $value) {
-		 		$array["STATION"][$key]["ELEVATION"]=$value;
+		 		$array["STATION"][$key]["ELEVATION"]=htmlspecialchars($value, ENT_QUOTES);;
 		 		}
 		 	}
 		 	else{
-		 	$array["STATION"][0]["ELEVATION"]=$value[0];
+		 	$array["STATION"][0]["ELEVATION"]=htmlspecialchars($value[0], ENT_QUOTES);;
 		 	}
 		 }
 		 if ($key=="station_description") {
 		 	if (count($value)>1) {
 		 		foreach ($value as $key => $value) {
-		 		$array["STATION"][$key]["DESCRIPTION"]=$value;
+		 		$array["STATION"][$key]["DESCRIPTION"]=htmlspecialchars($value, ENT_QUOTES);;
 		 		}
 		 	}
 		 	else{
-		 	$array["STATION"][0]["DESCRIPTION"]=$value[0];
+		 	$array["STATION"][0]["DESCRIPTION"]=htmlspecialchars($value[0], ENT_QUOTES);;
 		 	}
 		 }
 
 		  if ($key=="measurement_nature") {
 		 	if (count($value)>1) {
 		 		foreach ($value as $key => $value) {
-		 		$array["MEASUREMENT"][$key]["NATURE"]=$value;
+		 		$array["MEASUREMENT"][$key]["NATURE"]=htmlspecialchars($value, ENT_QUOTES);;
 		 		}
 		 	}
 		 	else{
-		 	$array["MEASUREMENT"][0]["NATURE"]=$value[0];
+		 	$array["MEASUREMENT"][0]["NATURE"]=htmlspecialchars($value[0], ENT_QUOTES);;
 		 	}
 		 }
 		  if ($key=="measurement_abbreviation") {
 		 	if (count($value)>1) {
 		 		foreach ($value as $key => $value) {
-		 		$array["MEASUREMENT"][$key]["ABBREVIATION"]=$value;
+		 		$array["MEASUREMENT"][$key]["ABBREVIATION"]=htmlspecialchars($value, ENT_QUOTES);;
 		 		}
 		 	}
 		 	else{
-		 	$array["MEASUREMENT"][0]["ABBREVIATION"]=$value[0];
+		 	$array["MEASUREMENT"][0]["ABBREVIATION"]=htmlspecialchars($value[0], ENT_QUOTES);;
 		 	}
 		 }
 		 if ($key=="measurement_unit") {
 		 	if (count($value)>1) {
 		 		foreach ($value as $key => $value) {
-		 		$array["MEASUREMENT"][$key]["UNIT"]=$value;
+		 		$array["MEASUREMENT"][$key]["UNIT"]=htmlspecialchars($value, ENT_QUOTES);;
 		 		}
 		 	}
 		 	else{
-		 	$array["MEASUREMENT"][0]["UNIT"]=$value[0];
+		 	$array["MEASUREMENT"][0]["UNIT"]=htmlspecialchars($value[0], ENT_QUOTES);;
 		 	}
 		 }
 
 		 if ($key=="sample_kind") {
-		 	$array["SAMPLE_KIND"][]["NAME"]=$value;
+		 	$array["SAMPLE_KIND"][]["NAME"]=htmlspecialchars($value, ENT_QUOTES);;
 		 }
 		   if ($key=="institution") {
 		 	if (count($value)>1) {
 		 		foreach ($value as $key => $value) {
-		 		$array["INSTITUTION"][$key]["NAME"]=$value;
+		 		$array["INSTITUTION"][$key]["NAME"]=htmlspecialchars($value, ENT_QUOTES);;
 		 		}
 		 	}
 		 	else{
-		 	$array["INSTITUTION"][0]["NAME"]=$value[0];
+		 	$array["INSTITUTION"][0]["NAME"]=htmlspecialchars($value[0], ENT_QUOTES);;
 		 	}
 		 }
 		
-		  if ($key=="authors-firstname") {
+		  if ($key=="authors_firstname") {
 		 	if (count($value)>1) {
 		 		foreach ($value as $key => $value) {
-		 		$array["FILE_CREATOR"][$key]["FIRST_NAME"]=$value;
+		 		$array["FILE_CREATOR"][$key]["FIRST_NAME"]=htmlspecialchars($value, ENT_QUOTES);;
 		 		}
 		 	}
 		 	else{
-		 	$array["FILE_CREATOR"][0]["FIRST_NAME"]=$value[0];
+		 	$array["FILE_CREATOR"][0]["FIRST_NAME"]=htmlspecialchars($value[0], ENT_QUOTES);;
 		 	}
 		 }
-		 if ($key=="authors-name") {
+		 if ($key=="authors_name") {
 		 	if (count($value)>1) {
 		 		foreach ($value as $key => $value) {
-		 		$array["FILE_CREATOR"][$key]["NAME"]=$value;
+		 		$array["FILE_CREATOR"][$key]["NAME"]=htmlspecialchars($value, ENT_QUOTES);;
 		 		}
 		 	}
 		 	else{
-		 	$array["FILE_CREATOR"][0]["NAME"]=$value[0];
+		 	$array["FILE_CREATOR"][0]["NAME"]=htmlspecialchars($value[0], ENT_QUOTES);;
 		 	}
 		 }
-		  if ($key=="authors-email") {
+		  if ($key=="authors_email") {
 		 	if (count($value)>1) {
 		 		foreach ($value as $key => $value) {
-		 		$array["FILE_CREATOR"][$key]["MAIL"]=$value;
+		 		$array["FILE_CREATOR"][$key]["MAIL"]=htmlspecialchars($value, ENT_QUOTES);;
 		 		}
 		 	}
 		 	else{
-		 	$array["FILE_CREATOR"][0]["MAIL"]=$value[0];
+		 	$array["FILE_CREATOR"][0]["MAIL"]=htmlspecialchars($value[0], ENT_QUOTES);;
 		 	}
 		 }
 		 if ($key=="keywords") {
 		 	if (count($value<=3)) {
 		 		foreach ($value as $key => $value) {
-		 		$array["KEYWORDS"][$key]["NAME"]=$value;
+		 		$array["KEYWORDS"][$key]["NAME"]=htmlspecialchars($value, ENT_QUOTES);;
 		 		}
 		 	}
 		 	else{
-		 	$array["KEYWORDS"]["NAME"]=$value;
+		 	$array["KEYWORDS"]["NAME"]=htmlspecialchars($value, ENT_QUOTES);;
 		 	}
 		 }
 		 if ($key=="description") {
-		 $array["DATA_DESCRIPTION"]=$value;
+		 $array["DATA_DESCRIPTION"]=htmlspecialchars($value, ENT_QUOTES);;
 		 }
-		 if ($key=="license") {
-		 $array["LICENSE"]=$value;
+		if ($key=="license") {
+			$licensetype=null;
+		 	if ($value==1) {
+		 		$licensetype="Attribution alone (CC BY)";
+		 	}
+		 	elseif ($value==2) {
+		 		$licensetype="Attribution + ShareAlike (CC BY-SA)";
+		 	}
+		 	elseif ($value==3) {
+		 		$licensetype="Attribution + Noncommercial (CC BY-NC)";
+		 	}
+		 	elseif ($value==4) {
+		 		$licensetype="Attribution + NoDerivatives (CC BY-ND)";
+		 	}
+		 	elseif ($value==5) {
+		 		$licensetype="Attribution + Noncommercial + ShareAlike (CC BY-NC-SA)";
+		 	}
+		 	elseif ($value==6) {
+		 		$licensetype="Attribution + Noncommercial + NoDerivatives (CC BY-NC-ND)";
+		 	}
+		 $array["LICENSE"]=$licensetype;
 		 }
 		 if ($key=="access_right") {
 		 $array["ACCESS_RIGHT"]=$value;
@@ -334,7 +355,6 @@ class SaveController
 		 		$publication_date=$_POST["publication_date"];
 		 	}
 
-		 $array["PUBLICATION_DATE"]=$publication_date;
 		 
 		 }
 
@@ -379,6 +399,7 @@ class SaveController
 
 	function Editdatasheet($collection,$doi)
 	{
+	$error=NULL;
 	$this->db = new MongoClient("mongodb://localhost:27017");
 	$required = array('title','creation_date','language','authors-name','authors-firstname','authors-email','description','scientific_field','measurement_nature','measurement_abbreviation','measurement_unit','license');
 	foreach($required as $field) {
@@ -386,7 +407,7 @@ class SaveController
 	    $error = true;
 	  }
 	}
-	if ($error) {
+	if ($error==true) {
 		//echo "all are required";
 	}
 	else{
@@ -529,7 +550,7 @@ class SaveController
 		 	$array["SAMPLE_KIND"][]["NAME"]=$value;
 		 }
 
-		 if ($key=="authors-firstname") {
+		 if ($key=="authors_firstname") {
 			 	if (count($value)>1) {
 			 		foreach ($value as $key => $value) {
 			 		$array["FILE_CREATOR"][$key]["FIRST_NAME"]=$value;
@@ -541,7 +562,7 @@ class SaveController
 			 }
 
 
-		 if ($key=="authors-name") {
+		 if ($key=="authors_name") {
 		 	if (count($value)>1) {
 		 		foreach ($value as $key => $value) {
 		 		$array["FILE_CREATOR"][$key]["NAME"]=$value;
@@ -551,7 +572,7 @@ class SaveController
 		 	$array["FILE_CREATOR"][0]["NAME"]=$value[0];
 		 	}
 		 }
-		  if ($key=="authors-email") {
+		  if ($key=="authors_email") {
 		 	if (count($value)>1) {
 		 		foreach ($value as $key => $value) {
 		 		$array["FILE_CREATOR"][$key]["MAIL"]=$value;
@@ -575,7 +596,26 @@ class SaveController
 		 $array["DATA_DESCRIPTION"]=$value;
 		 }
 		 if ($key=="license") {
-		 $array["LICENSE"]=$value;
+		 	$licensetype=NULL;
+		 	if ($value==1) {
+		 		$licensetype="Attribution alone (CC BY)";
+		 	}
+		 	elseif ($value==2) {
+		 		$licensetype="Attribution + ShareAlike (CC BY-SA)";
+		 	}
+		 	elseif ($value==3) {
+		 		$licensetype="Attribution + Noncommercial (CC BY-NC)";
+		 	}
+		 	elseif ($value==4) {
+		 		$licensetype="Attribution + NoDerivatives (CC BY-ND)";
+		 	}
+		 	elseif ($value==5) {
+		 		$licensetype="Attribution + Noncommercial + ShareAlike (CC BY-NC-SA)";
+		 	}
+		 	elseif ($value==6) {
+		 		$licensetype="Attribution + Noncommercial + NoDerivatives (CC BY-NC-ND)";
+		 	}
+		 $array["LICENSE"]=$licensetype;
 		 }
 		 if ($key=="access_right") {
 		 $array["ACCESS_RIGHT"]=$value;
@@ -589,20 +629,18 @@ class SaveController
 		 		$publication_date=$_POST["publication_date"];
 		 	}
 
-		 $array["PUBLICATION_DATE"]=$publication_date;
 		 
 		 }
 
 		 $array["UPLOAD_DATE"]=date('Y-m-d');
 		 
 		}
-	}
 		$collectionObject = $this->db->selectCollection('ORDaR', $collection);
 		if (is_numeric($doi)==true) {
 			$doi=$doi;
 
 		// Quand les vrai DOI seront implanté il faudra modifier ici
-
+			
 		$collectionObject->update(array('_id' => new \MongoInt32($doi)),array('$set'=>array("INTRO" => $array)));
 		}
 		else{
@@ -629,6 +667,7 @@ class SaveController
 			$collectionObject->insert(array('_id' => $newdoi,"INTRO" => $INTRO,"DATA" => $DATA));	
 		}
 		return true;
+	}
 	}
 	
 function removeUnpublishedDatasheet($collection,$doi){

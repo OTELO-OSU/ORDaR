@@ -90,6 +90,37 @@
 
       </div>
     </div>
+
+<div class="ui fluid card">
+    <div class="content">
+      <div class="header">Stations</div>
+      <ul>
+      {% for station in stations %}
+      <li>{{station.NAME}}</li>
+      <li>{{station.ABBREVIATION}}</li>
+      <li>{{station.LONGITUDE}}</li>
+      <li>{{station.LATITUDE}}</li>
+      <li>{{station.ELEVATION}}</li>
+      <li>{{station.DESCRIPTION}}</li>
+      {% endfor %}
+      </ul>
+      </div>
+    </div>
+
+
+    <div class="ui fluid card">
+    <div class="content">
+      <div class="header">Measurements</div>
+      <ul>
+      {% for measurement in measurements %}
+      <li>{{measurement.NATURE}}</li>
+      <li>{{measurement.ABBREVIATION}}</li>
+      <li>{{measurement.UNIT}}</li>
+      {% endfor %}
+      </ul>
+      </div>
+    </div>
+
   <div class="ui fluid card">
     <div class="content">
       <div class="header">Export</div>

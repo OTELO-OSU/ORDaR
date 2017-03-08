@@ -41,8 +41,8 @@ $app->get('/login', function (Request $req,Response $responseSlim) {
 	$loader = new Twig_Loader_Filesystem('search/templates');
 	$twig = new Twig_Environment($loader);
 	echo $twig->render('login.html.twig');
-	$_SESSION['name'] = 'Kanbar';
-	$_SESSION['firstname'] = 'Antho';
+	$_SESSION['name'] = 'a';
+	$_SESSION['firstname'] = 'a';
 	$_SESSION['mail'] = 'hussein.kanbar@univ-lorraine.fr';
 	if ($_SERVER['HTTP_REFERER']) {
 	return $responseSlim->withRedirect($_SERVER['HTTP_REFERER']);
@@ -136,7 +136,7 @@ $app->get('/record', function (Request $req,Response $responseSlim) {
 	}
 	else{
 	return @$twig->render('viewdatadetails.html.twig', [
-        'doi'=> $response['_id'],'title' => $response['_source']['INTRO']['TITLE'],'datadescription'=>$response['_source']['INTRO']['DATA_DESCRIPTION'],'accessright'=>$response['_source']['INTRO']['ACCESS_RIGHT'],'publicationdate'=> $response['_source']['INTRO']['PUBLICATION_DATE'],'uploaddate'=>$response['_source']['INTRO']['UPLOAD_DATE'],'creationdate'=>$response['_source']['INTRO']['CREATION_DATE'],'authors'=>$response['_source']['INTRO']['FILE_CREATOR'],'files'=> $files,'mail'=>$_SESSION['mail'],
+        'doi'=> $response['_id'],'title' => $response['_source']['INTRO']['TITLE'],'datadescription'=>$response['_source']['INTRO']['DATA_DESCRIPTION'],'accessright'=>$response['_source']['INTRO']['ACCESS_RIGHT'],'publicationdate'=> $response['_source']['INTRO']['PUBLICATION_DATE'],'uploaddate'=>$response['_source']['INTRO']['UPLOAD_DATE'],'creationdate'=>$response['_source']['INTRO']['CREATION_DATE'],'authors'=>$response['_source']['INTRO']['FILE_CREATOR'],'files'=> $files,'mail'=>$_SESSION['mail'],'stations'=> $response['_source']['INTRO']['STATION'],'measurements'=> $response['_source']['INTRO']['MEASUREMENT']
     	]);
 	}
 });
@@ -152,8 +152,27 @@ $app->get('/editrecord', function (Request $req,Response $responseSlim) {
 		return $responseSlim->withRedirect('accueil');
 	}
 	else{
+		$value=$response['_source']['INTRO']['LICENSE'];
+		if ($value=="Attribution alone (CC BY)") {
+	 		$license=1;
+	 	}
+	 	elseif ($value=="Attribution + ShareAlike (CC BY-SA)") {
+	 		$license=2;
+	 	}
+	 	elseif ($value=="Attribution + Noncommercial (CC BY-NC)") {
+	 		$license=3;
+	 	}
+	 	elseif ($value=="Attribution + NoDerivatives (CC BY-ND)") {
+	 		$license=4;
+	 	}
+	 	elseif ($value=="Attribution + Noncommercial + ShareAlike (CC BY-NC-SA)") {
+	 		$license=5;
+	 	}
+	 	elseif ($value=="Attribution + Noncommercial + NoDerivatives (CC BY-NC-ND)") {
+	 		$license=6;
+	 	}
 	return @$twig->render('edit_dataset.html.twig', [
-        'doi'=>$id,'title' => $response['_source']['INTRO']['TITLE'],'description'=>$response['_source']['INTRO']['DATA_DESCRIPTION'],'creation_date'=>$response['_source']['INTRO']['CREATION_DATE'],'sampling_date'=>$response['_source']['INTRO']['SAMPLING_DATE'][0],'authors'=>$response['_source']['INTRO']['FILE_CREATOR'],'keywords'=>$response['_source']['INTRO']['KEYWORDS'],'sample_kind'=>$response['_source']['INTRO']['SAMPLE_KIND'][0]['NAME'],'scientific_field'=>$response['_source']['INTRO']['SCIENTIFIC_FIELD']['NAME'],'institutions'=>$response['_source']['INTRO']['INSTITUTION'],'language'=>$response['_source']['INTRO']['LANGUAGE'],'stations'=>$response['_source']['INTRO']['STATION'],'measurements'=>$response['_source']['INTRO']['MEASUREMENT']
+        'doi'=>$id,'title' => $response['_source']['INTRO']['TITLE'],'description'=>$response['_source']['INTRO']['DATA_DESCRIPTION'],'creation_date'=>$response['_source']['INTRO']['CREATION_DATE'],'sampling_date'=>$response['_source']['INTRO']['SAMPLING_DATE'][0],'authors'=>$response['_source']['INTRO']['FILE_CREATOR'],'keywords'=>$response['_source']['INTRO']['KEYWORDS'],'sample_kind'=>$response['_source']['INTRO']['SAMPLE_KIND'][0]['NAME'],'scientific_field'=>$response['_source']['INTRO']['SCIENTIFIC_FIELD']['NAME'],'institutions'=>$response['_source']['INTRO']['INSTITUTION'],'language'=>$response['_source']['INTRO']['LANGUAGE'],'stations'=>$response['_source']['INTRO']['STATION'],'measurements'=>$response['_source']['INTRO']['MEASUREMENT'],'license'=>$license
     	]);
 	}
 });
@@ -191,8 +210,6 @@ $app->get('/remove/{doi}', function (Request $req,Response $responseSlim,$args) 
 
 
 });
-
-
 
 
 
