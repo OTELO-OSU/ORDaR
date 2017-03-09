@@ -377,9 +377,24 @@ function removeUnpublishedDatasheet($collection,$doi){
 
 
 
-	function Send_Mail_author(){
-		
-	}
+	function Send_Mail_author($doi,$response,$author_name,$author_firstname,$object,$message,$sendermail){
+		$title=$response['_source']['INTRO']['TITLE'];
+		foreach ($response['_source']['INTRO']['FILE_CREATOR'] as $key => $value) {
+			if ($author_name==$value["NAME"]&&$author_firstname==$value["FIRST_NAME"]) {
+				$mail=$value["MAIL"];
+				//mail('guiot.anthony@free.fr', 'Mon Sujet', "test");
+				echo $value["MAIL"];
+				mail($mail, 'Contact from ORDaR :'.$object, $sendermail." want to know something about this dataset: <br>DOI: ".$doi."<br>Title: ".$title." <br> Message from ".$sendermail.": <br> ".$message, 'From:'.$sendermail);
+			}
+		}
+		if (!empty($mail)) {
+			
+		}
+		else{
+			echo "an error as occured!";
+		}
+
+		}
 }
 
 
