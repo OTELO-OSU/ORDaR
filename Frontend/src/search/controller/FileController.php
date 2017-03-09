@@ -8,7 +8,7 @@ Class FileController{
 
 function download($doi,$filename,$response){
 		if (isset($response['_source']['DATA'])){
-		$file="http://localhost/download/".$doi."/".$filename ;
+		$file="http://127.0.0.1/download/".$doi."/".$filename ;
 		header ("Cache-Control: must-revalidate, post-check=0, pre-check=0");
 		header("Content-Disposition: attachment; filename=".$filename);
 		$readfile=readfile($file);
@@ -26,7 +26,7 @@ function download($doi,$filename,$response){
 
 	function preview($doi,$filename,$response){
 		if (isset($response['_source']['DATA'])){
-		$file="http://localhost/download/".$doi."/".$filename ;
+		$file="http://127.0.0.1/download/".$doi."/".$filename ;
 		header ("Cache-Control: must-revalidate, post-check=0, pre-check=0");
     	header("Content-Disposition: inline; filename=".$filename);
     	foreach ($response['_source']['DATA']['FILES'] as $key => $value) {
