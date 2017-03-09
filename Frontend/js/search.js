@@ -272,7 +272,7 @@ APP.modules.search = (function(){
 
                     }
                     else{
-                      samplekind="OR SAMPLE_KIND:"+value;
+                      samplekind="OR INTRO.SAMPLE_KIND.NAME:"+value;
                     }
                     if (facets!==undefined) {
                     	facets+=" "+samplekind;
@@ -312,7 +312,7 @@ APP.modules.search = (function(){
                       keywords=keywords+" OR INTRO.KEYWORDS:"+value;
                     }
                     if (facets!==undefined) {
-                    	facets=facets+" AND "+keywords;
+                    	facets=facets+" "+keywords;
                     }
                     else{
                     	facets=keywords;
@@ -330,7 +330,7 @@ APP.modules.search = (function(){
                       scientific_field=scientific_field+" OR INTRO.SCIENTIFIC_FIELD.NAME:"+value;
                     }
                     if (facets!==undefined) {
-                    	facets=facets+" AND "+scientific_field;
+                    	facets=facets+" "+scientific_field;
                     }
                     else{
                     	facets=scientific_field;
@@ -348,7 +348,7 @@ APP.modules.search = (function(){
                       language=language+" OR INTRO.LANGUAGE:"+value;
                     }
                     if (facets!==undefined) {
-                    	facets=facets+" AND "+language;
+                    	facets=facets+" "+language;
                     }
                     else{
                     	facets=language;
@@ -367,7 +367,7 @@ APP.modules.search = (function(){
                       filetype=filetype+' OR DATA.FILES.FILETYPE:"'+value+'"';
                     }
                     if (facets!==undefined) {
-                    	facets=facets+" AND "+filetype;
+                    	facets=facets+" "+filetype;
                     }
                     else{
                     	facets=filetype;
@@ -385,7 +385,7 @@ APP.modules.search = (function(){
                       access_right=access_right+" OR INTRO.ACCESS_RIGHT:"+value;
                     }
                     if (facets!==undefined) {
-                    	facets=facets+" AND "+access_right;
+                    	facets=facets+"  "+access_right;
                     }
                     else{
                     	facets=access_right;
