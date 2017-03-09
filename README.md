@@ -69,6 +69,7 @@ Pour ubuntu 16.04(pour d’autre système consulter le manuel de mongodb)
     extension=mongo.so dans  php.ini d’apache2 et du CLI
 
 **Configuration apache2**
+
     activer mode rewrite :
     sudo a2enmod rewrite
 
@@ -80,6 +81,7 @@ Pour ubuntu 16.04(pour d’autre système consulter le manuel de mongodb)
         </Directory>
 
 **Demarrer la base mongo en mode replica set :**
+    
     sudo mongod --replSet "rs0"
 
     Démarré shell mongo et exécuter :
@@ -118,6 +120,7 @@ rendez vous dans le dossier précédemment télécharger , dans le dossier bin e
     Alias /download  #CHEMIN PRECEDEMMENT CHOISI
 
 **Lancez Mongo-connector**
+
     mongo-connector -m  mongodb://username:password@localhost:27017 -t localhost:9200 -d elastic2_doc_manager -c mongo-connector_config.json   
 
 
