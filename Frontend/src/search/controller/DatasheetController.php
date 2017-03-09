@@ -1,15 +1,26 @@
 <?php
 
 namespace search\controller;
-include "config.php";
+
 
 use MongoClient;
 
 class DatasheetController
 {
+	function connect_tomongo(){
+			$config = parse_ini_file("config.ini");
 
+	 if(empty($config['authSource']) && empty($config['username']) && empty($config['password'])) {
+                $this->db = new MongoClient("mongodb://" . $config['host'] . ':' . $config['port']);
+            } else {
+                $this->db= new MongoClient("mongodb://" . $config['host'] . ':' . $config['port'], array('authSource' => $config['authSource'], 'username' => $config['username'], 'password' => $config['password']));
+            }
+            return $this->db;
+	}
 
 	function Postprocessing($POST){
+	$config = parse_ini_file("config.ini");
+	$UPLOAD_FOLDER=$config["UPLOAD_FOLDER"];
 	$required = array('title','creation_date','language','authors_name','authors_firstname','authors_email','description','scientific_field','measurement_nature','measurement_abbreviation','measurement_unit','license');
 	foreach($required as $field) {
 	  if (empty($_POST[$field])) {
@@ -255,12 +266,15 @@ class DatasheetController
 
 	function Newdatasheet()
 	{
+	$config = parse_ini_file("config.ini");
+	$UPLOAD_FOLDER=$config["UPLOAD_FOLDER"];
 	$error=NULL;
-	$this->db = new MongoClient("mongodb://localhost:27017");
+	//$this->db = new MongoClient("mongodb://localhost:27017");
+	$db=self::connect_tomongo();
 	$array=self::Postprocessing($_POST);
     $doi=rand(5, 15000);
 	for($i=0; $i<count($_FILES['file']['name']); $i++) {
-		$repertoireDestination = UPLOAD_FOLDER;
+		$repertoireDestination = $UPLOAD_FOLDER;
 		$nomDestination   = str_replace(' ', '_', $_FILES["file"]["name"][$i]);
 		$data["FILES"][$i]["DATA_URL"]=$nomDestination;
 		if (file_exists($repertoireDestination.$_FILES["file"]["name"][$i])){
@@ -295,8 +309,11 @@ class DatasheetController
 
 
 	function Editdatasheet($collection,$doi){
+	$config = parse_ini_file("config.ini");
+	$UPLOAD_FOLDER=$config["UPLOAD_FOLDER"];
 	$error=NULL;
-	$this->db = new MongoClient("mongodb://localhost:27017");
+	//$this->db = new MongoClient("mongodb://localhost:27017");
+	$db=self::connect_tomongo();
 	$array=self::Postprocessing($_POST);
 		$collectionObject = $this->db->selectCollection('ORDaR', $collection);
 		if (is_numeric($doi)==true) {
@@ -308,7 +325,7 @@ class DatasheetController
 		}
 		else{
 	        $newdoi=rand(5, 15000);
-	        mkdir(UPLOAD_FOLDER.$newdoi,0777,true);
+	        mkdir($UPLOAD_FOLDER.$newdoi,0777,true);
 	        $query=array('_id' => $doi);
 	       	$cursor = $collectionObject->find($query);
 	       	foreach ($cursor as $key => $value) {
@@ -317,8 +334,8 @@ class DatasheetController
 	        unlink($ORIGINAL_DATA_URL);
 	        //unlink(UPLOAD_FOLDER.$doi.'/'.$doi.'_INTRO.csv')
 			//$collectionObject->insert(array('_id' => new \MongoInt32($doi)),array("INTRO" => $array));
-	        rename(UPLOAD_FOLDER.$doi.'/'.$doi.'_DATA.csv',UPLOAD_FOLDER.$newdoi."/".$doi.'_DATA.csv');
-	        rmdir(UPLOAD_FOLDER.$doi);
+	        rename($UPLOAD_FOLDER.$doi.'/'.$doi.'_DATA.csv',$UPLOAD_FOLDER.$newdoi."/".$doi.'_DATA.csv');
+	        rmdir($UPLOAD_FOLDER.$doi);
 			$collectionObject->update(array('_id' => $doi),array('$set'=>array("INTRO" => $array)));
 			$olddata = $collectionObject->find(array('_id' => $doi));
 			foreach ($olddata as $key => $value) {
@@ -334,11 +351,14 @@ class DatasheetController
 	
 	
 function removeUnpublishedDatasheet($collection,$doi){
-	if (is_numeric($doi)==true) {
+		$config = parse_ini_file("config.ini");
+		$UPLOAD_FOLDER=$config["UPLOAD_FOLDER"];
+		if (is_numeric($doi)==true) {
 		print("test"); // test de suppression si publier
 	}
 	else{
-		$this->db = new MongoClient("mongodb://localhost:27017");
+		//$this->db = new MongoClient("mongodb://localhost:27017");
+		$db=self::connect_tomongo();
 		$collectionObject = $this->db->selectCollection('ORDaR', $collection);
 		$query=array('_id' => $doi);
 	   	$cursor = $collectionObject->find($query);
@@ -347,14 +367,19 @@ function removeUnpublishedDatasheet($collection,$doi){
 	   	}
 	   	unlink($ORIGINAL_DATA_URL);
 		$collectionObject->remove(array('_id' => $doi));
-		unlink(UPLOAD_FOLDER.$doi.'/'.$doi.'_DATA.csv');
-		rmdir(UPLOAD_FOLDER.$doi);
+		unlink($UPLOAD_FOLDER.$doi.'/'.$doi.'_DATA.csv');
+		rmdir($UPLOAD_FOLDER.$doi);
 		print("erase");
+		}
+
 	}
 
 
 
-}
+
+	function Send_Mail_author(){
+		
+	}
 }
 
 

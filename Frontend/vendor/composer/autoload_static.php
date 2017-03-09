@@ -18,6 +18,7 @@ class ComposerStaticInit98734a1f19e918d66eea18308131378a
         'P' => 
         array (
             'Psr\\Http\\Message\\' => 17,
+            'Psr\\Container\\' => 14,
         ),
         'I' => 
         array (
@@ -37,6 +38,10 @@ class ComposerStaticInit98734a1f19e918d66eea18308131378a
         'Psr\\Http\\Message\\' => 
         array (
             0 => __DIR__ . '/..' . '/psr/http-message/src',
+        ),
+        'Psr\\Container\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/psr/container/src',
         ),
         'Interop\\Container\\' => 
         array (

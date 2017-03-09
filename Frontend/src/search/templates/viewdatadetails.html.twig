@@ -27,7 +27,7 @@
 
 <ul>
     {% for author in authors %}
-        <li><a href="mailto:{{author.MAIL}}">{{ author.NAME}}</a></li>
+        <li><a onclick="APP.modules.send_email.send_email('{{doi}}','{{author.NAME}}','{{ author.FIRST_NAME}}')">{{author.NAME}} {{ author.FIRST_NAME}}</a></li>
     {% endfor %}
 </ul>
 
@@ -145,6 +145,7 @@
 </div>
  
 
+{% include 'contact_author.html.twig' %}
 {% include 'footer.html.twig' %}
 
       

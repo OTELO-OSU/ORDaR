@@ -238,11 +238,39 @@ $app->get('/preview/{doi}/{filename}', function (Request $req,Response $response
 		return $responseSlim->withStatus(403); 
 	}
 	    	
-	return @$responseSlim->withBody();
-
-
-
-		
+	return @$responseSlim->withBody();		
 });
+
+
+
+
+$app->post('/contact_author', function (Request $req,Response $responseSlim) {
+	$Datasheet = new Datasheet();
+	$request= new RequestApi();
+	$author_name  = $req->getparam('author_name');
+	$author_firstname  = $req->getparam('author_first_name');
+	$author_name=htmlspecialchars($author_name, ENT_QUOTES);
+	$author_firstname = htmlspecialchars($author_firstname, ENT_QUOTES);
+	$doi = $req->getparam('doi');
+	$doi = htmlspecialchars($doi, ENT_QUOTES);
+	$response=$request->get_info_for_dataset($doi);
+	$title=$response['_source']['INTRO']['TITLE'];
+	foreach ($response['_source']['INTRO']['FILE_CREATOR'] as $key => $value) {
+		if ($author_name==$value["NAME"]&&$author_firstname==$value["FIRST_NAME"]) {
+			$mail=$value["MAIL"];
+			mail('guiot.anthony@free.fr', 'Mon Sujet', "test");
+			echo $value["MAIL"];
+		}
+	}
+	if (!empty($mail)) {
+		
+	}
+	else{
+		echo "an error as occured!";
+	}
+	
+});
+
+
 
 $app->run();

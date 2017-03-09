@@ -732,6 +732,20 @@ return{
 }})()
 
 
+APP.modules.send_email=(function(){
+return{
+	send_email:function(doi,name,firstname){
+		$(".ui.modal .header").empty();
+		$(".ui.modal .header").append('Contact '+name+" "+firstname);
+		$(".form").append("<input type='hidden' name='doi' value='"+doi+"'></input><input type='hidden' name='author_name' value='"+name+"'></input><input type='hidden' name='author_first_name' value='"+firstname+"'></input>");
+		$('.ui.modal').modal('show');
+		console.log(doi);
+		}
+		
+}})()
+
+
+
 
 
 
