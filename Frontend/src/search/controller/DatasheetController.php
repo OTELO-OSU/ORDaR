@@ -19,6 +19,7 @@ class DatasheetController
 	}
 
 	function Postprocessing($POST){
+	$error=null;
 	$config = parse_ini_file("config.ini");
 	$UPLOAD_FOLDER=$config["UPLOAD_FOLDER"];
 	$required = array('title','creation_date','language','authors_name','authors_firstname','authors_email','description','scientific_field','measurement_nature','measurement_abbreviation','measurement_unit','license');
