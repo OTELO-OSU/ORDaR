@@ -135,6 +135,6 @@ Definissez un username, ainsi qu'un password.
 
 **Lancez Mongo-connector**
 
-    sudo mongo-connector -m localhost:27017 -c mongo-connector_config.json  
+    sudo mongo-connector -m localhost:27017 -c mongo-connector_config.json  --namespace NOMDELABDD._all
 
 
