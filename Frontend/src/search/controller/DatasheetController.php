@@ -13,7 +13,7 @@ class DatasheetController
 	 if(empty($config['username']) && empty($config['password'])) {
                 $this->db = new MongoClient("mongodb://" . $config['host'] . ':' . $config['port']);
             } else {
-                $this->db= new MongoClient("mongodb://" . $config['host'] . ':' . $config['port'], array('username' => $config['username'], 'password' => $config['password']));
+                $this->db= new MongoClient("mongodb://" . $config['host'] . ':' . $config['port'], array('authSource' => $config['authSource'],'username' => $config['username'], 'password' => $config['password']));
             }
             return $this->db;
 	}
