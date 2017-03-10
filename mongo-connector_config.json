@@ -1,7 +1,10 @@
 {
+"authentication": {
+"adminUsername":"test",
+"password": "@!test"},
 "docManagers": [
   {
-    "docManager": "elastic_doc_manager",
+    "docManager": "elastic2_doc_manager",
     "targetURL": "localhost:9200",
     "args": {
       "clientOptions": {

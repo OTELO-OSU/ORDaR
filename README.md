@@ -87,6 +87,20 @@ Pour ubuntu 16.04(pour d’autre système consulter le manuel de mongodb)
     Démarré shell mongo et exécuter :
         rs.initiate()
 
+    Se connecter sur la base admin:
+
+        use admin
+
+    Créé un utilisateur avec un role backup:
+
+    db.createUser({user: "USER",pwd: "PASSWORD",roles: [ { role: "backup", db: "admin" } ]})
+
+    Ensuite se connecter sur la base ORDaR et crée l'utilisateur qui pourra modifier les données:
+
+        use ORDaR
+
+        db.createUser({user: "USER",pwd: "PASSWORD",roles: [ { role: "readWrite", db: "ORDaR" } ]})
+
 Ensuite démarrer elasticsearch,
 rendez vous dans le dossier précédemment télécharger , dans le dossier bin et exécuter :
 ./elasticsearch
@@ -121,6 +135,6 @@ rendez vous dans le dossier précédemment télécharger , dans le dossier bin e
 
 **Lancez Mongo-connector**
 
-    mongo-connector -m  mongodb://username:password@localhost:27017 -t localhost:9200 -d elastic2_doc_manager -c mongo-connector_config.json   
+    sudo mongo-connector -m localhost:27017 -c mongo-connector_config.json  
 
 
