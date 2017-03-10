@@ -49,7 +49,7 @@ Pour ubuntu 16.04(pour d’autre système consulter le manuel de mongodb)
 **Installation php :**
 
     sudo apt-get install  php5.6
-    
+
     Installer php curl :
 
     sudo apt-get install php5.6-curl
@@ -64,7 +64,10 @@ Pour ubuntu 16.04(pour d’autre système consulter le manuel de mongodb)
     sudo a2enmod rewrite
 
     Modifier la configuration apache:
-    <Directory "/var/www/html">
+    DocumentRoot /var/www/html/ORDaR/Frontend/src/
+
+
+    <Directory "/var/www/html/ORDaR/Frontend/src/">
             AllowOverride All
             Order allow,deny
             Allow from all
@@ -105,6 +108,7 @@ rendez vous dans le dossier précédemment télécharger , dans le dossier bin e
     Rendez vous dans Frontend/src/search/controller/config.ini
     UPLOAD_FOLDER défini ou les Uploads des utilisateurs vont être stocké, 
     choisissez un chemin et vérifier les permissions.
+    Il s'agit de l'user qui a les droits de d'écriture.
     Choisissez l’authentification de mongodb 
     host = 127.0.0.1
     port = 27017
@@ -122,6 +126,12 @@ rendez vous dans le dossier précédemment télécharger , dans le dossier bin e
         </Directory>
 
     Alias /download  #CHEMIN PRECEDEMMENT CHOISI
+
+** Parametrage du fichier de configuration de mongo_connector:**
+Il s'agit de l'user qui a les droits de backup.
+Definissez un username, ainsi qu'un password.
+
+
 
 **Lancez Mongo-connector**
 

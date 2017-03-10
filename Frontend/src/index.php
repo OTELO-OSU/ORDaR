@@ -15,6 +15,17 @@ $app = new \Slim\App($c);
 session_start();
 
 
+$app->get('/', function (Request $req,Response $responseSlim) {
+$loader = new Twig_Loader_Filesystem('search/templates');
+$twig = new Twig_Environment($loader);
+if ($_SESSION) {
+echo $twig->render('accueil.html.twig',['name'=>$_SESSION['name'],'firstname'=>$_SESSION['firstname'],'mail'=>$_SESSION['mail']]);
+}
+else{
+	echo $twig->render('accueil.html.twig');
+}
+});
+
 $app->get('/accueil', function (Request $req,Response $responseSlim) {
 $loader = new Twig_Loader_Filesystem('search/templates');
 $twig = new Twig_Environment($loader);
@@ -90,7 +101,9 @@ $app->post('/upload', function (Request $req,Response $responseSlim) {
 	 $loader = new Twig_Loader_Filesystem('search/templates');
 	$twig = new Twig_Environment($loader);
    	$Datasheet = new Datasheet();
-	$response=$Datasheet->Newdatasheet();
+   	$db=$Datasheet->connect_tomongo();
+	$array=$Datasheet->Postprocessing($_POST);
+	$response=$Datasheet->Newdatasheet($db,$array);
 	if ($response==false) {
 		echo $twig->render('upload.html.twig',['error'=>"true",'name'=>$_SESSION['name'],'mail'=>$_SESSION['mail'],'firstname'=>$_SESSION['firstname'],'creation_date'=>$_POST['creation_date'],'language'=> $_POST['language'],'sample_kind'=> $_POST['sample_kind'],'title'=> $_POST['title'],'description'=> $_POST['description'],'scientific_field' => $_POST['scientific_field']]);
 	}
@@ -187,7 +200,9 @@ $app->post('/editrecord/{doi}', function (Request $req,Response $responseSlim,$a
 	$response=$request->get_info_for_dataset($doi);
 	$collection=$response['_type'];
 	$doi= $response['_id'];
-	$response=$Datasheet->Editdatasheet($collection,$doi);
+	$db=$Datasheet->connect_tomongo();
+	$array=$Datasheet->Postprocessing($_POST);
+	$response=$Datasheet->Editdatasheet($collection,$doi,$db,$array);
 });
 
 

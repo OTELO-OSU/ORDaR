@@ -7,7 +7,12 @@ use MongoClient;
 
 class DatasheetController
 {
-	function connect_tomongo(){
+
+/**
+ * Create a mongo connection instance
+ * @return Mongo_instance
+ */
+function connect_tomongo(){
 			$config = parse_ini_file("config.ini");
 
 	 if(empty($config['username']) && empty($config['password'])) {
@@ -17,7 +22,11 @@ class DatasheetController
             }
             return $this->db;
 	}
-
+	/**
+	 * Parse Post Data 
+	 * @param array, post request
+	 * @return array, parsed data to write
+	 */
 	function Postprocessing($POST){
 	$error=null;
 	$config = parse_ini_file("config.ini");
@@ -264,15 +273,13 @@ class DatasheetController
 	}
 }
 
-
-	function Newdatasheet()
+	
+	function Newdatasheet($db,$array)
 	{
 	$config = parse_ini_file("config.ini");
 	$UPLOAD_FOLDER=$config["UPLOAD_FOLDER"];
 	$error=NULL;
 	//$this->db = new MongoClient("mongodb://localhost:27017");
-	$db=self::connect_tomongo();
-	$array=self::Postprocessing($_POST);
     $doi=rand(5, 15000);
 	for($i=0; $i<count($_FILES['file']['name']); $i++) {
 		$repertoireDestination = $UPLOAD_FOLDER;
@@ -309,13 +316,11 @@ class DatasheetController
 
 
 
-	function Editdatasheet($collection,$doi){
+	function Editdatasheet($collection,$doi,$db;$array){
 	$config = parse_ini_file("config.ini");
 	$UPLOAD_FOLDER=$config["UPLOAD_FOLDER"];
 	$error=NULL;
 	//$this->db = new MongoClient("mongodb://localhost:27017");
-	$db=self::connect_tomongo();
-	$array=self::Postprocessing($_POST);
 		$collectionObject = $this->db->selectCollection('ORDaR', $collection);
 		if (is_numeric($doi)==true) {
 			$doi=$doi;
