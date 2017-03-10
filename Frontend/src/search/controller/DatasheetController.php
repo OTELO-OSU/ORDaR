@@ -301,7 +301,7 @@ function connect_tomongo(){
 					        }
 				$data["FILES"][$i]["FILETYPE"]=$filetypes;
 				$collection ="Manual_Depot";
-			    $collectionObject = $this->db->selectCollection('ORDaR', $collection);
+			    $collectionObject = $this->db->selectCollection($config["authSource"], $collection);
 				$json=array('_id' => $doi, "INTRO" => $array,"DATA" => $data);//voir pour DOI
 			    }         
 			} 
@@ -321,7 +321,7 @@ function connect_tomongo(){
 	$UPLOAD_FOLDER=$config["UPLOAD_FOLDER"];
 	$error=NULL;
 	//$this->db = new MongoClient("mongodb://localhost:27017");
-		$collectionObject = $this->db->selectCollection('ORDaR', $collection);
+		$collectionObject = $this->db->selectCollection($config["authSource"], $collection);
 		if (is_numeric($doi)==true) {
 			$doi=$doi;
 
@@ -365,7 +365,7 @@ function removeUnpublishedDatasheet($collection,$doi){
 	else{
 		//$this->db = new MongoClient("mongodb://localhost:27017");
 		$db=self::connect_tomongo();
-		$collectionObject = $this->db->selectCollection('ORDaR', $collection);
+		$collectionObject = $this->db->selectCollection($config["authSource"], $collection);
 		$query=array('_id' => $doi);
 	   	$cursor = $collectionObject->find($query);
 	   	foreach ($cursor as $key => $value) {
