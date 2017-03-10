@@ -14,13 +14,7 @@
 
     -PHP 5.6
 
-    -PHP-dev
-
     -PHP-curl
-
-    -PHP-xml
-
-    -PHP-pear
 
     -Mongo php driver
 
@@ -55,18 +49,14 @@ Pour ubuntu 16.04(pour d’autre système consulter le manuel de mongodb)
 **Installation php :**
 
     sudo apt-get install  php5.6
+    
     Installer php curl :
-    sudo apt-get install php5.6-curl
 
-    Installer php-dev
-    sudo apt-get install php5.6-dev
-    sudo apt-get install php5.6-xml
-    et pear
-    sudo apt-get install php-pear
-    ensuite :
-    sudo pecl install mongodb
-    et ajouter 
-    extension=mongo.so dans  php.ini d’apache2 et du CLI
+    sudo apt-get install php5.6-curl
+    
+    et php-mongo
+
+    sudo apt-get install php-mongo
 
 **Configuration apache2**
 
