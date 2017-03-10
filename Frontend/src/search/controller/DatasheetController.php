@@ -316,7 +316,7 @@ function connect_tomongo(){
 
 
 
-	function Editdatasheet($collection,$doi,$db;$array){
+	function Editdatasheet($collection,$doi,$db,$array){
 	$config = parse_ini_file("config.ini");
 	$UPLOAD_FOLDER=$config["UPLOAD_FOLDER"];
 	$error=NULL;
