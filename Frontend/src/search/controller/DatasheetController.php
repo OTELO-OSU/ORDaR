@@ -412,7 +412,7 @@ function removeUnpublishedDatasheet($collection,$doi){
 				$mail=$value["MAIL"];
 				//mail('guiot.anthony@free.fr', 'Mon Sujet', "test");
 				echo $value["MAIL"];
-				mail("<".$mail.">", 'Contact from ORDaR :'.$object, $sendermail." want to know something about this dataset: <br>DOI: ".$doi."<br>Title: ".$title." <br> Message from ".$sendermail.": <br> ".$message, 'From:'.$sendermail);
+				mail("<".$mail.">", 'Contact from ORDaR :'.$object, $sendermail." want to know something about this dataset: <br>DOI: ".$doi."<br>Title: ".$title." <br> Message from ".$sendermail.": <br> ".$message, '< From:'.$sendermail.">");
 			}
 		}
 		if (!empty($mail)) {
