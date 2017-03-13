@@ -3,33 +3,42 @@
 
 <div class="ui internally celled grid">
   <div class="row">
-      <div class="ui ten wide column centered">
-<h1> {{title}}</h1>
+  <div class="ui ten wide column ">
+  <h1> {{title}}</h1>
     <div class="content">
-      {% if accessright == "Closed" %}
-        <div class="ui red label" >{{accessright}}</div>
-      {% elseif accessright == "Embargoed" %}
-        <div class="ui red label" data-tooltip="Available as Open Access after {{publicationdate}}">{{accessright}}</div>
-      {% elseif accessright == "Open" %}
-        <div class="ui green label" >{{accessright}}</div>
-      {% endif %}
-    
+            {% if accessright == "Closed" %}
+              <div class="ui red label" >{{accessright}}</div>
+            {% elseif accessright == "Embargoed" %}
+              <div class="ui red label" data-tooltip="Available as Open Access after {{publicationdate}}">{{accessright}}</div>
+            {% elseif accessright == "Open" %}
+              <div class="ui green label" >{{accessright}}</div>
+            {% elseif accessright == "Unpublished" %}
+              <div class="ui red label" >{{accessright}}</div>
+            {% endif %}
+          
 
 
-      <div class="ui blue label">{{creationdate}}</div>
-       <div class="ui blue label">DOI : {{doi}}</div>
-    
-      <div class="row">
-      
-    <div class="meta"><h4>Description:</h4>
-    <span class="data">{{datadescription}}</span>
-    </div><div class="row"></div><h4><i class="user icon"></i>Authors:</h4>
+            <div class="ui blue label">{{creationdate}}</div>
+             <div class="ui blue label">DOI : {{doi}}</div>
+          
+            <div class="row">
+            
+          <div class="meta"><h4>Description:</h4>
+          <span class="data">{{datadescription}}</span>
+          </div><div class="row"></div><h4><i class="user icon"></i>Authors:</h4>
 
-<ul>
-    {% for author in authors %}
-        <li><a onclick="APP.modules.send_email.send_email('{{doi}}','{{author.NAME}}','{{ author.FIRST_NAME}}')">{{author.NAME}} {{ author.FIRST_NAME}}</a></li>
-    {% endfor %}
-</ul>
+      <ul>
+          {% for author in authors %}
+              <li><a onclick="APP.modules.send_email.send_email('{{doi}}','{{author.NAME}}','{{ author.FIRST_NAME}}')">{{author.NAME}} {{ author.FIRST_NAME}}</a></li>
+          {% endfor %}
+      </ul>
+  {% if accessright == "Unpublished" %}
+    <a href="remove/{{doi}}"><div class="ui right floated primary button" >Remove<i class="remove icon"></i></div></a>
+  {% endif %}
+  <a href="editrecord?id={{doi}}"><div class="ui right floated primary button" >Edit<i class="right chevron icon"></i></div></a>
+  <p>Uploaded on {{uploaddate}}</p>
+  
+
 
 <div class="ui container cards">
   <div class="ui fluid card"> 
@@ -80,30 +89,33 @@
  
       </div>
     </div>
-     <div class="ui fluid card">
-    <div class="content">
-      <div class="header" >Preview</div>
-      <div id="preview">
-    
-        
-      </div>
-
-      </div>
-    </div>
+  
 
 <div class="ui fluid card">
     <div class="content">
       <div class="header">Stations</div>
-      <ul>
+      <table class="ui inverted green table">
+      <thead>
+      <tr><th>Name</th>
+      <th>Abbreviation</th>
+      <th>Longitude</th>
+      <th>Latitude</th>
+      <th>Elevation</th>
+      <th>Description</th>
+    </tr></thead><tbody>
       {% for station in stations %}
-      <li>{{station.NAME}}</li>
-      <li>{{station.ABBREVIATION}}</li>
-      <li>{{station.LONGITUDE}}</li>
-      <li>{{station.LATITUDE}}</li>
-      <li>{{station.ELEVATION}}</li>
-      <li>{{station.DESCRIPTION}}</li>
+      <tr>
+      <td>{{station.NAME}}</td>
+      <td>{{station.ABBREVIATION}}</td>
+      <td>{{station.LONGITUDE}}</td>
+      <td>{{station.LATITUDE}}</td>
+      <td>{{station.ELEVATION}}</td>
+      <td>{{station.DESCRIPTION}}</td>
+      </tr>
       {% endfor %}
-      </ul>
+      </tr>
+      </tbody>
+      </table>
       </div>
     </div>
 
@@ -111,37 +123,56 @@
     <div class="ui fluid card">
     <div class="content">
       <div class="header">Measurements</div>
-      <ul>
+      <table class="ui inverted blue table">
+      <thead>
+      <tr><th>Nature</th>
+      <th>Abbreviation</th>
+      <th>Unit</th>
+      </tr></thead><tbody>
       {% for measurement in measurements %}
-      <li>{{measurement.NATURE}}</li>
-      <li>{{measurement.ABBREVIATION}}</li>
-      <li>{{measurement.UNIT}}</li>
+      <tr>
+      <td>{{measurement.NATURE}}</td>
+      <td>{{measurement.ABBREVIATION}}</td>
+      <td>{{measurement.UNIT}}</td>
+      </tr>
       {% endfor %}
-      </ul>
+      </tr>
+      </tbody>
+      </table>
       </div>
     </div>
+</div>
+</div>
+</div>
+</div>
 
-  <div class="ui fluid card">
-    <div class="content">
-      <div class="header">Export</div>
+    <div class="ui six wide column ">
+    <div class="row">
+      <div class="ui fluid card">
+        <div class="content">
+          <div class="header">Export</div>
+          </div>
+        </div>
+         <div class="ui fluid card">
+        <div class="content">
+          <div class="header" >Preview</div>
+          <div id="preview">
+        
+            
+          </div>
+
+          </div>
+        </div>
+
+        </div>
       </div>
-    </div>
 
-    <p>Uploaded on {{uploaddate}}</p></div>
-  </div>
   </div>
 </div>
     </div>
     </div>
-      {% if accessright == "Unpublished" %}
-       </div> <a href="remove/{{doi}}"><div class="ui right floated primary button" >Remove<i class="remove icon"></i></div></a
-  </div>
+    
 
-      {% endif %}
-
-   </div> <a href="editrecord?id={{doi}}"><div class="ui right floated primary button" >Edit<i class="right chevron icon"></i></div></a
-  </div>
- 
 </div>
  
 

@@ -92,7 +92,7 @@ class RequestController
 
 
 	function getPublicationsofUser($author){
-		$url='http://localhost/ordar/_search?q=INTRO.FILE_CREATOR.NAME:'.$author.'&size=10000';
+		$url='http://localhost/ordar/_search?q=INTRO.FILE_CREATOR.MAIL:'.$author.'&size=10000';
 		$curlopt=array(CURLOPT_RETURNTRANSFER => true,
 			  CURLOPT_PORT=> 9200,
 			  CURLOPT_ENCODING => "",

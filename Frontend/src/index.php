@@ -123,7 +123,7 @@ $app->post('/upload', function (Request $req,Response $responseSlim) {
 $app->post('/getmypublications', function (Request $req,Response $responseSlim) {
 	$request = new RequestApi();
 	if ($_SESSION) {
-		$authors= $_SESSION['name'];
+		$authors= $_SESSION['mail'];
 		$response=$request->getPublicationsofUser($authors);
    	return $response;
 	}
