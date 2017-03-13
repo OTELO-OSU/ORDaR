@@ -185,8 +185,9 @@ $app->get('/editrecord', function (Request $req,Response $responseSlim) {
 	 	elseif ($value=="Attribution + Noncommercial + NoDerivatives (CC BY-NC-ND)") {
 	 		$license=6;
 	 	}
+
 	return @$twig->render('edit_dataset.html.twig', ['name'=>$_SESSION['name'],'firstname'=>$_SESSION['firstname'],'mail'=>$_SESSION['mail'],
-        'doi'=>$id,'title' => $response['_source']['INTRO']['TITLE'],'description'=>$response['_source']['INTRO']['DATA_DESCRIPTION'],'creation_date'=>$response['_source']['INTRO']['CREATION_DATE'],'sampling_date'=>$response['_source']['INTRO']['SAMPLING_DATE'][0],'authors'=>$response['_source']['INTRO']['FILE_CREATOR'],'keywords'=>$response['_source']['INTRO']['KEYWORDS'],'sample_kind'=>$response['_source']['INTRO']['SAMPLE_KIND'][0]['NAME'],'scientific_fields'=>$response['_source']['INTRO']['SCIENTIFIC_FIELD'],'institutions'=>$response['_source']['INTRO']['INSTITUTION'],'language'=>$response['_source']['INTRO']['LANGUAGE'],'stations'=>$response['_source']['INTRO']['STATION'],'measurements'=>$response['_source']['INTRO']['MEASUREMENT'],'license'=>$license
+        'doi'=>$id,'title' => $response['_source']['INTRO']['TITLE'],'description'=>$response['_source']['INTRO']['DATA_DESCRIPTION'],'creation_date'=>$response['_source']['INTRO']['CREATION_DATE'],'sampling_date'=>$response['_source']['INTRO']['SAMPLING_DATE'][0],'authors'=>$response['_source']['INTRO']['FILE_CREATOR'],'keywords'=>$response['_source']['INTRO']['KEYWORDS'],'sample_kind'=>$response['_source']['INTRO']['SAMPLE_KIND'][0]['NAME'],'scientific_fields'=>$response['_source']['INTRO']['SCIENTIFIC_FIELD'],'institutions'=>$response['_source']['INTRO']['INSTITUTION'],'language'=>$response['_source']['INTRO']['LANGUAGE'],'stations'=>$response['_source']['INTRO']['STATION'],'measurements'=>$response['_source']['INTRO']['MEASUREMENT'],'license'=>$license,'publisher'=>$response['_source']['INTRO']['PUBLISHER'],'fundings'=>$response['_source']['INTRO']['FUNDINGS'],'accessright'=>$response['_source']['INTRO']['ACCESS_RIGHT'],'embargoed_date'=>$response['_source']['INTRO']['PUBLICATION_DATE']
     	]);
 	}
 });

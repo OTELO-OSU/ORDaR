@@ -36,3 +36,8 @@
 #results .label{
 	margin-bottom: 10px!important;
 }
+
+.delete{
+    
+    display: inline-flex;
+}

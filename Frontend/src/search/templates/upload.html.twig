@@ -10,22 +10,27 @@
 	
 {% if error %}
 
-<h1>error, please check fields</h1>
+<h1>Error, please check fields</h1>
 
 
 {% endif %}
+<h4 class="ui dividing header">Files</h4>
 <form class="ui form" method="post" enctype="multipart/form-data" >
  <div class="required field">
 <input type="file" name="file[]" required="">
+
 </div>
 <div class="required field" id="files">
 </div>
-<input type="button" class="ui button active" id="addfile" value="Add a file"></input>
+<input type="button" class="ui button active" id="addfile" value="Add a file">
+	<div class="ui ten wide column centered">
+
 
 {% include 'formdataset.html.twig' %}
 
          
 
+</div>
 </div>
 
 {% include 'footer.html.twig' %}

@@ -132,7 +132,7 @@ APP.modules.search = (function(){
 				for (var k in sample_kind){
 					count=sample_kind[k]['doc_count']
 					type=sample_kind[k]['key']
-					if (type=="") {
+					if (type=="" || type==" ") {
 
 					}else{
 					$('#samplekind').append('<label  class="item" for="'+type+'"> <input onclick="APP.modules.search.checkCheckbox()" id="'+type+'" name="sample_kind" value="'+type+'" type="checkbox"> <div class="ui blue horizontal label">'+type+'</div></input>'+count+'</label>')
@@ -539,9 +539,9 @@ APP.modules.mypublications = (function(){
 APP.modules.upload=(function(){
 return{
 	init:function(){
+	$('.ui.accordion').accordion();
 		$('.ui .form')
   .form({
-  	  on: 'blur',
     fields: {
       title: {
         identifier: 'title',
@@ -556,7 +556,7 @@ return{
         identifier: 'creation_date',
         rules: [
           {
-            type   : 'empty',
+            type   : 'regExp[^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])*$]',
             prompt : 'Please enter creation date'
           }
         ]
@@ -652,12 +652,21 @@ return{
           }
         ]
       },
+      institutions: {
+        identifier: 'institution',
+        rules: [
+          {
+            type   : 'empty',
+            prompt : 'Please enter institution'
+          }
+        ]
+      },
       
     }
   })
 ;
 		$("#addauthors").click(function (e) {
- 		$("#items").append('<div>	 <div><input type="text" name="authors_firstname[]" data-validate="authors_firstname" placeholder="First Name" ></div><input name="authors_name[]" data-validate="authors_name" placeholder="Family Name, Given names" required="" type="text" /><input type="email" data-validate="authors_email" name="authors_email[]" placeholder="Email"  required=""><button class="ui icon button delete"><i class="remove icon"></i></button></div>'); });
+ 		$("#items").append('<div class="required field" id="items"> <div <div class="three fields"> <div class="field"><label>Author firstname</label><input type="text" name="authors_firstname[]" data-validate="authors_firstname" placeholder="First Name" ></div> <div class="field"><label>Author name</label><input type="text" name="authors_name[]" data-validate="authors_name" placeholder="Family Name, Given names" ></div> <div class="field"><label>Author mail</label><input type="email" name="authors_email[]" data-validate="authors_email" placeholder="Email" required ></div> <button class="ui icon button delete"><i class="remove icon"></i></button> </div> </div>'); });
 		$("body").on("click", ".delete", function (e) {
 		$(this).parent("div").remove();
 
@@ -677,6 +686,16 @@ return{
 	$("body").on("click", ".delete", function (e) {
 	$(this).parent("div").remove();
 });
+	$("#addfundings").click(function (e) {
+	i = $('#fundings input').length;
+	if (i <= 2) {
+ 	$("#fundings").append('<div><input type="text" name="fundings[]"" placeholder="Funding"><button class="ui icon button delete"><i class="remove icon"></i></button></div>');
+	}
+ 	 });
+	$("body").on("click", ".delete", function (e) {
+	$(this).parent("div").remove();
+});
+
 
 $("#addinstitution").click(function (e) {
  	$("#institution").append('<div><div class="ui dropdown fluid search selection optgroup institution" "> <input type="hidden" name="institution[]"> <div class="text">Select</div> <i class="dropdown icon"></i> <div class="menu"> <div class="ui horizontal divider">Etablissements publics à caractère scientifique et technologique (EPST)</div> <div class="item">CEMAGREF Centre national du machinisme agricole, du génie rural, des eaux et des forêts</div> <div class="item">CNRS Centre national de la recherche scientifique</div> <div class="item">INED Institut national d\'études démographiques</div> <div class="item">INRA Institut national de la recherche agronomique</div> <div class="item">INRETS Institut national de recherche sur les transports et leur sécurité</div> <div class="item">INRIA Institut national de recherche en informatique et en automatique</div> <div class="item">INSERM Institut national de la santé et de la recherche médicale</div> <div class="item">IRD Institut de recherche pour le développement</div> <div class="item">LCPC Laboratoire central des ponts et chaussées</div> <div class="ui horizontal divider">Etablissements publics à caractère industriel et commercial (EPIC)</div> <div class="item">ADEME Agence de l\'environnement et de la maîtrise de l\'énergie</div> <div class="item">ADIT Agence pour la diffusion de l\'information technologique</div> <div class="item">ANDRA Agence nationale de gestion des déchets radioactifs</div> <div class="item">ANVAR Agence nationale de valorisation de la recherche</div> <div class="item">BRGM Bureau de recherches géologiques et minières</div> <div class="item">CEA Commissariat à l\'énergie atomique</div> <div class="item">CIRAD Centre de coopération international en recherche agronomique</div> <div class="item">CNDP Centre national de documentation pédagogique</div> <div class="item">CNED Centre national d\'enseignement à distance</div> <div class="item">CNES Centre national d\'études spatiales</div> <div class="item">CSI Cité des sciences et de l\'industrie</div> <div class="item">CSTB Centre scientifique et technique du bâtiment</div> <div class="item">CIFREMER Institut français de recherche pour l\'exploitation de la mer</div> <div class="item">CNERIS Institut national de l\'environnement industriel et des risques</div> <div class="item">ONERA Office national d\'études et de recherches aérospatiales</div> <div class="ui horizontal divider">Etablissements publics à caractère administratif (EPA)</div> <div class="item">CEE Centre d\'études de l\'emploi</div> <div class="item">CINES Centre informatique national de l\'enseignement supérieur</div> <div class="item">INRP Institut national de recherche pédagogique</div> <div class="item">EPA Jussieu : désamiantage, mise en sécurité et rénovation du site</div> <div class="ui horizontal divider">Fondations</div> <div class="item">CEPH Centre d\'étude du polymorphisme humain</div> <div class="item">Institut Curie</div> <div class="item">Institut Pasteur</div> <div class="ui horizontal divider">Groupements d\'intérêt public (GIP)</div> <div class="item">ANRS Agence nationale de la recherche contre le SIDA</div> <div class="item">CNG Centre national de génotypage</div> <div class="item">CNS Génoscope - Centre national de séquençage</div> <div class="item">CHMR Fonds de recherche Hoechst Marion Roussel</div> <div class="item">IFRTP Institut pour la recherche et la technologie polaires</div> <div class="item">OST Observatoire des sciences et techniques</div> <div class="item">RENATER Réseau national pour la technologie, l\'enseignement et la recherche</div> </div> </div><button class="ui icon button delete"><i class="remove icon"></i></button></div>'); 
@@ -695,7 +714,7 @@ $("#addstation").click(function (e) {
 });
 
 $("#addmeasurement").click(function (e) {
- 	$("#measurements").append('<div><div><input type="text" name="measurement_nature[]" placeholder="Nature" required="" ></input></div><div><input type="text" name="measurement_abbreviation[]"  placeholder="Abbreviation" required=""></div></input><div><input type="text" name="measurement_unit[]" placeholder="Unit" required=""></input></div><button class="ui icon button delete"><i class="remove icon"></i></button></div>'); });
+ 	$("#measurements").append('<div class="three fields"> <div class="field"><label>Measurement nature</label><input type="text"  name="measurement_nature[]"  placeholder="Nature" ></input></div> <div class="field"><label>Measurement abbreviation</label><input type="text"  name="measurement_abbreviation[]" data-validate="measurement_abbreviation" placeholder="Abbreviation" ></input></div> <div class="field"><label>Measurement unit</label><input type="text"  name="measurement_unit[]" data-validate="measurement_unit" placeholder="Unit" ></input></div> <button class="ui icon button delete"><i class="remove icon"></i></button> </div>'); });
 	$("body").on("click", ".delete", function (e) {
 	$(this).parent("div").remove();
 });

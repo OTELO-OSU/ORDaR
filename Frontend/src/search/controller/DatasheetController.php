@@ -31,7 +31,7 @@ function connect_tomongo(){
 	$error=null;
 	$config = parse_ini_file("config.ini");
 	$UPLOAD_FOLDER=$config["UPLOAD_FOLDER"];
-	$required = array('title','creation_date','language','authors_name','authors_firstname','authors_email','description','scientific_field','measurement_nature','measurement_abbreviation','measurement_unit','license');
+	$required = array('title','creation_date','language','authors_name','authors_firstname','authors_email','description','scientific_field','measurement_nature','measurement_abbreviation','measurement_unit','license','publisher','institution');
 	foreach($required as $field) {
 	  if (empty($_POST[$field])) {
 	  	print $field;
@@ -171,8 +171,13 @@ function connect_tomongo(){
 		 	$array["MEASUREMENT"][0]["UNIT"]=htmlspecialchars($value[0], ENT_QUOTES);
 		 	}
 		 }
-
+		 if ($key=="publisher") {
+	 	 	$array["PUBLISHER"]=htmlspecialchars($value, ENT_QUOTES);
+	 	 }
 		 if ($key=="sample_kind") {
+		 	if (empty($value)) {
+		 		$array["SAMPLE_KIND"][]["NAME"]=" ";
+		 	}
 		 	$array["SAMPLE_KIND"][]["NAME"]=htmlspecialchars($value, ENT_QUOTES);
 		 }
 		   if ($key=="institution") {
@@ -265,6 +270,23 @@ function connect_tomongo(){
 
 		 
 		 }
+	 	 $array["PUBLICATION_DATE"]=$publication_date;
+
+
+	 	 
+
+	 	  if ($key=="fundings") {
+		 	if (count($value<=3)) {
+		 		foreach ($value as $key => $value) {
+		 		$array["FUNDINGS"][$key]["NAME"]=htmlspecialchars($value, ENT_QUOTES);
+		 		}
+		 	}
+		 	else{
+		 	$array["FUNDINGS"]["NAME"]=htmlspecialchars($value, ENT_QUOTES);
+		 	}
+		 }
+
+
 
 		 $array["UPLOAD_DATE"]=date('Y-m-d');
 		 

@@ -130,6 +130,7 @@ rendez vous dans le dossier précédemment télécharger , dans le dossier bin e
 ** Parametrage du fichier de configuration de mongo_connector:**
 Il s'agit de l'user qui a les droits de backup.
 Definissez un username, ainsi qu'un password.
+Definisse
 
 
 
