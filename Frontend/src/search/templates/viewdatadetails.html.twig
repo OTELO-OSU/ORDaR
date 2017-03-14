@@ -9,11 +9,11 @@
             {% if accessright == "Closed" %}
               <div class="ui red label" >{{accessright}}</div>
             {% elseif accessright == "Embargoed" %}
-              <div class="ui red label" data-tooltip="Available as Open Access after {{publicationdate}}">{{accessright}}</div>
+              <div class="ui orange label" data-tooltip="Available as Open Access after {{publicationdate}}">{{accessright}}</div>
             {% elseif accessright == "Open" %}
               <div class="ui green label" >{{accessright}}</div>
             {% elseif accessright == "Unpublished" %}
-              <div class="ui red label" >{{accessright}}</div>
+              <div class="ui grey label" >{{accessright}}</div>
             {% endif %}
           
 

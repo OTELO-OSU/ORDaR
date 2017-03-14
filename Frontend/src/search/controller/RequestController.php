@@ -92,6 +92,50 @@ class RequestController
 
 
 	function getPublicationsofUser($author){
+		$postcontent='{
+		    "aggs" : { 
+		        "sample_kind" : { 
+		            "terms" : { 
+		              "field" : "INTRO.SAMPLE_KIND.NAME"
+		            }
+		        },
+		        "keywords" : { 
+		            "terms" : { 
+		              "field" : "INTRO.KEYWORDS.NAME"
+		            }
+		        },
+				 "authors" : { 
+		            "terms" : { 
+		              "field" : "INTRO.FILE_CREATOR.NAME"
+		            }
+		        },
+		        "scientific_field" : { 
+		            "terms" : { 
+		              "field" : "INTRO.SCIENTIFIC_FIELD.NAME"
+		            }
+		        },
+		        "date" : { 
+		            "terms" : { 
+		              "field" : "INTRO.CREATION_DATE"
+		            }
+		        },
+		        "language" : { 
+		            "terms" : { 
+		              "field" : "INTRO.LANGUAGE"
+		            }
+		        },
+		        "filetype" : { 
+		            "terms" : { 
+		              "field" : "DATA.FILES.FILETYPE"
+		            }
+		        },
+		         "access_right" : { 
+		            "terms" : { 
+		              "field" : "INTRO.ACCESS_RIGHT"
+		            }
+		        }
+		    }
+		}';
 		$url='http://localhost/ordar/_search?q=INTRO.FILE_CREATOR.MAIL:'.$author.'&size=10000';
 		$curlopt=array(CURLOPT_RETURNTRANSFER => true,
 			  CURLOPT_PORT=> 9200,
@@ -99,10 +143,13 @@ class RequestController
 			  CURLOPT_MAXREDIRS => 10,
 			  CURLOPT_TIMEOUT => 40,
 			  CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-			  CURLOPT_CUSTOMREQUEST => "GET");
+			  CURLOPT_CUSTOMREQUEST => "POST",
+			  CURLOPT_POSTFIELDS => $postcontent);
 		$response=self::Curlrequest($url,$curlopt);
 		$response=json_decode($response,TRUE);
 		$responses["hits"]["total"]=$response["hits"]["total"];
+				$responses['aggregations']=$response	['aggregations'];
+
 		foreach ($response["hits"]["hits"] as $key => $value) {
 		$responses["hits"]["hits"][$key]=$value["_source"]["INTRO"];
 		$responses["hits"]["hits"][$key]["_index"]=$value["_index"];
@@ -112,6 +159,9 @@ class RequestController
 		$responses=json_encode($responses);
 		return $responses;
 	}
+
+
+	
 
 	function get_info_for_dataset($id){
 		$url='http://localhost/ordar/_all/'.$id;
@@ -203,6 +253,20 @@ class RequestController
 		}
 		
 	}
+
+
+
+	function Send_Contact_Mail($object,$message,$sendermail){
+		$mail=mail("<otelo-si@univ-lorraine.fr>", 'Contact from ORDaR :'.$object, $sendermail." Message from ".$sendermail.": <br> ".$message, ' From:<'.$sendermail.">");
+
+		if ($mail==true) {
+			return $error=false;
+		}
+		else{
+			return $error=true;
+		}
+
+		}
 
 
 }

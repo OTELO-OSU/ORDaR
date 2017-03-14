@@ -38,6 +38,36 @@ else{
 });
 
 
+$app->get('/about', function (Request $req,Response $responseSlim) {
+	$loader = new Twig_Loader_Filesystem('search/templates');
+	$twig = new Twig_Environment($loader);
+	echo $twig->render('about.html.twig');
+});
+
+$app->get('/terms', function (Request $req,Response $responseSlim) {
+	$loader = new Twig_Loader_Filesystem('search/templates');
+	$twig = new Twig_Environment($loader);
+	echo $twig->render('terms.html.twig');
+});
+
+$app->get('/contact', function (Request $req,Response $responseSlim) {
+	$loader = new Twig_Loader_Filesystem('search/templates');
+	$twig = new Twig_Environment($loader);
+	echo $twig->render('contact.html.twig');
+});
+
+$app->post('/contact', function (Request $req,Response $responseSlim) {
+	$loader = new Twig_Loader_Filesystem('search/templates');
+	$twig = new Twig_Environment($loader);
+	$sendermail = $req->getparam('User-email');
+	$message = $req->getparam('User-message');
+	$object = $req->getparam('User-object');
+	$request= new RequestApi();
+	$error=$request->Send_Contact_Mail($object,$message,$sendermail);
+	echo $twig->render('contact.html.twig',['error'=>$error]);
+});
+
+
 $app->get('/searchresult', function (Request $req,Response $responseSlim) {
 $loader = new Twig_Loader_Filesystem('search/templates');
 $twig = new Twig_Environment($loader);
@@ -153,7 +183,7 @@ $app->get('/record', function (Request $req,Response $responseSlim) {
         'doi'=> $response['_id'],'title' => $response['_source']['INTRO']['TITLE'],'datadescription'=>$response['_source']['INTRO']['DATA_DESCRIPTION'],'accessright'=>$response['_source']['INTRO']['ACCESS_RIGHT'],'publicationdate'=> $response['_source']['INTRO']['PUBLICATION_DATE'],'uploaddate'=>$response['_source']['INTRO']['UPLOAD_DATE'],'creationdate'=>$response['_source']['INTRO']['CREATION_DATE'],'authors'=>$response['_source']['INTRO']['FILE_CREATOR'],'files'=> $files,'mail'=>$_SESSION['mail'],'stations'=> $response['_source']['INTRO']['STATION'],'measurements'=> $response['_source']['INTRO']['MEASUREMENT']
     	]);
 	}
-});
+})->setName('record');
 
 
 $app->get('/editrecord', function (Request $req,Response $responseSlim) {
@@ -273,7 +303,7 @@ $app->post('/contact_author', function (Request $req,Response $responseSlim) {
 	$message = $req->getparam('User-message');
 	$object = $req->getparam('User-object');
 	$response=$request->get_info_for_dataset($doi);
-	$Datasheet->Send_Mail_author($doi,$response,$author_name,$author_firstname,$object,$message,$sendermail);	
+	$Datasheet->Send_Mail_author($doi,$response,$author_name,$author_firstname,$object,$message,$sendermail);
 });
 
 

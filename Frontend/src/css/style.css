@@ -1,6 +1,7 @@
 
 
 #info{
+    top: 1%;
 	display: none;
 }
 
@@ -37,7 +38,15 @@
 	margin-bottom: 10px!important;
 }
 
-.delete{
-    
-    display: inline-flex;
+
+#info-noresult{
+    display: none;
 }
+
+footer{
+position:fixed;
+bottom:0;
+width:100%;
+height:30px;
+}
+ 

@@ -20,15 +20,16 @@
 
  <div class="ui grey inverted menu">
     <div class="ui container">
-      <a href="accueil" class="header item">
-        <img class="ui small image" src="/img/ordar.png">
+      <a href="accueil" class="header left floated item">
+        <img  class="ui small image" src="/img/ordar_logo.png">
       </a>
+      <div id="search"></div>
       {% if mail %}
-      <a href="logout" class="item">Logout</a>
+      <a href="logout" class="right item">Logout</a>
       <a href="upload" class="item"  >Upload</a>
       <a href="mypublications" class="item"  >My dataset</a>
       {% else %}
-       <a href="login" class="item">Login</a>
+       <a href="login" class="right item">Login</a>
  	 {% endif %}
     </div>
   </div>

@@ -12,15 +12,18 @@ APP.modules.datatable = (function(){
 	return{
 		AppendTable : function(data){
 			if(data['hits']['total']==0){
-				$('#info').append('No result found!');
-				$('#info').addClass('red');
-				$('#info').show();
+				$('#info-noresult').append('No result found!');
+				$('#info-noresult').addClass('red');
+				$('#info-noresult').show();
+				$('#info').remove();
+				$('#gridlogo').show();
 				$('.easyPaginateNav').remove();
 				$('#facets').hide();
 
 			}
 			else{
 				$('.easyPaginateNav').remove();
+				$('#info-noresult').empty();
 				$('#info').empty();
 				total= data['hits']['total'];
 				
@@ -38,10 +41,13 @@ APP.modules.datatable = (function(){
 						access='<div class="ui green label">'+accessright+'</div>';
 					}
 					else if(accessright=="Embargoed"){
-						access='<div class="ui red label" data-tooltip="Available as Open Access after '+accessrightdate+'">'+accessright+'</div>';
+						access='<div class="ui orange label" data-tooltip="Available as Open Access after '+accessrightdate+'">'+accessright+'</div>';
 					}
-					else{
+					else if (accessright=="Closed"){
 						access='<div class="ui red label">'+accessright+'</div>';
+					}
+					else if (accessright=="Unpublished"){
+						access='<div class="ui grey label">'+accessright+'</div>';
 					}
 					//datedepot='<div class="ui label">'+datedepot+'</div>';
 					//filetype='<div class="ui label">'+filetype+'</div>';
@@ -81,6 +87,8 @@ APP.modules.datatable = (function(){
 	     		$('#info').append(total+' result(s) found!');
 				$('#info').addClass('green');
 				$('#info').show();
+				$('#logosearch').hide();
+				$('#gridlogo .row').remove();
 	     		$('#results').easyPaginate({
 				    paginateElement: '.item',
 				    elementsPerPage: 10,
@@ -135,7 +143,7 @@ APP.modules.search = (function(){
 					if (type=="" || type==" ") {
 
 					}else{
-					$('#samplekind').append('<label  class="item" for="'+type+'"> <input onclick="APP.modules.search.checkCheckbox()" id="'+type+'" name="sample_kind" value="'+type+'" type="checkbox"> <div class="ui blue horizontal label">'+type+'</div></input>'+count+'</label>')
+					$('#samplekind').append('<label  class="item" for="'+type+'"> <input onclick="APP.modules.search.checkCheckbox()" id="'+type+'" name="sample_kind" value="'+type+'" type="checkbox"> <div class="ui blue horizontal label">'+type+'</div>'+count+'</label>')
 					}
 				}
 				authors=data['aggregations']['authors']['buckets'];
@@ -146,20 +154,19 @@ APP.modules.search = (function(){
 					if (type=="") {
 
 					}else{
-					$('#authors').append('<label  class="item" for="'+type+'authors"> <input onclick="APP.modules.search.checkCheckbox()" id="'+type+'authors" name="authors" value="'+type+'" type="checkbox"> <div class="ui blue horizontal label">'+type+'</div></input>'+count+'</label>')
+					$('#authors').append('<label  class="item" for="'+type+'authors"> <input onclick="APP.modules.search.checkCheckbox()" id="'+type+'authors" name="authors" value="'+type+'" type="checkbox"> <div class="ui blue horizontal label">'+type+'</div>'+count+'</label>')
 					}
 				}
 				keywords=data['aggregations']['keywords']['buckets'];
 				$("#keywords").append('<div class="header" >Keywords</div>');
 				for (var k in keywords){
-					count=keywords[k]['doc_count']
-					type=keywords[k]['key']
-				console.log(type);
+					count=keywords[k]['doc_count'];
+					type=keywords[k]['key'];
 					if (type=="") {
 
 					}else{
 
-					$('#keywords').append('<label  class="item" for="'+type+'keywords"> <input onclick="APP.modules.search.checkCheckbox()" id="'+type+'keywords" name="keywords" value="'+type+'" type="checkbox"> <div class="ui blue horizontal label">'+type+'</div></input>'+count+'</label>')
+					$('#keywords').append('<label  class="item" for="'+type+'keywords"> <input onclick="APP.modules.search.checkCheckbox()" id="'+type+'keywords" name="keywords" value="'+type+'" type="checkbox"> <div class="ui blue horizontal label">'+type+'</div>'+count+'</label>')
 					}
 				}
 				scientific_field=data['aggregations']['scientific_field']['buckets'];
@@ -170,7 +177,7 @@ APP.modules.search = (function(){
 					if (type=="") {
 
 					}else{
-					$('#scientificfield').append('<label  class="item" for="'+type+'scientificfield"> <input onclick="APP.modules.search.checkCheckbox()" id="'+type+'scientificfield" name="scientific_field" value="'+type+'" type="checkbox"> <div class="ui blue horizontal label">'+type+'</div></input>'+count+'</label>')
+					$('#scientificfield').append('<label  class="item" for="'+type+'scientificfield"> <input onclick="APP.modules.search.checkCheckbox()" id="'+type+'scientificfield" name="scientific_field" value="'+type+'" type="checkbox"> <div class="ui blue horizontal label">'+type+'</div>'+count+'</label>')
 					}
 				}
 				language=data['aggregations']['language']['buckets'];
@@ -181,7 +188,7 @@ APP.modules.search = (function(){
 					if (type=="") {
 
 					}else{
-					$('#language').append('<label  class="item" for="'+type+'language"> <input onclick="APP.modules.search.checkCheckbox()" id="'+type+'language" name="language" value="'+type+'" type="checkbox"> <div class="ui blue horizontal label">'+type+'</div></input>'+count+'</label>')
+					$('#language').append('<label  class="item" for="'+type+'language"> <input onclick="APP.modules.search.checkCheckbox()" id="'+type+'language" name="language" value="'+type+'" type="checkbox"> <div class="ui blue horizontal label">'+type+'</div>'+count+'</label>')
 					}
 				}
 				filetype=data['aggregations']['filetype']['buckets'];
@@ -192,7 +199,7 @@ APP.modules.search = (function(){
 					if (type=="") {
 
 					}else{
-					$('#filetype').append('<label  class="item" for="'+type+'filetype"> <input onclick="APP.modules.search.checkCheckbox()" id="'+type+'filetype" name="filetype" value="'+type+'" type="checkbox"> <div class="ui blue horizontal label">'+type+'</div></input>'+count+'</label>')
+					$('#filetype').append('<label  class="item" for="'+type+'filetype"> <input onclick="APP.modules.search.checkCheckbox()" id="'+type+'filetype" name="filetype" value="'+type+'" type="checkbox"> <div class="ui blue horizontal label">'+type+'</div>'+count+'</label>')
 					}
 				}
 				accessright=data['aggregations']['access_right']['buckets'];
@@ -203,7 +210,7 @@ APP.modules.search = (function(){
 					if (type=="") {
 
 					}else{
-					$('#accesright').append('<label  class="item" for="'+type+'accessright"> <input onclick="APP.modules.search.checkCheckbox()" id="'+type+'accessright" name="accessright" value="'+type+'" type="checkbox"> <div class="ui blue horizontal label">'+type+'</div></input>'+count+'</label>')
+					$('#accesright').append('<label  class="item" for="'+type+'accessright"> <input onclick="APP.modules.search.checkCheckbox()" id="'+type+'accessright" name="accessright" value="'+type+'" type="checkbox"> <div class="ui blue horizontal label">'+type+'</div>'+count+'</label>')
 					}
 				}
 				var creationdatearray=[];
@@ -408,7 +415,7 @@ APP.modules.search = (function(){
                     }
                    
 
-                    				var query =APP.modules.search.$_GET('query');
+                    var query =APP.modules.search.$_GET('query');
 
                    // var query=$('#query').val()// recuperation de la valeur de l'input
                     $('#results').empty();
@@ -504,8 +511,300 @@ APP.modules.search = (function(){
 APP.modules.mypublications = (function(){
 	return{
 			init: function(){
+				var query=APP.modules.mypublications.$_GET('query');
+				APP.modules.mypublications.search(query);
+			},
+			AppendFacets:function(data){
+				$('#info').hide();
+				$('#facets').hide();
+				$('#info').removeClass('red');
+				$('#info').removeClass('green');
+				$('#info').empty();
+				$('#results').empty();
+				$('.easyPaginateNav').remove();
+				$('#facets_type').empty();
+				sample_kind=data['aggregations']['sample_kind']['buckets'];
+				$("#samplekind").append('<div class="header" >Sample kind</div>');
+				for (var k in sample_kind){
+					count=sample_kind[k]['doc_count']
+					type=sample_kind[k]['key']
+					if (type=="" || type==" ") {
+
+					}else{
+					$('#samplekind').append('<label  class="item" for="'+type+'"> <input onclick="APP.modules.mypublications.checkCheckbox()" id="'+type+'" name="sample_kind" value="'+type+'" type="checkbox"> <div class="ui blue horizontal label">'+type+'</div>'+count+'</label>')
+					}
+				}
+				authors=data['aggregations']['authors']['buckets'];
+				$("#authors").append('<div class="header" >Authors</div>');
+				for (var k in authors){
+					count=authors[k]['doc_count']
+					type=authors[k]['key'];
+					if (type=="") {
+
+					}else{
+					$('#authors').append('<label  class="item" for="'+type+'authors"> <input onclick="APP.modules.mypublications.checkCheckbox()" id="'+type+'authors" name="authors" value="'+type+'" type="checkbox"> <div class="ui blue horizontal label">'+type+'</div>'+count+'</label>')
+					}
+				}
+				keywords=data['aggregations']['keywords']['buckets'];
+				$("#keywords").append('<div class="header" >Keywords</div>');
+				for (var k in keywords){
+					count=keywords[k]['doc_count']
+					type=keywords[k]['key']
+				console.log(type);
+					if (type=="") {
+
+					}else{
+
+					$('#keywords').append('<label  class="item" for="'+type+'keywords"> <input onclick="APP.modules.mypublications.checkCheckbox()" id="'+type+'keywords" name="keywords" value="'+type+'" type="checkbox"> <div class="ui blue horizontal label">'+type+'</div>'+count+'</label>')
+					}
+				}
+				scientific_field=data['aggregations']['scientific_field']['buckets'];
+				$("#scientificfield").append('<div class="header" >Scientific fields</div>');
+				for (var k in scientific_field){
+					count=scientific_field[k]['doc_count']
+					type=scientific_field[k]['key']
+					if (type=="") {
+
+					}else{
+					$('#scientificfield').append('<label  class="item" for="'+type+'scientificfield"> <input onclick="APP.modules.mypublications.checkCheckbox()" id="'+type+'scientificfield" name="scientific_field" value="'+type+'" type="checkbox"> <div class="ui blue horizontal label">'+type+'</div>'+count+'</label>')
+					}
+				}
+				language=data['aggregations']['language']['buckets'];
+				$("#language").append('<div class="header" >Languages</div>');
+				for (var k in language){
+					count=language[k]['doc_count']
+					type=language[k]['key'];
+					if (type=="") {
+
+					}else{
+					$('#language').append('<label  class="item" for="'+type+'language"> <input onclick="APP.modules.mypublications.checkCheckbox()" id="'+type+'language" name="language" value="'+type+'" type="checkbox"> <div class="ui blue horizontal label">'+type+'</div>'+count+'</label>')
+					}
+				}
+				filetype=data['aggregations']['filetype']['buckets'];
+				$("#filetype").append('<div class="header" >Filetypes</div>');
+				for (var k in filetype){
+					count=filetype[k]['doc_count']
+					type=filetype[k]['key'];
+					if (type=="") {
+
+					}else{
+					$('#filetype').append('<label  class="item" for="'+type+'filetype"> <input onclick="APP.modules.mypublications.checkCheckbox()" id="'+type+'filetype" name="filetype" value="'+type+'" type="checkbox"> <div class="ui blue horizontal label">'+type+'</div>'+count+'</label>')
+					}
+				}
+				accessright=data['aggregations']['access_right']['buckets'];
+				$("#accesright").append('<div class="header" >Access right</div>');
+				for (var k in accessright){
+					count=accessright[k]['doc_count']
+					type=accessright[k]['key'];
+					if (type=="") {
+
+					}else{
+					$('#accesright').append('<label  class="item" for="'+type+'accessright"> <input onclick="APP.modules.mypublications.checkCheckbox()" id="'+type+'accessright" name="accessright" value="'+type+'" type="checkbox"> <div class="ui blue horizontal label">'+type+'</div>'+count+'</label>')
+					}
+				}
+				var creationdatearray=[];
+				data= data['hits']['hits'];
+				$("#date").append('<div class="header" >Date</div>');
+				for(var k in data){
+					creationdate=data[k]['CREATION_DATE'].split("-", 2);
+					creationdatearray.push(creationdate[0])
+				}
+				minyear=Math.min.apply(null, creationdatearray);
+	        	maxyear=Math.max.apply(null, creationdatearray);
+				$('#date').append('<input class="range-slider" value="'+minyear+','+maxyear+'" type="hidden">');
+
+				$('.range-slider').jRange({
+				    from:minyear ,
+				    to:maxyear,
+				    step: 1,
+				   	format: '%s',
+				    width: 300,
+				    showLabels: true,
+				    isRange : true,
+				     ondragend: function(val){
+				     	var query =APP.modules.search.$_GET('query');
+				     	range=val.split(",", 2);
+						mindate=range[0];
+						maxdate=range[1];
+						date=" AND INTRO.CREATION_DATE:["+mindate+"-01-01 TO "+maxdate+"-12-31]"
+						$('#results').empty();
+				     	APP.modules.search.search(query+date,"facets");
+				          
+				        },
+				     onbarclicked: function(val){
+						var query =APP.modules.search.$_GET('query');
+						range=val.split(",", 2);
+						mindate=range[0];
+						maxdate=range[1];
+						date=" AND INTRO.CREATION_DATE:["+mindate+"-01-01 TO "+maxdate+"-12-31]"
+						$('#results').empty();
+				     	APP.modules.search.search(query+date,"facets");
+				       	}
+			});
+
+
+				$('#facets').show();	
 				
-				APP.modules.mypublications.search();
+		  
+	
+			},
+			checkCheckbox:function(){
+				checked=$("#facets input:checked");
+				 	var samplekind;
+				 	var authors;
+				 	var facets;
+				 	var project_name;
+				 	var scientific_field;
+				 	var access_right;
+				 	var filetype;
+				 	facets=undefined;
+				 $.each(checked,function(index,value){
+
+				 	if (value.name=="sample_kind") {
+
+				 	var value = value.value;
+                    if (samplekind===undefined) {
+                      samplekind="INTRO.SAMPLE_KIND.NAME:"+value;
+
+                    }
+                    else{
+                      samplekind="OR INTRO.SAMPLE_KIND.NAME:"+value;
+                    }
+                    if (facets!==undefined) {
+                    	facets+=" "+samplekind;
+                    }
+                    else{
+                    	facets=samplekind;
+                    	
+                    }
+				 	}
+                    if (value.name=="authors") {
+
+				 	var value = value.value;
+                    if (authors===undefined) {
+                      authors="INTRO.FILE_CREATOR.NAME:"+value;
+
+                    }
+                     else{
+                      authors=" OR _INTRO.FILE_CREATOR.NAME:"+value;
+                    }
+                    if (facets!==undefined) {
+                    	facets+=" "+authors;
+                    }
+                    else{
+                    	facets=authors;
+                    	
+                    }
+                  }
+
+				if (value.name=="keywords") {
+
+				 	var value = value.value;
+                    if (keywords===undefined) {
+                      keywords="INTRO.KEYWORDS:"+value;
+
+                    }
+                    else{
+                      keywords=keywords+" OR INTRO.KEYWORDS:"+value;
+                    }
+                    if (facets!==undefined) {
+                    	facets=facets+" "+keywords;
+                    }
+                    else{
+                    	facets=keywords;
+                    	
+                    }
+				 	}
+                if (value.name=="scientific_field") {
+
+				 	var value = value.value;
+                    if (scientific_field===undefined) {
+                      scientific_field="INTRO.SCIENTIFIC_FIELD.NAME:"+value;
+
+                    }
+                    else{
+                      scientific_field=scientific_field+" OR INTRO.SCIENTIFIC_FIELD.NAME:"+value;
+                    }
+                    if (facets!==undefined) {
+                    	facets=facets+" "+scientific_field;
+                    }
+                    else{
+                    	facets=scientific_field;
+                    	
+                    }
+				 	}
+				if (value.name=="language") {
+
+				 	var value = value.value;
+                    if (language===undefined) {
+                      language="INTRO.LANGUAGE:"+value;
+
+                    }
+                    else{
+                      language=language+" OR INTRO.LANGUAGE:"+value;
+                    }
+                    if (facets!==undefined) {
+                    	facets=facets+" "+language;
+                    }
+                    else{
+                    	facets=language;
+                    	
+                    }
+				 	}
+
+				 	if (value.name=="filetype") {
+
+				 	var value = value.value;
+                    if (filetype===undefined) {
+                      filetype='DATA.FILES.FILETYPE:"'+value+'"';
+
+                    }
+                    else{
+                      filetype=filetype+' OR DATA.FILES.FILETYPE:"'+value+'"';
+                    }
+                    if (facets!==undefined) {
+                    	facets=facets+" "+filetype;
+                    }
+                    else{
+                    	facets=filetype;
+                    	
+                    }
+				 	}
+				 	if (value.name=="accessright") {
+
+				 	var value = value.value;
+                    if (access_right===undefined) {
+                      access_right="INTRO.ACCESS_RIGHT:"+value;
+
+                    }
+                    else{
+                      access_right=access_right+" OR INTRO.ACCESS_RIGHT:"+value;
+                    }
+                    if (facets!==undefined) {
+                    	facets=facets+"  "+access_right;
+                    }
+                    else{
+                    	facets=access_right;
+                    	
+                    }
+				 	}
+
+
+                    })
+
+                    if (facets===undefined) {
+                        facets="";
+                    }
+                    else{
+
+                   facets= " AND ("+facets+")"
+                    }
+                   
+                    $('#results').empty();
+
+                    APP.modules.mypublications.search("*"+facets);
+
+
 			},
 			 $_GET: function(param) {
 				var vars = {};
@@ -521,12 +820,15 @@ APP.modules.mypublications = (function(){
 				}
 				return vars;
 			},
-			search: function(){
-				var query=APP.modules.mypublications.$_GET('query');
+			search: function(query){
+				//var query=APP.modules.mypublications.$_GET('query');
 				$.post("index.php/getmypublications",
-		        {}, 
+		        {
+		        	query:query
+		        }, 
 		        function(data){
 		        	data=JSON.parse(data);
+		        	APP.modules.mypublications.AppendFacets(data);
 		        	APP.modules.datatable.AppendTable(data);
 		        })
 			}
@@ -708,13 +1010,13 @@ $("#addinstitution").click(function (e) {
 });
 
 $("#addstation").click(function (e) {
- 	$("#stations").append('<div> <div> <input type="text" name="station_name[]" placeholder="Name" ></input></div>  <div><input type="text" name="station_coordonate_system[]"  placeholder="coordonate sytem"></input></div><div><input type="text" name="station_abbreviation[]"  placeholder="abbreviation"></input></div><div><input type="text" name="station_longitude[]" placeholder="longitude" ></input></div><div><input type="text" name="station_latitude[]"  placeholder="latitude"></input></div><div><input type="text" name="station_elevation[]"  placeholder="elevation"></input></div><div><textarea name="station_description[]"  placeholder="description"></textarea></div><button class="ui icon button delete"><i class="remove icon"></i></button></div>'); });
+ 	$("#stations").append('<div> <div> <input type="text" name="station_name[]" placeholder="Name" ></div>  <div><input type="text" name="station_coordonate_system[]"  placeholder="coordonate sytem"></div><div><input type="text" name="station_abbreviation[]"  placeholder="abbreviation"></div><div><input type="text" name="station_longitude[]" placeholder="longitude" ></div><div><input type="text" name="station_latitude[]"  placeholder="latitude"></div><div><input type="text" name="station_elevation[]"  placeholder="elevation"></div><div><textarea name="station_description[]"  placeholder="description"></textarea></div><button class="ui icon button delete"><i class="remove icon"></i></button></div>'); });
 	$("body").on("click", ".delete", function (e) {
 	$(this).parent("div").remove();
 });
 
 $("#addmeasurement").click(function (e) {
- 	$("#measurements").append('<div class="three fields"> <div class="field"><label>Measurement nature</label><input type="text"  name="measurement_nature[]"  placeholder="Nature" ></input></div> <div class="field"><label>Measurement abbreviation</label><input type="text"  name="measurement_abbreviation[]" data-validate="measurement_abbreviation" placeholder="Abbreviation" ></input></div> <div class="field"><label>Measurement unit</label><input type="text"  name="measurement_unit[]" data-validate="measurement_unit" placeholder="Unit" ></input></div> <button class="ui icon button delete"><i class="remove icon"></i></button> </div>'); });
+ 	$("#measurements").append('<div class="three fields"> <div class="field"><label>Measurement nature</label><input type="text"  name="measurement_nature[]"  placeholder="Nature" ></div> <div class="field"><label>Measurement abbreviation</label><input type="text"  name="measurement_abbreviation[]" data-validate="measurement_abbreviation" placeholder="Abbreviation" ></div> <div class="field"><label>Measurement unit</label><input type="text"  name="measurement_unit[]" data-validate="measurement_unit" placeholder="Unit" ></div> <button class="ui icon button delete"><i class="remove icon"></i></button> </div>'); });
 	$("body").on("click", ".delete", function (e) {
 	$(this).parent("div").remove();
 });
@@ -756,7 +1058,7 @@ return{
 	send_email:function(doi,name,firstname){
 		$(".ui.modal .header").empty();
 		$(".ui.modal .header").append('Contact '+name+" "+firstname);
-		$(".form").append("<input type='hidden' name='doi' value='"+doi+"'></input><input type='hidden' name='author_name' value='"+name+"'></input><input type='hidden' name='author_first_name' value='"+firstname+"'></input>");
+		$(".form").append("<input type='hidden' name='doi' value='"+doi+"'><input type='hidden' name='author_name' value='"+name+"'><input type='hidden' name='author_first_name' value='"+firstname+"'>");
 		$('.ui.modal').modal('show');
 		console.log(doi);
 		}

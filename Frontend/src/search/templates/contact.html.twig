@@ -1,0 +1,36 @@
+
+{% include 'head.html.twig' %}
+<div class="ui grid">
+	<div class="ui eight wide centered column">
+		<h1> Contact us </h1>
+		{%if error%}
+			{% if error == true %}
+			<div class="ui message red"  style="display: block;">Une erreur est survenu!</div>
+			{% elseif error == false %}
+			<div class="ui message green"  style="display: block;">Message sent</div>
+			{% endif %}
+		{% endif %}
+
+	  <form class="ui form" action="contact" method="post">
+		 <div class="required field">
+		      <label>Your email</label>
+		  <input type="email" name="User-email"  placeholder="Your email" required>
+		  </div>
+		   <div class="required field">
+
+		    <label>Object</label>
+		    <input type="text" name="User-object" placeholder="Object" required>
+		  </div>
+
+		  <div class="required field">
+		    <label>Message</label>
+		   <textarea name="User-message" required></textarea>
+		  </div>
+	   <button class="ui submit button" >Send</button>
+	   </form>
+	</div>
+</div>
+
+
+
+{% include 'footer.html.twig' %}

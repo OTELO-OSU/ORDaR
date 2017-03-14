@@ -416,12 +416,12 @@ function removeUnpublishedDatasheet($collection,$doi){
 			}
 		}
 		if (!empty($mail)) {
-			
+			return $error=false;
 		}
 		else{
-			echo "an error as occured!";
+			return $error=true;
 		}
-
+		
 		}
 }
 
