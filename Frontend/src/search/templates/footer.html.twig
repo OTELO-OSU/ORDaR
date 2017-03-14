@@ -1,9 +1,11 @@
   
+
 <footer class="ui grey inverted menu">
-<a href="contact" class="item">Contact</a>
+<a onclick="APP.modules.send_email.contact()" class="item">Contact</a>
 <a href="terms" class="item">Terms of use</a>
 <a href="about" class="item">About</a>
 </footer>
+ {% include 'contact.html.twig' %}
 
 </body>
 </html>

@@ -1,23 +1,25 @@
-<div class="ui modal">
+<div class="ui modal contactauthor">
   <i class="close icon"></i>
   <div class="header">
   </div>
 
   <div class="content">
-  <form class="ui form" action="contact_author" method="post">
+
+  <form class="ui form contact " action="contact_author" method="post">
+  <div class="ui error message"></div>
  <div class="required field">
       <label>Your email</label>
-  <input type="email" name="User-email"  placeholder="Your email" required>
+  <input type="email" name="User-email"  placeholder="Your email" >
   </div>
    <div class="required field">
 
     <label>Object</label>
-    <input type="text" name="User-object" placeholder="Object" required>
+    <input type="text" name="User-object" placeholder="Object" >
   </div>
 
   <div class="required field">
     <label>Message</label>
-   <textarea name="User-message" required></textarea>
+   <textarea name="User-message"></textarea>
   </div>
 
   </div>

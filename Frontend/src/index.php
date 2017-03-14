@@ -64,8 +64,7 @@ $app->post('/contact', function (Request $req,Response $responseSlim) {
 	$object = $req->getparam('User-object');
 	$request= new RequestApi();
 	$error=$request->Send_Contact_Mail($object,$message,$sendermail);
-	echo $twig->render('contact.html.twig',['error'=>$error]);
-});
+	echo $twig->render('contact_request.html.twig',['name'=>$_SESSION['name'],'firstname'=>$_SESSION['firstname'],'mail'=>$_SESSION['mail'],'error'=>$error]);});
 
 
 $app->get('/searchresult', function (Request $req,Response $responseSlim) {
@@ -291,6 +290,8 @@ $app->get('/preview/{doi}/{filename}', function (Request $req,Response $response
 
 
 $app->post('/contact_author', function (Request $req,Response $responseSlim) {
+	$loader = new Twig_Loader_Filesystem('search/templates');
+	$twig = new Twig_Environment($loader);
 	$Datasheet = new Datasheet();
 	$request= new RequestApi();
 	$author_name  = $req->getparam('author_name');
@@ -303,7 +304,9 @@ $app->post('/contact_author', function (Request $req,Response $responseSlim) {
 	$message = $req->getparam('User-message');
 	$object = $req->getparam('User-object');
 	$response=$request->get_info_for_dataset($doi);
-	$Datasheet->Send_Mail_author($doi,$response,$author_name,$author_firstname,$object,$message,$sendermail);
+	$error=$Datasheet->Send_Mail_author($doi,$response,$author_name,$author_firstname,$object,$message,$sendermail);
+	echo $twig->render('contact_request.html.twig',['name'=>$_SESSION['name'],'firstname'=>$_SESSION['firstname'],'mail'=>$_SESSION['mail'],'error'=>$error]);
+
 });
 
 

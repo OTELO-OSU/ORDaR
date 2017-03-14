@@ -1059,9 +1059,14 @@ return{
 		$(".ui.modal .header").empty();
 		$(".ui.modal .header").append('Contact '+name+" "+firstname);
 		$(".form").append("<input type='hidden' name='doi' value='"+doi+"'><input type='hidden' name='author_name' value='"+name+"'><input type='hidden' name='author_first_name' value='"+firstname+"'>");
-		$('.ui.modal').modal('show');
+		$('.ui.modal.contactauthor').modal('show');
 		console.log(doi);
-		}
+		},
+	contact:function(){
+		$(".ui.modal .header").empty();
+		$(".ui.modal .header").append('Contact us');
+		$('.ui.modal.contactus').modal('show');
+	}
 		
 }})()
 
@@ -1072,6 +1077,7 @@ return{
 
 
 $(document).ready(function(){
+
 $('.ui .dropdown.license')
   .dropdown()
 ;
@@ -1081,8 +1087,42 @@ $('.ui .dropdown.scientific_field')
 $('.ui .dropdown.institution')
   .dropdown({allowAdditions: true})
 ;
+
+$('.contact')
+  .form({
+    fields: {
+      usermail: {
+        identifier: 'User-email',
+        rules: [
+          {
+            type   : 'email',
+            prompt : 'Please enter a valid email'
+          }
+        ]
+      },
+      userobject: {
+        identifier: 'User-object',
+        rules: [
+          {
+            type   : 'empty',
+            prompt : 'Please enter object'
+          }
+        ]
+      },
+      usermessage: {
+        identifier: 'User-message',
+        rules: [
+          {
+            type   : 'empty',
+            prompt : 'Please enter message'
+          }
+        ]
+      }
+  	}
+  });
+
+
 	APP.init();
-	APP.modules.upload.init();
 
 	APP.modules.search.init();
   	

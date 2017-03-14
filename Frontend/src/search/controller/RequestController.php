@@ -257,14 +257,21 @@ class RequestController
 
 
 	function Send_Contact_Mail($object,$message,$sendermail){
-		$mail=mail("<otelo-si@univ-lorraine.fr>", 'Contact from ORDaR :'.$object, $sendermail." Message from ".$sendermail.": <br> ".$message, ' From:<'.$sendermail.">");
 
+		if (!empty($object)&&!empty($message)&&filter_var($sendermail, FILTER_VALIDATE_EMAIL)) {
+		$mail=mail("<otelo-si@univ-lorraine.fr>", 'Contact from ORDaR :'.$object, $sendermail." Message from ".$sendermail.": <br> ".$message, "From:<noreply@ordar.otelo.univ-lorraine.fr>");
 		if ($mail==true) {
-			return $error=false;
+			 $error="false";
 		}
 		else{
-			return $error=true;
+			 $error="true";
 		}
+			return $error;
+		}
+		else{
+			return $error="true";
+		}
+
 
 		}
 
