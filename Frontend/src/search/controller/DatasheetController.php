@@ -39,6 +39,7 @@ function connect_tomongo(){
 	  }
 	}
 	if ($error==true) {
+		return $error;
 	}
 	else{
 		foreach ($POST as $key => $value){	
@@ -298,40 +299,44 @@ function connect_tomongo(){
 	
 	function Newdatasheet($db,$array)
 	{
-	$config = parse_ini_file("config.ini");
-	$UPLOAD_FOLDER=$config["UPLOAD_FOLDER"];
-	$error=NULL;
-	//$this->db = new MongoClient("mongodb://localhost:27017");
-    $doi=rand(5, 15000);
-	for($i=0; $i<count($_FILES['file']['name']); $i++) {
-		$repertoireDestination = $UPLOAD_FOLDER;
-		$nomDestination   = str_replace(' ', '_', $_FILES["file"]["name"][$i]);
-		$data["FILES"][$i]["DATA_URL"]=$nomDestination;
-		if (file_exists($repertoireDestination.$_FILES["file"]["name"][$i])){
-			return false;
-		}
-		else{
-			if (is_uploaded_file($_FILES["file"]["tmp_name"][$i])) {
-				if (!file_exists($repertoireDestination.$doi)) {
-				mkdir($repertoireDestination.$doi);
-			}
-			    if (rename($_FILES["file"]["tmp_name"][$i],$repertoireDestination.$doi."/".$nomDestination)) {
-					        $extension= new \SplFileInfo($repertoireDestination.$doi."/".$nomDestination);
-					        $filetypes=$extension->getExtension();
-					        if (strlen($filetypes)==0 OR strlen($filetypes)>4) {
-					        	$filetypes='unknow';
-					        }
-				$data["FILES"][$i]["FILETYPE"]=$filetypes;
-				$collection ="Manual_Depot";
-			    $collectionObject = $this->db->selectCollection($config["authSource"], $collection);
-				$json=array('_id' => $doi, "INTRO" => $array,"DATA" => $data);//voir pour DOI
-			    }         
-			} 
-		}
-	}
+	if ($array=="true") {
 
-				$collectionObject->insert($json);
-				return true;
+	}
+	else{
+		$config = parse_ini_file("config.ini");
+		$UPLOAD_FOLDER=$config["UPLOAD_FOLDER"];
+		//$this->db = new MongoClient("mongodb://localhost:27017");
+	    $doi=rand(5, 15000);
+		for($i=0; $i<count($_FILES['file']['name']); $i++) {
+			$repertoireDestination = $UPLOAD_FOLDER;
+			$nomDestination   = str_replace(' ', '_', $_FILES["file"]["name"][$i]);
+			$data["FILES"][$i]["DATA_URL"]=$nomDestination;
+			if (file_exists($repertoireDestination.$_FILES["file"]["name"][$i])){
+				return false;
+			}
+			else{
+				if (is_uploaded_file($_FILES["file"]["tmp_name"][$i])) {
+					if (!file_exists($repertoireDestination.$doi)) {
+					mkdir($repertoireDestination.$doi);
+				}
+				    if (rename($_FILES["file"]["tmp_name"][$i],$repertoireDestination.$doi."/".$nomDestination)) {
+						        $extension= new \SplFileInfo($repertoireDestination.$doi."/".$nomDestination);
+						        $filetypes=$extension->getExtension();
+						        if (strlen($filetypes)==0 OR strlen($filetypes)>4) {
+						        	$filetypes='unknow';
+						        }
+					$data["FILES"][$i]["FILETYPE"]=$filetypes;
+					$collection ="Manual_Depot";
+				    $collectionObject = $this->db->selectCollection($config["authSource"], $collection);
+					$json=array('_id' => $doi, "INTRO" => $array,"DATA" => $data);//voir pour DOI
+				    }         
+				} 
+			}
+		}
+
+					$collectionObject->insert($json);
+					return true;
+		}
 	}
 
 
@@ -341,7 +346,10 @@ function connect_tomongo(){
 	function Editdatasheet($collection,$doi,$db,$array){
 	$config = parse_ini_file("config.ini");
 	$UPLOAD_FOLDER=$config["UPLOAD_FOLDER"];
-	$error=NULL;
+	if ($array=="true") {
+
+	}
+	else{
 	//$this->db = new MongoClient("mongodb://localhost:27017");
 		$collectionObject = $this->db->selectCollection($config["authSource"], $collection);
 		if (is_numeric($doi)==true) {
@@ -375,6 +383,7 @@ function connect_tomongo(){
 			$collectionObject->insert(array('_id' => $newdoi,"INTRO" => $INTRO,"DATA" => $DATA));	
 		}
 		return true;
+		}
 	}
 	
 	

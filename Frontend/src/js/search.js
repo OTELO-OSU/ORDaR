@@ -965,6 +965,15 @@ return{
           }
         ]
       },
+      publisher: {
+        identifier: 'publisher',
+        rules: [
+          {
+            type   : 'empty',
+            prompt : 'Please enter a publisher'
+          }
+        ]
+      },
       
     }
   })
