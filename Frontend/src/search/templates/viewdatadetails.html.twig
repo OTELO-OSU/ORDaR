@@ -32,10 +32,14 @@
               <li><a onclick="APP.modules.send_email.send_email('{{doi}}','{{author.NAME}}','{{ author.FIRST_NAME}}')">{{author.NAME}} {{ author.FIRST_NAME}}</a></li>
           {% endfor %}
       </ul>
+  {%for author in authors%}
+  {% if author.MAIL == mail %}
   {% if accessright == "Unpublished" %}
     <a href="remove/{{doi}}"><div class="ui right floated red button" >Remove  <i class="remove icon"></i></div></a>
   {% endif %}
   <a href="editrecord?id={{doi}}"><div class="ui right floated primary button" >Edit<i class="right chevron icon"></i></div></a>
+  {%endif%}
+  {%endfor%}
   <p>Uploaded on {{uploaddate}}</p>
   
 

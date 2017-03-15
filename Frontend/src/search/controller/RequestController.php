@@ -231,8 +231,6 @@ class RequestController
 				}
 				}
 				 if($notfound="notfound"){
-					
-
 					$responses["_source"]["INTRO"]=$response["_source"]["INTRO"];
 					$responses["_index"]=$response["_index"];
 					$responses["_id"]=$response["_id"];
@@ -245,14 +243,13 @@ class RequestController
 		}
 
 		elseif ($response["_source"]["INTRO"]["ACCESS_RIGHT"]=="Unpublished"){
+			$found="true";
 			foreach ($response["_source"]["INTRO"]["FILE_CREATOR"] as $key => $value) {
 					if (@$_SESSION["mail"]==$value["MAIL"]) {
 						$found="true";
 					}
-					else{
-						$found="false";
+					
 				}
-			}
 				if ($found=="true") {
 					return $response;
 				}

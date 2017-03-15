@@ -223,31 +223,48 @@ $app->get('/editrecord', function (Request $req,Response $responseSlim) {
 	if ($response==false) {
 		return $responseSlim->withRedirect('accueil');
 	}
-	else{
-		$value=$response['_source']['INTRO']['LICENSE'];
-		if ($value=="Attribution alone (CC BY)") {
-	 		$license=1;
-	 	}
-	 	elseif ($value=="Attribution + ShareAlike (CC BY-SA)") {
-	 		$license=2;
-	 	}
-	 	elseif ($value=="Attribution + Noncommercial (CC BY-NC)") {
-	 		$license=3;
-	 	}
-	 	elseif ($value=="Attribution + NoDerivatives (CC BY-ND)") {
-	 		$license=4;
-	 	}
-	 	elseif ($value=="Attribution + Noncommercial + ShareAlike (CC BY-NC-SA)") {
-	 		$license=5;
-	 	}
-	 	elseif ($value=="Attribution + Noncommercial + NoDerivatives (CC BY-NC-ND)") {
-	 		$license=6;
-	 	}
-
-	return @$twig->render('edit_dataset.html.twig', ['name'=>$_SESSION['name'],'firstname'=>$_SESSION['firstname'],'mail'=>$_SESSION['mail'],
-        'doi'=>$id,'title' => $response['_source']['INTRO']['TITLE'],'description'=>$response['_source']['INTRO']['DATA_DESCRIPTION'],'creation_date'=>$response['_source']['INTRO']['CREATION_DATE'],'sampling_date'=>$response['_source']['INTRO']['SAMPLING_DATE'][0],'authors'=>$response['_source']['INTRO']['FILE_CREATOR'],'keywords'=>$response['_source']['INTRO']['KEYWORDS'],'sample_kind'=>$response['_source']['INTRO']['SAMPLE_KIND'][0]['NAME'],'scientific_fields'=>$response['_source']['INTRO']['SCIENTIFIC_FIELD'],'institutions'=>$response['_source']['INTRO']['INSTITUTION'],'language'=>$response['_source']['INTRO']['LANGUAGE'],'stations'=>$response['_source']['INTRO']['STATION'],'measurements'=>$response['_source']['INTRO']['MEASUREMENT'],'license'=>$license,'publisher'=>$response['_source']['INTRO']['PUBLISHER'],'fundings'=>$response['_source']['INTRO']['FUNDINGS'],'accessright'=>$response['_source']['INTRO']['ACCESS_RIGHT'],'embargoed_date'=>$response['_source']['INTRO']['PUBLICATION_DATE']
-    	]);
+	elseif($response['_source']['DATA']==null){
+		return $responseSlim->withRedirect('accueil');
 	}
+	else{
+		$found="false";
+		foreach ($response["_source"]["INTRO"]["FILE_CREATOR"] as $key => $value) {
+			if (@$_SESSION["mail"]==$value["MAIL"]) {
+						$found="true";
+			}
+		}
+		if ($found=="true") {
+			
+		
+			$value=$response['_source']['INTRO']['LICENSE'];
+			if ($value=="Attribution alone (CC BY)") {
+		 		$license=1;
+		 	}
+		 	elseif ($value=="Attribution + ShareAlike (CC BY-SA)") {
+		 		$license=2;
+		 	}
+		 	elseif ($value=="Attribution + Noncommercial (CC BY-NC)") {
+		 		$license=3;
+		 	}
+		 	elseif ($value=="Attribution + NoDerivatives (CC BY-ND)") {
+		 		$license=4;
+		 	}
+		 	elseif ($value=="Attribution + Noncommercial + ShareAlike (CC BY-NC-SA)") {
+		 		$license=5;
+		 	}
+		 	elseif ($value=="Attribution + Noncommercial + NoDerivatives (CC BY-NC-ND)") {
+		 		$license=6;
+		 	}
+
+		return @$twig->render('edit_dataset.html.twig', ['name'=>$_SESSION['name'],'firstname'=>$_SESSION['firstname'],'mail'=>$_SESSION['mail'],
+	        'doi'=>$id,'title' => $response['_source']['INTRO']['TITLE'],'description'=>$response['_source']['INTRO']['DATA_DESCRIPTION'],'creation_date'=>$response['_source']['INTRO']['CREATION_DATE'],'sampling_date'=>$response['_source']['INTRO']['SAMPLING_DATE'][0],'authors'=>$response['_source']['INTRO']['FILE_CREATOR'],'keywords'=>$response['_source']['INTRO']['KEYWORDS'],'sample_kind'=>$response['_source']['INTRO']['SAMPLE_KIND'][0]['NAME'],'scientific_fields'=>$response['_source']['INTRO']['SCIENTIFIC_FIELD'],'institutions'=>$response['_source']['INTRO']['INSTITUTION'],'language'=>$response['_source']['INTRO']['LANGUAGE'],'stations'=>$response['_source']['INTRO']['STATION'],'measurements'=>$response['_source']['INTRO']['MEASUREMENT'],'license'=>$license,'publisher'=>$response['_source']['INTRO']['PUBLISHER'],'fundings'=>$response['_source']['INTRO']['FUNDINGS'],'accessright'=>$response['_source']['INTRO']['ACCESS_RIGHT'],'embargoed_date'=>$response['_source']['INTRO']['PUBLICATION_DATE']
+	    	]);
+		}
+	
+	else{
+		return $responseSlim->withRedirect('accueil');
+	}
+}
 });
 
 $app->post('/editrecord/{doi}', function (Request $req,Response $responseSlim,$args) {
