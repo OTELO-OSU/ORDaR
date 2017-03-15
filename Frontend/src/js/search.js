@@ -263,6 +263,7 @@ APP.modules.search = (function(){
 				checked=$("#facets input:checked");
 				 	var samplekind;
 				 	var authors;
+				 	var keywords;
 				 	var facets;
 				 	var project_name;
 				 	var scientific_field;
@@ -312,11 +313,11 @@ APP.modules.search = (function(){
 
 				 	var value = value.value;
                     if (keywords===undefined) {
-                      keywords="INTRO.KEYWORDS:"+value;
+                      keywords="INTRO.KEYWORDS.NAME:"+value;
 
                     }
                     else{
-                      keywords=keywords+" OR INTRO.KEYWORDS:"+value;
+                      keywords=keywords+" OR INTRO.KEYWORDS.NAME:"+value;
                     }
                     if (facets!==undefined) {
                     	facets=facets+" "+keywords;
@@ -657,6 +658,7 @@ APP.modules.mypublications = (function(){
 				 	var scientific_field;
 				 	var access_right;
 				 	var filetype;
+				 	var keywords;
 				 	facets=undefined;
 				 $.each(checked,function(index,value){
 
@@ -701,11 +703,11 @@ APP.modules.mypublications = (function(){
 
 				 	var value = value.value;
                     if (keywords===undefined) {
-                      keywords="INTRO.KEYWORDS:"+value;
+                      keywords="INTRO.KEYWORDS.NAME:"+value;
 
                     }
                     else{
-                      keywords=keywords+" OR INTRO.KEYWORDS:"+value;
+                      keywords=keywords+" OR INTRO.KEYWORDS.NAME:"+value;
                     }
                     if (facets!==undefined) {
                     	facets=facets+" "+keywords;
@@ -829,7 +831,7 @@ APP.modules.mypublications = (function(){
 		        function(data){
 		        	data=JSON.parse(data);
 		        	if (!facets) {
-		        		
+
 		        	APP.modules.mypublications.AppendFacets(data);
 		        	}
 		        	APP.modules.datatable.AppendTable(data);
