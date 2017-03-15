@@ -271,16 +271,13 @@ APP.modules.search = (function(){
 				 	var filetype;
 				 	facets=undefined;
 				 $.each(checked,function(index,value){
-
-				 	if (value.name=="sample_kind") {
-
 				 	var value = value.value;
-                    if (samplekind===undefined) {
-                      samplekind="INTRO.SAMPLE_KIND.NAME:"+value;
+				 	 if (samplekind===undefined) {
+                      samplekind='INTRO.SAMPLE_KIND.NAME:"'+value+'"';
 
                     }
                     else{
-                      samplekind="OR INTRO.SAMPLE_KIND.NAME:"+value;
+                      samplekind='OR INTRO.SAMPLE_KIND.NAME:"'+value+'"';
                     }
                     if (facets!==undefined) {
                     	facets+=" "+samplekind;
@@ -289,16 +286,16 @@ APP.modules.search = (function(){
                     	facets=samplekind;
                     	
                     }
-				 	}
+				 	
                     if (value.name=="authors") {
 
 				 	var value = value.value;
                     if (authors===undefined) {
-                      authors="INTRO.FILE_CREATOR.NAME:"+value;
+                      authors='INTRO.FILE_CREATOR.NAME:"'+value+'"';
 
                     }
                      else{
-                      authors=" OR _INTRO.FILE_CREATOR.NAME:"+value;
+                      authors=' OR _INTRO.FILE_CREATOR.NAME:"'+value+'"';
                     }
                     if (facets!==undefined) {
                     	facets+=" "+authors;
@@ -313,11 +310,11 @@ APP.modules.search = (function(){
 
 				 	var value = value.value;
                     if (keywords===undefined) {
-                      keywords="INTRO.KEYWORDS.NAME:"+value;
+                      keywords='INTRO.KEYWORDS.NAME:"'+value+'"';
 
                     }
                     else{
-                      keywords=keywords+" OR INTRO.KEYWORDS.NAME:"+value;
+                      keywords=keywords+' OR INTRO.KEYWORDS.NAME:"'+value+'"';
                     }
                     if (facets!==undefined) {
                     	facets=facets+" "+keywords;
@@ -331,11 +328,11 @@ APP.modules.search = (function(){
 
 				 	var value = value.value;
                     if (scientific_field===undefined) {
-                      scientific_field="INTRO.SCIENTIFIC_FIELD.NAME:"+value;
+                      scientific_field='INTRO.SCIENTIFIC_FIELD.NAME:"'+value+'"';
 
                     }
                     else{
-                      scientific_field=scientific_field+" OR INTRO.SCIENTIFIC_FIELD.NAME:"+value;
+                      scientific_field=scientific_field+' OR INTRO.SCIENTIFIC_FIELD.NAME:"'+value+'"';
                     }
                     if (facets!==undefined) {
                     	facets=facets+" "+scientific_field;
@@ -349,11 +346,11 @@ APP.modules.search = (function(){
 
 				 	var value = value.value;
                     if (language===undefined) {
-                      language="INTRO.LANGUAGE:"+value;
+                      language='INTRO.LANGUAGE:"'+value+'"';
 
                     }
                     else{
-                      language=language+" OR INTRO.LANGUAGE:"+value;
+                      language=language+' OR INTRO.LANGUAGE:"'+value+'"';
                     }
                     if (facets!==undefined) {
                     	facets=facets+" "+language;
@@ -386,11 +383,11 @@ APP.modules.search = (function(){
 
 				 	var value = value.value;
                     if (access_right===undefined) {
-                      access_right="INTRO.ACCESS_RIGHT:"+value;
+                      access_right='INTRO.ACCESS_RIGHT:"'+value+'"';
 
                     }
                     else{
-                      access_right=access_right+" OR INTRO.ACCESS_RIGHT:"+value;
+                      access_right=access_right+' OR INTRO.ACCESS_RIGHT:"'+value+'"';
                     }
                     if (facets!==undefined) {
                     	facets=facets+"  "+access_right;
@@ -666,11 +663,11 @@ APP.modules.mypublications = (function(){
 
 				 	var value = value.value;
                     if (samplekind===undefined) {
-                      samplekind="INTRO.SAMPLE_KIND.NAME:"+value;
+                      samplekind='INTRO.SAMPLE_KIND.NAME:"'+value+'"';
 
                     }
                     else{
-                      samplekind="OR INTRO.SAMPLE_KIND.NAME:"+value;
+                      samplekind='OR INTRO.SAMPLE_KIND.NAME:"'+value+'"';
                     }
                     if (facets!==undefined) {
                     	facets+=" "+samplekind;
@@ -684,11 +681,11 @@ APP.modules.mypublications = (function(){
 
 				 	var value = value.value;
                     if (authors===undefined) {
-                      authors="INTRO.FILE_CREATOR.NAME:"+value;
+                      authors='INTRO.FILE_CREATOR.NAME:"'+value+'"';
 
                     }
                      else{
-                      authors=" OR _INTRO.FILE_CREATOR.NAME:"+value;
+                      authors=' OR _INTRO.FILE_CREATOR.NAME:"'+value+'"';
                     }
                     if (facets!==undefined) {
                     	facets+=" "+authors;
@@ -703,11 +700,11 @@ APP.modules.mypublications = (function(){
 
 				 	var value = value.value;
                     if (keywords===undefined) {
-                      keywords="INTRO.KEYWORDS.NAME:"+value;
+                      keywords='INTRO.KEYWORDS.NAME:"'+value+'"';
 
                     }
                     else{
-                      keywords=keywords+" OR INTRO.KEYWORDS.NAME:"+value;
+                      keywords=keywords+' OR INTRO.KEYWORDS.NAME:"'+value+'"';
                     }
                     if (facets!==undefined) {
                     	facets=facets+" "+keywords;
@@ -721,11 +718,11 @@ APP.modules.mypublications = (function(){
 
 				 	var value = value.value;
                     if (scientific_field===undefined) {
-                      scientific_field="INTRO.SCIENTIFIC_FIELD.NAME:"+value;
+                      scientific_field='INTRO.SCIENTIFIC_FIELD.NAME:"'+value+'"';
 
                     }
                     else{
-                      scientific_field=scientific_field+" OR INTRO.SCIENTIFIC_FIELD.NAME:"+value;
+                      scientific_field=scientific_field+' OR INTRO.SCIENTIFIC_FIELD.NAME:"'+value+'"';
                     }
                     if (facets!==undefined) {
                     	facets=facets+" "+scientific_field;
@@ -739,11 +736,11 @@ APP.modules.mypublications = (function(){
 
 				 	var value = value.value;
                     if (language===undefined) {
-                      language="INTRO.LANGUAGE:"+value;
+                      language='INTRO.LANGUAGE:"'+value+'"';
 
                     }
                     else{
-                      language=language+" OR INTRO.LANGUAGE:"+value;
+                      language=language+' OR INTRO.LANGUAGE:"'+value+'"';
                     }
                     if (facets!==undefined) {
                     	facets=facets+" "+language;
@@ -776,11 +773,11 @@ APP.modules.mypublications = (function(){
 
 				 	var value = value.value;
                     if (access_right===undefined) {
-                      access_right="INTRO.ACCESS_RIGHT:"+value;
+                      access_right='INTRO.ACCESS_RIGHT:"'+value+'"';
 
                     }
                     else{
-                      access_right=access_right+" OR INTRO.ACCESS_RIGHT:"+value;
+                      access_right=access_right+' OR INTRO.ACCESS_RIGHT:"'+value+'"';
                     }
                     if (facets!==undefined) {
                     	facets=facets+"  "+access_right;
