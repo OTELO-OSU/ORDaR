@@ -91,7 +91,7 @@ class RequestController
 	}
 
 
-	function getPublicationsofUser($author){
+	function getPublicationsofUser($author,$query){
 		$postcontent='{
 		    "aggs" : { 
 		        "sample_kind" : { 
@@ -136,7 +136,13 @@ class RequestController
 		        }
 		    }
 		}';
+		if ($query=="null") {
 		$url='http://localhost/ordar/_search?q=INTRO.FILE_CREATOR.MAIL:'.$author.'&size=10000';
+		}
+		else{
+			$query = rawurlencode($query);
+			$url='http://localhost/ordar/_search?q='.$query.'%20AND%20(INTRO.FILE_CREATOR.MAIL:'.$author.')&size=10000';
+		}
 		$curlopt=array(CURLOPT_RETURNTRANSFER => true,
 			  CURLOPT_PORT=> 9200,
 			  CURLOPT_ENCODING => "",

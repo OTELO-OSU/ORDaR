@@ -153,7 +153,14 @@ $app->post('/getmypublications', function (Request $req,Response $responseSlim) 
 	$request = new RequestApi();
 	if ($_SESSION) {
 		$authors= $_SESSION['mail'];
-		$response=$request->getPublicationsofUser($authors);
+		$query  = $req->getparam('query');
+
+		if (!empty($query)) {
+			$response=$request->getPublicationsofUser($authors,$query);
+		}
+		else{
+		$response=$request->getPublicationsofUser($authors,"null");
+		}
    	return $response;
 	}
 	else{

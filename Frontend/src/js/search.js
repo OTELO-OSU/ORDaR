@@ -802,7 +802,7 @@ APP.modules.mypublications = (function(){
                    
                     $('#results').empty();
 
-                    APP.modules.mypublications.search("*"+facets);
+                    APP.modules.mypublications.search("*"+facets,'facets');
 
 
 			},
@@ -820,7 +820,7 @@ APP.modules.mypublications = (function(){
 				}
 				return vars;
 			},
-			search: function(query){
+			search: function(query,facets){
 				//var query=APP.modules.mypublications.$_GET('query');
 				$.post("index.php/getmypublications",
 		        {
@@ -828,7 +828,10 @@ APP.modules.mypublications = (function(){
 		        }, 
 		        function(data){
 		        	data=JSON.parse(data);
+		        	if (!facets) {
+		        		
 		        	APP.modules.mypublications.AppendFacets(data);
+		        	}
 		        	APP.modules.datatable.AppendTable(data);
 		        })
 			}
