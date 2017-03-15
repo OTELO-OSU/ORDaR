@@ -83,9 +83,9 @@ $app->get('/login', function (Request $req,Response $responseSlim) {
 	$loader = new Twig_Loader_Filesystem('search/templates');
 	$twig = new Twig_Environment($loader);
 	echo $twig->render('login.html.twig');
-	$_SESSION['name'] = 'Hissler';
+	$_SESSION['name'] = 'Montarges-Pelletier';
 	$_SESSION['firstname'] = 'a';
-	$_SESSION['mail'] = 'christophe.hissler@list.lu';
+	$_SESSION['mail'] = 'emmanuelle.montarges@univ-lorraine.fr';
 	if ($_SERVER['HTTP_REFERER']) {
 	return $responseSlim->withRedirect($_SERVER['HTTP_REFERER']);
 	}	
@@ -153,14 +153,15 @@ $app->post('/upload', function (Request $req,Response $responseSlim) {
 $app->post('/getmypublications', function (Request $req,Response $responseSlim) {
 	$request = new RequestApi();
 	if ($_SESSION) {
-		$authors= $_SESSION['mail'];
+		$authors_mail= $_SESSION['mail'];
+		$authors_name= $_SESSION['name'];
 		$query  = $req->getparam('query');
 
 		if (!empty($query)) {
-			$response=$request->getPublicationsofUser($authors,$query);
+			$response=$request->getPublicationsofUser($authors_mail,$authors_name,$query);
 		}
 		else{
-		$response=$request->getPublicationsofUser($authors,"null");
+		$response=$request->getPublicationsofUser($authors_mail,$authors_name,"null");
 		}
    	return $response;
 	}

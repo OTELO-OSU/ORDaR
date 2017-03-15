@@ -91,7 +91,7 @@ class RequestController
 	}
 
 
-	function getPublicationsofUser($author,$query){
+	function getPublicationsofUser($author_mail,$authors_name,$query){
 		$postcontent='{
 		    "aggs" : { 
 		        "sample_kind" : { 
@@ -137,11 +137,11 @@ class RequestController
 		    }
 		}';
 		if ($query=="null") {
-		$url='http://localhost/ordar/_search?q=INTRO.FILE_CREATOR.MAIL:'.$author.'&size=10000';
+		$url='http://localhost/ordar/_search?q=INTRO.FILE_CREATOR.MAIL:'.$author_mail.'%20AND%20(INTRO.FILE_CREATOR.NAME:'.$authors_name.')&size=10000';
 		}
 		else{
 			$query = rawurlencode($query);
-			$url='http://localhost/ordar/_search?q='.$query.'%20AND%20(INTRO.FILE_CREATOR.MAIL:'.$author.')&size=10000';
+			$url='http://localhost/ordar/_search?q='.$query.'%20AND%20(INTRO.FILE_CREATOR.MAIL:'.$author_mail.')%20AND%20(INTRO.FILE_CREATOR.NAME:'.$authors_name.')&size=10000';
 		}
 		$curlopt=array(CURLOPT_RETURNTRANSFER => true,
 			  CURLOPT_PORT=> 9200,
@@ -247,13 +247,18 @@ class RequestController
 		elseif ($response["_source"]["INTRO"]["ACCESS_RIGHT"]=="Unpublished"){
 			foreach ($response["_source"]["INTRO"]["FILE_CREATOR"] as $key => $value) {
 					if (@$_SESSION["mail"]==$value["MAIL"]) {
-						return $response;
+						$found="true";
 					}
 					else{
-					return false;
-				
+						$found="false";
 				}
 			}
+				if ($found=="true") {
+					return $response;
+				}
+				else{
+					return false;
+				}
 
 
 		}
