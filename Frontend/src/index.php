@@ -185,8 +185,28 @@ $app->get('/record', function (Request $req,Response $responseSlim) {
 
 	}
 	else{
-	return @$twig->render('viewdatadetails.html.twig', ['name'=>$_SESSION['name'],'firstname'=>$_SESSION['firstname'],'mail'=>$_SESSION['mail'],
-        'doi'=> $response['_id'],'title' => $response['_source']['INTRO']['TITLE'],'datadescription'=>$response['_source']['INTRO']['DATA_DESCRIPTION'],'accessright'=>$response['_source']['INTRO']['ACCESS_RIGHT'],'publicationdate'=> $response['_source']['INTRO']['PUBLICATION_DATE'],'uploaddate'=>$response['_source']['INTRO']['UPLOAD_DATE'],'creationdate'=>$response['_source']['INTRO']['CREATION_DATE'],'authors'=>$response['_source']['INTRO']['FILE_CREATOR'],'files'=> $files,'mail'=>$_SESSION['mail'],'stations'=> $response['_source']['INTRO']['STATION'],'measurements'=> $response['_source']['INTRO']['MEASUREMENT']
+	return @$twig->render('viewdatadetails.html.twig', [
+		'name'=>$_SESSION['name'],
+		'firstname'=>$_SESSION['firstname'],
+		'mail'=>$_SESSION['mail'],
+        'doi'=> $response['_id'],
+        'title' => $response['_source']['INTRO']['TITLE'],
+        'datadescription'=>$response['_source']['INTRO']['DATA_DESCRIPTION'],
+        'accessright'=>$response['_source']['INTRO']['ACCESS_RIGHT'],
+        'publicationdate'=> $response['_source']['INTRO']['PUBLICATION_DATE'],
+        'uploaddate'=>$response['_source']['INTRO']['UPLOAD_DATE'],
+        'creationdate'=>$response['_source']['INTRO']['CREATION_DATE'],
+        'authors'=>$response['_source']['INTRO']['FILE_CREATOR'],
+        'files'=> $files,'mail'=>$_SESSION['mail'],
+        'stations'=> $response['_source']['INTRO']['STATION'],
+        'measurements'=> $response['_source']['INTRO']['MEASUREMENT'],
+        'language'=> $response['_source']['INTRO']['LANGUAGE'],
+        'institutions'=> $response['_source']['INTRO']['INSTITUTION'],
+        'scientific_field'=> $response['_source']['INTRO']['SCIENTIFIC_FIELD'],
+        'sampling_date'=> $response['_source']['INTRO']['SAMPLING_DATE'],
+        'sample_kind'=> $response['_source']['INTRO']['SAMPLE_KIND'],
+        'keywords'=> $response['_source']['INTRO']['KEYWORDS'],
+        'license'=> $response['_source']['INTRO']['LICENSE']
     	]);
 	}
 })->setName('record');

@@ -49,7 +49,10 @@ function download($doi,$filename,$response){
     		$file = fopen($file, "r");
 			$firstTimeHeader = true;
 			$firstTimeBody = true;
-			echo "<table border='1'>";
+			echo '<link rel="stylesheet" type="text/css" href="/css/semantic/dist/semantic.min.css">';
+			echo '	<link rel="stylesheet" type="text/css" href="/css/style.css">
+';
+			echo "<div class='' ui grid container'  style='overflow-x:auto'><table style='width:700px; height:500px;' class='ui compact unstackable table'></div>";
 			while(! feof($file))
 			{
 			    $data = fgetcsv($file);
