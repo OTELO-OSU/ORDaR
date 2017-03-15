@@ -70,8 +70,9 @@ $app->post('/contact', function (Request $req,Response $responseSlim) {
 $app->get('/searchresult', function (Request $req,Response $responseSlim) {
 $loader = new Twig_Loader_Filesystem('search/templates');
 $twig = new Twig_Environment($loader);
+$query=$req->getparam('query');
 if ($_SESSION) {
-echo $twig->render('accueil.html.twig',['name'=>$_SESSION['name'],'firstname'=>$_SESSION['firstname'],'mail'=>$_SESSION['mail']]);
+echo $twig->render('accueil.html.twig',['name'=>$_SESSION['name'],'firstname'=>$_SESSION['firstname'],'mail'=>$_SESSION['mail'],'query'=>$query]);
 }
 else{
 	echo $twig->render('accueil.html.twig');
