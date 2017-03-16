@@ -78,7 +78,10 @@
 }
 
 #footer{
-background-color: #767676;
+    background-color: #767676;
 }
 
 
+#authors li a{
+    cursor: pointer;
+}

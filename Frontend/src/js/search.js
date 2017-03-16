@@ -271,21 +271,23 @@ APP.modules.search = (function(){
 				 	var filetype;
 				 	facets=undefined;
 				 $.each(checked,function(index,value){
-				 	var value = value.value;
-				 	 if (samplekind===undefined) {
-                      samplekind='INTRO.SAMPLE_KIND.NAME:"'+value+'"';
+				 	if (value.name=="sample_kind") {
+				 		var value = value.value;
+					 	 if (samplekind===undefined) {
+	                      samplekind='INTRO.SAMPLE_KIND.NAME:"'+value+'"';
 
-                    }
-                    else{
-                      samplekind='OR INTRO.SAMPLE_KIND.NAME:"'+value+'"';
-                    }
-                    if (facets!==undefined) {
-                    	facets+=" "+samplekind;
-                    }
-                    else{
-                    	facets=samplekind;
-                    	
-                    }
+	                    }
+	                    else{
+	                      samplekind='OR INTRO.SAMPLE_KIND.NAME:"'+value+'"';
+	                    }
+	                    if (facets!==undefined) {
+	                    	facets+=" "+samplekind;
+	                    }
+	                    else{
+	                    	facets=samplekind;
+	                    	
+	                    }
+               		 }
 				 	
                     if (value.name=="authors") {
 

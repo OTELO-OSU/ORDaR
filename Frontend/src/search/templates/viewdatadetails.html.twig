@@ -27,7 +27,7 @@
           <span class="data">{{datadescription}}</span>
           </div><div class="row"></div><h4><i class="user icon"></i>Authors:</h4>
 
-      <ul>
+      <ul id="authors">
           {% for author in authors %}
               <li><a onclick="APP.modules.send_email.send_email('{{doi}}','{{author.NAME}}','{{ author.FIRST_NAME}}')">{{author.NAME}} {{ author.FIRST_NAME}}</a></li>
           {% endfor %}

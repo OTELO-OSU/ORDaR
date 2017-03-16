@@ -50,7 +50,9 @@ function connect_tomongo(){
 		 $array["TITLE"]= htmlspecialchars($value, ENT_QUOTES);
 		 }
 		  if ($key=="sampling_date") {
-		 $array["SAMPLING_DATE"][]=htmlspecialchars($value, ENT_QUOTES);
+		  	if (!count($value==0)){
+			 $array["SAMPLING_DATE"][]=htmlspecialchars($value, ENT_QUOTES);
+			}
 		 }
 		 if ($key=="language") {
 		 	if ($value=='0') {
@@ -60,6 +62,9 @@ function connect_tomongo(){
 		 		$language="ENGLISH";
 		 	}
 		 	$array["LANGUAGE"]=$language;
+		 }
+		if ($key=="description") {
+		 $array["DATA_DESCRIPTION"]=htmlspecialchars($value, ENT_QUOTES);
 		 }
 		if ($key=="scientific_field") {
 		 	if (count($value)>1) {
@@ -176,10 +181,9 @@ function connect_tomongo(){
 	 	 	$array["PUBLISHER"]=htmlspecialchars($value, ENT_QUOTES);
 	 	 }
 		 if ($key=="sample_kind") {
-		 	if (empty($value)) {
-		 		$array["SAMPLE_KIND"][]["NAME"]=" ";
-		 	}
+		 	if (!count($value==0)){
 		 	$array["SAMPLE_KIND"][]["NAME"]=htmlspecialchars($value, ENT_QUOTES);
+		 	}
 		 }
 		   if ($key=="institution") {
 		 	if (count($value)>1) {
@@ -223,6 +227,7 @@ function connect_tomongo(){
 		 	}
 		 }
 		 if ($key=="keywords") {
+		 	if (!count($value==0)){
 		 	if (count($value<=3)) {
 		 		foreach ($value as $key => $value) {
 		 		$array["KEYWORDS"][$key]["NAME"]=htmlspecialchars($value, ENT_QUOTES);
@@ -231,10 +236,9 @@ function connect_tomongo(){
 		 	else{
 		 	$array["KEYWORDS"]["NAME"]=htmlspecialchars($value, ENT_QUOTES);
 		 	}
+		 	}
 		 }
-		 if ($key=="description") {
-		 $array["DATA_DESCRIPTION"]=htmlspecialchars($value, ENT_QUOTES);
-		 }
+		
 		if ($key=="license") {
 			$licensetype=null;
 		 	if ($value==1) {
@@ -257,6 +261,8 @@ function connect_tomongo(){
 		 	}
 		 $array["LICENSE"]=$licensetype;
 		 }
+
+
 		 if ($key=="access_right") {
 		 $array["ACCESS_RIGHT"]=$value;
 		 	if ($value=="Closed") {
@@ -277,14 +283,16 @@ function connect_tomongo(){
 	 	 
 
 	 	  if ($key=="fundings") {
-		 	if (count($value<=3)) {
-		 		foreach ($value as $key => $value) {
-		 		$array["FUNDINGS"][$key]["NAME"]=htmlspecialchars($value, ENT_QUOTES);
-		 		}
-		 	}
-		 	else{
-		 	$array["FUNDINGS"]["NAME"]=htmlspecialchars($value, ENT_QUOTES);
-		 	}
+	 	  	if (!count($value==0)){
+			 	if (count($value<=3)) {
+			 		foreach ($value as $key => $value) {
+			 		$array["FUNDINGS"][$key]["NAME"]=htmlspecialchars($value, ENT_QUOTES);
+			 		}
+			 	}
+			 	else{
+			 	$array["FUNDINGS"]["NAME"]=htmlspecialchars($value, ENT_QUOTES);
+			 	}
+	 	  	}
 		 }
 
 
@@ -391,7 +399,7 @@ function removeUnpublishedDatasheet($collection,$doi){
 		$config = parse_ini_file("config.ini");
 		$UPLOAD_FOLDER=$config["UPLOAD_FOLDER"];
 		if (is_numeric($doi)==true) {
-		print("test"); // test de suppression si publier
+		 // test de suppression si publier
 	}
 	else{
 		//$this->db = new MongoClient("mongodb://localhost:27017");

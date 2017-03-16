@@ -281,100 +281,10 @@
   {% endif %}
 
 
-</div>
-</div>
-  <input type="button" class="ui button active" id="addinstitution" value="Add a new institution">
-    </div>
-</div>
-   <div class="field">
-
-    <label>Sample kind</label>
-    <input type="text" name="sample_kind" placeholder="Sample kind" value="{{sample_kind}}">
-  </div>
-
-  <div class="field">
-
-    <label>Sampling date</label>
-    <input type="text"  class="date" name="sampling_date" placeholder="Sampling date" value="{{sampling_date}}">
-  </div>
-
-
-  
-  <div class=" field">
-    <label>Keywords</label>
-  <div class="row">
-    
-<div class=" field" id="keywords">
-{% if keywords %}
-  {% for keyword in keywords %}
-   <div><input type="text" name="keywords[]" value="{{keyword.NAME}}" placeholder="Keyword"><button class="ui icon button delete"><i class="remove icon"></i></button></div>
-   {% endfor %}
-{%else%}
-    <div><input type="text" name="keywords[]"  value="{{keyword.NAME}}" placeholder="Keyword"><button class="ui icon button delete"><i class="remove icon"></i></button></div>
-{% endif %}
-  </div>
-
-
-</div>
-     <input type="button" class="ui button active" id="addkeywords" value="Add a new keyword">
-  </div>
-
-
-
-<div class=" field">
-  <label>Fundings</label>
-  <div class="row">
-    
-  <div class=" field" id="fundings">
-  {% if fundings %}
-    {% for funding in fundings %}
-     <div><input type="text" name="fundings[]" value="{{funding.NAME}}" placeholder="Funding"><button class="ui icon button delete"><i class="remove icon"></i></button></div>
-     {% endfor %}
-  {%else%}
-      <div><input type="text" name="fundings[]"  value="{{funding.NAME}}" placeholder="Funding"><button class="ui icon button delete"><i class="remove icon"></i></button></div>
-    </div>
-  {% endif %}
-
-
-</div>
-     <input type="button" class="ui button active" id="addfundings" value="Add a new funding">
-  </div>
-  
-
- <div class="field" >
-  <label>Station</label>
-      <div id="stations">
-      {% if stations %}
-        {% for station in stations %}
-        <div>
-          <div class="field"><label>Name</label> <input type="text" value="{{station.NAME}}" name="station_name[]" placeholder="Name" ></div>
-          <div class="field"><label>Abbreviation</label><input type="text" value="{{station.ABBREVIATION}}" name="station_abbreviation[]"  placeholder="abbreviation"></div>
-          <div class="field"><label>Longitude</label><input type="text" value="{{station.LONGITUDE}}" name="station_longitude[]" placeholder="longitude" ></div>
-          <div class="field"><label>Latitude</label><input type="text" value="{{station.LATITUDE}}" name="station_latitude[]"  placeholder="latitude"></div>
-          <div class="field"><label>Elevation</label><input type="number" value="{{station.ELEVATION}}" name="station_elevation[]"  placeholder="elevation"></div>
-          <div class="field"><label>Description</label><textarea name="station_description[]"  placeholder="description">{{station.DESCRIPTION}}</textarea></div>
-          <button class="ui icon button delete"><i class="remove icon"></i></button>
-        </div>
-        {% endfor %}
-        {%else%}
-          <div>
-          <div class="field"><label>Name</label><input type="text" value="{{station.NAME}}" name="station_name[]" placeholder="Name" ></div>
-          <div class="field"><label>Abbreviation</label><input type="text" value="{{station.ABBREVIATION}}" name="station_abbreviation[]"  placeholder="abbreviation"></div>
-          <div class="field"><label>Longitude</label><input type="text" value="{{station.LONGITUDE}}" name="station_longitude[]" placeholder="longitude" ></div>
-          <div class="field"><label>Latitude</label><input type="text" value="{{station.LATITUDE}}" name="station_latitude[]"  placeholder="latitude"></div>
-          <div class="field"><label>Elevation</label><input type="number" value="{{station.ELEVATION}}" name="station_elevation[]"  placeholder="elevation"></div>
-          <div class="field"><label>Description</label><textarea name="station_description[]"  placeholder="description">{{station.DESCRIPTION}}</textarea></div>
-          <button class="ui icon button delete"><i class="remove icon"></i></button>
-        </div>
-
-      {%endif%}
- 
-  <input type="button" class="ui button active" id="addstation" value="Add a new station">
-  </div>
-
-
-
- <div class="required field" >
+      </div>
+      </div>
+        <input type="button" class="ui button active" id="addinstitution" value="Add a new institution">
+         <div class="required field" >
     <label>Measurement</label>
     <div id="measurements">
     {% if measurements %}
@@ -397,6 +307,110 @@
     </div>
     <input type="button" class="ui button active" id="addmeasurement" value="Add a new measurement">
   </div>
+  </div>
+</div>
+
+
+<div class="ui fluid styled accordion">
+    <div class="title">
+        Sample
+        <i class="dropdown icon"></i>
+    </div>
+    <div class=" content">
+       <div class="field">
+        <label>Sample kind</label>
+        <input type="text" name="sample_kind" placeholder="Sample kind" value="{{sample_kind}}">
+      </div>
+
+      <div class="field">
+
+        <label>Sampling date</label>
+        <input type="text"  class="date" name="sampling_date" placeholder="Sampling date" value="{{sampling_date}}">
+      </div>
+    </div>
+</div>
+<div class="ui fluid styled accordion">
+    <div class="title">
+        Extra information
+        <i class="dropdown icon"></i>
+    </div>
+    <div class="content">
+        <div class=" field">
+          <label>Keywords</label>
+        <div class=" field" id="keywords">
+        {% if keywords %}
+          {% for keyword in keywords %}
+           <div><input type="text" name="keywords[]" value="{{keyword.NAME}}" placeholder="Keyword"><button class="ui icon button delete"><i class="remove icon"></i></button></div>
+           {% endfor %}
+        {%else%}
+            <div><input type="text" name="keywords[]"  value="{{keyword.NAME}}" placeholder="Keyword"><button class="ui icon button delete"><i class="remove icon"></i></button></div>
+        {% endif %}
+          </div>
+
+             <input type="button" class="ui button active" id="addkeywords" value="Add a new keyword">
+          </div>
+      <div class=" field">
+        <label>Fundings</label>
+        <div class="row">
+          
+        <div class=" field" id="fundings">
+        {% if fundings %}
+          {% for funding in fundings %}
+           <div><input type="text" name="fundings[]" value="{{funding.NAME}}" placeholder="Funding"><button class="ui icon button delete"><i class="remove icon"></i></button></div>
+           {% endfor %}
+        {%else%}
+            <div><input type="text" name="fundings[]"  value="{{funding.NAME}}" placeholder="Funding"><button class="ui icon button delete"><i class="remove icon"></i></button></div>
+          </div>
+        {% endif %}
+
+
+      </div>
+           <input type="button" class="ui button active" id="addfundings" value="Add a new funding">
+        </div>
+    </div>
+</div>
+
+  
+<div class="ui fluid styled accordion">
+    <div class="title">
+        Station
+        <i class="dropdown icon"></i>
+    </div>
+    <div class="content">
+     <div class="field" >
+      <label>Station</label>
+          <div id="stations">
+          {% if stations %}
+            {% for station in stations %}
+            <div>
+              <div class="field"><label>Name</label> <input type="text" value="{{station.NAME}}" name="station_name[]" placeholder="Name" ></div>
+              <div class="field"><label>Abbreviation</label><input type="text" value="{{station.ABBREVIATION}}" name="station_abbreviation[]"  placeholder="abbreviation"></div>
+              <div class="field"><label>Longitude</label><input type="text" value="{{station.LONGITUDE}}" name="station_longitude[]" placeholder="longitude" ></div>
+              <div class="field"><label>Latitude</label><input type="text" value="{{station.LATITUDE}}" name="station_latitude[]"  placeholder="latitude"></div>
+              <div class="field"><label>Elevation</label><input type="number" value="{{station.ELEVATION}}" name="station_elevation[]"  placeholder="elevation"></div>
+              <div class="field"><label>Description</label><textarea name="station_description[]"  placeholder="description">{{station.DESCRIPTION}}</textarea></div>
+              <button class="ui icon button delete"><i class="remove icon"></i></button>
+            </div>
+            {% endfor %}
+            {%else%}
+              <div>
+              <div class="field"><label>Name</label><input type="text" value="{{station.NAME}}" name="station_name[]" placeholder="Name" ></div>
+              <div class="field"><label>Abbreviation</label><input type="text" value="{{station.ABBREVIATION}}" name="station_abbreviation[]"  placeholder="abbreviation"></div>
+              <div class="field"><label>Longitude</label><input type="text" value="{{station.LONGITUDE}}" name="station_longitude[]" placeholder="longitude" ></div>
+              <div class="field"><label>Latitude</label><input type="text" value="{{station.LATITUDE}}" name="station_latitude[]"  placeholder="latitude"></div>
+              <div class="field"><label>Elevation</label><input type="number" value="{{station.ELEVATION}}" name="station_elevation[]"  placeholder="elevation"></div>
+              <div class="field"><label>Description</label><textarea name="station_description[]"  placeholder="description">{{station.DESCRIPTION}}</textarea></div>
+              <button class="ui icon button delete"><i class="remove icon"></i></button>
+            </div>
+
+          {%endif%}
+     
+      <input type="button" class="ui button active" id="addstation" value="Add a new station">
+      </div>
+    </div>
+  </div>
+</div>
+
 
 
 <div class="ui fluid styled accordion">
@@ -467,7 +481,6 @@
     </div>
   </div>
  </div>
-</div>
 
 <button class="ui submit button" >Submit</button>
 <div class="ui error message"></div>

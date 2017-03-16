@@ -86,6 +86,8 @@ $app->get('/login', function (Request $req,Response $responseSlim) {
 	$_SESSION['name'] = 'Montarges-Pelletier';
 	$_SESSION['firstname'] = 'a';
 	$_SESSION['mail'] = 'emmanuelle.montarges@univ-lorraine.fr';
+	session_regenerate_id();
+
 	if ($_SERVER['HTTP_REFERER']) {
 	return $responseSlim->withRedirect($_SERVER['HTTP_REFERER']);
 	}	
@@ -98,7 +100,6 @@ $app->get('/login', function (Request $req,Response $responseSlim) {
 $app->get('/logout', function (Request $req,Response $responseSlim) {
 	$loader = new Twig_Loader_Filesystem('search/templates');
 	$twig = new Twig_Environment($loader);
-	//echo $twig->render('login.html.twig');
 	session_destroy();
 	return $responseSlim->withRedirect('accueil');
 
@@ -123,7 +124,7 @@ $app->get('/upload', function (Request $req,Response $responseSlim) {
 	echo $twig->render('upload.html.twig',['name'=>$_SESSION['name'],'firstname'=>$_SESSION['firstname'],'mail'=>$_SESSION['mail']]);
 	}
 	else{
-		echo "login first";
+		return $responseSlim->withRedirect('accueil');
 	}
 })->setName('upload');
 
@@ -278,7 +279,15 @@ $app->post('/editrecord/{doi}', function (Request $req,Response $responseSlim,$a
 	$doi= $response['_id'];
 	$db=$Datasheet->connect_tomongo();
 	$array=$Datasheet->Postprocessing($_POST);
-	$response=$Datasheet->Editdatasheet($collection,$doi,$db,$array);
+	$return=$Datasheet->Editdatasheet($collection,$doi,$db,$array);
+	if ($return==false) {
+			return $responseSlim->withRedirect($_SERVER['HTTP_REFERER']);
+
+	}
+	else{
+
+	return @$twig->render('editsuccess.html.twig');
+	}
 });
 
 
