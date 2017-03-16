@@ -85,6 +85,7 @@ $.fn.easyPaginate = function (options) {
             });
             plugin.el.after(plugin.nav);
 
+
             var elSelector = '#' + plugin.el.get(0).id + ' + ';
             $(elSelector + ' .easyPaginateNav a.page,'
                 + elSelector + ' .easyPaginateNav a.first,'

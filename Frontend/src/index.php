@@ -201,13 +201,13 @@ $app->get('/record', function (Request $req,Response $responseSlim) {
         'creationdate'=>$response['_source']['INTRO']['CREATION_DATE'],
         'authors'=>$response['_source']['INTRO']['FILE_CREATOR'],
         'files'=> $files,'mail'=>$_SESSION['mail'],
-        'stations'=> $response['_source']['INTRO']['STATION'],
+        'sampling_points'=> $response['_source']['INTRO']['SAMPLING_POINT'],
         'measurements'=> $response['_source']['INTRO']['MEASUREMENT'],
         'language'=> $response['_source']['INTRO']['LANGUAGE'],
         'institutions'=> $response['_source']['INTRO']['INSTITUTION'],
         'scientific_field'=> $response['_source']['INTRO']['SCIENTIFIC_FIELD'],
         'sampling_date'=> $response['_source']['INTRO']['SAMPLING_DATE'],
-        'sample_kind'=> $response['_source']['INTRO']['SAMPLE_KIND'],
+        'sample_kinds'=> $response['_source']['INTRO']['SAMPLE_KIND'],
         'keywords'=> $response['_source']['INTRO']['KEYWORDS'],
         'license'=> $response['_source']['INTRO']['LICENSE']
     	]);
@@ -258,7 +258,7 @@ $app->get('/editrecord', function (Request $req,Response $responseSlim) {
 		 	}
 
 		return @$twig->render('edit_dataset.html.twig', ['name'=>$_SESSION['name'],'firstname'=>$_SESSION['firstname'],'mail'=>$_SESSION['mail'],
-	        'doi'=>$id,'title' => $response['_source']['INTRO']['TITLE'],'description'=>$response['_source']['INTRO']['DATA_DESCRIPTION'],'creation_date'=>$response['_source']['INTRO']['CREATION_DATE'],'sampling_date'=>$response['_source']['INTRO']['SAMPLING_DATE'][0],'authors'=>$response['_source']['INTRO']['FILE_CREATOR'],'keywords'=>$response['_source']['INTRO']['KEYWORDS'],'sample_kind'=>$response['_source']['INTRO']['SAMPLE_KIND'][0]['NAME'],'scientific_fields'=>$response['_source']['INTRO']['SCIENTIFIC_FIELD'],'institutions'=>$response['_source']['INTRO']['INSTITUTION'],'language'=>$response['_source']['INTRO']['LANGUAGE'],'stations'=>$response['_source']['INTRO']['STATION'],'measurements'=>$response['_source']['INTRO']['MEASUREMENT'],'license'=>$license,'publisher'=>$response['_source']['INTRO']['PUBLISHER'],'fundings'=>$response['_source']['INTRO']['FUNDINGS'],'accessright'=>$response['_source']['INTRO']['ACCESS_RIGHT'],'embargoed_date'=>$response['_source']['INTRO']['PUBLICATION_DATE']
+	        'doi'=>$id,'title' => $response['_source']['INTRO']['TITLE'],'description'=>$response['_source']['INTRO']['DATA_DESCRIPTION'],'creation_date'=>$response['_source']['INTRO']['CREATION_DATE'],'sampling_dates'=>$response['_source']['INTRO']['SAMPLING_DATE'],'authors'=>$response['_source']['INTRO']['FILE_CREATOR'],'keywords'=>$response['_source']['INTRO']['KEYWORDS'],'sample_kinds'=>$response['_source']['INTRO']['SAMPLE_KIND'],'scientific_fields'=>$response['_source']['INTRO']['SCIENTIFIC_FIELD'],'institutions'=>$response['_source']['INTRO']['INSTITUTION'],'language'=>$response['_source']['INTRO']['LANGUAGE'],'sampling_points'=>$response['_source']['INTRO']['SAMPLING_POINT'],'measurements'=>$response['_source']['INTRO']['MEASUREMENT'],'license'=>$license,'publisher'=>$response['_source']['INTRO']['PUBLISHER'],'fundings'=>$response['_source']['INTRO']['FUNDINGS'],'accessright'=>$response['_source']['INTRO']['ACCESS_RIGHT'],'embargoed_date'=>$response['_source']['INTRO']['PUBLICATION_DATE']
 	    	]);
 		}
 	

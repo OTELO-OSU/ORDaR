@@ -49,11 +49,6 @@ function connect_tomongo(){
 		 if ($key=="title") {
 		 $array["TITLE"]= htmlspecialchars($value, ENT_QUOTES);
 		 }
-		  if ($key=="sampling_date") {
-		  	if (!count($value==0)){
-			 $array["SAMPLING_DATE"][]=htmlspecialchars($value, ENT_QUOTES);
-			}
-		 }
 		 if ($key=="language") {
 		 	if ($value=='0') {
 		 		$language="FRENCH";
@@ -62,6 +57,17 @@ function connect_tomongo(){
 		 		$language="ENGLISH";
 		 	}
 		 	$array["LANGUAGE"]=$language;
+		 }
+		 if ($key=="sampling_date") {
+		 		if (count($value)>1) {
+		 		foreach ($value as $key => $value) {
+		 		$array["SAMPLING_DATE"][$key]=htmlspecialchars($value, ENT_QUOTES);
+		 		}
+		 	}
+		 	else{
+		 	$array["SAMPLING_DATE"][0]=htmlspecialchars($value[0], ENT_QUOTES);
+		 	}
+			
 		 }
 		if ($key=="description") {
 		 $array["DATA_DESCRIPTION"]=htmlspecialchars($value, ENT_QUOTES);
@@ -76,74 +82,74 @@ function connect_tomongo(){
 		 	$array["SCIENTIFIC_FIELD"][0]["NAME"]=htmlspecialchars($value[0], ENT_QUOTES);
 		 	}
 		 }
-		  if ($key=="station_name") {
+		  if ($key=="sampling_point_name") {
 		 	if (count($value)>1) {
 		 		foreach ($value as $key => $value) {
-		 		$array["STATION"][$key]["NAME"]=htmlspecialchars($value, ENT_QUOTES);
+		 		$array["SAMPLING_POINT"][$key]["NAME"]=htmlspecialchars($value, ENT_QUOTES);
 		 		}
 		 	}
 		 	else{
-		 	$array["STATION"][0]["NAME"]=htmlspecialchars($value[0], ENT_QUOTES);
+		 	$array["SAMPLING_POINT"][0]["NAME"]=htmlspecialchars($value[0], ENT_QUOTES);
 		 	}
 		 }
-		  if ($key=="station_coordonate_system") {
+		  if ($key=="sampling_point_coordonate_system") {
 			 	if (count($value)>1) {
 			 		foreach ($value as $key => $value) {
-			 		$array["STATION"][$key]["COORDONATE_SYSTEM"]=htmlspecialchars($value, ENT_QUOTES);;
+			 		$array["SAMPLING_POINT"][$key]["COORDONATE_SYSTEM"]=htmlspecialchars($value, ENT_QUOTES);;
 			 		}
 			 	}
 			 	else{
-			 	$array["STATION"][0]["ABBREVIATION"]=htmlspecialchars($value[0], ENT_QUOTES);
+			 	$array["SAMPLING_POINT"][0]["ABBREVIATION"]=htmlspecialchars($value[0], ENT_QUOTES);
 			 	}
 			 }
-		 if ($key=="station_abbreviation") {
+		 if ($key=="sampling_point_abbreviation") {
 		 	if (count($value)>1) {
 		 		foreach ($value as $key => $value) {
-		 		$array["STATION"][$key]["ABBREVIATION"]=htmlspecialchars($value, ENT_QUOTES);
+		 		$array["SAMPLING_POINT"][$key]["ABBREVIATION"]=htmlspecialchars($value, ENT_QUOTES);
 		 		}
 		 	}
 		 	else{
-		 	$array["STATION"][0]["ABBREVIATION"]=htmlspecialchars($value[0], ENT_QUOTES);
+		 	$array["SAMPLING_POINT"][0]["ABBREVIATION"]=htmlspecialchars($value[0], ENT_QUOTES);
 		 	}
 		 }
-		 if ($key=="station_longitude") {
+		 if ($key=="sampling_point_longitude") {
 		 	if (count($value)>1) {
 		 		foreach ($value as $key => $value) {
-		 		$array["STATION"][$key]["LONGITUDE"]=htmlspecialchars($value, ENT_QUOTES);
+		 		$array["SAMPLING_POINT"][$key]["LONGITUDE"]=htmlspecialchars($value, ENT_QUOTES);
 		 		}
 		 	}
 		 	else{
-		 	$array["STATION"][0]["LONGITUDE"]=htmlspecialchars($value[0], ENT_QUOTES);
+		 	$array["SAMPLING_POINT"][0]["LONGITUDE"]=htmlspecialchars($value[0], ENT_QUOTES);
 		 	}
 		 }
-		 if ($key=="station_latitude") {
+		 if ($key=="sampling_point_latitude") {
 		 	if (count($value)>1) {
 		 		foreach ($value as $key => $value) {
-		 		$array["STATION"][$key]["LATITUDE"]=htmlspecialchars($value, ENT_QUOTES);
+		 		$array["SAMPLING_POINT"][$key]["LATITUDE"]=htmlspecialchars($value, ENT_QUOTES);
 		 		}
 		 	}
 		 	else{
-		 	$array["STATION"][0]["LATITUDE"]=htmlspecialchars($value[0], ENT_QUOTES);
+		 	$array["SAMPLING_POINT"][0]["LATITUDE"]=htmlspecialchars($value[0], ENT_QUOTES);
 		 	}
 		 }
-		 if ($key=="station_elevation") {
+		 if ($key=="sampling_point_elevation") {
 		 	if (count($value)>1) {
 		 		foreach ($value as $key => $value) {
-		 		$array["STATION"][$key]["ELEVATION"]=htmlspecialchars($value, ENT_QUOTES);
+		 		$array["SAMPLING_POINT"][$key]["ELEVATION"]=htmlspecialchars($value, ENT_QUOTES);
 		 		}
 		 	}
 		 	else{
-		 	$array["STATION"][0]["ELEVATION"]=htmlspecialchars($value[0], ENT_QUOTES);
+		 	$array["SAMPLING_POINT"][0]["ELEVATION"]=htmlspecialchars($value[0], ENT_QUOTES);
 		 	}
 		 }
-		 if ($key=="station_description") {
+		 if ($key=="sampling_point_description") {
 		 	if (count($value)>1) {
 		 		foreach ($value as $key => $value) {
-		 		$array["STATION"][$key]["DESCRIPTION"]=htmlspecialchars($value, ENT_QUOTES);
+		 		$array["SAMPLING_POINT"][$key]["DESCRIPTION"]=htmlspecialchars($value, ENT_QUOTES);
 		 		}
 		 	}
 		 	else{
-		 	$array["STATION"][0]["DESCRIPTION"]=htmlspecialchars($value[0], ENT_QUOTES);
+		 	$array["SAMPLING_POINT"][0]["DESCRIPTION"]=htmlspecialchars($value[0], ENT_QUOTES);
 		 	}
 		 }
 
@@ -181,9 +187,16 @@ function connect_tomongo(){
 	 	 	$array["PUBLISHER"]=htmlspecialchars($value, ENT_QUOTES);
 	 	 }
 		 if ($key=="sample_kind") {
-		 	if (!count($value==0)){
-		 	$array["SAMPLE_KIND"][]["NAME"]=htmlspecialchars($value, ENT_QUOTES);
+		 	
+		 		if (count($value)>1) {
+		 		foreach ($value as $key => $value) {
+		 		$array["SAMPLE_KIND"][$key]["NAME"]=htmlspecialchars($value, ENT_QUOTES);
+		 		}
 		 	}
+		 	else{
+		 	$array["SAMPLE_KIND"][0]["NAME"]=htmlspecialchars($value[0], ENT_QUOTES);
+		 	}
+		 	
 		 }
 		   if ($key=="institution") {
 		 	if (count($value)>1) {

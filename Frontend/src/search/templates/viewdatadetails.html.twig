@@ -97,7 +97,7 @@
 
 <div class="ui fluid card">
     <div class="content">
-      <div class="header">Stations</div>
+      <div class="header">Sampling points</div>
       <table class="ui inverted green table">
       <thead>
       <tr><th>Name</th>
@@ -107,14 +107,14 @@
       <th>Elevation</th>
       <th>Description</th>
     </tr></thead><tbody>
-      {% for station in stations %}
+      {% for sampling_point in sampling_points %}
       <tr>
-      <td>{{station.NAME}}</td>
-      <td>{{station.ABBREVIATION}}</td>
-      <td>{{station.LONGITUDE}}</td>
-      <td>{{station.LATITUDE}}</td>
-      <td>{{station.ELEVATION}}</td>
-      <td>{{station.DESCRIPTION}}</td>
+      <td>{{sampling_point.NAME}}</td>
+      <td>{{sampling_point.ABBREVIATION}}</td>
+      <td>{{sampling_point.LONGITUDE}}</td>
+      <td>{{sampling_point.LATITUDE}}</td>
+      <td>{{sampling_point.ELEVATION}}</td>
+      <td>{{sampling_point.DESCRIPTION}}</td>
       </tr>
       {% endfor %}
       </tr>
@@ -189,8 +189,13 @@
             {%endfor%}
             </ul>
           {%endif%}
-           {%if sample_kind %}
-           <h2 class="ui sub header">Sample kind:</h2> <span>{{sample_kind[0].NAME}}</span>
+           {%if sample_kinds %}
+           <h2 class="ui sub header">Sample kind:</h2>
+           <ul>
+            {%for sample_kind in sample_kinds%}
+              <li>{{sample_kind.NAME}}</li>
+            {%endfor%}
+            </ul>
           {%endif%}
 
           {%if sampling_date%}
