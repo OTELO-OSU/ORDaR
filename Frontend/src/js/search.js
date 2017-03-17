@@ -259,6 +259,10 @@ APP.modules.search = (function(){
 				}
 				minyear=Math.min.apply(null, creationdatearray);
 	        	maxyear=Math.max.apply(null, creationdatearray);
+	        	console.log(maxyear)
+	        	if (minyear==maxyear) {
+	        		minyear=maxyear-1;
+	        	}
 				$('#date').append('<input class="range-slider" value="'+minyear+','+maxyear+'" type="hidden">');
 
 				$('.range-slider').jRange({
