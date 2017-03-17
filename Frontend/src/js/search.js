@@ -148,7 +148,7 @@ APP.modules.search = (function(){
 					if (type=="" || type==" ") {
 
 					}else{
-					$('#samplekind').append('<label title="'+longtype+'"  class="item" for="'+type+'"> <input onclick="APP.modules.mypublications.checkCheckbox()" id="'+type+'" name="sample_kind" value="'+type+'" type="checkbox"> <div class="ui blue horizontal label">'+type+'</div>'+count+'</label>')
+					$('#samplekind').append('<label title="'+longtype+'"  class="item" for="'+type+'"> <input onclick="APP.modules.search.checkCheckbox()" id="'+type+'" name="sample_kind" value="'+type+'" type="checkbox"> <div class="ui blue horizontal label">'+type+'</div>'+count+'</label>')
 					}
 				}
 				authors=data['aggregations']['authors']['buckets'];
@@ -163,7 +163,7 @@ APP.modules.search = (function(){
 					if (type=="") {
 
 					}else{
-					$('#authors').append('<label title="'+longtype+'"  class="item" for="'+type+'authors"> <input onclick="APP.modules.mypublications.checkCheckbox()" id="'+type+'authors" name="authors" value="'+type+'" type="checkbox"> <div class="ui blue horizontal label">'+type+'</div>'+count+'</label>')
+					$('#authors').append('<label title="'+longtype+'"  class="item" for="'+type+'authors"> <input onclick="APP.modules.search.checkCheckbox()" id="'+type+'authors" name="authors" value="'+type+'" type="checkbox"> <div class="ui blue horizontal label">'+type+'</div>'+count+'</label>')
 					}
 				}
 				keywords=data['aggregations']['keywords']['buckets'];
@@ -179,7 +179,7 @@ APP.modules.search = (function(){
 
 					}else{
 
-					$('#keywords').append('<label title="'+longtype+'"  class="item" for="'+type+'keywords"> <input onclick="APP.modules.mypublications.checkCheckbox()" id="'+type+'keywords" name="keywords" value="'+type+'" type="checkbox"> <div class="ui blue horizontal label">'+type+'</div>'+count+'</label>')
+					$('#keywords').append('<label title="'+longtype+'"  class="item" for="'+type+'keywords"> <input onclick="APP.modules.search.checkCheckbox()" id="'+type+'keywords" name="keywords" value="'+type+'" type="checkbox"> <div class="ui blue horizontal label">'+type+'</div>'+count+'</label>')
 					}
 				}
 				scientific_field=data['aggregations']['scientific_field']['buckets'];
@@ -194,7 +194,7 @@ APP.modules.search = (function(){
 					if (type=="") {
 
 					}else{
-					$('#scientificfield').append('<label title="'+longtype+'"  class="item" for="'+type+'scientificfield"> <input onclick="APP.modules.mypublications.checkCheckbox()" id="'+type+'scientificfield" name="scientific_field" value="'+type+'" type="checkbox"> <div class="ui blue horizontal label">'+type+'</div>'+count+'</label>')
+					$('#scientificfield').append('<label title="'+longtype+'"  class="item" for="'+type+'scientificfield"> <input onclick="APP.modules.search.checkCheckbox()" id="'+type+'scientificfield" name="scientific_field" value="'+type+'" type="checkbox"> <div class="ui blue horizontal label">'+type+'</div>'+count+'</label>')
 					}
 				}
 				language=data['aggregations']['language']['buckets'];
@@ -209,7 +209,7 @@ APP.modules.search = (function(){
 					if (type=="") {
 
 					}else{
-					$('#language').append('<label title="'+longtype+'"  class="item" for="'+type+'language"> <input onclick="APP.modules.mypublications.checkCheckbox()" id="'+type+'language" name="language" value="'+type+'" type="checkbox"> <div class="ui blue horizontal label">'+type+'</div>'+count+'</label>')
+					$('#language').append('<label title="'+longtype+'"  class="item" for="'+type+'language"> <input onclick="APP.modules.search.checkCheckbox()" id="'+type+'language" name="language" value="'+type+'" type="checkbox"> <div class="ui blue horizontal label">'+type+'</div>'+count+'</label>')
 					}
 				}
 				filetype=data['aggregations']['filetype']['buckets'];
@@ -224,7 +224,7 @@ APP.modules.search = (function(){
 					if (type=="") {
 
 					}else{
-					$('#filetype').append('<label title="'+longtype+'"  class="item" for="'+type+'filetype"> <input onclick="APP.modules.mypublications.checkCheckbox()" id="'+type+'filetype" name="filetype" value="'+type+'" type="checkbox"> <div class="ui blue horizontal label">'+type+'</div>'+count+'</label>')
+					$('#filetype').append('<label title="'+longtype+'"  class="item" for="'+type+'filetype"> <input onclick="APP.modules.search.checkCheckbox()" id="'+type+'filetype" name="filetype" value="'+type+'" type="checkbox"> <div class="ui blue horizontal label">'+type+'</div>'+count+'</label>')
 					}
 				}
 				accessright=data['aggregations']['access_right']['buckets'];
@@ -248,7 +248,7 @@ APP.modules.search = (function(){
 					if (type=="") {
 
 					}else{
-					$('#accesright').append('<label  class="item" for="'+type+'accessright"> <input onclick="APP.modules.mypublications.checkCheckbox()" id="'+type+'accessright" name="accessright" value="'+type+'" type="checkbox"> <div class="ui '+color+' horizontal label">'+type+'</div>'+count+'</label>')
+					$('#accesright').append('<label  class="item" for="'+type+'accessright"> <input onclick="APP.modules.search.checkCheckbox()" id="'+type+'accessright" name="accessright" value="'+type+'" type="checkbox"> <div class="ui '+color+' horizontal label">'+type+'</div>'+count+'</label>')
 					}
 				}
 				var creationdatearray=[];
@@ -311,6 +311,7 @@ APP.modules.search = (function(){
 				 	var scientific_field;
 				 	var access_right;
 				 	var filetype;
+				 	var language;
 				 	facets=undefined;
 				 $.each(checked,function(index,value){
 				 	if (value.name=="sample_kind") {
@@ -739,6 +740,7 @@ APP.modules.mypublications = (function(){
 				 	var access_right;
 				 	var filetype;
 				 	var keywords;
+				 	var language;
 				 	facets=undefined;
 				 $.each(checked,function(index,value){
 
