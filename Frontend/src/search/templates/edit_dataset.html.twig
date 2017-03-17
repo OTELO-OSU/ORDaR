@@ -8,6 +8,12 @@
 </div>
 	<div class="ui ten wide column centered">
 
+{% if error %}
+	<div class="ui warning message">
+  <div class="header">
+Warning!  </div>
+{{error}}</div>
+{%endif%}
 
 <form class="ui form" action="editrecord/{{doi}}" method="post" enctype="multipart/form-data" >
 

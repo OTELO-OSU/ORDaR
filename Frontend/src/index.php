@@ -135,8 +135,8 @@ $app->post('/upload', function (Request $req,Response $responseSlim) {
    	$db=$Datasheet->connect_tomongo();
 	$array=$Datasheet->Postprocessing($_POST);
 	$response=$Datasheet->Newdatasheet($db,$array);
-	if ($response==false) {
-		echo $twig->render('upload.html.twig',['error'=>"true",'name'=>$_SESSION['name'],'mail'=>$_SESSION['mail'],'firstname'=>$_SESSION['firstname'],'creation_date'=>$_POST['creation_date'],'language'=> $_POST['language'],'sample_kind'=> $_POST['sample_kind'],'title'=> $_POST['title'],'description'=> $_POST['description'],'scientific_field' => $_POST['scientific_field']]);
+	if ($response!="true") {
+		echo $twig->render('upload.html.twig',['error'=>$response,'name'=>$_SESSION['name'],'mail'=>$_SESSION['mail'],'firstname'=>$_SESSION['firstname'],'creation_date'=>$_POST['creation_date'],'language'=> $_POST['language'],'sample_kind'=> $_POST['sample_kind'],'title'=> $_POST['title'],'description'=> $_POST['description'],'scientific_field' => $_POST['scientific_field']]);
 	}
 	else{
 	$loader = new Twig_Loader_Filesystem('search/templates');
@@ -280,10 +280,10 @@ $app->post('/editrecord/{doi}', function (Request $req,Response $responseSlim,$a
 	$db=$Datasheet->connect_tomongo();
 	$array=$Datasheet->Postprocessing($_POST);
 	$return=$Datasheet->Editdatasheet($collection,$doi,$db,$array);
-	if ($return==false) {
-			return $responseSlim->withRedirect($_SERVER['HTTP_REFERER']);
-
-	}
+	if ($return!="true") {
+return @$twig->render('edit_dataset.html.twig', ['error'=>$return,'name'=>$_SESSION['name'],'firstname'=>$_SESSION['firstname'],'mail'=>$_SESSION['mail'],
+	        'doi'=>$id,'title' => $response['_source']['INTRO']['TITLE'],'description'=>$response['_source']['INTRO']['DATA_DESCRIPTION'],'creation_date'=>$response['_source']['INTRO']['CREATION_DATE'],'sampling_dates'=>$response['_source']['INTRO']['SAMPLING_DATE'],'authors'=>$response['_source']['INTRO']['FILE_CREATOR'],'keywords'=>$response['_source']['INTRO']['KEYWORDS'],'sample_kinds'=>$response['_source']['INTRO']['SAMPLE_KIND'],'scientific_fields'=>$response['_source']['INTRO']['SCIENTIFIC_FIELD'],'institutions'=>$response['_source']['INTRO']['INSTITUTION'],'language'=>$response['_source']['INTRO']['LANGUAGE'],'sampling_points'=>$response['_source']['INTRO']['SAMPLING_POINT'],'measurements'=>$response['_source']['INTRO']['MEASUREMENT'],'license'=>$license,'publisher'=>$response['_source']['INTRO']['PUBLISHER'],'fundings'=>$response['_source']['INTRO']['FUNDINGS'],'accessright'=>$response['_source']['INTRO']['ACCESS_RIGHT'],'embargoed_date'=>$response['_source']['INTRO']['PUBLICATION_DATE']
+	    	]);	}
 	else{
 
 	return @$twig->render('editsuccess.html.twig');

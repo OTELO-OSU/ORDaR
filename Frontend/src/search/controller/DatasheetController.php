@@ -34,11 +34,10 @@ function connect_tomongo(){
 	$required = array('title','creation_date','language','authors_name','authors_firstname','authors_email','description','scientific_field','measurement_nature','measurement_abbreviation','measurement_unit','license','publisher','institution');
 	foreach($required as $field) {
 	  if (empty($_POST[$field])) {
-	  	print $field;
-	    $error = true;
+	    $error = "Warning there are empty fields: ". $field;
 	  }
 	}
-	if ($error==true) {
+	if (!$error==NULL) {
 		return $error;
 	}
 	else{
@@ -285,7 +284,14 @@ function connect_tomongo(){
 		 		$publication_date=date('Y-m-d');
 		 	}
 		 	if ($value=="Embargoed") {
-		 		$publication_date=$_POST["publication_date"];
+		 		$today=date('Y-m-d');
+		 		$embargoeddate=$_POST["publication_date"];
+		 		if ($today < $embargoeddate) {
+		 			$publication_date=htmlspecialchars($_POST["publication_date"], ENT_QUOTES);;
+		 		}
+		 		else{
+		 			$error= "Invalid embargo date!";
+		 		}
 		 	}
 
 		 
@@ -313,15 +319,19 @@ function connect_tomongo(){
 		 $array["UPLOAD_DATE"]=date('Y-m-d');
 		 
 		}
-		return $array;
+		if (!$error==NULL) {
+			return $error;
+		}else{
+			return $array;
+		}
 	}
 }
 
 	
 	function Newdatasheet($db,$array)
 	{
-	if ($array=="true") {
-
+	if (is_array($array)==false) {
+		return $array;
 	}
 	else{
 		$config = parse_ini_file("config.ini");
@@ -356,7 +366,7 @@ function connect_tomongo(){
 		}
 
 					$collectionObject->insert($json);
-					return true;
+					return "true";
 		}
 	}
 
@@ -367,8 +377,9 @@ function connect_tomongo(){
 	function Editdatasheet($collection,$doi,$db,$array){
 	$config = parse_ini_file("config.ini");
 	$UPLOAD_FOLDER=$config["UPLOAD_FOLDER"];
-	if ($array=="true") {
-
+	var_dump($array);
+	if (is_array($array)==false) {
+		return $array;
 	}
 	else{
 	//$this->db = new MongoClient("mongodb://localhost:27017");
@@ -403,7 +414,7 @@ function connect_tomongo(){
 			$collectionObject->remove(array('_id' => $doi));
 			$collectionObject->insert(array('_id' => $newdoi,"INTRO" => $INTRO,"DATA" => $DATA));	
 		}
-		return true;
+		return "true";
 		}
 	}
 	
