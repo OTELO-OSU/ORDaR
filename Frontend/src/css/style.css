@@ -89,5 +89,13 @@
 
 .delete{
     position: relative;
+    top: 10px;
+}
+
+.delete.center{
+     position: relative;
     top: 30px;
 }
+
+
+

@@ -96,6 +96,7 @@ APP.modules.datatable = (function(){
 				   nextButton:false,
 				  
 				});
+
 	     	}
 		}
 	}
@@ -1061,7 +1062,7 @@ return{
   })
 ;
 		$("#addauthors").click(function (e) {
- 		$("#items").append('<div class="required field" id="items"> <div class="three fields"> <div class="field"><label>Author firstname</label><input type="text" name="authors_firstname[]" data-validate="authors_firstname" placeholder="First Name" ></div> <div class="field"><label>Author name</label><input type="text" name="authors_name[]" data-validate="authors_name" placeholder="Family Name, Given names" ></div> <div class="field"><label>Author mail</label><input type="email" name="authors_email[]" data-validate="authors_email" placeholder="Email" required ></div> <div class="ui icon delete"><i class="remove icon"></i></div> </div> </div>'); });
+ 		$("#items").append('<div class="required field" id="items"> <div class="three fields"> <div class="field"><label>Author firstname</label><input type="text" name="authors_firstname[]" data-validate="authors_firstname" placeholder="First Name" ></div> <div class="field"><label>Author name</label><input type="text" name="authors_name[]" data-validate="authors_name" placeholder="Family Name, Given names" ></div> <div class="field"><label>Author mail</label><input type="email" name="authors_email[]" data-validate="authors_email" placeholder="Email" required ></div> <div class="ui icon delete center"><i class="remove icon"></i></div> </div> </div>'); });
 		$("body").on("click", ".delete", function (e) {
 		$(this).parent("div").remove();
 
@@ -1119,7 +1120,7 @@ $(this).parent("div").remove();
 });
 
 $("#addmeasurement").click(function (e) {
- 	$("#measurements").append('<div class="three fields"> <div class="field"><label>Measurement nature</label><input type="text"  name="measurement_nature[]"  placeholder="Nature" ></div> <div class="field"><label>Measurement abbreviation</label><input type="text"  name="measurement_abbreviation[]" data-validate="measurement_abbreviation" placeholder="Abbreviation" ></div> <div class="field"><label>Measurement unit</label><input type="text"  name="measurement_unit[]" data-validate="measurement_unit" placeholder="Unit" ></div> <div class="ui icon delete"><i class="remove icon"></i></div>  </div>'); });
+ 	$("#measurements").append('<div class="three fields"> <div class="field"><label>Measurement nature</label><input type="text"  name="measurement_nature[]"  placeholder="Nature" ></div> <div class="field"><label>Measurement abbreviation</label><input type="text"  name="measurement_abbreviation[]" data-validate="measurement_abbreviation" placeholder="Abbreviation" ></div> <div class="field"><label>Measurement unit</label><input type="text"  name="measurement_unit[]" data-validate="measurement_unit" placeholder="Unit" ></div> <div class="ui icon delete center"><i class="remove icon"></i></div>  </div>'); });
 	$("body").on("click", ".delete", function (e) {
 	$(this).parent("div").remove();
 });

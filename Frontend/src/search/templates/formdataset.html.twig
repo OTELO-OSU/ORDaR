@@ -48,7 +48,7 @@
            <div class="field"><label>Author firstname</label><input type="text" value="{{author.FIRST_NAME}}" data-validate="authors_firstname" name="authors_firstname[]" placeholder="First Name"  ></div>
            <div class="field"><label>Author name</label><input type="text" value="{{author.NAME}}" data-validate="authors_name" name="authors_name[]" placeholder="Family Name, Given names"  ></div>
            <div class="field"><label>Author mail</label><input type="email" name="authors_email[]" data-validate="authors_email" value="{{author.MAIL}}" placeholder="Email" required ></div>
-           <a class="ui icon  delete"><i class="remove icon"></i></a>
+           <a class="ui icon  delete center"><i class="remove icon"></i></a>
            </div>
            </div>
            {% endfor %}
@@ -162,7 +162,9 @@
         </div>
         {% endif %} 
       </div>
-          <input type="button" class="ui button active" id="addscientificfields" value="Add a new scientific field">
+      <div class="ui primary right floated button"  id="addscientificfields">
+       <i class="plus icon"></i> Add a new scientific field
+      </div>
     </div>
       <div class="required field">
         <label>Institutions</label>
@@ -283,7 +285,9 @@
 
 
         </div>
-          <input type="button" class="ui button active" id="addinstitution" value="Add a new institution">
+          <div class="ui primary right floated button"  id="addinstitution">
+      <i class="plus icon"></i> Add a new institution
+    </div>
         </div>
         </div>
         </div>
@@ -302,26 +306,32 @@
                               <div class="field"><label>Measurement nature</label><input type="text" value="{{measurement.NATURE}}" name="measurement_nature[]" data-validate="measurement_nature" placeholder="Nature"  ></div>
                               <div class="field"><label>Measurement abbreviation</label><input type="text" value="{{measurement.ABBREVIATION}}" name="measurement_abbreviation[]" data-validate="measurement_abbreviation" placeholder="Abbreviation" ></div>
                               <div class="field"><label>Measurement unit</label><input type="text" value="{{measurement.UNIT}}" name="measurement_unit[]" data-validate="measurement_unit" placeholder="Unit"></div>
-                          <div class="ui icon delete"><i class="remove icon"></i></div> 
+                          <div class="ui icon delete center"><i class="remove icon"></i></div> 
                           </div>
                       </div>
                   {% endfor %}
-                          <input type="button" class="ui button active" id="addmeasurement" value="Add a new measurement">
+                          <div class="ui primary right floated button"  id="addmeasurement">
+                          <i class="plus icon"></i> Add a new measurement
+                        </div>
                 </div>
               </div>
                   {% else %}
+                  <div class="ui segment">
                   <div class="required field" >
-                   <label>Measurement</label>
-                <div id="measurements">
-                  <div class="three fields">
-                    <div class="field"><label>Measurement nature</label><input type="text" value="{{measurement.NATURE}}" name="measurement_nature[]" data-validate="measurement_nature" placeholder="Nature"  ></div>
-                    <div class="field"><label>Measurement abbreviation</label><input type="text" value="{{measurement.ABBREVIATION}}" name="measurement_abbreviation[]" data-validate="measurement_abbreviation" placeholder="Abbreviation" ></div>
-                    <div class="field"><label>Measurement unit</label><input type="text" value="{{measurement.UNIT}}" name="measurement_unit[]" data-validate="measurement_unit" placeholder="Unit" ></div>
-                    <div class="ui icon delete"><i class="remove icon"></i></div> 
+                         <label>Measurement</label>
+                      <div id="measurements">
+                        <div class="three fields">
+                          <div class="field"><label>Measurement nature</label><input type="text" value="{{measurement.NATURE}}" name="measurement_nature[]" data-validate="measurement_nature" placeholder="Nature"  ></div>
+                          <div class="field"><label>Measurement abbreviation</label><input type="text" value="{{measurement.ABBREVIATION}}" name="measurement_abbreviation[]" data-validate="measurement_abbreviation" placeholder="Abbreviation" ></div>
+                          <div class="field"><label>Measurement unit</label><input type="text" value="{{measurement.UNIT}}" name="measurement_unit[]" data-validate="measurement_unit" placeholder="Unit" ></div>
+                          <div class="ui icon delete center"><i class="remove icon"></i></div> 
+                        </div>
+                      </div>
+                      <div class="ui primary right floated button"  id="addmeasurement">
+                          <i class="plus icon"></i> Add a new measurement
+                        </div>
                   </div>
-                </div>
-                  <input type="button" class="ui button active" id="addmeasurement" value="Add a new measurement">
-                </div>
+            </div>
                   {%endif%}
           
 
@@ -343,7 +353,9 @@
                 <input type="text" name="sample_kind[]" placeholder="Sample kind" value="{{sample_kind.NAME}}">     
               {%endif%}
             </div>
-                <input type="button" class="ui button active" id="addsamplekind" value="Add a new sample kind">
+                  <div class="ui primary  button"  id="addsamplekind">
+                      <i class="plus icon"></i> Add a new sample kind
+                  </div>
 
             <div class="field" id="sampling_date">
 
@@ -358,7 +370,9 @@
                 </div>
               {%endif%}
             </div>
-                <input type="button" class="ui button active" id="addsamplingdate" value="Add a new sampling date">
+                  <div class="ui primary  button"  id="addsamplingdate">
+                          <i class="plus icon"></i> Add a new sampling date
+                        </div>
           </div>
       </div>
   <div class="row"></div>
@@ -381,12 +395,12 @@
               <div><input type="text" name="keywords[]"  value="{{keyword.NAME}}" placeholder="Keyword"> </div>
           {% endif %}
             </div>
-
-               <input type="button" class="ui button active" id="addkeywords" value="Add a new keyword">
+                 <div class="ui primary  button"  id="addkeywords">
+                          <i class="plus icon"></i> Add a new keyword
+                        </div>
             </div>
         <div class=" field">
           <label>Fundings</label>
-          <div class="row">
             
           <div class=" field" id="fundings">
           {% if fundings %}
@@ -399,9 +413,11 @@
           {% endif %}
 
 
+               <div class="ui primary  button"  id="addfundings">
+                      <i class="plus icon"></i> Add a new funding
+              </div>
         </div>
-             <input type="button" class="ui button active" id="addfundings" value="Add a new funding">
-          </div>
+
       </div>
   </div>
 </div>
@@ -440,7 +456,9 @@
 
             {%endif%}
        
-        <input type="button" class="ui button active" id="addsampling_point" value="Add a new sampling_point">
+          <div class="ui primary right floated button"  id="addsampling_point">
+                          <i class="plus icon"></i> Add a new sampling point
+                        </div>
         </div>
       </div>
     </div>
