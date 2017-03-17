@@ -85,3 +85,9 @@
 #authors li a{
     cursor: pointer;
 }
+
+
+.delete{
+    position: relative;
+    top: 30px;
+}

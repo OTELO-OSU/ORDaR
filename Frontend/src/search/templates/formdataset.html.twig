@@ -1,514 +1,526 @@
 <div class="row"></div>
 <h4 class="ui dividing header">Metadata</h4>
-<div class="ui fluid styled accordion">
-    <div class="active title">
-        Basic information
-        <i class="dropdown icon"></i>
-    </div>
-    <div class="active content">
-
-      <div class="required field">
-          <label>Creation date</label>
-      <input type="text" class="date" name="creation_date" value="{{creation_date}}" placeholder="Creation date">
+<div class="ui grid">
+  <div class="ui fluid styled accordion">
+      <div class="active title">
+          Basic information
+          <i class="dropdown icon"></i>
       </div>
+      <div class="active content">
+
         <div class="required field">
+            <label>Creation date</label>
+        <input type="text" class="date" name="creation_date" value="{{creation_date}}" placeholder="Creation date">
+        </div>
+          <div class="required field">
 
-        <label>Title</label>
-        <input type="text" name="title" placeholder="Title" value="{{title}}" >
-      </div>
-    <div class="required field">
-        <label>Language</label>
-        {%if language %}
-        {% if language == "ENGLISH" %}
-           <select class="ui dropdown" name="language">
-              <option value="1">ENGLISH</option>
-              <option value="0">FRENCH</option>
-           </select>
-        {% else %}
-         <select class="ui dropdown" name="language">
-          <option value="0">FRENCH</option>
-          <option value="1">ENGLISH</option>
-          </select>
-        {% endif %}
-        {% else %}
-          <select class="ui dropdown" name="language">
-          <option value="1" selected>ENGLISH</option>
-          <option value="0">FRENCH</option>
-          </select>
-        {% endif %}
-
-      </div>    
+          <label>Title</label>
+          <input type="text" name="title" placeholder="Title" value="{{title}}" >
+        </div>
       <div class="required field">
-        <label>Authors</label>
-        {% if authors %}
-          {% for author in authors %}
-         <div class="required field" id="items">
-         <div class="three fields">
-         <div class="field"><label>Author firstname</label><input type="text" value="{{author.FIRST_NAME}}" data-validate="authors_firstname" name="authors_firstname[]" placeholder="First Name"  ></div>
-         <div class="field"><label>Author name</label><input type="text" value="{{author.NAME}}" data-validate="authors_name" name="authors_name[]" placeholder="Family Name, Given names"  ></div>
-         <div class="field"><label>Author mail</label><input type="email" name="authors_email[]" data-validate="authors_email" value="{{author.MAIL}}" placeholder="Email" required ></div>
-         <a class="ui icon  delete"><i class="remove icon"></i></a>
-         </div>
-         </div>
-         {% endfor %}
-        {%else%}
-    <div class="required field" id="items">
-         <div class="three fields">
-         <div class="field"><label>Author firstname</label><input type="text" value="{{firstname}}"  name="authors_firstname[]" data-validate="authors_firstname" placeholder="First Name"  ></div>
-         <div class="field"><label>Author name</label><input type="text" value="{{name}}"  name="authors_name[]" data-validate="authors_name" placeholder="Family Name, Given names" ></div>
-         <div class="field"><label>Author mail</label><input type="email" name="authors_email[]" value="{{mail}}" data-validate="authors_email" placeholder="Email" required ></div>
-         <a class="ui icon  delete"><i class="remove icon"></i></a>
-         </div>
-         </div>
-        {%endif%}
-      <input type="button" class="ui button active" id="addauthors" value="Add a new authors">
+          <label>Language</label>
+          {%if language %}
+          {% if language == "ENGLISH" %}
+             <select class="ui dropdown" name="language">
+                <option value="1">ENGLISH</option>
+                <option value="0">FRENCH</option>
+             </select>
+          {% else %}
+           <select class="ui dropdown" name="language">
+            <option value="0">FRENCH</option>
+            <option value="1">ENGLISH</option>
+            </select>
+          {% endif %}
+          {% else %}
+            <select class="ui dropdown" name="language">
+            <option value="1" selected>ENGLISH</option>
+            <option value="0">FRENCH</option>
+            </select>
+          {% endif %}
 
-      </div>
-       <div class="required field">
-    <label>Description</label>
-    <textarea name="description" >{{description}}</textarea>
-  </div>
-   <div class="required field">
-    <label>Publisher</label>
-    <input type="text" name="publisher" placeholder="Publisher" value="{{publisher}}" >
-  </div>
-   <div class="required field">
-    <label>Scientific field</label>
-    <div class=" field" id="scientificfields">
- {% if scientific_fields %}
- {% for scientific_field in scientific_fields %}
- <div>
+        </div>    
+        <div class="required field">
+          <label>Authors</label>
+          {% if authors %}
+            {% for author in authors %}
+           <div class="required field" id="items">
+           <div class="three fields">
+           <div class="field"><label>Author firstname</label><input type="text" value="{{author.FIRST_NAME}}" data-validate="authors_firstname" name="authors_firstname[]" placeholder="First Name"  ></div>
+           <div class="field"><label>Author name</label><input type="text" value="{{author.NAME}}" data-validate="authors_name" name="authors_name[]" placeholder="Family Name, Given names"  ></div>
+           <div class="field"><label>Author mail</label><input type="email" name="authors_email[]" data-validate="authors_email" value="{{author.MAIL}}" placeholder="Email" required ></div>
+           <a class="ui icon  delete"><i class="remove icon"></i></a>
+           </div>
+           </div>
+           {% endfor %}
+          {%else%}
+      <div class="required field" id="items">
+           <div class="three fields">
+           <div class="field"><label>Author firstname</label><input type="text" value="{{firstname}}"  name="authors_firstname[]" data-validate="authors_firstname" placeholder="First Name" readonly ></div>
+           <div class="field"><label>Author name</label><input type="text" value="{{name}}"  name="authors_name[]" data-validate="authors_name" placeholder="Family Name, Given names" readonly></div>
+           <div class="field"><label>Author mail</label><input type="email" name="authors_email[]" value="{{mail}}" data-validate="authors_email" placeholder="Email" required readonly ></div>
+           </div>
+           </div>
+          {%endif%}
+<div class="ui primary right floated button" id="addauthors">
+      <i class="plus icon"></i> Add a new author
+    </div>
+        </div>
+         <div class="required field">
+      <label>Description</label>
+      <textarea name="description" >{{description}}</textarea>
+    </div>
+     <div class="required field">
+      <label>Publisher</label>
+      <input type="text" name="publisher" placeholder="Publisher" value="{{publisher}}" >
+    </div>
+     <div class="required field">
+      <label>Scientific field</label>
+      <div class=" field" id="scientificfields">
+   {% if scientific_fields %}
+   {% for scientific_field in scientific_fields %}
+   <div class="ui input">
+         <select class="ui fluid search dropdown scientific_field" name="scientific_field[]"  > 
+            <option value="{{scientific_field.NAME}}">{{scientific_field.NAME}}</option>
+            <option value="Addresses">Addresses</option>
+            <option value="Hydrography">  Hydrography</option>
+            <option value="Administrative units"> Administrative units</option>
+            <option value="Land cover"> Land cover</option>
+            <option value="Agricultural and aquaculture facilities">  Agricultural and aquaculture facilities</option>
+            <option value="Land use"> Land use</option>
+            <option value="Area management/restriction/regulation zones and reporting units"> Area management/restriction/regulation zones and reporting units</option>
+            <option value="Meteorological geographical features"> Meteorological geographical features</option>
+            <option value="Atmospheric conditions"> Atmospheric conditions</option>
+            <option value="Mineral resources"> Mineral resources</option>
+            <option value="Bio-geographical regions"> Bio-geographical regions</option>
+            <option value="Natural risk zones"> Natural risk zones</option>
+            <option value="Buildings"> Buildings</option>
+            <option value="Oceanographic geographical features"> Oceanographic geographical features</option>
+            <option value="Cadastral parcels"> Cadastral parcels</option>
+            <option value="Orthoimagery"> Orthoimagery</option>
+            <option value="Coordinate reference systems">Coordinate reference systems</option>
+            <option value="Population distribution — demography">Population distribution — demography</option>
+            <option value="Elevation">Elevation</option>
+            <option value="Production and industrial facilities">Production and industrial facilities</option>
+            <option value="Energy resources">Energy resources</option>
+            <option value="Protected sites">Protected sites</option>
+            <option value="Environmental monitoring facilities">Environmental monitoring facilities</option>
+            <option value="Sea regions">Sea regions</option>
+            <option value="Geographical grid systems">Geographical grid systems</option>
+            <option value="Soil">Soil</option>
+            <option value="Geographical names">Geographical names</option>
+            <option value="Species distribution">Species distribution</option>
+            <option value="Geology">Geology</option>
+            <option value="Statistical units">Statistical units</option>
+            <option value="Habitats and biotopes">Habitats and biotopes</option>
+            <option value="Transport networks">Transport networks</option>
+            <option value="Human health and safety">Human health and safety</option>
+            <option value="Utility and governmental services">Utility and governmental services</option>
+        </select>
+       <div class="ui icon delete"><i class="remove icon"></i></div> 
+       </div>
+        {% endfor %}
+        {% else %}
+        <div class="ui input">
        <select class="ui fluid search dropdown scientific_field" name="scientific_field[]"  > 
-          <option value="{{scientific_field.NAME}}">{{scientific_field.NAME}}</option>
-          <option value="Addresses">Addresses</option>
-          <option value="Hydrography">  Hydrography</option>
-          <option value="Administrative units"> Administrative units</option>
-          <option value="Land cover"> Land cover</option>
-          <option value="Agricultural and aquaculture facilities">  Agricultural and aquaculture facilities</option>
-          <option value="Land use"> Land use</option>
-          <option value="Area management/restriction/regulation zones and reporting units"> Area management/restriction/regulation zones and reporting units</option>
-          <option value="Meteorological geographical features"> Meteorological geographical features</option>
-          <option value="Atmospheric conditions"> Atmospheric conditions</option>
-          <option value="Mineral resources"> Mineral resources</option>
-          <option value="Bio-geographical regions"> Bio-geographical regions</option>
-          <option value="Natural risk zones"> Natural risk zones</option>
-          <option value="Buildings"> Buildings</option>
-          <option value="Oceanographic geographical features"> Oceanographic geographical features</option>
-          <option value="Cadastral parcels"> Cadastral parcels</option>
-          <option value="Orthoimagery"> Orthoimagery</option>
-          <option value="Coordinate reference systems">Coordinate reference systems</option>
-          <option value="Population distribution — demography">Population distribution — demography</option>
-          <option value="Elevation">Elevation</option>
-          <option value="Production and industrial facilities">Production and industrial facilities</option>
-          <option value="Energy resources">Energy resources</option>
-          <option value="Protected sites">Protected sites</option>
-          <option value="Environmental monitoring facilities">Environmental monitoring facilities</option>
-          <option value="Sea regions">Sea regions</option>
-          <option value="Geographical grid systems">Geographical grid systems</option>
-          <option value="Soil">Soil</option>
-          <option value="Geographical names">Geographical names</option>
-          <option value="Species distribution">Species distribution</option>
-          <option value="Geology">Geology</option>
-          <option value="Statistical units">Statistical units</option>
-          <option value="Habitats and biotopes">Habitats and biotopes</option>
-          <option value="Transport networks">Transport networks</option>
-          <option value="Human health and safety">Human health and safety</option>
-          <option value="Utility and governmental services">Utility and governmental services</option>
-      </select>
-     <button class="ui icon button delete"><i class="remove icon"></i></button>
-     </div>
+            <option value="">Select a field</option>
+            <option value="Addresses">Addresses</option>
+            <option value="Hydrography">  Hydrography</option>
+            <option value="Administrative units"> Administrative units</option>
+            <option value="Land cover"> Land cover</option>
+            <option value="Agricultural and aquaculture facilities">  Agricultural and aquaculture facilities</option>
+            <option value="Land use"> Land use</option>
+            <option value="Area management/restriction/regulation zones and reporting units"> Area management/restriction/regulation zones and reporting units</option>
+            <option value="Meteorological geographical features"> Meteorological geographical features</option>
+            <option value="Atmospheric conditions"> Atmospheric conditions</option>
+            <option value="Mineral resources"> Mineral resources</option>
+            <option value="Bio-geographical regions"> Bio-geographical regions</option>
+            <option value="Natural risk zones"> Natural risk zones</option>
+            <option value="Buildings"> Buildings</option>
+            <option value="Oceanographic geographical features"> Oceanographic geographical features</option>
+            <option value="Cadastral parcels"> Cadastral parcels</option>
+            <option value="Orthoimagery"> Orthoimagery</option>
+            <option value="Coordinate reference systems">Coordinate reference systems</option>
+            <option value="Population distribution — demography">Population distribution — demography</option>
+            <option value="Elevation">Elevation</option>
+            <option value="Production and industrial facilities">Production and industrial facilities</option>
+            <option value="Energy resources">Energy resources</option>
+            <option value="Protected sites">Protected sites</option>
+            <option value="Environmental monitoring facilities">Environmental monitoring facilities</option>
+            <option value="Sea regions">Sea regions</option>
+            <option value="Geographical grid systems">Geographical grid systems</option>
+            <option value="Soil">Soil</option>
+            <option value="Geographical names">Geographical names</option>
+            <option value="Species distribution">Species distribution</option>
+            <option value="Geology">Geology</option>
+            <option value="Statistical units">Statistical units</option>
+            <option value="Habitats and biotopes">Habitats and biotopes</option>
+            <option value="Transport networks">Transport networks</option>
+            <option value="Human health and safety">Human health and safety</option>
+            <option value="Utility and governmental services">Utility and governmental services</option>
+        </select>
+        <div class="ui icon delete"><i class="remove icon"></i></div> 
+        </div>
+        {% endif %} 
+      </div>
+          <input type="button" class="ui button active" id="addscientificfields" value="Add a new scientific field">
+    </div>
+      <div class="required field">
+        <label>Institutions</label>
+    <div class=" field" id="institution">
+    {% if institutions %}
+      {% for institution in institutions %}
+      <div  class="ui input">
+      <div class="ui dropdown fluid search selection  optgroup institution" >
+        <input value="{{institution.NAME}}" data-validate="institution" type="hidden" name="institution[]">
+      <div  class="text">Select</div>
+      <i class="dropdown icon"></i>
+      <div class="menu">
+          <div class="ui horizontal divider">Etablissements publics à caractère scientifique et technologique (EPST)</div>
+            <div class="item">CEMAGREF Centre national du machinisme agricole, du génie rural, des eaux et des forêts</div>
+            <div class="item">CNRS Centre national de la recherche scientifique</div>
+            <div class="item">INED Institut national d'études démographiques</div>
+            <div class="item">INRA Institut national de la recherche agronomique</div>
+            <div class="item">INRETS Institut national de recherche sur les transports et leur sécurité</div>
+            <div class="item">INRIA Institut national de recherche en informatique et en automatique</div>
+            <div class="item">INSERM Institut national de la santé et de la recherche médicale</div>
+            <div class="item">IRD Institut de recherche pour le développement</div>
+            <div class="item">LCPC Laboratoire central des ponts et chaussées</div>
+          <div class="ui horizontal divider">Etablissements publics à caractère industriel et commercial (EPIC)</div>
+            <div class="item">ADEME Agence de l'environnement et de la maîtrise de l'énergie</div>
+            <div class="item">ADIT Agence pour la diffusion de l'information technologique</div>
+            <div class="item">ANDRA Agence nationale de gestion des déchets radioactifs</div>
+            <div class="item">ANVAR Agence nationale de valorisation de la recherche</div>
+            <div class="item">BRGM Bureau de recherches géologiques et minières</div>
+            <div class="item">CEA Commissariat à l'énergie atomique</div>
+            <div class="item">CIRAD Centre de coopération international en recherche agronomique</div>
+            <div class="item">CNDP Centre national de documentation pédagogique</div>
+            <div class="item">CNED Centre national d'enseignement à distance</div>
+            <div class="item">CNES Centre national d'études spatiales</div>
+            <div class="item">CSI Cité des sciences et de l'industrie</div>
+            <div class="item">CSTB Centre scientifique et technique du bâtiment</div>
+            <div class="item">CIFREMER Institut français de recherche pour l'exploitation de la mer</div>
+            <div class="item">CNERIS Institut national de l'environnement industriel et des risques</div>
+            <div class="item">ONERA Office national d'études et de recherches aérospatiales</div>
+          <div class="ui horizontal divider">Etablissements publics à caractère administratif (EPA)</div>
+            <div class="item">CEE Centre d'études de l'emploi</div>
+            <div class="item">CINES Centre informatique national de l'enseignement supérieur</div>
+            <div class="item">INRP Institut national de recherche pédagogique</div>
+            <div class="item">EPA Jussieu : désamiantage, mise en sécurité et rénovation du site</div>
+          <div class="ui horizontal divider">Fondations</div>
+            <div class="item">CEPH Centre d'étude du polymorphisme humain</div>
+            <div class="item">Institut Curie</div>
+            <div class="item">Institut Pasteur</div>
+          <div class="ui horizontal divider">Groupements d'intérêt public (GIP)</div>
+            <div class="item">ANRS Agence nationale de la recherche contre le SIDA</div>
+            <div class="item">CNG Centre national de génotypage</div>
+            <div class="item">CNS Génoscope - Centre national de séquençage</div>
+            <div class="item">CHMR Fonds de recherche Hoechst Marion Roussel</div>
+            <div class="item">IFRTP Institut pour la recherche et la technologie polaires</div>
+            <div class="item">OST Observatoire des sciences et techniques</div>
+            <div class="item">RENATER Réseau national pour la technologie, l'enseignement et la recherche</div>
+      </div>
+    </div>
+        <div class="ui icon delete"><i class="remove icon"></i></div> 
+  </div>
+
       {% endfor %}
       {% else %}
-      <div>
-     <select class="ui fluid search dropdown scientific_field" name="scientific_field[]"  > 
-          <option value="">Select a field</option>
-          <option value="Addresses">Addresses</option>
-          <option value="Hydrography">  Hydrography</option>
-          <option value="Administrative units"> Administrative units</option>
-          <option value="Land cover"> Land cover</option>
-          <option value="Agricultural and aquaculture facilities">  Agricultural and aquaculture facilities</option>
-          <option value="Land use"> Land use</option>
-          <option value="Area management/restriction/regulation zones and reporting units"> Area management/restriction/regulation zones and reporting units</option>
-          <option value="Meteorological geographical features"> Meteorological geographical features</option>
-          <option value="Atmospheric conditions"> Atmospheric conditions</option>
-          <option value="Mineral resources"> Mineral resources</option>
-          <option value="Bio-geographical regions"> Bio-geographical regions</option>
-          <option value="Natural risk zones"> Natural risk zones</option>
-          <option value="Buildings"> Buildings</option>
-          <option value="Oceanographic geographical features"> Oceanographic geographical features</option>
-          <option value="Cadastral parcels"> Cadastral parcels</option>
-          <option value="Orthoimagery"> Orthoimagery</option>
-          <option value="Coordinate reference systems">Coordinate reference systems</option>
-          <option value="Population distribution — demography">Population distribution — demography</option>
-          <option value="Elevation">Elevation</option>
-          <option value="Production and industrial facilities">Production and industrial facilities</option>
-          <option value="Energy resources">Energy resources</option>
-          <option value="Protected sites">Protected sites</option>
-          <option value="Environmental monitoring facilities">Environmental monitoring facilities</option>
-          <option value="Sea regions">Sea regions</option>
-          <option value="Geographical grid systems">Geographical grid systems</option>
-          <option value="Soil">Soil</option>
-          <option value="Geographical names">Geographical names</option>
-          <option value="Species distribution">Species distribution</option>
-          <option value="Geology">Geology</option>
-          <option value="Statistical units">Statistical units</option>
-          <option value="Habitats and biotopes">Habitats and biotopes</option>
-          <option value="Transport networks">Transport networks</option>
-          <option value="Human health and safety">Human health and safety</option>
-          <option value="Utility and governmental services">Utility and governmental services</option>
-      </select>
-      <button class="ui icon button delete"><i class="remove icon"></i></button>
+       <div class="ui input">
+       <div class="ui dropdown fluid search selection  optgroup institution">
+        <input value="{{institution.NAME}}" data-validate="institution" type="hidden" name="institution[]">
+      <div  class="text">Select</div>
+      <i class="dropdown icon"></i>
+      <div class="menu">
+          <div class="ui horizontal divider">Etablissements publics à caractère scientifique et technologique (EPST)</div>
+            <div class="item">CEMAGREF Centre national du machinisme agricole, du génie rural, des eaux et des forêts</div>
+            <div class="item">CNRS Centre national de la recherche scientifique</div>
+            <div class="item">INED Institut national d'études démographiques</div>
+            <div class="item">INRA Institut national de la recherche agronomique</div>
+            <div class="item">INRETS Institut national de recherche sur les transports et leur sécurité</div>
+            <div class="item">INRIA Institut national de recherche en informatique et en automatique</div>
+            <div class="item">INSERM Institut national de la santé et de la recherche médicale</div>
+            <div class="item">IRD Institut de recherche pour le développement</div>
+            <div class="item">LCPC Laboratoire central des ponts et chaussées</div>
+          <div class="ui horizontal divider">Etablissements publics à caractère industriel et commercial (EPIC)</div>
+            <div class="item">ADEME Agence de l'environnement et de la maîtrise de l'énergie</div>
+            <div class="item">ADIT Agence pour la diffusion de l'information technologique</div>
+            <div class="item">ANDRA Agence nationale de gestion des déchets radioactifs</div>
+            <div class="item">ANVAR Agence nationale de valorisation de la recherche</div>
+            <div class="item">BRGM Bureau de recherches géologiques et minières</div>
+            <div class="item">CEA Commissariat à l'énergie atomique</div>
+            <div class="item">CIRAD Centre de coopération international en recherche agronomique</div>
+            <div class="item">CNDP Centre national de documentation pédagogique</div>
+            <div class="item">CNED Centre national d'enseignement à distance</div>
+            <div class="item">CNES Centre national d'études spatiales</div>
+            <div class="item">CSI Cité des sciences et de l'industrie</div>
+            <div class="item">CSTB Centre scientifique et technique du bâtiment</div>
+            <div class="item">CIFREMER Institut français de recherche pour l'exploitation de la mer</div>
+            <div class="item">CNERIS Institut national de l'environnement industriel et des risques</div>
+            <div class="item">ONERA Office national d'études et de recherches aérospatiales</div>
+          <div class="ui horizontal divider">Etablissements publics à caractère administratif (EPA)</div>
+            <div class="item">CEE Centre d'études de l'emploi</div>
+            <div class="item">CINES Centre informatique national de l'enseignement supérieur</div>
+            <div class="item">INRP Institut national de recherche pédagogique</div>
+            <div class="item">EPA Jussieu : désamiantage, mise en sécurité et rénovation du site</div>
+          <div class="ui horizontal divider">Fondations</div>
+            <div class="item">CEPH Centre d'étude du polymorphisme humain</div>
+            <div class="item">Institut Curie</div>
+            <div class="item">Institut Pasteur</div>
+          <div class="ui horizontal divider">Groupements d'intérêt public (GIP)</div>
+            <div class="item">ANRS Agence nationale de la recherche contre le SIDA</div>
+            <div class="item">CNG Centre national de génotypage</div>
+            <div class="item">CNS Génoscope - Centre national de séquençage</div>
+            <div class="item">CHMR Fonds de recherche Hoechst Marion Roussel</div>
+            <div class="item">IFRTP Institut pour la recherche et la technologie polaires</div>
+            <div class="item">OST Observatoire des sciences et techniques</div>
+            <div class="item">RENATER Réseau national pour la technologie, l'enseignement et la recherche</div>
       </div>
-      {% endif %} 
     </div>
-        <input type="button" class="ui button active" id="addscientificfields" value="Add a new scientific field">
+      <a  class="ui icon delete"><i class="remove icon"></i></a>
   </div>
-    <div class="required field">
-      <label>Institutions</label>
-  <div class=" field" id="institution">
-  {% if institutions %}
-    {% for institution in institutions %}
-    <div>
-    <div class="ui dropdown fluid search selection  optgroup institution" >
-      <input value="{{institution.NAME}}" data-validate="institution" type="hidden" name="institution[]">
-    <div  class="text">Select</div>
-    <i class="dropdown icon"></i>
-    <div class="menu">
-        <div class="ui horizontal divider">Etablissements publics à caractère scientifique et technologique (EPST)</div>
-          <div class="item">CEMAGREF Centre national du machinisme agricole, du génie rural, des eaux et des forêts</div>
-          <div class="item">CNRS Centre national de la recherche scientifique</div>
-          <div class="item">INED Institut national d'études démographiques</div>
-          <div class="item">INRA Institut national de la recherche agronomique</div>
-          <div class="item">INRETS Institut national de recherche sur les transports et leur sécurité</div>
-          <div class="item">INRIA Institut national de recherche en informatique et en automatique</div>
-          <div class="item">INSERM Institut national de la santé et de la recherche médicale</div>
-          <div class="item">IRD Institut de recherche pour le développement</div>
-          <div class="item">LCPC Laboratoire central des ponts et chaussées</div>
-        <div class="ui horizontal divider">Etablissements publics à caractère industriel et commercial (EPIC)</div>
-          <div class="item">ADEME Agence de l'environnement et de la maîtrise de l'énergie</div>
-          <div class="item">ADIT Agence pour la diffusion de l'information technologique</div>
-          <div class="item">ANDRA Agence nationale de gestion des déchets radioactifs</div>
-          <div class="item">ANVAR Agence nationale de valorisation de la recherche</div>
-          <div class="item">BRGM Bureau de recherches géologiques et minières</div>
-          <div class="item">CEA Commissariat à l'énergie atomique</div>
-          <div class="item">CIRAD Centre de coopération international en recherche agronomique</div>
-          <div class="item">CNDP Centre national de documentation pédagogique</div>
-          <div class="item">CNED Centre national d'enseignement à distance</div>
-          <div class="item">CNES Centre national d'études spatiales</div>
-          <div class="item">CSI Cité des sciences et de l'industrie</div>
-          <div class="item">CSTB Centre scientifique et technique du bâtiment</div>
-          <div class="item">CIFREMER Institut français de recherche pour l'exploitation de la mer</div>
-          <div class="item">CNERIS Institut national de l'environnement industriel et des risques</div>
-          <div class="item">ONERA Office national d'études et de recherches aérospatiales</div>
-        <div class="ui horizontal divider">Etablissements publics à caractère administratif (EPA)</div>
-          <div class="item">CEE Centre d'études de l'emploi</div>
-          <div class="item">CINES Centre informatique national de l'enseignement supérieur</div>
-          <div class="item">INRP Institut national de recherche pédagogique</div>
-          <div class="item">EPA Jussieu : désamiantage, mise en sécurité et rénovation du site</div>
-        <div class="ui horizontal divider">Fondations</div>
-          <div class="item">CEPH Centre d'étude du polymorphisme humain</div>
-          <div class="item">Institut Curie</div>
-          <div class="item">Institut Pasteur</div>
-        <div class="ui horizontal divider">Groupements d'intérêt public (GIP)</div>
-          <div class="item">ANRS Agence nationale de la recherche contre le SIDA</div>
-          <div class="item">CNG Centre national de génotypage</div>
-          <div class="item">CNS Génoscope - Centre national de séquençage</div>
-          <div class="item">CHMR Fonds de recherche Hoechst Marion Roussel</div>
-          <div class="item">IFRTP Institut pour la recherche et la technologie polaires</div>
-          <div class="item">OST Observatoire des sciences et techniques</div>
-          <div class="item">RENATER Réseau national pour la technologie, l'enseignement et la recherche</div>
-    </div>
-  </div>
-      <button class="ui icon button delete"><i class="remove icon"></i></button>
-</div>
 
-    {% endfor %}
-    {% else %}
-     <div>
-     <div class="ui dropdown fluid search selection  optgroup institution">
-      <input value="{{institution.NAME}}" data-validate="institution" type="hidden" name="institution[]">
-    <div  class="text">Select</div>
-    <i class="dropdown icon"></i>
-    <div class="menu">
-        <div class="ui horizontal divider">Etablissements publics à caractère scientifique et technologique (EPST)</div>
-          <div class="item">CEMAGREF Centre national du machinisme agricole, du génie rural, des eaux et des forêts</div>
-          <div class="item">CNRS Centre national de la recherche scientifique</div>
-          <div class="item">INED Institut national d'études démographiques</div>
-          <div class="item">INRA Institut national de la recherche agronomique</div>
-          <div class="item">INRETS Institut national de recherche sur les transports et leur sécurité</div>
-          <div class="item">INRIA Institut national de recherche en informatique et en automatique</div>
-          <div class="item">INSERM Institut national de la santé et de la recherche médicale</div>
-          <div class="item">IRD Institut de recherche pour le développement</div>
-          <div class="item">LCPC Laboratoire central des ponts et chaussées</div>
-        <div class="ui horizontal divider">Etablissements publics à caractère industriel et commercial (EPIC)</div>
-          <div class="item">ADEME Agence de l'environnement et de la maîtrise de l'énergie</div>
-          <div class="item">ADIT Agence pour la diffusion de l'information technologique</div>
-          <div class="item">ANDRA Agence nationale de gestion des déchets radioactifs</div>
-          <div class="item">ANVAR Agence nationale de valorisation de la recherche</div>
-          <div class="item">BRGM Bureau de recherches géologiques et minières</div>
-          <div class="item">CEA Commissariat à l'énergie atomique</div>
-          <div class="item">CIRAD Centre de coopération international en recherche agronomique</div>
-          <div class="item">CNDP Centre national de documentation pédagogique</div>
-          <div class="item">CNED Centre national d'enseignement à distance</div>
-          <div class="item">CNES Centre national d'études spatiales</div>
-          <div class="item">CSI Cité des sciences et de l'industrie</div>
-          <div class="item">CSTB Centre scientifique et technique du bâtiment</div>
-          <div class="item">CIFREMER Institut français de recherche pour l'exploitation de la mer</div>
-          <div class="item">CNERIS Institut national de l'environnement industriel et des risques</div>
-          <div class="item">ONERA Office national d'études et de recherches aérospatiales</div>
-        <div class="ui horizontal divider">Etablissements publics à caractère administratif (EPA)</div>
-          <div class="item">CEE Centre d'études de l'emploi</div>
-          <div class="item">CINES Centre informatique national de l'enseignement supérieur</div>
-          <div class="item">INRP Institut national de recherche pédagogique</div>
-          <div class="item">EPA Jussieu : désamiantage, mise en sécurité et rénovation du site</div>
-        <div class="ui horizontal divider">Fondations</div>
-          <div class="item">CEPH Centre d'étude du polymorphisme humain</div>
-          <div class="item">Institut Curie</div>
-          <div class="item">Institut Pasteur</div>
-        <div class="ui horizontal divider">Groupements d'intérêt public (GIP)</div>
-          <div class="item">ANRS Agence nationale de la recherche contre le SIDA</div>
-          <div class="item">CNG Centre national de génotypage</div>
-          <div class="item">CNS Génoscope - Centre national de séquençage</div>
-          <div class="item">CHMR Fonds de recherche Hoechst Marion Roussel</div>
-          <div class="item">IFRTP Institut pour la recherche et la technologie polaires</div>
-          <div class="item">OST Observatoire des sciences et techniques</div>
-          <div class="item">RENATER Réseau national pour la technologie, l'enseignement et la recherche</div>
-    </div>
-  </div>
-    <a  class="ui icon delete"><i class="remove icon"></i></a>
-</div>
-
-  {% endif %}
+    {% endif %}
 
 
-      </div>
-        <input type="button" class="ui button active" id="addinstitution" value="Add a new institution">
-      </div>
-      </div>
-      </div>
-   
-              {% if measurements %}
-              <div class="ui fluid styled accordion">
-              <div class=" title">
-                  Measurement
-                  <i class="dropdown icon"></i>
-              </div>
-              <div class=" content">
-                     <label>Measurement</label>
-                    {% for measurement in measurements %}
-                    <div id="measurements">
-                        <div class="three fields">
-                            <div class="field"><label>Measurement nature</label><input type="text" value="{{measurement.NATURE}}" name="measurement_nature[]" data-validate="measurement_nature" placeholder="Nature"  ></div>
-                            <div class="field"><label>Measurement abbreviation</label><input type="text" value="{{measurement.ABBREVIATION}}" name="measurement_abbreviation[]" data-validate="measurement_abbreviation" placeholder="Abbreviation" ></div>
-                            <div class="field"><label>Measurement unit</label><input type="text" value="{{measurement.UNIT}}" name="measurement_unit[]" data-validate="measurement_unit" placeholder="Unit"></div>
-                        <button class="ui icon button delete"><i class="remove icon"></i></button>
-                        </div>
-                    </div>
-                {% endfor %}
-                        <input type="button" class="ui button active" id="addmeasurement" value="Add a new measurement">
-              </div>
-            </div>
-                {% else %}
-                <div class="required field" >
-                 <label>Measurement</label>
-              <div id="measurements">
-                <div class="three fields">
-                  <div class="field"><label>Measurement nature</label><input type="text" value="{{measurement.NATURE}}" name="measurement_nature[]" data-validate="measurement_nature" placeholder="Nature"  ></div>
-                  <div class="field"><label>Measurement abbreviation</label><input type="text" value="{{measurement.ABBREVIATION}}" name="measurement_abbreviation[]" data-validate="measurement_abbreviation" placeholder="Abbreviation" ></div>
-                  <div class="field"><label>Measurement unit</label><input type="text" value="{{measurement.UNIT}}" name="measurement_unit[]" data-validate="measurement_unit" placeholder="Unit" ></div>
-                  <button class="ui icon button delete"><i class="remove icon"></i></button>
+        </div>
+          <input type="button" class="ui button active" id="addinstitution" value="Add a new institution">
+        </div>
+        </div>
+        </div>
+     
+                {% if measurements %}
+                <div class="ui fluid styled accordion">
+                <div class=" title">
+                    Measurement
+                    <i class="dropdown icon"></i>
+                </div>
+                <div class=" content">
+                       <label>Measurement</label>
+                      {% for measurement in measurements %}
+                      <div id="measurements">
+                          <div class="three fields">
+                              <div class="field"><label>Measurement nature</label><input type="text" value="{{measurement.NATURE}}" name="measurement_nature[]" data-validate="measurement_nature" placeholder="Nature"  ></div>
+                              <div class="field"><label>Measurement abbreviation</label><input type="text" value="{{measurement.ABBREVIATION}}" name="measurement_abbreviation[]" data-validate="measurement_abbreviation" placeholder="Abbreviation" ></div>
+                              <div class="field"><label>Measurement unit</label><input type="text" value="{{measurement.UNIT}}" name="measurement_unit[]" data-validate="measurement_unit" placeholder="Unit"></div>
+                          <div class="ui icon delete"><i class="remove icon"></i></div> 
+                          </div>
+                      </div>
+                  {% endfor %}
+                          <input type="button" class="ui button active" id="addmeasurement" value="Add a new measurement">
                 </div>
               </div>
-                <input type="button" class="ui button active" id="addmeasurement" value="Add a new measurement">
-              </div>
-                {%endif%}
-        
-
-
-
-
-<div class="ui fluid styled accordion">
-    <div class="title">
-        Sample
-        <i class="dropdown icon"></i>
-    </div>
-    <div class=" content">
-       <div class="field">
-        <label>Sample kind</label>
-        {% if sample_kinds %}
-          {% for sample_kind in sample_kinds %}
-        <div><input type="text" name="sample_kind[]" placeholder="Sample kind" value="{{sample_kind.NAME}}"><button class="ui icon button delete"><i class="remove icon"></i></button></div>
-          {%endfor%}
-          {%else%} 
-          <input type="text" name="sample_kind[]" placeholder="Sample kind" value="{{sample_kind.NAME}}">     
-        {%endif%}
-      </div>
-
-      <div class="field">
-
-        <label>Sampling date</label>
-        {% if sampling_dates %}
-          {% for sampling_date in sampling_dates %}
-        <div><input type="text"  class="date" name="sampling_date[]" placeholder="Sampling date" value="{{sampling_date}}"><button class="ui icon button delete"><i class="remove icon"></i></button></div>
-          {%endfor%}
-          {%else%} 
-          <input type="text"  class="date" name="sampling_date[]" placeholder="Sampling date" value="{{sampling_date}}">    
-        {%endif%}
-      </div>
-    </div>
-</div>
-<div class="ui fluid styled accordion">
-    <div class="title">
-        Extra information
-        <i class="dropdown icon"></i>
-    </div>
-    <div class="content">
-        <div class=" field">
-          <label>Keywords</label>
-        <div class=" field" id="keywords">
-        {% if keywords %}
-          {% for keyword in keywords %}
-           <div><input type="text" name="keywords[]" value="{{keyword.NAME}}" placeholder="Keyword"><button class="ui icon button delete"><i class="remove icon"></i></button></div>
-           {% endfor %}
-        {%else%}
-            <div><input type="text" name="keywords[]"  value="{{keyword.NAME}}" placeholder="Keyword"><button class="ui icon button delete"><i class="remove icon"></i></button></div>
-        {% endif %}
-          </div>
-
-             <input type="button" class="ui button active" id="addkeywords" value="Add a new keyword">
-          </div>
-      <div class=" field">
-        <label>Fundings</label>
-        <div class="row">
+                  {% else %}
+                  <div class="required field" >
+                   <label>Measurement</label>
+                <div id="measurements">
+                  <div class="three fields">
+                    <div class="field"><label>Measurement nature</label><input type="text" value="{{measurement.NATURE}}" name="measurement_nature[]" data-validate="measurement_nature" placeholder="Nature"  ></div>
+                    <div class="field"><label>Measurement abbreviation</label><input type="text" value="{{measurement.ABBREVIATION}}" name="measurement_abbreviation[]" data-validate="measurement_abbreviation" placeholder="Abbreviation" ></div>
+                    <div class="field"><label>Measurement unit</label><input type="text" value="{{measurement.UNIT}}" name="measurement_unit[]" data-validate="measurement_unit" placeholder="Unit" ></div>
+                    <div class="ui icon delete"><i class="remove icon"></i></div> 
+                  </div>
+                </div>
+                  <input type="button" class="ui button active" id="addmeasurement" value="Add a new measurement">
+                </div>
+                  {%endif%}
           
-        <div class=" field" id="fundings">
-        {% if fundings %}
-          {% for funding in fundings %}
-           <div><input type="text" name="fundings[]" value="{{funding.NAME}}" placeholder="Funding"><button class="ui icon button delete"><i class="remove icon"></i></button></div>
-           {% endfor %}
-        {%else%}
-            <div><input type="text" name="fundings[]"  value="{{funding.NAME}}" placeholder="Funding"><button class="ui icon button delete"><i class="remove icon"></i></button></div>
+
+
+  <div class="ui eight wide column">
+      <div class="ui fluid styled accordion">
+          <div class="title">
+              Sample
+              <i class="dropdown icon"></i>
           </div>
-        {% endif %}
-
-
-      </div>
-           <input type="button" class="ui button active" id="addfundings" value="Add a new funding">
-        </div>
-    </div>
-</div>
-
-  
-<div class="ui fluid styled accordion">
-    <div class="title">
-        Sampling point
-        <i class="dropdown icon"></i>
-    </div>
-    <div class="content">
-     <div class="field" >
-      <label>Sampling point</label>
-          <div id="sampling_points">
-          {% if sampling_points %}
-            {% for sampling_point in sampling_points %}
-            <div>
-              <div class="field"><label>Name</label> <input type="text" value="{{sampling_point.NAME}}" name="sampling_point_name[]" placeholder="Name" ></div>
-              <div class="field"><label>Abbreviation</label><input type="text" value="{{sampling_point.ABBREVIATION}}" name="sampling_point_abbreviation[]"  placeholder="abbreviation"></div>
-              <div class="field"><label>Longitude</label><input type="text" value="{{sampling_point.LONGITUDE}}" name="sampling_point_longitude[]" placeholder="longitude" ></div>
-              <div class="field"><label>Latitude</label><input type="text" value="{{sampling_point.LATITUDE}}" name="sampling_point_latitude[]"  placeholder="latitude"></div>
-              <div class="field"><label>Elevation</label><input type="number" value="{{sampling_point.ELEVATION}}" name="sampling_point_elevation[]"  placeholder="elevation"></div>
-              <div class="field"><label>Description</label><textarea name="sampling_point_description[]"  placeholder="description">{{sampling_point.DESCRIPTION}}</textarea></div>
-              <button class="ui icon button delete"><i class="remove icon"></i></button>
+          <div class=" content">
+             <div class="field" id="sample_kind">
+              <label>Sample kind</label>
+              {% if sample_kinds %}
+                {% for sample_kind in sample_kinds %}
+              <div class="ui input"><input type="text" name="sample_kind[]" placeholder="Sample kind" value="{{sample_kind.NAME}}"><div class="ui icon delete"><i class="remove icon"></i></div> </div>
+                {%endfor%}
+                {%else%} 
+                <input type="text" name="sample_kind[]" placeholder="Sample kind" value="{{sample_kind.NAME}}">     
+              {%endif%}
             </div>
-            {% endfor %}
-            {%else%}
+                <input type="button" class="ui button active" id="addsamplekind" value="Add a new sample kind">
+
+            <div class="field" id="sampling_date">
+
+              <label>Sampling date</label>
+              {% if sampling_dates %}
+                {% for sampling_date in sampling_dates %}
+              <div class="ui input"><input type="text"  class="date" name="sampling_date[]" placeholder="Sampling date" value="{{sampling_date}}"><div class="ui icon delete"><i class="remove icon"></i></div> </div>
+                {%endfor%}
+                {%else%} 
+                <div  class="ui input">
+                   <input type="text"  class="date" name="sampling_date[]" placeholder="Sampling date" value="{{sampling_date}}">    
+                </div>
+              {%endif%}
+            </div>
+                <input type="button" class="ui button active" id="addsamplingdate" value="Add a new sampling date">
+          </div>
+      </div>
+  <div class="row"></div>
+  </div>
+  <div class="ui eight wide column">
+  <div class="ui fluid styled accordion">
+      <div class="title">
+          Extra information
+          <i class="dropdown icon"></i>
+      </div>
+      <div class="content">
+          <div class=" field">
+            <label>Keywords</label>
+          <div class=" field" id="keywords">
+          {% if keywords %}
+            {% for keyword in keywords %}
+             <div><input type="text" name="keywords[]" value="{{keyword.NAME}}" placeholder="Keyword"></div>
+             {% endfor %}
+          {%else%}
+              <div><input type="text" name="keywords[]"  value="{{keyword.NAME}}" placeholder="Keyword"> </div>
+          {% endif %}
+            </div>
+
+               <input type="button" class="ui button active" id="addkeywords" value="Add a new keyword">
+            </div>
+        <div class=" field">
+          <label>Fundings</label>
+          <div class="row">
+            
+          <div class=" field" id="fundings">
+          {% if fundings %}
+            {% for funding in fundings %}
+             <div><input type="text" name="fundings[]" value="{{funding.NAME}}" placeholder="Funding"> </div>
+             {% endfor %}
+          {%else%}
+              <div><input type="text" name="fundings[]"  value="{{funding.NAME}}" placeholder="Funding"> </div>
+            </div>
+          {% endif %}
+
+
+        </div>
+             <input type="button" class="ui button active" id="addfundings" value="Add a new funding">
+          </div>
+      </div>
+  </div>
+</div>
+    
+  <div class="ui fluid styled accordion">
+      <div class="title">
+          Sampling point
+          <i class="dropdown icon"></i>
+      </div>
+      <div class="content">
+       <div class="field" >
+        <label>Sampling point</label>
+            <div id="sampling_points">
+            {% if sampling_points %}
+              {% for sampling_point in sampling_points %}
               <div>
-              <div class="field"><label>Name</label><input type="text" value="{{sampling_point.NAME}}" name="sampling_point_name[]" placeholder="Name" ></div>
-              <div class="field"><label>Abbreviation</label><input type="text" value="{{sampling_point.ABBREVIATION}}" name="sampling_point_abbreviation[]"  placeholder="abbreviation"></div>
-              <div class="field"><label>Longitude</label><input type="text" value="{{sampling_point.LONGITUDE}}" name="sampling_point_longitude[]" placeholder="longitude" ></div>
-              <div class="field"><label>Latitude</label><input type="text" value="{{sampling_point.LATITUDE}}" name="sampling_point_latitude[]"  placeholder="latitude"></div>
-              <div class="field"><label>Elevation</label><input type="number" value="{{sampling_point.ELEVATION}}" name="sampling_point_elevation[]"  placeholder="elevation"></div>
-              <div class="field"><label>Description</label><textarea name="sampling_point_description[]"  placeholder="description">{{sampling_point.DESCRIPTION}}</textarea></div>
-              <button class="ui icon button delete"><i class="remove icon"></i></button>
-            </div>
+                <div class="field"><label>Name</label> <input type="text" value="{{sampling_point.NAME}}" name="sampling_point_name[]" placeholder="Name" ></div>
+                <div class="field"><label>Abbreviation</label><input type="text" value="{{sampling_point.ABBREVIATION}}" name="sampling_point_abbreviation[]"  placeholder="abbreviation"></div>
+                <div class="field"><label>Longitude</label><input type="text" value="{{sampling_point.LONGITUDE}}" name="sampling_point_longitude[]" placeholder="longitude" ></div>
+                <div class="field"><label>Latitude</label><input type="text" value="{{sampling_point.LATITUDE}}" name="sampling_point_latitude[]"  placeholder="latitude"></div>
+                <div class="field"><label>Elevation</label><input type="number" value="{{sampling_point.ELEVATION}}" name="sampling_point_elevation[]"  placeholder="elevation"></div>
+                <div class="field"><label>Description</label><textarea name="sampling_point_description[]"  placeholder="description">{{sampling_point.DESCRIPTION}}</textarea></div>
+                <div class="ui icon delete"><i class="remove icon"></i></div> 
+              </div>
+              {% endfor %}
+              {%else%}
+                <div>
+                <div class="field"><label>Name</label><input type="text" value="{{sampling_point.NAME}}" name="sampling_point_name[]" placeholder="Name" ></div>
+                <div class="field"><label>Abbreviation</label><input type="text" value="{{sampling_point.ABBREVIATION}}" name="sampling_point_abbreviation[]"  placeholder="abbreviation"></div>
+                <div class="field"><label>Longitude</label><input type="text" value="{{sampling_point.LONGITUDE}}" name="sampling_point_longitude[]" placeholder="longitude" ></div>
+                <div class="field"><label>Latitude</label><input type="text" value="{{sampling_point.LATITUDE}}" name="sampling_point_latitude[]"  placeholder="latitude"></div>
+                <div class="field"><label>Elevation</label><input type="number" value="{{sampling_point.ELEVATION}}" name="sampling_point_elevation[]"  placeholder="elevation"></div>
+                <div class="field"><label>Description</label><textarea name="sampling_point_description[]"  placeholder="description">{{sampling_point.DESCRIPTION}}</textarea></div>
+                <div class="ui icon delete"><i class="remove icon"></i></div> 
+              </div>
 
-          {%endif%}
-     
-      <input type="button" class="ui button active" id="addsampling_point" value="Add a new sampling_point">
+            {%endif%}
+       
+        <input type="button" class="ui button active" id="addsampling_point" value="Add a new sampling_point">
+        </div>
       </div>
     </div>
   </div>
+
+<div class="row"></div>
+
+  <div class="ui fluid styled accordion">
+      <div class="active title">
+          License
+          <i class="dropdown icon"></i>
+      </div>
+      <div class="active content">
+       <div class="required field">
+          <label>License</label>
+        <select class="ui fluid search dropdown license" name="license" >
+        <option value="{{license}}">Select a license</option>
+        <option value="1">Attribution alone (CC BY)</option>
+        <option value="2">Attribution + ShareAlike (CC BY-SA)</option>
+        <option value="3">Attribution + Noncommercial (CC BY-NC)</option>
+        <option value="4">Attribution + NoDerivatives (CC BY-ND)</option>
+        <option value="5">Attribution + Noncommercial + ShareAlike (CC BY-NC-SA)</option>
+        <option value="6">Attribution + Noncommercial + NoDerivatives (CC BY-NC-ND)</option>
+      </select>
+      </div>
+      <div class="ui form">
+      <div class="inline fields">
+        <div class="grouped fields">
+        <label>Access right</label>
+        <div class="field">
+        <div class="ui radio checkbox">
+        {% if accessright == "Open" %}
+          <input type="radio"  onclick="APP.modules.upload.checkformbutton()" name="access_right" id="open" value="Open"  checked > 
+          {% else %}
+            <input type="radio"  onclick="APP.modules.upload.checkformbutton()" name="access_right" id="open" value="Open" >
+          {% endif %}
+          <label>Open</label>
+          </div>
+          </div>
+          <div class="field">
+        <div class="ui radio checkbox">
+          {% if accessright == "Closed" %}
+          <input type="radio"  onclick="APP.modules.upload.checkformbutton()" name="access_right" id="closed" value="Closed" checked> 
+           {% else %}
+           <input type="radio"  onclick="APP.modules.upload.checkformbutton()" name="access_right" id="closed" value="Closed" > 
+           {%endif%}
+          <label>Closed</label>
+          </div>
+          </div>
+          <div class="field">
+       <div class="ui radio checkbox">
+        {% if accessright == "Embargoed" %}
+        <input type="radio" onclick="APP.modules.upload.checkformbutton()" name="access_right" id="embargoed" value="Embargoed" checked>
+        <label>Embargoed</label>
+        </div>
+        <div class="field" id="date_end"  >
+      <label>Embargo date</label>
+          <input type="text" class="date" name="publication_date" value="{{embargoed_date}}" placeholder="Publication date">
+        </div>
+        {%else%}
+        <input type="radio" onclick="APP.modules.upload.checkformbutton()" name="access_right" id="embargoed" value="Embargoed">
+         <label>Embargoed</label>
+        {%endif%}
+        
+        
+        </div>
+      <div class="field" id="date_end" >
+      <label>Embargo date</label>
+          <input type="text" class="date" name="publication_date"  placeholder="Publication date">
+        </div>
+      </div>
+      </div>
+      </div>
+    </div>
+   </div>
+   </div>
+  <div class="ui error message"></div>
+<div class="row"></div>
+
+  <button class="ui submit button" >Submit</button>
+  <div class="row"></div>
+
 </div>
-
-
-
-<div class="ui fluid styled accordion">
-    <div class="active title">
-        License
-        <i class="dropdown icon"></i>
-    </div>
-    <div class="active content">
-     <div class="required field">
-        <label>License</label>
-      <select class="ui fluid search dropdown license" name="license" >
-      <option value="{{license}}">Select a license</option>
-      <option value="1">Attribution alone (CC BY)</option>
-      <option value="2">Attribution + ShareAlike (CC BY-SA)</option>
-      <option value="3">Attribution + Noncommercial (CC BY-NC)</option>
-      <option value="4">Attribution + NoDerivatives (CC BY-ND)</option>
-      <option value="5">Attribution + Noncommercial + ShareAlike (CC BY-NC-SA)</option>
-      <option value="6">Attribution + Noncommercial + NoDerivatives (CC BY-NC-ND)</option>
-    </select>
-    </div>
-    <div class="ui form">
-    <div class="inline fields">
-      <div class="grouped fields">
-      <label>Access right</label>
-      <div class="field">
-      <div class="ui radio checkbox">
-      {% if accessright == "Open" %}
-        <input type="radio"  onclick="APP.modules.upload.checkformbutton()" name="access_right" id="open" value="Open"  checked > 
-        {% else %}
-          <input type="radio"  onclick="APP.modules.upload.checkformbutton()" name="access_right" id="open" value="Open" >
-        {% endif %}
-        <label>Open</label>
-        </div>
-        </div>
-        <div class="field">
-      <div class="ui radio checkbox">
-        {% if accessright == "Closed" %}
-        <input type="radio"  onclick="APP.modules.upload.checkformbutton()" name="access_right" id="closed" value="Closed" checked> 
-         {% else %}
-         <input type="radio"  onclick="APP.modules.upload.checkformbutton()" name="access_right" id="closed" value="Closed" > 
-         {%endif%}
-        <label>Closed</label>
-        </div>
-        </div>
-        <div class="field">
-     <div class="ui radio checkbox">
-      {% if accessright == "Embargoed" %}
-      <input type="radio" onclick="APP.modules.upload.checkformbutton()" name="access_right" id="embargoed" value="Embargoed" checked>
-      <label>Embargoed</label>
-      </div>
-      <div class="field" id="date_end"  >
-    <label>Embargo date</label>
-        <input type="text" class="date" name="publication_date" value="{{embargoed_date}}" placeholder="Publication date">
-      </div>
-      {%else%}
-      <input type="radio" onclick="APP.modules.upload.checkformbutton()" name="access_right" id="embargoed" value="Embargoed">
-       <label>Embargoed</label>
-      {%endif%}
-      
-      
-      </div>
-    <div class="field" id="date_end" >
-    <label>Embargo date</label>
-        <input type="text" class="date" name="publication_date"  placeholder="Publication date">
-      </div>
-    </div>
-    </div>
-    </div>
-  </div>
- </div>
-
-<button class="ui submit button" >Submit</button>
-<div class="ui error message"></div>

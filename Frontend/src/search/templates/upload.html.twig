@@ -6,7 +6,7 @@
 	<h1> New upload </h1>
 		
 	</div>
-	<div class="ui ten wide column centered">
+	<div class="ui fourteen wide column centered">
 		
 	{% if error %}
 
@@ -14,26 +14,39 @@
 
 
 	{% endif %}
-	<h4 class="ui dividing header">Files</h4>
+	<div class="ui message">
+	  	<div class="header">
+		Instructions:
+		</div>
+		 <p>Upload minimum one file and fill-in required fields (marked with a red star ).</p>
+	</div>
+
 	<form class="ui form" method="post" enctype="multipart/form-data" >
+	<h4 class="ui dividing header">Files</h4>
 	 <div class="required field">
 	 <label for="file" class="custom-file-upload">
       File
 </label>
-	<input id="file" type="file" name="file[]" required="">
 
 	</div>
+	<div class="ui grid">
 	<div class="required field" id="files">
+		<div class="ui input">
+			<input id="file" type="file" name="file[]" required="">
+		</div>
 	</div>
-	<input type="button" class="ui button active" id="addfile" value="Add a file">
-		<div class="ui ten wide column centered">
+	<div class="row"></div>
+	</div>
+
+	<div class="ui primary  button" id="addfile">
+    	<i class="plus icon"></i> Add a file
+  	</div>
 
 
 	{% include 'formdataset.html.twig' %}
 
 	         
 
-	</div>
 	</form>
 	</div>
 </div>
