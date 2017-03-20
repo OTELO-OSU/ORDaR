@@ -83,17 +83,17 @@ $app->get('/login', function (Request $req,Response $responseSlim) {
 	$loader = new Twig_Loader_Filesystem('search/templates');
 	$twig = new Twig_Environment($loader);
 	echo $twig->render('login.html.twig');
-	$_SESSION['name'] = 'Montarges-Pelletier';
-	$_SESSION['firstname'] = 'a';
-	$_SESSION['mail'] = 'emmanuelle.montarges@univ-lorraine.fr';
+	$_SESSION['name'] = $_SERVER['HTTP_SN'];
+    $_SESSION['firstname'] = $_SERVER['HTTP_GIVENNAME'];
+    $_SESSION['mail'] = $_SERVER['HTTP_MAIL'];
 	session_regenerate_id();
 
-	if ($_SERVER['HTTP_REFERER']) {
-	return $responseSlim->withRedirect($_SERVER['HTTP_REFERER']);
-	}	
-	else{
+	//if ($_SERVER['HTTP_REFERER']) {
+	//return $responseSlim->withRedirect($_SERVER['HTTP_REFERER']);
+	//}	
+	//else{
 		return $responseSlim->withRedirect('accueil');
-	}
+	//}
 
 });
 
@@ -135,8 +135,9 @@ $app->post('/upload', function (Request $req,Response $responseSlim) {
    	$db=$Datasheet->connect_tomongo();
 	$array=$Datasheet->Postprocessing($_POST);
 	$response=$Datasheet->Newdatasheet($db,$array);
-	if ($response!="true") {
-		echo $twig->render('upload.html.twig',['error'=>$response,'name'=>$_SESSION['name'],'mail'=>$_SESSION['mail'],'firstname'=>$_SESSION['firstname'],'creation_date'=>$_POST['creation_date'],'language'=> $_POST['language'],'sample_kind'=> $_POST['sample_kind'],'title'=> $_POST['title'],'description'=> $_POST['description'],'scientific_field' => $_POST['scientific_field']]);
+	
+	if (array_key_exists('error', $response)) {
+		echo $twig->render('upload.html.twig',['error'=>$response['error'],'name'=>$_SESSION['name'],'mail'=>$_SESSION['mail'],'firstname'=>$_SESSION['firstname'],'title' => $response['dataform']['TITLE'],'description'=>$response['dataform']['DATA_DESCRIPTION'],'creation_date'=>$response['dataform']['CREATION_DATE'],'sampling_dates'=>$response['dataform']['SAMPLING_DATE'],'authors'=>$response['dataform']['FILE_CREATOR'],'keywords'=>$response['dataform']['KEYWORDS'],'sample_kinds'=>$response['dataform']['SAMPLE_KIND'],'scientific_fields'=>$response['dataform']['SCIENTIFIC_FIELD'],'institutions'=>$response['dataform']['INSTITUTION'],'language'=>$response['dataform']['LANGUAGE'],'sampling_points'=>$response['dataform']['SAMPLING_POINT'],'measurements'=>$response['dataform']['MEASUREMENT'],'license'=>$license,'publisher'=>$response['dataform']['PUBLISHER'],'fundings'=>$response['dataform']['FUNDINGS'],'accessright'=>$response['dataform']['ACCESS_RIGHT'],'embargoed_date'=>$response['dataform']['PUBLICATION_DATE']]);
 	}
 	else{
 	$loader = new Twig_Loader_Filesystem('search/templates');
@@ -280,8 +281,8 @@ $app->post('/editrecord/{doi}', function (Request $req,Response $responseSlim,$a
 	$db=$Datasheet->connect_tomongo();
 	$array=$Datasheet->Postprocessing($_POST);
 	$return=$Datasheet->Editdatasheet($collection,$doi,$db,$array);
-	if ($return!="true") {
-return @$twig->render('edit_dataset.html.twig', ['error'=>$return,'name'=>$_SESSION['name'],'firstname'=>$_SESSION['firstname'],'mail'=>$_SESSION['mail'],
+	if (array_key_exists('error', $return)) {
+return @$twig->render('edit_dataset.html.twig', ['error'=>$return['error'],'name'=>$_SESSION['name'],'firstname'=>$_SESSION['firstname'],'mail'=>$_SESSION['mail'],
 	        'doi'=>$id,'title' => $response['_source']['INTRO']['TITLE'],'description'=>$response['_source']['INTRO']['DATA_DESCRIPTION'],'creation_date'=>$response['_source']['INTRO']['CREATION_DATE'],'sampling_dates'=>$response['_source']['INTRO']['SAMPLING_DATE'],'authors'=>$response['_source']['INTRO']['FILE_CREATOR'],'keywords'=>$response['_source']['INTRO']['KEYWORDS'],'sample_kinds'=>$response['_source']['INTRO']['SAMPLE_KIND'],'scientific_fields'=>$response['_source']['INTRO']['SCIENTIFIC_FIELD'],'institutions'=>$response['_source']['INTRO']['INSTITUTION'],'language'=>$response['_source']['INTRO']['LANGUAGE'],'sampling_points'=>$response['_source']['INTRO']['SAMPLING_POINT'],'measurements'=>$response['_source']['INTRO']['MEASUREMENT'],'license'=>$license,'publisher'=>$response['_source']['INTRO']['PUBLISHER'],'fundings'=>$response['_source']['INTRO']['FUNDINGS'],'accessright'=>$response['_source']['INTRO']['ACCESS_RIGHT'],'embargoed_date'=>$response['_source']['INTRO']['PUBLICATION_DATE']
 	    	]);	}
 	else{

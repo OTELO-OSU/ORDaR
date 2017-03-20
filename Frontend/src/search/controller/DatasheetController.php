@@ -37,10 +37,7 @@ function connect_tomongo(){
 	    $error = "Warning there are empty fields: ". $field;
 	  }
 	}
-	if (!$error==NULL) {
-		return $error;
-	}
-	else{
+	
 		foreach ($POST as $key => $value){	
 		 if ($key=="creation_date") {
 		 $array["CREATION_DATE"]=htmlspecialchars($value, ENT_QUOTES);
@@ -58,6 +55,7 @@ function connect_tomongo(){
 		 	$array["LANGUAGE"]=$language;
 		 }
 		 if ($key=="sampling_date") {
+		 	if (!count($value==0)){
 		 		if (count($value)>1) {
 		 		foreach ($value as $key => $value) {
 		 		$array["SAMPLING_DATE"][$key]=htmlspecialchars($value, ENT_QUOTES);
@@ -66,6 +64,7 @@ function connect_tomongo(){
 		 	else{
 		 	$array["SAMPLING_DATE"][0]=htmlspecialchars($value[0], ENT_QUOTES);
 		 	}
+		 }
 			
 		 }
 		if ($key=="description") {
@@ -228,16 +227,6 @@ function connect_tomongo(){
 		 	$array["FILE_CREATOR"][0]["NAME"]=htmlspecialchars($value[0], ENT_QUOTES);
 		 	}
 		 }
-		  if ($key=="authors_email") {
-		 	if (count($value)>1) {
-		 		foreach ($value as $key => $value) {
-		 		$array["FILE_CREATOR"][$key]["MAIL"]=htmlspecialchars($value, ENT_QUOTES);
-		 		}
-		 	}
-		 	else{
-		 	$array["FILE_CREATOR"][0]["MAIL"]=htmlspecialchars($value[0], ENT_QUOTES);
-		 	}
-		 }
 		 if ($key=="keywords") {
 		 	if (!count($value==0)){
 		 	if (count($value<=3)) {
@@ -248,6 +237,28 @@ function connect_tomongo(){
 		 	else{
 		 	$array["KEYWORDS"]["NAME"]=htmlspecialchars($value, ENT_QUOTES);
 		 	}
+		 	}
+		 }
+		  if ($key=="fundings") {
+	 	  	if (!count($value==0)){
+			 	if (count($value<=3)) {
+			 		foreach ($value as $key => $value) {
+			 		$array["FUNDINGS"][$key]["NAME"]=htmlspecialchars($value, ENT_QUOTES);
+			 		}
+			 	}
+			 	else{
+			 	$array["FUNDINGS"]["NAME"]=htmlspecialchars($value, ENT_QUOTES);
+			 	}
+	 	  	}
+		 }
+		  if ($key=="authors_email") {
+		 	if (count($value)>1) {
+		 		foreach ($value as $key => $value) {
+		 		$array["FILE_CREATOR"][$key]["MAIL"]=htmlspecialchars($value, ENT_QUOTES);
+		 		}
+		 	}
+		 	else{
+		 	$array["FILE_CREATOR"][0]["MAIL"]=htmlspecialchars($value[0], ENT_QUOTES);
 		 	}
 		 }
 		
@@ -295,42 +306,28 @@ function connect_tomongo(){
 		 	}
 
 		 
-		 }
+		 
 	 	 $array["PUBLICATION_DATE"]=$publication_date;
 
 
-	 	 
-
-	 	  if ($key=="fundings") {
-	 	  	if (!count($value==0)){
-			 	if (count($value<=3)) {
-			 		foreach ($value as $key => $value) {
-			 		$array["FUNDINGS"][$key]["NAME"]=htmlspecialchars($value, ENT_QUOTES);
-			 		}
-			 	}
-			 	else{
-			 	$array["FUNDINGS"]["NAME"]=htmlspecialchars($value, ENT_QUOTES);
-			 	}
-	 	  	}
-		 }
-
-
-
+	 
 		 $array["UPLOAD_DATE"]=date('Y-m-d');
 		 
 		}
+	}
 		if (!$error==NULL) {
-			return $error;
+			$array['dataform']=$array;
+			$array['error']=$error;
+			return $array;
 		}else{
 			return $array;
 		}
-	}
 }
 
 	
 	function Newdatasheet($db,$array)
 	{
-	if (is_array($array)==false) {
+	if ($array['error']) {
 		return $array;
 	}
 	else{
@@ -343,7 +340,9 @@ function connect_tomongo(){
 			$nomDestination   = str_replace(' ', '_', $_FILES["file"]["name"][$i]);
 			$data["FILES"][$i]["DATA_URL"]=$nomDestination;
 			if (file_exists($repertoireDestination.$_FILES["file"]["name"][$i])){
-				return false;
+				$returnarray[]="false";
+				$returnarray[]=$array;
+				return $returnarray;
 			}
 			else{
 				if (is_uploaded_file($_FILES["file"]["tmp_name"][$i])) {
@@ -377,8 +376,7 @@ function connect_tomongo(){
 	function Editdatasheet($collection,$doi,$db,$array){
 	$config = parse_ini_file("config.ini");
 	$UPLOAD_FOLDER=$config["UPLOAD_FOLDER"];
-	var_dump($array);
-	if (is_array($array)==false) {
+	if ($array['error']) {
 		return $array;
 	}
 	else{
