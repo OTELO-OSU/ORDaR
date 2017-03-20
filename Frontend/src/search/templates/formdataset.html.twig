@@ -289,6 +289,39 @@
       <i class="plus icon"></i> Add a new institution
     </div>
         </div>
+          <div class=" field">
+                  <label>Keywords</label>
+                <div class=" field" id="keywords">
+                {% if keywords %}
+                  {% for keyword in keywords %}
+                   <div><input type="text" name="keywords[]" value="{{keyword.NAME}}" placeholder="Keyword"></div>
+                   {% endfor %}
+                {%else%}
+                    <div><input type="text" name="keywords[]"  value="{{keyword.NAME}}" placeholder="Keyword"> </div>
+                {% endif %}
+                  </div>
+                       <div class="ui primary  button"  id="addkeywords">
+                                <i class="plus icon"></i> Add a new keyword
+                              </div>
+                  </div>
+              <div class=" field">
+                <label>Fundings</label>
+                  
+                <div class=" field" id="fundings">
+                {% if fundings %}
+                  {% for funding in fundings %}
+                   <div><input type="text" name="fundings[]" value="{{funding.NAME}}" placeholder="Funding"> </div>
+                   {% endfor %}
+                {%else%}
+                    <div><input type="text" name="fundings[]"  value="{{funding.NAME}}" placeholder="Funding"> </div>
+                  </div>
+                {% endif %}
+
+
+                     <div class="ui primary  button"  id="addfundings">
+                            <i class="plus icon"></i> Add a new funding
+                    </div>
+              </div>
         </div>
         </div>
      
@@ -316,7 +349,7 @@
                 </div>
               </div>
                   {% else %}
-                  <div class="ui segment">
+                  <div class="ui segment  sixteen wide column ">
                   <div class="required field" >
                          <label>Measurement</label>
                       <div id="measurements">
@@ -336,7 +369,6 @@
           
 
 
-  <div class="ui eight wide column">
       <div class="ui fluid styled accordion">
           <div class="title">
               Sample
@@ -376,51 +408,6 @@
           </div>
       </div>
   <div class="row"></div>
-  </div>
-  <div class="ui eight wide column">
-  <div class="ui fluid styled accordion">
-      <div class="title">
-          Extra information
-          <i class="dropdown icon"></i>
-      </div>
-      <div class="content">
-          <div class=" field">
-            <label>Keywords</label>
-          <div class=" field" id="keywords">
-          {% if keywords %}
-            {% for keyword in keywords %}
-             <div><input type="text" name="keywords[]" value="{{keyword.NAME}}" placeholder="Keyword"></div>
-             {% endfor %}
-          {%else%}
-              <div><input type="text" name="keywords[]"  value="{{keyword.NAME}}" placeholder="Keyword"> </div>
-          {% endif %}
-            </div>
-                 <div class="ui primary  button"  id="addkeywords">
-                          <i class="plus icon"></i> Add a new keyword
-                        </div>
-            </div>
-        <div class=" field">
-          <label>Fundings</label>
-            
-          <div class=" field" id="fundings">
-          {% if fundings %}
-            {% for funding in fundings %}
-             <div><input type="text" name="fundings[]" value="{{funding.NAME}}" placeholder="Funding"> </div>
-             {% endfor %}
-          {%else%}
-              <div><input type="text" name="fundings[]"  value="{{funding.NAME}}" placeholder="Funding"> </div>
-            </div>
-          {% endif %}
-
-
-               <div class="ui primary  button"  id="addfundings">
-                      <i class="plus icon"></i> Add a new funding
-              </div>
-        </div>
-
-      </div>
-  </div>
-</div>
     
   <div class="ui fluid styled accordion">
       <div class="title">

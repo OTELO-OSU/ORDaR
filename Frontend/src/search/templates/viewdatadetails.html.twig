@@ -72,7 +72,7 @@
           <div class="item">
             <i class="file icon"></i>
             <div class="content">
-            <div class="header"><a href="files/{{doi}}/{{filename.DATA_URL}}">{{filename.DATA_URL}}</a><a href="files/{{doi}}/{{filename.DATA_URL}}"><input value="Download" type="button" class="ui button" ></input></a><input value="Preview"onclick="APP.modules.preview.previewdocument('preview/{{doi}}/{{filename.DATA_URL}}')" type="button" class="ui button" ></input></div>            
+            <div class="header"><a href="files/{{doi}}/{{filename.DATA_URL}}">{{filename.DATA_URL}}</a><a href="files/{{doi}}/{{filename.DATA_URL}}"><input value="Download" type="button" class="ui button" ></input></a><input value="Preview"onclick="APP.modules.preview.previewdocument('preview/{{doi}}/{{filename.DATA_URL}}')" type="button" class="ui right floated button" ></input></div>            
             </div>
           </div>
       {% endfor %}
@@ -84,7 +84,7 @@
           <div class="item">
             <i class="file icon"></i>
             <div class="content">
-              <div class="header"><a href="files/{{doi}}/{{filename.DATA_URL}}">{{filename.DATA_URL}}</a><a href="files/{{doi}}/{{filename.DATA_URL}}"><input value="Download" type="button" class="ui button" ></input></a><input value="Preview" onclick="APP.modules.preview.previewdocument('preview/{{doi}}/{{filename.DATA_URL}}')" type="button" class="ui button" ></input></div>
+              <div class="header"><a href="files/{{doi}}/{{filename.DATA_URL}}">{{filename.DATA_URL}}</a><a href="files/{{doi}}/{{filename.DATA_URL}}"><input value="Download" type="button" class="ui button" ></input></a><input value="Preview" onclick="APP.modules.preview.previewdocument('preview/{{doi}}/{{filename.DATA_URL}}')" type="button" class="ui right floated button" ></input></div>
             </div>
           </div>
       {% endfor %}
@@ -94,10 +94,10 @@
       </div>
     </div>
   
-
 <div class="ui fluid card">
     <div class="content">
       <div class="header">Sampling points</div>
+      {% if sampling_points %}
       <table class="ui inverted green table">
       <thead>
       <tr><th>Name</th>
@@ -120,13 +120,16 @@
       </tr>
       </tbody>
       </table>
+      {% else %}
+      <p>No data to show </p>
+      {%endif%}
       </div>
     </div>
-
 
     <div class="ui fluid card">
     <div class="content">
       <div class="header">Measurements</div>
+      {% if measurements %}
       <table class="ui inverted blue table">
       <thead>
       <tr><th>Nature</th>
@@ -143,12 +146,16 @@
       </tr>
       </tbody>
       </table>
+      {% else %}
+      <p>No data to show </p>
+      {% endif %}
       </div>
     </div>
 </div>
 </div>
 </div>
 </div>
+
 
     <div class="ui six wide column ">
     <div class="row">

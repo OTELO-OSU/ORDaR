@@ -64,12 +64,15 @@ APP.modules.datatable = (function(){
 
 						if(file_creator.length>=1){
 							for(var k in file_creator){
-							authorsname.push(file_creator[k]["NAME"]);
+							author=file_creator[k]["NAME"]+" "+file_creator[k]["FIRST_NAME"];
+							authorsname.push(author);
+
 							
 							}
 						}
 						else{
-							authorsname.push(file_creator["NAME"]);
+							author=file_creator[k]["NAME"]+" "+file_creator[k]["FIRST_sNAME"];
+							authorsname.push(author);
 						}
 					}
 					var authorsnames = document.createElement("ul");
@@ -137,6 +140,9 @@ APP.modules.search = (function(){
 			},
 			AppendFacets:function(data){
 				sample_kind=data['aggregations']['sample_kind']['buckets'];
+				if (sample_kind.length==0) {
+					$(".ui.card #samplekind").parent().hide();
+				}
 				$("#samplekind").append('<div class="header" >Sample kind</div>');
 				for (var k in sample_kind){
 					count=sample_kind[k]['doc_count']
@@ -152,6 +158,9 @@ APP.modules.search = (function(){
 					}
 				}
 				authors=data['aggregations']['authors']['buckets'];
+				if (authors.length==0) {
+					$(".ui.card #authors").parent().hide();
+				}
 				$("#authors").append('<div class="header" >Authors</div>');
 				for (var k in authors){
 					count=authors[k]['doc_count']
@@ -160,13 +169,16 @@ APP.modules.search = (function(){
 					if (type.length>=25) {
 						type=type.substring(0,20)+"...";
 					}
-					if (type=="") {
+					if (type=="" || type==" ") {
 
 					}else{
 					$('#authors').append('<label title="'+longtype+'"  class="item" for="'+type+'authors"> <input onclick="APP.modules.search.checkCheckbox()" id="'+type+'authors" name="authors" value="'+type+'" type="checkbox"> <div class="ui blue horizontal label">'+type+'</div>'+count+'</label>')
 					}
 				}
 				keywords=data['aggregations']['keywords']['buckets'];
+				if (keywords.length==0) {
+					$(".ui.card #keywords").parent().hide();
+				}
 				$("#keywords").append('<div class="header" >Keywords</div>');
 				for (var k in keywords){
 					count=keywords[k]['doc_count']
@@ -175,7 +187,7 @@ APP.modules.search = (function(){
 					if (type.length>=25) {
 						type=type.substring(0,20)+"...";
 					}
-					if (type=="") {
+					if (type=="" || type==" ") {
 
 					}else{
 
@@ -183,6 +195,9 @@ APP.modules.search = (function(){
 					}
 				}
 				scientific_field=data['aggregations']['scientific_field']['buckets'];
+				if (scientific_field.length==0) {
+					$(".ui.card #scientificfield").parent().hide();
+				}
 				$("#scientificfield").append('<div class="header" >Scientific fields</div>');
 				for (var k in scientific_field){
 					count=scientific_field[k]['doc_count']
@@ -191,13 +206,16 @@ APP.modules.search = (function(){
 					if (type.length>=25) {
 						type=type.substring(0,20)+"...";
 					}
-					if (type=="") {
+					if (type=="" || type==" ") {
 
 					}else{
 					$('#scientificfield').append('<label title="'+longtype+'"  class="item" for="'+type+'scientificfield"> <input onclick="APP.modules.search.checkCheckbox()" id="'+type+'scientificfield" name="scientific_field" value="'+type+'" type="checkbox"> <div class="ui blue horizontal label">'+type+'</div>'+count+'</label>')
 					}
 				}
 				language=data['aggregations']['language']['buckets'];
+				if (language.length==0) {
+					$(".ui.card #language").parent().hide();
+				}
 				$("#language").append('<div class="header" >Languages</div>');
 				for (var k in language){
 					count=language[k]['doc_count']
@@ -206,13 +224,16 @@ APP.modules.search = (function(){
 					if (type.length>=25) {
 						type=type.substring(0,20)+"...";
 					}
-					if (type=="") {
+					if (type=="" || type==" ") {
 
 					}else{
 					$('#language').append('<label title="'+longtype+'"  class="item" for="'+type+'language"> <input onclick="APP.modules.search.checkCheckbox()" id="'+type+'language" name="language" value="'+type+'" type="checkbox"> <div class="ui blue horizontal label">'+type+'</div>'+count+'</label>')
 					}
 				}
 				filetype=data['aggregations']['filetype']['buckets'];
+				if (filetype.length==0) {
+					$(".ui.card #filetype").parent().hide();
+				}
 				$("#filetype").append('<div class="header" >Filetypes</div>');
 				for (var k in filetype){
 					count=filetype[k]['doc_count']
@@ -221,13 +242,16 @@ APP.modules.search = (function(){
 					if (type.length>=25) {
 						type=type.substring(0,20)+"...";
 					}
-					if (type=="") {
+					if (type=="" || type==" ") {
 
 					}else{
 					$('#filetype').append('<label title="'+longtype+'"  class="item" for="'+type+'filetype"> <input onclick="APP.modules.search.checkCheckbox()" id="'+type+'filetype" name="filetype" value="'+type+'" type="checkbox"> <div class="ui blue horizontal label">'+type+'</div>'+count+'</label>')
 					}
 				}
 				accessright=data['aggregations']['access_right']['buckets'];
+				if (accessright.length==0) {
+					$(".ui.card #accessright").parent().hide();
+				}
 				$("#accesright").append('<div class="header" >Access right</div>');
 				for (var k in accessright){
 					count=accessright[k]['doc_count']
@@ -245,7 +269,7 @@ APP.modules.search = (function(){
 					if (type=="Embargoed") {
 						color="orange";
 					}
-					if (type=="") {
+					if (type=="" || type==" ") {
 
 					}else{
 					$('#accesright').append('<label  class="item" for="'+type+'accessright"> <input onclick="APP.modules.search.checkCheckbox()" id="'+type+'accessright" name="accessright" value="'+type+'" type="checkbox"> <div class="ui '+color+' horizontal label">'+type+'</div>'+count+'</label>')
@@ -260,7 +284,6 @@ APP.modules.search = (function(){
 				}
 				minyear=Math.min.apply(null, creationdatearray);
 	        	maxyear=Math.max.apply(null, creationdatearray);
-	        	console.log(maxyear)
 	        	if (minyear==maxyear) {
 	        		minyear=maxyear-1;
 	        	}
@@ -567,6 +590,9 @@ APP.modules.mypublications = (function(){
 				$('.easyPaginateNav').remove();
 				$('#facets_type').empty();
 				sample_kind=data['aggregations']['sample_kind']['buckets'];
+				if (sample_kind.length==0) {
+					$(".ui.card #samplekind").parent().hide();
+				}
 				$("#samplekind").append('<div class="header" >Sample kind</div>');
 				for (var k in sample_kind){
 					count=sample_kind[k]['doc_count']
@@ -582,6 +608,9 @@ APP.modules.mypublications = (function(){
 					}
 				}
 				authors=data['aggregations']['authors']['buckets'];
+				if (authors.length==0) {
+					$(".ui.card #authors").parent().hide();
+				}
 				$("#authors").append('<div class="header" >Authors</div>');
 				for (var k in authors){
 					count=authors[k]['doc_count']
@@ -597,6 +626,9 @@ APP.modules.mypublications = (function(){
 					}
 				}
 				keywords=data['aggregations']['keywords']['buckets'];
+				if (keywords.length==0) {
+					$(".ui.card #keywords").parent().hide();
+				}
 				$("#keywords").append('<div class="header" >Keywords</div>');
 				for (var k in keywords){
 					count=keywords[k]['doc_count']
@@ -613,6 +645,9 @@ APP.modules.mypublications = (function(){
 					}
 				}
 				scientific_field=data['aggregations']['scientific_field']['buckets'];
+				if (scientific_field.length==0) {
+					$(".ui.card #scientificfields").parent().hide();
+				}
 				$("#scientificfield").append('<div class="header" >Scientific fields</div>');
 				for (var k in scientific_field){
 					count=scientific_field[k]['doc_count']
@@ -628,6 +663,9 @@ APP.modules.mypublications = (function(){
 					}
 				}
 				language=data['aggregations']['language']['buckets'];
+				if (language.length==0) {
+					$(".ui.card #language").parent().hide();
+				}
 				$("#language").append('<div class="header" >Languages</div>');
 				for (var k in language){
 					count=language[k]['doc_count']
@@ -643,6 +681,9 @@ APP.modules.mypublications = (function(){
 					}
 				}
 				filetype=data['aggregations']['filetype']['buckets'];
+				if (filetype.length==0) {
+					$(".ui.card #filetype").parent().hide();
+				}
 				$("#filetype").append('<div class="header" >Filetypes</div>');
 				for (var k in filetype){
 					count=filetype[k]['doc_count']
@@ -658,6 +699,9 @@ APP.modules.mypublications = (function(){
 					}
 				}
 				accessright=data['aggregations']['access_right']['buckets'];
+				if (accessright.length==0) {
+					$(".ui.card #accessright").parent().hide();
+				}
 				$("#accesright").append('<div class="header" >Access right</div>');
 				for (var k in accessright){
 					count=accessright[k]['doc_count']
@@ -693,6 +737,9 @@ APP.modules.mypublications = (function(){
 				}
 				minyear=Math.min.apply(null, creationdatearray);
 	        	maxyear=Math.max.apply(null, creationdatearray);
+	        	if (minyear==maxyear) {
+	        		minyear=maxyear-1;
+	        	}
 				$('#date').append('<input class="range-slider" value="'+minyear+','+maxyear+'" type="hidden">');
 
 				$('.range-slider').jRange({
@@ -704,23 +751,23 @@ APP.modules.mypublications = (function(){
 				    showLabels: true,
 				    isRange : true,
 				     ondragend: function(val){
-				     	var query =APP.modules.search.$_GET('query');
+				     	var query ="*";
 				     	range=val.split(",", 2);
 						mindate=range[0];
 						maxdate=range[1];
 						date=" AND INTRO.CREATION_DATE:["+mindate+"-01-01 TO "+maxdate+"-12-31]"
 						$('#results').empty();
-				     	APP.modules.search.search(query+date,"facets");
+				     	APP.modules.mypublications.search(query+date,"facets");
 				          
 				        },
 				     onbarclicked: function(val){
-						var query =APP.modules.search.$_GET('query');
+						var query ="*";
 						range=val.split(",", 2);
 						mindate=range[0];
 						maxdate=range[1];
 						date=" AND INTRO.CREATION_DATE:["+mindate+"-01-01 TO "+maxdate+"-12-31]"
 						$('#results').empty();
-				     	APP.modules.search.search(query+date,"facets");
+				     	APP.modules.mypublications.search(query+date,"facets");
 				       	}
 			});
 

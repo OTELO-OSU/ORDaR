@@ -81,74 +81,108 @@ function connect_tomongo(){
 		 	}
 		 }
 		  if ($key=="sampling_point_name") {
-		 	if (count($value)>1) {
-		 		foreach ($value as $key => $value) {
-		 		$array["SAMPLING_POINT"][$key]["NAME"]=htmlspecialchars($value, ENT_QUOTES);
-		 		}
-		 	}
-		 	else{
-		 	$array["SAMPLING_POINT"][0]["NAME"]=htmlspecialchars($value[0], ENT_QUOTES);
-		 	}
-		 }
-		  if ($key=="sampling_point_coordonate_system") {
 			 	if (count($value)>1) {
 			 		foreach ($value as $key => $value) {
-			 		$array["SAMPLING_POINT"][$key]["COORDONATE_SYSTEM"]=htmlspecialchars($value, ENT_QUOTES);;
+			 			if (!empty($value)) {
+			 				$array["SAMPLING_POINT"][$key]["NAME"]=htmlspecialchars($value, ENT_QUOTES);
+			 			}
 			 		}
 			 	}
 			 	else{
-			 	$array["SAMPLING_POINT"][0]["ABBREVIATION"]=htmlspecialchars($value[0], ENT_QUOTES);
+			 		if (!empty($value[0])) {
+			 		$array["SAMPLING_POINT"][0]["NAME"]=htmlspecialchars($value[0], ENT_QUOTES);
+			 		}
 			 	}
+			
+		 }
+		  if ($key=="sampling_point_coordonate_system") {
+				 	if (count($value)>1) {
+				 		foreach ($value as $key => $value) {
+				 			if (!empty($value)) {
+				 				$array["SAMPLING_POINT"][$key]["COORDONATE_SYSTEM"]=htmlspecialchars($value, ENT_QUOTES);;
+				 			}
+				 		}
+				 	}
+				 	else{
+				 		if (!empty($value[0])) {
+				 	$array["SAMPLING_POINT"][0]["ABBREVIATION"]=htmlspecialchars($value[0], ENT_QUOTES);
+				 		}
+				 	}
+				 
 			 }
 		 if ($key=="sampling_point_abbreviation") {
-		 	if (count($value)>1) {
-		 		foreach ($value as $key => $value) {
-		 		$array["SAMPLING_POINT"][$key]["ABBREVIATION"]=htmlspecialchars($value, ENT_QUOTES);
-		 		}
-		 	}
-		 	else{
-		 	$array["SAMPLING_POINT"][0]["ABBREVIATION"]=htmlspecialchars($value[0], ENT_QUOTES);
-		 	}
+			 	if (count($value)>1) {
+			 		foreach ($value as $key => $value) {
+			 			if (!empty($value)) {
+			 				$array["SAMPLING_POINT"][$key]["ABBREVIATION"]=htmlspecialchars($value, ENT_QUOTES);
+			 				}
+			 			}
+			 	}
+			 	else{
+			 		if (!empty($value[0])) {
+			 			$array["SAMPLING_POINT"][0]["ABBREVIATION"]=htmlspecialchars($value[0], ENT_QUOTES);
+			 		}
+			 	}
 		 }
 		 if ($key=="sampling_point_longitude") {
-		 	if (count($value)>1) {
-		 		foreach ($value as $key => $value) {
-		 		$array["SAMPLING_POINT"][$key]["LONGITUDE"]=htmlspecialchars($value, ENT_QUOTES);
-		 		}
-		 	}
-		 	else{
-		 	$array["SAMPLING_POINT"][0]["LONGITUDE"]=htmlspecialchars($value[0], ENT_QUOTES);
-		 	}
+			 	if (count($value)>1) {
+			 		foreach ($value as $key => $value) {
+			 			if (!empty($value)) {
+			 			$array["SAMPLING_POINT"][$key]["LONGITUDE"]=htmlspecialchars($value, ENT_QUOTES);
+			 			}
+			 		}
+			 	}
+			 	else{
+			 		if (!empty($value[0])) {		 			
+			 			$array["SAMPLING_POINT"][0]["LONGITUDE"]=htmlspecialchars($value[0], ENT_QUOTES);
+			 		}
+			 	}
+			 
 		 }
 		 if ($key=="sampling_point_latitude") {
-		 	if (count($value)>1) {
-		 		foreach ($value as $key => $value) {
-		 		$array["SAMPLING_POINT"][$key]["LATITUDE"]=htmlspecialchars($value, ENT_QUOTES);
-		 		}
-		 	}
-		 	else{
-		 	$array["SAMPLING_POINT"][0]["LATITUDE"]=htmlspecialchars($value[0], ENT_QUOTES);
-		 	}
+			 	if (count($value)>1) {
+			 		foreach ($value as $key => $value) {
+			 			if (!empty($value)) {
+			 			$array["SAMPLING_POINT"][$key]["LATITUDE"]=htmlspecialchars($value, ENT_QUOTES);
+			 			}
+			 		}
+			 	}
+			 	else{
+			 		if (!empty($value[0])) {
+			 			$array["SAMPLING_POINT"][0]["LATITUDE"]=htmlspecialchars($value[0], ENT_QUOTES);
+			 		}
+			 	}
+			 
 		 }
 		 if ($key=="sampling_point_elevation") {
-		 	if (count($value)>1) {
-		 		foreach ($value as $key => $value) {
-		 		$array["SAMPLING_POINT"][$key]["ELEVATION"]=htmlspecialchars($value, ENT_QUOTES);
-		 		}
-		 	}
-		 	else{
-		 	$array["SAMPLING_POINT"][0]["ELEVATION"]=htmlspecialchars($value[0], ENT_QUOTES);
-		 	}
+			 	if (count($value)>1) {
+			 		foreach ($value as $key => $value) {
+			 			if (!empty($value)) {
+			 				$array["SAMPLING_POINT"][$key]["ELEVATION"]=htmlspecialchars($value, ENT_QUOTES);
+			 			}
+			 		}
+			 	}
+			 	else{
+			 		if (!empty($value[0])) {
+			 			$array["SAMPLING_POINT"][0]["ELEVATION"]=htmlspecialchars($value[0], ENT_QUOTES);
+			 		}
+			 	}
+			 
 		 }
 		 if ($key=="sampling_point_description") {
-		 	if (count($value)>1) {
-		 		foreach ($value as $key => $value) {
-		 		$array["SAMPLING_POINT"][$key]["DESCRIPTION"]=htmlspecialchars($value, ENT_QUOTES);
-		 		}
-		 	}
-		 	else{
-		 	$array["SAMPLING_POINT"][0]["DESCRIPTION"]=htmlspecialchars($value[0], ENT_QUOTES);
-		 	}
+			 	if (count($value)>1) {
+			 		foreach ($value as $key => $value) {
+			 			if (!empty($value)) {
+			 				$array["SAMPLING_POINT"][$key]["DESCRIPTION"]=htmlspecialchars($value, ENT_QUOTES);
+			 			}
+			 		}
+			 	}
+			 	else{
+			 		if (!empty($value[0])) {
+			 			$array["SAMPLING_POINT"][0]["DESCRIPTION"]=htmlspecialchars($value[0], ENT_QUOTES);
+			 		}
+			 	}
+			 
 		 }
 
 		  if ($key=="measurement_nature") {
@@ -185,25 +219,32 @@ function connect_tomongo(){
 	 	 	$array["PUBLISHER"]=htmlspecialchars($value, ENT_QUOTES);
 	 	 }
 		 if ($key=="sample_kind") {
-		 	
 		 		if (count($value)>1) {
-		 		foreach ($value as $key => $value) {
-		 		$array["SAMPLE_KIND"][$key]["NAME"]=htmlspecialchars($value, ENT_QUOTES);
-		 		}
+		 			foreach ($value as $key => $value) {
+		 				if (!empty($value)) {
+		 						$array["SAMPLE_KIND"][$key]["NAME"]=htmlspecialchars($value, ENT_QUOTES);
+		 					}
+		 			}
 		 	}
 		 	else{
-		 	$array["SAMPLE_KIND"][0]["NAME"]=htmlspecialchars($value[0], ENT_QUOTES);
+		 		if (!empty($value[0])) {
+		 			$array["SAMPLE_KIND"][0]["NAME"]=htmlspecialchars($value[0], ENT_QUOTES);
+		 		}
 		 	}
 		 	
 		 }
 		   if ($key=="institution") {
 		 	if (count($value)>1) {
 		 		foreach ($value as $key => $value) {
-		 		$array["INSTITUTION"][$key]["NAME"]=htmlspecialchars($value, ENT_QUOTES);
+		 			if (!empty($value)) {
+		 				$array["INSTITUTION"][$key]["NAME"]=htmlspecialchars($value, ENT_QUOTES);
+		 				}
 		 		}
 		 	}
 		 	else{
-		 	$array["INSTITUTION"][0]["NAME"]=htmlspecialchars($value[0], ENT_QUOTES);
+		 		if (!empty($value[0])) {
+		 			$array["INSTITUTION"][0]["NAME"]=htmlspecialchars($value[0], ENT_QUOTES);
+		 		}
 		 	}
 		 }
 		
@@ -227,30 +268,6 @@ function connect_tomongo(){
 		 	$array["FILE_CREATOR"][0]["NAME"]=htmlspecialchars($value[0], ENT_QUOTES);
 		 	}
 		 }
-		 if ($key=="keywords") {
-		 	if (!count($value==0)){
-		 	if (count($value<=3)) {
-		 		foreach ($value as $key => $value) {
-		 		$array["KEYWORDS"][$key]["NAME"]=htmlspecialchars($value, ENT_QUOTES);
-		 		}
-		 	}
-		 	else{
-		 	$array["KEYWORDS"]["NAME"]=htmlspecialchars($value, ENT_QUOTES);
-		 	}
-		 	}
-		 }
-		  if ($key=="fundings") {
-	 	  	if (!count($value==0)){
-			 	if (count($value<=3)) {
-			 		foreach ($value as $key => $value) {
-			 		$array["FUNDINGS"][$key]["NAME"]=htmlspecialchars($value, ENT_QUOTES);
-			 		}
-			 	}
-			 	else{
-			 	$array["FUNDINGS"]["NAME"]=htmlspecialchars($value, ENT_QUOTES);
-			 	}
-	 	  	}
-		 }
 		  if ($key=="authors_email") {
 		 	if (count($value)>1) {
 		 		foreach ($value as $key => $value) {
@@ -260,6 +277,36 @@ function connect_tomongo(){
 		 	else{
 		 	$array["FILE_CREATOR"][0]["MAIL"]=htmlspecialchars($value[0], ENT_QUOTES);
 		 	}
+		 }
+		 if ($key=="keywords") {
+		 	if (count($value<=3)) {
+		 		foreach ($value as $key => $value) {
+		 			if (!empty($value)) {
+		 				$array["KEYWORDS"][$key]["NAME"]=htmlspecialchars($value, ENT_QUOTES);
+		 			}
+		 		}
+		 	}
+		 	else{
+		 		if (!empty($value[0])) {
+		 			$array["KEYWORDS"]["NAME"]=htmlspecialchars($value, ENT_QUOTES);
+		 		}
+		 	}
+		 	
+		 }
+		  if ($key=="fundings") {
+			 	if (count($value<=3)) {
+			 		foreach ($value as $key => $value) {
+			 			if (!empty($value)) {
+			 				$array["FUNDINGS"][$key]["NAME"]=htmlspecialchars($value, ENT_QUOTES);
+			 			}
+			 		}
+			 	}
+			 	else{
+			 		if (!empty($value[0])) {
+			 			$array["FUNDINGS"]["NAME"]=htmlspecialchars($value, ENT_QUOTES);
+			 			}
+			 	}
+	 	  	
 		 }
 		
 		if ($key=="license") {
