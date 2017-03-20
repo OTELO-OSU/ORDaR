@@ -1,9 +1,9 @@
 <div class="row"></div>
-<h4 class="ui dividing header">Metadata</h4>
+<h4 class="ui dividing header">Metadata <i class="database icon"></i> </h4>
 <div class="ui grid">
   <div class="ui fluid styled accordion">
       <div class="active title">
-          Basic information
+          Basic information <i class="info circle icon"></i> 
           <i class="dropdown icon"></i>
       </div>
       <div class="active content">
@@ -455,73 +455,88 @@
 
   <div class="ui fluid styled accordion">
       <div class="active title">
-          License
+          License <i class="creative commons icon"></i>
           <i class="dropdown icon"></i>
       </div>
       <div class="active content">
        <div class="required field">
           <label>License</label>
-        <select class="ui fluid search dropdown license" name="license" >
-        <option value="{{license}}">Select a license</option>
-        <option value="1">Attribution alone (CC BY)</option>
-        <option value="2">Attribution + ShareAlike (CC BY-SA)</option>
-        <option value="3">Attribution + Noncommercial (CC BY-NC)</option>
-        <option value="4">Attribution + NoDerivatives (CC BY-ND)</option>
-        <option value="5">Attribution + Noncommercial + ShareAlike (CC BY-NC-SA)</option>
-        <option value="6">Attribution + Noncommercial + NoDerivatives (CC BY-NC-ND)</option>
-      </select>
-      </div>
-      <div class="ui form">
-      <div class="inline fields">
-        <div class="grouped fields">
-        <label>Access right</label>
-        <div class="field">
-        <div class="ui radio checkbox">
-        {% if accessright == "Open" %}
-          <input type="radio"  onclick="APP.modules.upload.checkformbutton()" name="access_right" id="open" value="Open"  checked > 
-          {% else %}
-            <input type="radio"  onclick="APP.modules.upload.checkformbutton()" name="access_right" id="open" value="Open" >
-          {% endif %}
-          <label>Open</label>
+        <div class="ui dropdown selection license" name="license" >
+          <input type="hidden" value="{{license}}" name="license">
+            <i class="dropdown icon"></i>
+          <div class="default text"  > Select a license</div>
+                <div class="menu">
+                  <div class="item" data-value="1"> <img class='ui image' src='img/license/ccby.png'>Creative commons Attribution alone </div>
+                  <div class="item" data-value="2"><img class='ui image' src='img/license/ccby-sa.png' >Creative commons Attribution + ShareAlike </div>
+                  <div class="item" data-value="3"><img class='ui  image' src='img/license/ccby-nc.png' >Creative commons Attribution + Noncommercial </div>
+                  <div class="item" data-value="4"><img class='ui image' src='img/license/ccby-nd.png'>Creative commons Attribution + NoDerivatives </div>
+                  <div class="item" data-value="5"><img class='ui image' src='img/license/ccby-nc-sa.png' >Creative commons Attribution + Noncommercial + ShareAlike </div>
+                  <div class="item" data-value="6"><img class='ui image' src='img/license/ccby-nc-nd.png'>Creative commons Attribution + Noncommercial + NoDerivatives </div>
+            </div>
           </div>
-          </div>
-          <div class="field">
-        <div class="ui radio checkbox">
-          {% if accessright == "Closed" %}
-          <input type="radio"  onclick="APP.modules.upload.checkformbutton()" name="access_right" id="closed" value="Closed" checked> 
-           {% else %}
-           <input type="radio"  onclick="APP.modules.upload.checkformbutton()" name="access_right" id="closed" value="Closed" > 
-           {%endif%}
-          <label>Closed</label>
-          </div>
-          </div>
-          <div class="field">
-       <div class="ui radio checkbox">
-        {% if accessright == "Embargoed" %}
-        <input type="radio" onclick="APP.modules.upload.checkformbutton()" name="access_right" id="embargoed" value="Embargoed" checked>
-        <label>Embargoed</label>
-        </div>
-        <div class="field" id="date_end"  >
-      <label>Embargo date</label>
-          <input type="text" class="date" name="publication_date" value="{{embargoed_date}}" placeholder="Publication date">
-        </div>
-        {%else%}
-        <input type="radio" onclick="APP.modules.upload.checkformbutton()" name="access_right" id="embargoed" value="Embargoed">
-         <label>Embargoed</label>
-        {%endif%}
-        
-        
-        </div>
-      <div class="field" id="date_end" >
-      <label>Embargo date</label>
-          <input type="text" class="date" name="publication_date"  placeholder="Publication date">
-        </div>
-      </div>
-      </div>
+        <h5>Click <a href="https://creativecommons.org/licenses/?lang=en" target="_blank">here</a> to view more about license.</h5>
       </div>
     </div>
    </div>
-   </div>
+   <div class="row"></div>
+<div class="ui fluid styled accordion">
+  <div class="active title">
+         Access right <i class="users icon"></i> 
+          <i class="dropdown icon"></i>
+      </div>
+    <div class="active content">
+         <div class="ui form">
+              <div class="inline fields">
+                <div class="grouped fields">
+                <label>Access right</label>
+                <div class="field">
+                <div class="ui radio checkbox">
+                {% if accessright == "Open" %}
+                  <input type="radio"  onclick="APP.modules.upload.checkformbutton()" name="access_right" id="open" value="Open"  checked > 
+                  {% else %}
+                    <input type="radio"  onclick="APP.modules.upload.checkformbutton()" name="access_right" id="open" value="Open" >
+                  {% endif %}
+                  <label>Open <i class="unlock icon"></i></label> 
+                  </div>
+                  </div>
+                  <div class="field">
+                <div class="ui radio checkbox">
+                  {% if accessright == "Closed" %}
+                  <input type="radio"  onclick="APP.modules.upload.checkformbutton()" name="access_right" id="closed" value="Closed" checked> 
+                   {% else %}
+                   <input type="radio"  onclick="APP.modules.upload.checkformbutton()" name="access_right" id="closed" value="Closed" > 
+                   {%endif%}
+                  <label>Closed <i class="lock icon"></i></label>
+                  </div>
+                  </div>
+                  <div class="field">
+               <div class="ui radio checkbox">
+                {% if accessright == "Embargoed" %}
+                <input type="radio" onclick="APP.modules.upload.checkformbutton()" name="access_right" id="embargoed" value="Embargoed" checked>
+                <label>Embargoed</label>
+                </div>
+                <div class="field" id="date_end"  >
+              <label>Embargo date</label>
+                  <input type="text" class="date" name="publication_date" value="{{embargoed_date}}" placeholder="Publication date">
+                </div>
+                {%else%}
+                <input type="radio" onclick="APP.modules.upload.checkformbutton()" name="access_right" id="embargoed" value="Embargoed">
+                 <label>Embargoed <i class="ban icon"></i></label>
+                {%endif%}
+                
+                
+                </div>
+              <div class="field" id="date_end" >
+              <label>Embargo date</label>
+                  <input type="text" class="date" name="publication_date"  placeholder="Publication date">
+                </div>
+          </div>
+        </div>
+        </div>
+      </div>
+  </div>
+
+</div>
   <div class="ui error message"></div>
 <div class="row"></div>
 

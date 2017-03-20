@@ -166,9 +166,26 @@
           {%if language %}
            <h2 class="ui sub header">Language:</h2> <span>{{language}}</span>
           {%endif%}
-          {%if license %}
-           <h2 class="ui sub header">License:</h2> <span>{{license}}</span>
-          {%endif%}
+          
+            {% if license == "Creative commons Attribution alone" %}
+              <h2 class="ui sub header">License:</h2> <span>{{license}}  <img class='ui tiny image' src='img/license/ccby.png'></span>
+            {%endif%}
+            {% if license == "Creative commons Attribution + ShareAlike" %}
+              <h2 class="ui sub header">License:</h2> <span>{{license}}  <img class='ui tiny image' src='img/license/ccby-sa.png'></span>
+            {%endif%}
+            {% if license == "Creative commons Attribution + Noncommercial" %}
+              <h2 class="ui sub header">License:</h2> <span>{{license}}  <img class='ui tiny image' src='img/license/ccby-nc.png'></span>
+            {%endif%}
+            {% if license == "Creative commons Attribution + NoDerivatives" %}
+              <h2 class="ui sub header">License:</h2> <span>{{license}}  <img class='ui tiny image' src='img/license/ccby-nd.png'></span>
+            {%endif%}
+            {% if license == "Creative commons Attribution + Noncommercial + ShareAlike" %}
+              <h2 class="ui sub header">License:</h2> <span>{{license}}  <img class='ui tiny image' src='img/license/ccby-nc-sa.png'></span>
+            {%endif%}
+            {% if license == "Creative commons Attribution + Noncommercial + NoDerivatives" %}
+              <h2 class="ui sub header">License:</h2> <span>{{license}}  <img class='ui tiny image' src='img/license/ccby-nc-nd.png'></span>
+            {%endif%}
+         
 
           {%if institutions %}
            <h2 class="ui sub header">Institutions:</h2>

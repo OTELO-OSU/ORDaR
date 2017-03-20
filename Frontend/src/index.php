@@ -242,19 +242,19 @@ $app->get('/editrecord', function (Request $req,Response $responseSlim) {
 			if ($value=="Attribution alone (CC BY)") {
 		 		$license=1;
 		 	}
-		 	elseif ($value=="Attribution + ShareAlike (CC BY-SA)") {
+		 	elseif ($value=="Creative commons Attribution + ShareAlike") {
 		 		$license=2;
 		 	}
-		 	elseif ($value=="Attribution + Noncommercial (CC BY-NC)") {
+		 	elseif ($value=="Creative commons Attribution + Noncommercial") {
 		 		$license=3;
 		 	}
-		 	elseif ($value=="Attribution + NoDerivatives (CC BY-ND)") {
+		 	elseif ($value=="Creative commons Attribution + NoDerivatives") {
 		 		$license=4;
 		 	}
-		 	elseif ($value=="Attribution + Noncommercial + ShareAlike (CC BY-NC-SA)") {
+		 	elseif ($value=="Creative commons Attribution + Noncommercial + ShareAlike") {
 		 		$license=5;
 		 	}
-		 	elseif ($value=="Attribution + Noncommercial + NoDerivatives (CC BY-NC-ND)") {
+		 	elseif ($value=="Creative commons Attribution + Noncommercial + NoDerivatives") {
 		 		$license=6;
 		 	}
 

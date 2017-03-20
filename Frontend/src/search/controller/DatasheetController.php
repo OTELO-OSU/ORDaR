@@ -312,22 +312,22 @@ function connect_tomongo(){
 		if ($key=="license") {
 			$licensetype=null;
 		 	if ($value==1) {
-		 		$licensetype="Attribution alone (CC BY)";
+		 		$licensetype="Creative commons Attribution alone";
 		 	}
 		 	elseif ($value==2) {
-		 		$licensetype="Attribution + ShareAlike (CC BY-SA)";
+		 		$licensetype="Creative commons Attribution + ShareAlike";
 		 	}
 		 	elseif ($value==3) {
-		 		$licensetype="Attribution + Noncommercial (CC BY-NC)";
+		 		$licensetype="Creative commons Attribution + Noncommercial";
 		 	}
 		 	elseif ($value==4) {
-		 		$licensetype="Attribution + NoDerivatives (CC BY-ND)";
+		 		$licensetype="Creative commons Attribution + NoDerivatives";
 		 	}
 		 	elseif ($value==5) {
-		 		$licensetype="Attribution + Noncommercial + ShareAlike (CC BY-NC-SA)";
+		 		$licensetype="Creative commons Attribution + Noncommercial + ShareAlike";
 		 	}
 		 	elseif ($value==6) {
-		 		$licensetype="Attribution + Noncommercial + NoDerivatives (CC BY-NC-ND)";
+		 		$licensetype="Creative commons Attribution + Noncommercial + NoDerivatives";
 		 	}
 		 $array["LICENSE"]=$licensetype;
 		 }
