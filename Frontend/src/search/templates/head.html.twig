@@ -18,11 +18,12 @@
 
 <body>
 
-
- <div class="ui grey inverted menu">
  {% include 'contact.html.twig' %}
-    <div class="ui container">
-      <a id="logo" href="accueil" class="header left floated item">
+
+  <nav>
+          <div class="navbar ui inverted grey menu ">
+              
+        <a id="logo" href="accueil" class="header left floated item">
         <img  class="ui tiny image" src="/img/ordar_logo.png">
       </a>
       <div id="search"></div>
@@ -33,8 +34,10 @@
       {% else %}
        <a href="login" class="right item">Login</a>
    {% endif %}
-    </div>
-  </div>
+               
+           
+            </div>
+        </nav>
 
 <div class="content">
 

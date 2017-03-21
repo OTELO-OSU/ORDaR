@@ -4,50 +4,51 @@
 <div class="ui internally celled grid">
   <div class="row">
   <div class="ui ten wide column ">
-  <h1> {{title}}</h1>
-    <div class="content">
-            {% if accessright == "Closed" %}
-              <div class="ui red label" >{{accessright}}</div>
-            {% elseif accessright == "Embargoed" %}
-              <div class="ui orange label" data-tooltip="Available as Open Access after {{publicationdate}}">{{accessright}}</div>
-            {% elseif accessright == "Open" %}
-              <div class="ui green label" >{{accessright}}</div>
-            {% elseif accessright == "Unpublished" %}
-              <div class="ui grey label" >{{accessright}}</div>
-            {% endif %}
-          
+  <div>
+          <h1> {{title}}</h1>
+            <div class="content">
+                    {% if accessright == "Closed" %}
+                      <div class="ui red label" >{{accessright}}</div>
+                    {% elseif accessright == "Embargoed" %}
+                      <div class="ui orange label" data-tooltip="Available as Open Access after {{publicationdate}}">{{accessright}}</div>
+                    {% elseif accessright == "Open" %}
+                      <div class="ui green label" >{{accessright}}</div>
+                    {% elseif accessright == "Unpublished" %}
+                      <div class="ui grey label" >{{accessright}}</div>
+                    {% endif %}
+                  
 
 
-            <div class="ui blue label">{{creationdate}}</div>
-             <div class="ui blue label">DOI : {{doi}}</div>
-          
-            <div class="row">
-            
-          <div class="meta"><h4>Description:</h4>
-          <span class="data">{{datadescription}}</span>
-          </div><div class="row"></div><h4><i class="user icon"></i>Authors:</h4>
+                    <div class="ui blue label">{{creationdate}}</div>
+                     <div class="ui blue label">DOI : {{doi}}</div>
+                  
+                    <div class="row">
+                    
+                  <div class="meta"><h4>Description:</h4>
+                  <span class="data">{{datadescription}}</span>
+                  </div><div class="row"></div><h4><i class="user icon"></i>Authors:</h4>
 
-      <ul id="authors">
-          {% for author in authors %}
-              <li><a onclick="APP.modules.send_email.send_email('{{doi}}','{{author.NAME}}','{{ author.FIRST_NAME}}')">{{author.NAME}} {{ author.FIRST_NAME}}</a></li>
-          {% endfor %}
-      </ul>
-  {%for author in authors%}
-  {% if author.MAIL == mail %}
-  {% if accessright == "Unpublished" %}
-    <a href="remove/{{doi}}"><div class="ui right floated red button" >Remove  <i class="remove icon"></i></div></a>
-  {% endif %}
-  <a href="editrecord?id={{doi}}"><div class="ui right floated primary button" >Edit<i class="right chevron icon"></i></div></a>
-  {%endif%}
-  {%endfor%}
-  <p>Uploaded on {{uploaddate}}</p>
-  
+              <ul id="authors">
+                  {% for author in authors %}
+                      <li><a onclick="APP.modules.send_email.send_email('{{doi}}','{{author.NAME}}','{{ author.FIRST_NAME}}')">{{author.NAME}} {{ author.FIRST_NAME}}</a></li>
+                  {% endfor %}
+              </ul>
+          {%for author in authors%}
+          {% if author.MAIL == mail %}
+          {% if accessright == "Unpublished" %}
+            <a href="remove/{{doi}}"><div class="ui right floated red button" >Remove  <i class="remove icon"></i></div></a>
+          {% endif %}
+          <a href="editrecord?id={{doi}}"><div class="ui right floated primary button" >Edit<i class="right chevron icon"></i></div></a>
+          {%endif%}
+          {%endfor%}
+    <p>Uploaded on {{uploaddate}}</p>
+  </div>
 
 
 <div class="ui container cards">
   <div class="ui fluid card"> 
     <div class="content files">
-      <div class="header ">Files</div>
+      <div class="header "> <i class="file icon"></i>Files</div>
       {% if accessright == "Closed" or accessright == "Unpublished" %}
         {% if files == NULL %}
          <div class="ui red message">Data are not available</div>
@@ -160,35 +161,35 @@
     <div class="ui six wide column ">
     <div class="row">
     <div class="ui fluid card">
+    <div class="row"></div>
+          <div class=" ui horizontal divider header"> <i class="tag icon"></i>About this dataset</div>
         <div class="content">
-          <div class="header">About this dataset</div>
-          <div class="description">
           {%if language %}
-           <h2 class="ui sub header">Language:</h2> <span>{{language}}</span>
+           <h3 class="ui  header">Language:</h3> <span>{{language}}</span>
           {%endif%}
           
             {% if license == "Creative commons Attribution alone" %}
-              <h2 class="ui sub header">License:</h2> <span>{{license}}  <img class='ui tiny image' src='img/license/ccby.png'></span>
+              <h3 class="ui  header">License:</h3><img class='ui tiny floated left image' src='img/license/ccby.png'> <span>{{license}}  </span>
             {%endif%}
             {% if license == "Creative commons Attribution + ShareAlike" %}
-              <h2 class="ui sub header">License:</h2> <span>{{license}}  <img class='ui tiny image' src='img/license/ccby-sa.png'></span>
+              <h3 class="ui  header">License:</h3> <span>{{license}}  <img class='ui tiny floated left  image' src='img/license/ccby-sa.png'></span>
             {%endif%}
             {% if license == "Creative commons Attribution + Noncommercial" %}
-              <h2 class="ui sub header">License:</h2> <span>{{license}}  <img class='ui tiny image' src='img/license/ccby-nc.png'></span>
+              <h3 class="ui  header">License:</h3> <span>{{license}}  <img class='ui tiny floated left  image' src='img/license/ccby-nc.png'></span>
             {%endif%}
             {% if license == "Creative commons Attribution + NoDerivatives" %}
-              <h2 class="ui sub header">License:</h2> <span>{{license}}  <img class='ui tiny image' src='img/license/ccby-nd.png'></span>
+              <h3 class="ui  header">License:</h3> <span>{{license}}  <img class='ui tiny floated left image' src='img/license/ccby-nd.png'></span>
             {%endif%}
             {% if license == "Creative commons Attribution + Noncommercial + ShareAlike" %}
-              <h2 class="ui sub header">License:</h2> <span>{{license}}  <img class='ui tiny image' src='img/license/ccby-nc-sa.png'></span>
+              <h3 class="ui  header">License:</h3> <span>{{license}}  <img class='ui tiny floated left image' src='img/license/ccby-nc-sa.png'></span>
             {%endif%}
             {% if license == "Creative commons Attribution + Noncommercial + NoDerivatives" %}
-              <h2 class="ui sub header">License:</h2> <span>{{license}}  <img class='ui tiny image' src='img/license/ccby-nc-nd.png'></span>
+              <h3 class="ui  header">License:</h3> <span>{{license}}  <img class='ui tiny floated left image' src='img/license/ccby-nc-nd.png'></span>
             {%endif%}
          
 
           {%if institutions %}
-           <h2 class="ui sub header">Institutions:</h2>
+           <h3 class="ui  header">Institutions:</h3>
            <ul>
             {%for field in institutions%}
               <li>{{field.NAME}}</li>
@@ -197,7 +198,7 @@
           {%endif%}
 
            {%if scientific_field %}
-           <h2 class="ui sub header">Scientific fields:</h2>
+           <h3 class="ui header">Scientific fields:</h3>
            <ul>
             {%for field in scientific_field%}
               <li>{{field.NAME}}</li>
@@ -206,7 +207,7 @@
           {%endif%}
 
           {%if keywords%}
-           <h2 class="ui sub header">Keywords:</h2>
+           <h3 class="ui header">Keywords:</h3>
            <ul>
             {%for keyword in keywords%}
               <li>{{keyword.NAME}}</li>
@@ -214,7 +215,7 @@
             </ul>
           {%endif%}
            {%if sample_kinds %}
-           <h2 class="ui sub header">Sample kind:</h2>
+           <h3 class="ui header">Sample kind:</h3>
            <ul>
             {%for sample_kind in sample_kinds%}
               <li>{{sample_kind.NAME}}</li>
@@ -223,7 +224,7 @@
           {%endif%}
 
           {%if sampling_date%}
-           <h2 class="ui sub header">Sampling date:</h2>
+           <h3 class="ui header">Sampling date:</h3>
            <ul>
             {%for sample in sampling_date%}
               <li>{{sample}}</li>
@@ -233,7 +234,6 @@
 
 
 
-          </div>
           </div>
 
 
