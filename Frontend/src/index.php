@@ -83,8 +83,8 @@ $app->get('/login', function (Request $req,Response $responseSlim) {
 	$loader = new Twig_Loader_Filesystem('search/templates');
 	$twig = new Twig_Environment($loader);
 	echo $twig->render('login.html.twig');
-	$_SESSION['name'] = "test";
-    $_SESSION['firstname'] ="test";
+	$_SESSION['name'] = "Guiot";
+    $_SESSION['firstname'] ="anthony";
     $_SESSION['mail'] = "test@gf.gt";
 	session_regenerate_id();
 

@@ -163,17 +163,24 @@ APP.modules.search = (function(){
 				}
 				$("#authors").append('<div class="header" >Authors</div>');
 				for (var k in authors){
-					count=authors[k]['doc_count']
-					type=authors[k]['key'];
+				
+					firstname=authors[k]['firstname']['buckets']
+					name=authors[k]['key']
+					for (var k in firstname){	
+					count=firstname[k]['doc_count']
+					type=name+" "+firstname[k]['key'];
+
 					longtype=type
 					if (type.length>=25) {
-						type=type.substring(0,20)+"...";
+						type=type.substring(0,25)+"...";
 					}
 					if (type=="" || type==" ") {
 
 					}else{
 					$('#authors').append('<label title="'+longtype+'"  class="item" for="'+type+'authors"> <input onclick="APP.modules.search.checkCheckbox()" id="'+type+'authors" name="authors" value="'+type+'" type="checkbox"> <div class="ui blue horizontal label">'+type+'</div>'+count+'</label>')
 					}
+					}
+
 				}
 				keywords=data['aggregations']['keywords']['buckets'];
 				if (keywords.length==0) {
@@ -357,13 +364,13 @@ APP.modules.search = (function(){
 				 	
                     if (value.name=="authors") {
 
-				 	var value = value.value;
+				 	var value = value.value.split(" ");;
                     if (authors===undefined) {
-                      authors='INTRO.FILE_CREATOR.NAME:"'+value+'"';
+                      authors='INTRO.FILE_CREATOR.NAME:"'+value[0]+'" AND INTRO.FILE_CREATOR.FIRST_NAME:"'+value[1]+'"';
 
                     }
                      else{
-                      authors=' AND INTRO.FILE_CREATOR.NAME:"'+value+'"';
+                      authors=' AND INTRO.FILE_CREATOR.NAME:"'+value[0]+'" AND INTRO.FILE_CREATOR.FIRST_NAME:"'+value[1]+'"';
                     }
                     if (facets!==undefined) {
                     	facets+=" "+authors;
@@ -613,17 +620,24 @@ APP.modules.mypublications = (function(){
 				}
 				$("#authors").append('<div class="header" >Authors</div>');
 				for (var k in authors){
-					count=authors[k]['doc_count']
-					type=authors[k]['key'];
+				
+					firstname=authors[k]['firstname']['buckets']
+					name=authors[k]['key']
+					for (var k in firstname){	
+					count=firstname[k]['doc_count']
+					type=name+" "+firstname[k]['key'];
+
 					longtype=type
 					if (type.length>=25) {
-						type=type.substring(0,20)+"...";
+						type=type.substring(0,25)+"...";
 					}
-					if (type=="") {
+					if (type=="" || type==" ") {
 
 					}else{
-					$('#authors').append('<label title="'+longtype+'"  class="item" for="'+type+'authors"> <input onclick="APP.modules.mypublications.checkCheckbox()" id="'+type+'authors" name="authors" value="'+type+'" type="checkbox"> <div class="ui blue horizontal label">'+type+'</div>'+count+'</label>')
+					$('#authors').append('<label title="'+longtype+'"  class="item" for="'+type+'authors"> <input onclick="APP.modules.search.checkCheckbox()" id="'+type+'authors" name="authors" value="'+type+'" type="checkbox"> <div class="ui blue horizontal label">'+type+'</div>'+count+'</label>')
 					}
+					}
+
 				}
 				keywords=data['aggregations']['keywords']['buckets'];
 				if (keywords.length==0) {
@@ -809,15 +823,16 @@ APP.modules.mypublications = (function(){
                     	
                     }
 				 	}
+                   
                     if (value.name=="authors") {
 
-				 	var value = value.value;
+				 	var value = value.value.split(" ");;
                     if (authors===undefined) {
-                      authors='INTRO.FILE_CREATOR.NAME:"'+value+'"';
+                      authors='INTRO.FILE_CREATOR.NAME:"'+value[0]+'" AND INTRO.FILE_CREATOR.FIRST_NAME:"'+value[1]+'"';
 
                     }
                      else{
-                      authors=' AND INTRO.FILE_CREATOR.NAME:"'+value+'"';
+                      authors=' AND INTRO.FILE_CREATOR.NAME:"'+value[0]+'" AND INTRO.FILE_CREATOR.FIRST_NAME:"'+value[1]+'"';
                     }
                     if (facets!==undefined) {
                     	facets+=" "+authors;

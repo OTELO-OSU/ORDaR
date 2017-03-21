@@ -37,6 +37,13 @@ class RequestController
 				 "authors" : { 
 		            "terms" : { 
 		              "field" : "INTRO.FILE_CREATOR.NAME"
+		            },
+		            "aggs":{
+		            	"firstname" : { 
+				            "terms" : { 
+				              "field" : "INTRO.FILE_CREATOR.FIRST_NAME"
+				            }
+				            }
 		            }
 		        },
 		        "scientific_field" : { 
@@ -104,9 +111,17 @@ class RequestController
 		              "field" : "INTRO.KEYWORDS.NAME"
 		            }
 		        },
+		        
 				 "authors" : { 
 		            "terms" : { 
 		              "field" : "INTRO.FILE_CREATOR.NAME"
+		            },
+		            "aggs":{
+		            	"firstname" : { 
+				            "terms" : { 
+				              "field" : "INTRO.FILE_CREATOR.FIRST_NAME"
+				            }
+				            }
 		            }
 		        },
 		        "scientific_field" : { 
