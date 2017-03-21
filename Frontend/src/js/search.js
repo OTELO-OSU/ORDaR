@@ -163,23 +163,18 @@ APP.modules.search = (function(){
 				}
 				$("#authors").append('<div class="header" >Authors</div>');
 				for (var k in authors){
-				
-					firstname=authors[k]['firstname']['buckets']
-					name=authors[k]['key']
-					for (var k in firstname){	
-					count=firstname[k]['doc_count']
-					type=name+" "+firstname[k]['key'];
+					type=authors[k]['key']
+					count=authors[k]['doc_count']
+					
+						longtype=type
+						if (type.length>=25) {
+							type=type.substring(0,25)+"...";
+						}
+						if (type=="" || type==" ") {
 
-					longtype=type
-					if (type.length>=25) {
-						type=type.substring(0,25)+"...";
-					}
-					if (type=="" || type==" ") {
-
-					}else{
-					$('#authors').append('<label title="'+longtype+'"  class="item" for="'+type+'authors"> <input onclick="APP.modules.search.checkCheckbox()" id="'+type+'authors" name="authors" value="'+type+'" type="checkbox"> <div class="ui blue horizontal label">'+type+'</div>'+count+'</label>')
-					}
-					}
+						}else{
+						$('#authors').append('<label title="'+longtype+'"  class="item" for="'+type+'authors"> <input onclick="APP.modules.search.checkCheckbox()" id="'+type+'authors" name="authors" value="'+type+'" type="checkbox"> <div class="ui blue horizontal label">'+type+'</div>'+count+'</label>')
+						}
 
 				}
 				keywords=data['aggregations']['keywords']['buckets'];
@@ -345,7 +340,7 @@ APP.modules.search = (function(){
 				 	facets=undefined;
 				 $.each(checked,function(index,value){
 				 	if (value.name=="sample_kind") {
-				 		var value = value.value;
+				 		var value = $(value).parent().attr('title');
 					 	 if (samplekind===undefined) {
 	                      samplekind='INTRO.SAMPLE_KIND.NAME:"'+value+'"';
 
@@ -364,7 +359,7 @@ APP.modules.search = (function(){
 				 	
                     if (value.name=="authors") {
 
-				 	var value = value.value.split(" ");;
+				 	var value = $(value).parent().attr('title').split(" ");;
                     if (authors===undefined) {
                       authors='INTRO.FILE_CREATOR.NAME:"'+value[0]+'" AND INTRO.FILE_CREATOR.FIRST_NAME:"'+value[1]+'"';
 
@@ -383,7 +378,7 @@ APP.modules.search = (function(){
 
 				if (value.name=="keywords") {
 
-				 	var value = value.value;
+				 	var value = $(value).parent().attr('title');
                     if (keywords===undefined) {
                       keywords='INTRO.KEYWORDS.NAME:"'+value+'"';
 
@@ -401,7 +396,7 @@ APP.modules.search = (function(){
 				 	}
                 if (value.name=="scientific_field") {
 
-				 	var value = value.value;
+				 	var value = $(value).parent().attr('title');
                     if (scientific_field===undefined) {
                       scientific_field='INTRO.SCIENTIFIC_FIELD.NAME:"'+value+'"';
 
@@ -419,7 +414,7 @@ APP.modules.search = (function(){
 				 	}
 				if (value.name=="language") {
 
-				 	var value = value.value;
+				 	var value = $(value).parent().attr('title');
                     if (language===undefined) {
                       language='INTRO.LANGUAGE:"'+value+'"';
 
@@ -438,7 +433,7 @@ APP.modules.search = (function(){
 
 				 	if (value.name=="filetype") {
 
-				 	var value = value.value;
+				 	var value = $(value).parent().attr('title');
                     if (filetype===undefined) {
                       filetype='DATA.FILES.FILETYPE:"'+value+'"';
 
@@ -620,23 +615,19 @@ APP.modules.mypublications = (function(){
 				}
 				$("#authors").append('<div class="header" >Authors</div>');
 				for (var k in authors){
-				
-					firstname=authors[k]['firstname']['buckets']
-					name=authors[k]['key']
-					for (var k in firstname){	
-					count=firstname[k]['doc_count']
-					type=name+" "+firstname[k]['key'];
+					type=authors[k]['key']
+					count=authors[k]['doc_count']
+					
+						longtype=type
+						if (type.length>=25) {
+							type=type.substring(0,25)+"...";
+						}
+						if (type=="" || type==" ") {
 
-					longtype=type
-					if (type.length>=25) {
-						type=type.substring(0,25)+"...";
+						}else{
+					$('#authors').append('<label title="'+longtype+'"  class="item" for="'+type+'authors"> <input onclick="APP.modules.mypublications.checkCheckbox()" id="'+type+'authors" name="authors" value="'+type+'" type="checkbox"> <div class="ui blue horizontal label">'+type+'</div>'+count+'</label>')
 					}
-					if (type=="" || type==" ") {
-
-					}else{
-					$('#authors').append('<label title="'+longtype+'"  class="item" for="'+type+'authors"> <input onclick="APP.modules.search.checkCheckbox()" id="'+type+'authors" name="authors" value="'+type+'" type="checkbox"> <div class="ui blue horizontal label">'+type+'</div>'+count+'</label>')
-					}
-					}
+					
 
 				}
 				keywords=data['aggregations']['keywords']['buckets'];
@@ -807,7 +798,7 @@ APP.modules.mypublications = (function(){
 
 				 	if (value.name=="sample_kind") {
 
-				 	var value = value.value;
+				 	var value = $(value).parent().attr('title');
                     if (samplekind===undefined) {
                       samplekind='INTRO.SAMPLE_KIND.NAME:"'+value+'"';
 
@@ -826,7 +817,8 @@ APP.modules.mypublications = (function(){
                    
                     if (value.name=="authors") {
 
-				 	var value = value.value.split(" ");;
+
+				 	var value = $(value).parent().attr('title').split(" ");;
                     if (authors===undefined) {
                       authors='INTRO.FILE_CREATOR.NAME:"'+value[0]+'" AND INTRO.FILE_CREATOR.FIRST_NAME:"'+value[1]+'"';
 
@@ -845,7 +837,7 @@ APP.modules.mypublications = (function(){
 
 				if (value.name=="keywords") {
 
-				 	var value = value.value;
+				 	var value = $(value).parent().attr('title');
                     if (keywords===undefined) {
                       keywords='INTRO.KEYWORDS.NAME:"'+value+'"';
 
@@ -862,8 +854,9 @@ APP.modules.mypublications = (function(){
                     }
 				 	}
                 if (value.name=="scientific_field") {
+                	
 
-				 	var value = value.value;
+				 	var value = $(value).parent().attr('title');
                     if (scientific_field===undefined) {
                       scientific_field='INTRO.SCIENTIFIC_FIELD.NAME:"'+value+'"';
 
@@ -881,7 +874,7 @@ APP.modules.mypublications = (function(){
 				 	}
 				if (value.name=="language") {
 
-				 	var value = value.value;
+				 	var value = $(value).parent().attr('title');
                     if (language===undefined) {
                       language='INTRO.LANGUAGE:"'+value+'"';
 
@@ -900,7 +893,7 @@ APP.modules.mypublications = (function(){
 
 				 	if (value.name=="filetype") {
 
-				 	var value = value.value;
+				 	var value = $(value).parent().attr('title');
                     if (filetype===undefined) {
                       filetype='DATA.FILES.FILETYPE:"'+value+'"';
 

@@ -1,35 +1,27 @@
-
 {% include 'head.html.twig' %}
 <div class="ui grid container">
-<div class="row"></div>
-<div class="row">
-<h1> Edit document </h1>
-	
-</div>
-	<div class="ui ten wide column centered">
-
-{% if error %}
-	<div class="ui warning message">
-  <div class="header">
-Warning!  </div>
-{{error}}</div>
-{%endif%}
-
-<form class="ui form" action="editrecord/{{doi}}" method="post" enctype="multipart/form-data" >
-
-{% include 'formdataset.html.twig' %}
-
- 
-</form>
-</div>
+   <div class="row"></div>
+   <div class="row">
+      <h1> Edit document </h1>
+   </div>
+   <div class="ui ten wide column centered">
+      {% if error %}
+      <div class="ui warning message">
+         <div class="header">
+            Warning!  
+         </div>
+         {{error}}
+      </div>
+      {%endif%}
+      <form class="ui form" action="editrecord?id={{doi}}" method="post" enctype="multipart/form-data" >
+         {% include 'formdataset.html.twig' %}
+      </form>
+   </div>
 </div>
 </div>
 <script type="text/javascript">
-	
-	APP.modules.upload.init();
-
-	
+   APP.modules.upload.init();
+   
+   
 </script>
-
-
 {% include 'footer.html.twig' %}

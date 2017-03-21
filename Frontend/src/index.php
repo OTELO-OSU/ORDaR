@@ -84,8 +84,8 @@ $app->get('/login', function (Request $req,Response $responseSlim) {
 	$twig = new Twig_Environment($loader);
 	echo $twig->render('login.html.twig');
 	$_SESSION['name'] = $_SERVER['HTTP_SN'];
-    $_SESSION['firstname'] = $_SERVER['HTTP_GIVENNAME'];
- 	$_SESSION['mail'] = $_SERVER['HTTP_MAIL'];
+	$_SESSION['firstname'] = $_SERVER['HTTP_GIVENNAME'];
+	$_SESSION['mail'] = $_SERVER['HTTP_MAIL'];
 	session_regenerate_id();
 
 	//if ($_SERVER['HTTP_REFERER']) {
@@ -269,11 +269,11 @@ $app->get('/editrecord', function (Request $req,Response $responseSlim) {
 }
 });
 
-$app->post('/editrecord/{doi}', function (Request $req,Response $responseSlim,$args) {
+$app->post('/editrecord', function (Request $req,Response $responseSlim) {
 	$loader = new Twig_Loader_Filesystem('search/templates');
 	$twig = new Twig_Environment($loader);
    	$Datasheet = new Datasheet();
-   	$doi  = $args['doi'];
+   	$doi = $req->getparam('id');
    	$request= new RequestApi();
 	$response=$request->get_info_for_dataset($doi);
 	$collection=$response['_type'];
@@ -283,7 +283,7 @@ $app->post('/editrecord/{doi}', function (Request $req,Response $responseSlim,$a
 	$return=$Datasheet->Editdatasheet($collection,$doi,$db,$array);
 	if (array_key_exists('error', $return)) {
 return @$twig->render('edit_dataset.html.twig', ['error'=>$return['error'],'name'=>$_SESSION['name'],'firstname'=>$_SESSION['firstname'],'mail'=>$_SESSION['mail'],
-	        'doi'=>$id,'title' => $response['_source']['INTRO']['TITLE'],'description'=>$response['_source']['INTRO']['DATA_DESCRIPTION'],'creation_date'=>$response['_source']['INTRO']['CREATION_DATE'],'sampling_dates'=>$response['_source']['INTRO']['SAMPLING_DATE'],'authors'=>$response['_source']['INTRO']['FILE_CREATOR'],'keywords'=>$response['_source']['INTRO']['KEYWORDS'],'sample_kinds'=>$response['_source']['INTRO']['SAMPLE_KIND'],'scientific_fields'=>$response['_source']['INTRO']['SCIENTIFIC_FIELD'],'institutions'=>$response['_source']['INTRO']['INSTITUTION'],'language'=>$response['_source']['INTRO']['LANGUAGE'],'sampling_points'=>$response['_source']['INTRO']['SAMPLING_POINT'],'measurements'=>$response['_source']['INTRO']['MEASUREMENT'],'license'=>$license,'publisher'=>$response['_source']['INTRO']['PUBLISHER'],'fundings'=>$response['_source']['INTRO']['FUNDINGS'],'accessright'=>$response['_source']['INTRO']['ACCESS_RIGHT'],'embargoed_date'=>$response['_source']['INTRO']['PUBLICATION_DATE']
+	        'doi'=>$doi,'title' => $response['_source']['INTRO']['TITLE'],'description'=>$response['_source']['INTRO']['DATA_DESCRIPTION'],'creation_date'=>$response['_source']['INTRO']['CREATION_DATE'],'sampling_dates'=>$response['_source']['INTRO']['SAMPLING_DATE'],'authors'=>$response['_source']['INTRO']['FILE_CREATOR'],'keywords'=>$response['_source']['INTRO']['KEYWORDS'],'sample_kinds'=>$response['_source']['INTRO']['SAMPLE_KIND'],'scientific_fields'=>$response['_source']['INTRO']['SCIENTIFIC_FIELD'],'institutions'=>$response['_source']['INTRO']['INSTITUTION'],'language'=>$response['_source']['INTRO']['LANGUAGE'],'sampling_points'=>$response['_source']['INTRO']['SAMPLING_POINT'],'measurements'=>$response['_source']['INTRO']['MEASUREMENT'],'license'=>$license,'publisher'=>$response['_source']['INTRO']['PUBLISHER'],'fundings'=>$response['_source']['INTRO']['FUNDINGS'],'accessright'=>$response['_source']['INTRO']['ACCESS_RIGHT'],'embargoed_date'=>$response['_source']['INTRO']['PUBLICATION_DATE']
 	    	]);	}
 	else{
 
