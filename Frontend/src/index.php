@@ -16,7 +16,7 @@ session_start();
 
 
 $app->get('/', function (Request $req,Response $responseSlim) {
-$_SESSION['HTTP_REFERER']=$_SERVER['HTTP_REFERER'];
+$_SESSION['HTTP_REFERER']=$_SERVER['REQUEST_URI'];
 $loader = new Twig_Loader_Filesystem('search/templates');
 $twig = new Twig_Environment($loader);
 if ($_SESSION) {
@@ -28,7 +28,7 @@ else{
 });
 
 $app->get('/accueil', function (Request $req,Response $responseSlim) {
-$_SESSION['HTTP_REFERER']=$_SERVER['HTTP_REFERER'];
+$_SESSION['HTTP_REFERER']=$_SERVER['REQUEST_URI'];
 $loader = new Twig_Loader_Filesystem('search/templates');
 $twig = new Twig_Environment($loader);
 if ($_SESSION) {
@@ -70,7 +70,7 @@ $app->post('/contact', function (Request $req,Response $responseSlim) {
 
 
 $app->get('/searchresult', function (Request $req,Response $responseSlim) {
-$_SESSION['HTTP_REFERER']=$_SERVER['HTTP_REFERER'];
+$_SESSION['HTTP_REFERER']=$_SERVER['REQUEST_URI'];
 $loader = new Twig_Loader_Filesystem('search/templates');
 $twig = new Twig_Environment($loader);
 $query=$req->getparam('query');
