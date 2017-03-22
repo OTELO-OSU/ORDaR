@@ -115,17 +115,7 @@ rendez vous dans le dossier précédemment télécharger , dans le dossier bin e
     username =
     password =
 
-**Dans votre fichier de configuration apache ajoutez :**
 
-     <Directory #CHEMIN PRECEDEMMENT CHOISI>
-           Options Indexes FollowSymLinks
-            AllowOverride None
-            Order allow,deny
-            Allow from 127.0.0.1
-            Require all granted
-        </Directory>
-
-    Alias /download  #CHEMIN PRECEDEMMENT CHOISI
 
 ** Parametrage du fichier de configuration de mongo_connector:**
 Il s'agit de l'user qui a les droits de backup.
