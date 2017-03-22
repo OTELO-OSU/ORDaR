@@ -1,4 +1,12 @@
-
+.field input{
+    margin-bottom: 10px!important;
+}
+.field .dropdown{
+    margin-bottom: 10px!important;
+}
+.accordion .button{
+    margin-bottom: 10px!important;
+}
 
 
 #facets{
