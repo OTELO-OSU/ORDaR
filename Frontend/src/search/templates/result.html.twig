@@ -1,54 +1,55 @@
-<div class="ui grid ">
-   <div class="row"></div>
-   <div class="facets four wide centered column  " id="facets">
+   <form method="get" action="searchresult">
+   <div class="ui grid ">
       <div class="row"></div>
-      <form method="get" action="searchresult">
-         <div class="ui  card  " >
-            <div class="content ui list" id="samplekind"></div>
-         </div>
-         <div class="ui  card " >
-            <div class="content ui list" id="authors"></div>
-         </div>
-         <div class="ui  card " >
-            <div class="content ui list" id="keywords"></div>
-         </div>
-         <div class="ui  card " >
-            <div class="content ui list" id="scientificfield"></div>
-         </div>
-         <div class="ui  card " >
-            <div class="content ui list" id="language"></div>
-         </div>
-         <div class="ui  card " >
-            <div class="content ui list" id="filetype"></div>
-         </div>
-         <div class="ui  card " >
-            <div class="content ui list" id="accesright"></div>
-         </div>
-         <div class="ui  card " >
-            <div class="content" id="date"></div>
-         </div>
-   </div>
+      <div class="facets four wide centered column  " id="facets">
+         <div class="row"></div>
+            <div class="ui  card  " >
+               <div class="content ui list" id="samplekind"></div>
+            </div>
+            <div class="ui  card " >
+               <div class="content ui list" id="authors"></div>
+            </div>
+            <div class="ui  card " >
+               <div class="content ui list" id="keywords"></div>
+            </div>
+            <div class="ui  card " >
+               <div class="content ui list" id="scientificfield"></div>
+            </div>
+            <div class="ui  card " >
+               <div class="content ui list" id="language"></div>
+            </div>
+            <div class="ui  card " >
+               <div class="content ui list" id="filetype"></div>
+            </div>
+            <div class="ui  card " >
+               <div class="content ui list" id="accesright"></div>
+            </div>
+            <div class="ui  card " >
+               <div class="content" id="date"></div>
+            </div>
+      </div>
    <div class="ten wide centered column">
-   <div id="gridlogo" class="ui centered grid">
-   <div class="row"></div>
-   <div class="row"></div>
-   <div class="row"></div>
-   <div class="row"></div>
-   <div class="row"></div>
-   <div class="row"></div>
-   <img id="logosearch" class="ui image"  src="/img/ordar.png">
-   <div class="row"></div>
-   <div class="ui sixteen wide column search" id="search">
-   <div class="ui icon fluid  input">
-   <input class="prompt" value="{{query}}" type="text" id="query" name="query" placeholder="Search a term">
-   <button class="ui button primary" id="search" >Search</button>
-   </div>
-   </div>
-   <div class="row"></div>
-   </div>
-   <div class="ui message" id="info-noresult" ></div>
-   <div class="ui message" id="info" ></div>
-   </form>
+         <div id="gridlogo" class="ui centered grid">
+         <div class="row"></div>
+         <div class="row"></div>
+         <div class="row"></div>
+         <div class="row"></div>
+         <div class="row"></div>
+         <div class="row"></div>
+         <img id="logosearch" class="ui image" alt="logoOrdar" src="/img/ordar.png">
+         <div class="row"></div>
+         <div class="ui sixteen wide column search" >
+         <div class="ui icon fluid  input">
+         <input class="prompt" value="{{query}}" type="text" id="query" name="query" placeholder="Search a term">
+         <button class="ui button primary"  >Search</button>
+         </div>
+         </div>
+         <div class="row"></div>
+         </div>
+         <div class="ui message" id="info-noresult" ></div>
+         <div class="ui message" id="info" ></div>
    <div id="results" class="ui divided items"></div>
    </div>
-</div>
+   </div>
+   </form>
+   

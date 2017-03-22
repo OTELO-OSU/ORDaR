@@ -36,11 +36,11 @@
             </select>
             {% endif %}
          </div>
-         <div class="required field">
+         <div class="required field" id="authors">
             <label>Authors</label>
             {% if authors %}
             {% for author in authors %}
-            <div class="required field" id="items">
+            <div class=" field" >
                <div class="three fields">
                   <div class="field"><label>Author firstname</label><input type="text" value="{{author.FIRST_NAME}}" data-validate="authors_firstname" name="authors_firstname[]" placeholder="First Name"  ></div>
                   <div class="field"><label>Author name</label><input type="text" value="{{author.NAME}}" data-validate="authors_name" name="authors_name[]" placeholder="Family Name, Given names"  ></div>
@@ -50,7 +50,7 @@
             </div>
             {% endfor %}
             {%else%}
-            <div class="required field" id="items">
+            <div class=" field" >
                <div class="three fields">
                   <div class="field"><label>Author firstname</label><input type="text" value="{{firstname}}"  name="authors_firstname[]" data-validate="authors_firstname" placeholder="First Name" readonly ></div>
                   <div class="field"><label>Author name</label><input type="text" value="{{name}}"  name="authors_name[]" data-validate="authors_name" placeholder="Family Name, Given names" readonly></div>
@@ -58,10 +58,10 @@
                </div>
             </div>
             {%endif%}
+         </div>
             <div class="ui primary right floated button" id="addauthors">
                <i class="plus icon"></i> Add a new author
             </div>
-         </div>
          <div class=" field">
             <label>Keywords</label>
             <div class=" field" id="keywords">
@@ -81,9 +81,9 @@
             <label>Description</label>
             <textarea name="description" >{{description}}</textarea>
          </div>
-         <div class="required field">
+         <div class="required field " >
             <label>Publisher</label>
-            <div class=" field" id="institution">
+            <div class=" field" >
                <div class="ui input">
                   <div class="ui dropdown fluid search selection  optgroup publisher">
                      {%if publisher%}
@@ -235,15 +235,15 @@
                {% endfor %}
                {%else%}
                <div><input type="text" name="fundings[]"  value="{{funding.NAME}}" placeholder="Funding"> </div>
-            </div>
             {% endif %}
+            </div>
             <div class="ui primary right floated  button"  id="addfundings">
                <i class="plus icon"></i> Add a new funding
             </div>
          </div>
-         <div class="required field">
+         <div class="required field institution">
             <label>Institutions</label>
-            <div class=" field" id="institution">
+            <div class=" field" >
                {% if institutions %}
                {% for institution in institutions %}
                <div  class="ui input">
@@ -486,12 +486,12 @@
             <i class="dropdown icon"></i>
             <div class="default text"  > Select a license</div>
             <div class="menu">
-               <div class="item" data-value="1"> <img class='ui image' src='img/license/ccby.png'>Creative commons Attribution alone </div>
-               <div class="item" data-value="2"><img class='ui image' src='img/license/ccby-sa.png' >Creative commons Attribution + ShareAlike </div>
-               <div class="item" data-value="3"><img class='ui  image' src='img/license/ccby-nc.png' >Creative commons Attribution + Noncommercial </div>
-               <div class="item" data-value="4"><img class='ui image' src='img/license/ccby-nd.png'>Creative commons Attribution + NoDerivatives </div>
-               <div class="item" data-value="5"><img class='ui image' src='img/license/ccby-nc-sa.png' >Creative commons Attribution + Noncommercial + ShareAlike </div>
-               <div class="item" data-value="6"><img class='ui image' src='img/license/ccby-nc-nd.png'>Creative commons Attribution + Noncommercial + NoDerivatives </div>
+               <div class="item" data-value="1"> <img class='ui image' alt="ccby" src='img/license/ccby.png'>Creative commons Attribution alone </div>
+               <div class="item" data-value="2"><img class='ui image' alt="ccby-sa" src='img/license/ccby-sa.png' >Creative commons Attribution + ShareAlike </div>
+               <div class="item" data-value="3"><img class='ui  image' alt="ccby-nc" src='img/license/ccby-nc.png' >Creative commons Attribution + Noncommercial </div>
+               <div class="item" data-value="4"><img class='ui image' alt="ccby-nd" src='img/license/ccby-nd.png'>Creative commons Attribution + NoDerivatives </div>
+               <div class="item" data-value="5"><img class='ui image' alt="ccby-nc-sa" src='img/license/ccby-nc-sa.png' >Creative commons Attribution + Noncommercial + ShareAlike </div>
+               <div class="item" data-value="6"><img class='ui image' alt="ccby-nc-nd" src='img/license/ccby-nc-nd.png'>Creative commons Attribution + Noncommercial + NoDerivatives </div>
             </div>
          </div>
          <h5>Click <a href="https://creativecommons.org/licenses/?lang=en" target="_blank">here</a> to view more about license.</h5>
@@ -554,10 +554,5 @@
    </div>
 </div>
 
-</div>
-<div class="ui error message"></div>
-<div class="row"></div>
-<button class="ui submit button" >Submit</button>
-<div class="row"></div>
 </div>
 </div>

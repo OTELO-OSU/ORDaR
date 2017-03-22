@@ -393,7 +393,6 @@ class DatasheetController
         } else {
             $config        = parse_ini_file("config.ini");
             $UPLOAD_FOLDER = $config["UPLOAD_FOLDER"];
-            //$this->db = new MongoClient("mongodb://localhost:27017");
             $doi           = rand(5, 15000);
             for ($i = 0; $i < count($_FILES['file']['name']); $i++) {
                 $repertoireDestination         = $UPLOAD_FOLDER;

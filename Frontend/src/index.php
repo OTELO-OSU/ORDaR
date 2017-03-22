@@ -86,6 +86,8 @@ $app->get('/login', function (Request $req,Response $responseSlim) {
 	$_SESSION['name'] = $_SERVER['HTTP_SN'];
 	$_SESSION['firstname'] = $_SERVER['HTTP_GIVENNAME'];
 	$_SESSION['mail'] = $_SERVER['HTTP_MAIL'];
+	
+
 	session_regenerate_id();
 
 	//if ($_SERVER['HTTP_REFERER']) {

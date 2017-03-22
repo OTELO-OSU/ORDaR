@@ -3,43 +3,44 @@
    <div class="row"></div>
    <h1> List of my dataset  </h1>
 </div>
-<div class="ui grid container">
-   <div class="row"></div>
-   <div class="facets " id="facets">
-      <form method="get" action="searchresult">
+<form method="get" action="searchresult">
+   <div class="ui grid container">
       <div class="row"></div>
-      <div class="ui  card  " >
-         <div class="content ui list" id="samplekind"></div>
+      <div class="facets " id="facets">
+         <div class="row"></div>
+         <div class="ui  card  " >
+            <div class="content ui list" id="samplekind"></div>
+         </div>
+         <div class="ui  card " >
+            <div class="content ui list" id="authors"></div>
+         </div>
+         <div class="ui  card " >
+            <div class="content ui list" id="keywords"></div>
+         </div>
+         <div class="ui  card " >
+            <div class="content ui list" id="scientificfield"></div>
+         </div>
+         <div class="ui  card " >
+            <div class="content ui list" id="language"></div>
+         </div>
+         <div class="ui  card " >
+            <div class="content ui list" id="filetype"></div>
+         </div>
+         <div class="ui  card " >
+            <div class="content ui list" id="accesright"></div>
+         </div>
+         <div class="ui  card " >
+            <div class="content" id="date"></div>
+         </div>
+         <div class="row"></div>
       </div>
-      <div class="ui  card " >
-         <div class="content ui list" id="authors"></div>
+      <div class="ten wide centered column">
+         <div class="ui message" id="info" ></div>
+         <div id="results" class="ui divided items"></div>
       </div>
-      <div class="ui  card " >
-         <div class="content ui list" id="keywords"></div>
-      </div>
-      <div class="ui  card " >
-         <div class="content ui list" id="scientificfield"></div>
-      </div>
-      <div class="ui  card " >
-         <div class="content ui list" id="language"></div>
-      </div>
-      <div class="ui  card " >
-         <div class="content ui list" id="filetype"></div>
-      </div>
-      <div class="ui  card " >
-         <div class="content ui list" id="accesright"></div>
-      </div>
-      <div class="ui  card " >
-         <div class="content" id="date"></div>
-      </div>
-      <div class="row"></div>
    </div>
-   <div class="ten wide centered column">
-      <div class="ui message" id="info" ></div>
-      <div id="results" class="ui divided items"></div>
-   </div>
-</div>
-{% include 'footer.html.twig' %}
+   </form>
 <script type="text/javascript">
    APP.modules.mypublications.init();
 </script>
+{% include 'footer.html.twig' %}
