@@ -284,6 +284,25 @@ $app->post('/editrecord', function (Request $req,Response $responseSlim) {
 	$array=$Datasheet->Postprocessing($_POST);
 	$return=$Datasheet->Editdatasheet($collection,$doi,$db,$array);
 	if (array_key_exists('error', $return)) {
+		$value=$response['_source']['INTRO']['LICENSE'];
+			if ($value=="Creative commons Attribution alone") {
+		 		$license=1;
+		 	}
+		 	elseif ($value=="Creative commons Attribution + ShareAlike") {
+		 		$license=2;
+		 	}
+		 	elseif ($value=="Creative commons Attribution + Noncommercial") {
+		 		$license=3;
+		 	}
+		 	elseif ($value=="Creative commons Attribution + NoDerivatives") {
+		 		$license=4;
+		 	}
+		 	elseif ($value=="Creative commons Attribution + Noncommercial + ShareAlike") {
+		 		$license=5;
+		 	}
+		 	elseif ($value=="Creative commons Attribution + Noncommercial + NoDerivatives") {
+		 		$license=6;
+		 	}
 return @$twig->render('edit_dataset.html.twig', ['error'=>$return['error'],'name'=>$_SESSION['name'],'firstname'=>$_SESSION['firstname'],'mail'=>$_SESSION['mail'],
 	        'doi'=>$doi,'title' => $response['_source']['INTRO']['TITLE'],'description'=>$response['_source']['INTRO']['DATA_DESCRIPTION'],'creation_date'=>$response['_source']['INTRO']['CREATION_DATE'],'sampling_dates'=>$response['_source']['INTRO']['SAMPLING_DATE'],'authors'=>$response['_source']['INTRO']['FILE_CREATOR'],'keywords'=>$response['_source']['INTRO']['KEYWORDS'],'sample_kinds'=>$response['_source']['INTRO']['SAMPLE_KIND'],'scientific_fields'=>$response['_source']['INTRO']['SCIENTIFIC_FIELD'],'institutions'=>$response['_source']['INTRO']['INSTITUTION'],'language'=>$response['_source']['INTRO']['LANGUAGE'],'sampling_points'=>$response['_source']['INTRO']['SAMPLING_POINT'],'measurements'=>$response['_source']['INTRO']['MEASUREMENT'],'license'=>$license,'publisher'=>$response['_source']['INTRO']['PUBLISHER'],'fundings'=>$response['_source']['INTRO']['FUNDINGS'],'accessright'=>$response['_source']['INTRO']['ACCESS_RIGHT'],'embargoed_date'=>$response['_source']['INTRO']['PUBLICATION_DATE']
 	    	]);	}
