@@ -530,23 +530,28 @@
                   </div>
                </div>
                <div class="field">
-                  <div class="ui radio checkbox">
                      {% if accessright == "Embargoed" %}
+                  <div class="ui radio checkbox">
                      <input type="radio" onclick="APP.modules.upload.checkformbutton()" name="access_right" id="embargoed" value="Embargoed" checked>
-                     <label>Embargoed</label>
+                     <label>Embargoed <i class="ban icon"></i></label>
                   </div>
                   <div class="field" id="date_end"  >
                      <label>Embargo date</label>
-                     <input type="text" class="date" name="publication_date" value="{{embargoed_date}}" placeholder="Publication date">
+                     <input type="text" class="date" name="publication_date" value="{{embargoed_date}}" placeholder="Publication date" >
+                     <script type="text/javascript">
+                        APP.modules.upload.checkformbutton()
+                     </script>
                   </div>
                   {%else%}
+                  <div class="ui radio checkbox">
                   <input type="radio" onclick="APP.modules.upload.checkformbutton()" name="access_right" id="embargoed" value="Embargoed">
                   <label>Embargoed <i class="ban icon"></i></label>
-                  {%endif%}
-               </div>
+                  </div>
                <div class="field" id="date_end" >
                   <label>Embargo date</label>
                   <input type="text" class="date" name="publication_date"  placeholder="Publication date">
+               </div>
+                  {%endif%}
                </div>
             </div>
          </div>
@@ -554,5 +559,4 @@
    </div>
 </div>
 
-</div>
 </div>

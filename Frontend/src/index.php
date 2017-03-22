@@ -241,7 +241,7 @@ $app->get('/editrecord', function (Request $req,Response $responseSlim) {
 			
 		
 			$value=$response['_source']['INTRO']['LICENSE'];
-			if ($value=="Attribution alone (CC BY)") {
+			if ($value=="Creative commons Attribution alone") {
 		 		$license=1;
 		 	}
 		 	elseif ($value=="Creative commons Attribution + ShareAlike") {
