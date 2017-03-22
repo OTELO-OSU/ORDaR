@@ -86,17 +86,15 @@ $app->get('/login', function (Request $req,Response $responseSlim) {
 	$_SESSION['name'] = $_SERVER['HTTP_SN'];
 	$_SESSION['firstname'] = $_SERVER['HTTP_GIVENNAME'];
 	$_SESSION['mail'] = $_SERVER['HTTP_MAIL'];
-	
-	
-
+	$_SESSION['HTTP_REFERER']=$_SERVER['HTTP_REFERER'];
 	session_regenerate_id();
 
-	//if ($_SERVER['HTTP_REFERER']) {
-	//return $responseSlim->withRedirect($_SERVER['HTTP_REFERER']);
-	//}	
-	//else{
+	if ($_SESSION['HTTP_REFERER']) {
+	return $responseSlim->withRedirect($_SESSION['HTTP_REFERER']);
+	}	
+	else{
 		return $responseSlim->withRedirect('accueil');
-	//}
+	}
 
 });
 
