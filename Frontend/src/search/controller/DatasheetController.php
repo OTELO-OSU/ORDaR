@@ -1,6 +1,8 @@
 <?php
 
 namespace search\controller;
+use \search\controller\RequestController as RequestApi;
+
 
 
 use MongoClient;
@@ -27,16 +29,56 @@ class DatasheetController
         }
         return $this->db;
     }
+
+
+function generateDOI(){
+        $config = parse_ini_file("config.ini");
+        $dbdoi = new MongoClient("mongodb://" . $config['host'] . ':' . $config['port'], array(
+                'authSource' => "DOI",
+                'username' => "user",
+                'password' => "user"
+            ));
+        $collection = $dbdoi->selectCollection("DOI", "DOI");
+        $query=array('STATE' => 'UNLOCKED');
+        $cursor = $collection->find($query);
+        foreach ($cursor as $key => $value) {
+                $update = $collection->update(array("_id" => $value['_id']), array('$set' => array("STATE" => "LOCKED")));
+                $DOI=$value['ID'];
+                $NewDOI=++$DOI;
+                $update = $collection->update(array("_id" => $value['_id']), array('$set' => array("ID" => $NewDOI))); 
+                $update = $collection->update(array("_id" => $value['_id']), array('$set' => array("STATE" => "UNLOCKED")));
+
+        }
+        return $NewDOI;
+}
+
+
     /**
      * Parse Post Data 
      * @param array, post request
      * @return array, parsed data to write
      */
-    function Postprocessing($POST)
+    function Postprocessing($POST,$method,$doi)
     {
+        $config             = parse_ini_file("config.ini");
+        $sxe = new \SimpleXMLElement("<resource/>");
+        $sxe->addAttribute('xmlns:xmlns:xsi', 'http://www.w3.org/2001/XMLSchema-instance');
+        $sxe->addAttribute('xmlns', 'http://datacite.org/schema/kernel-4');
+        $sxe->addAttribute('xsi:xsi:schemaLocation', 'http://datacite.org/schema/kernel-4 http://schema.datacite.org/meta/kernel-4/metadata.xsd');
+      
+        $creators = $sxe->addChild('creators');
+        $publicationYear = $sxe->addChild('publicationYear',date('Y'));
+        $subjects = $sxe->addChild('subjects');
+        $titles = $sxe->addChild('titles');
+        $RessourceType = $sxe->addChild('resourceType','Dataset');
+        $RessourceType->addAttribute('resourceTypeGeneral', 'Dataset');
+        $Version = $sxe->addChild('version','1');
+        $descriptions = $sxe->addChild('descriptions');
+
+
+
         $error              = null;
         $author_displayname = null;
-        $config             = parse_ini_file("config.ini");
         $UPLOAD_FOLDER      = $config["UPLOAD_FOLDER"];
         $required           = array(
             'title',
@@ -59,13 +101,13 @@ class DatasheetController
                 $error = "Warning there are empty fields: " . $field;
             }
         }
-        
         foreach ($POST as $key => $value) {
             if ($key == "creation_date") {
                 $array["CREATION_DATE"] = htmlspecialchars($value, ENT_QUOTES);
             }
             if ($key == "title") {
                 $array["TITLE"] = htmlspecialchars($value, ENT_QUOTES);
+                $title = $titles->addChild('title',htmlspecialchars($value, ENT_QUOTES));
             }
             if ($key == "language") {
                 if ($value == '0') {
@@ -75,6 +117,7 @@ class DatasheetController
                     $language = "ENGLISH";
                 }
                 $array["LANGUAGE"] = $language;
+                $sxe->addChild('language',$language);
             }
             if ($key == "sampling_date") {
                 if (!count($value == 0)) {
@@ -90,14 +133,20 @@ class DatasheetController
             }
             if ($key == "description") {
                 $array["DATA_DESCRIPTION"] = htmlspecialchars($value, ENT_QUOTES);
+                $description=$descriptions->addChild('description', htmlspecialchars($value, ENT_QUOTES));
+                $description->addAttribute('descriptionType', 'Abstract');
+
+
             }
             if ($key == "scientific_field") {
                 if (count($value) > 1) {
                     foreach ($value as $key => $value) {
                         $array["SCIENTIFIC_FIELD"][$key]["NAME"] = htmlspecialchars($value, ENT_QUOTES);
+                        $subjects->addChild('subject',htmlspecialchars($value, ENT_QUOTES));
                     }
                 } else {
                     $array["SCIENTIFIC_FIELD"][0]["NAME"] = htmlspecialchars($value[0], ENT_QUOTES);
+                    $subjects->addChild('subject',htmlspecialchars($value[0], ENT_QUOTES));
                 }
             }
             if ($key == "sampling_point_name") {
@@ -228,6 +277,7 @@ class DatasheetController
             }
             if ($key == "publisher") {
                 $array["PUBLISHER"] = htmlspecialchars($value, ENT_QUOTES);
+                $publisher = $sxe->addChild('publisher',htmlspecialchars($value, ENT_QUOTES));
             }
             if ($key == "sample_kind") {
                 if (count($value) > 1) {
@@ -268,16 +318,22 @@ class DatasheetController
                     $author_firstname                       = htmlspecialchars($value[0], ENT_QUOTES);
                 }
             }
+
+
             if ($key == "authors_name") {
                 if (count($value) > 1) {
                     foreach ($value as $keys => $value) {
                         $array["FILE_CREATOR"][$keys]["NAME"] = htmlspecialchars($value, ENT_QUOTES);
                         $author_displayname[]                 = htmlspecialchars($value, ENT_QUOTES) . " " . $author_firstname[$keys];
+                        $creator= $creators->addChild('creator');
+                        $creator->addChild('creatorName', htmlspecialchars($value, ENT_QUOTES) . " " . $author_firstname[$keys]);
                         
                     }
                 } else {
                     $array["FILE_CREATOR"][0]["NAME"] = htmlspecialchars($value[0], ENT_QUOTES);
                     $author_displayname               = htmlspecialchars($value[0], ENT_QUOTES) . " " . $author_firstname;
+                    $creator= $creators->addChild('creator');
+                    $creator->addChild('creatorName',htmlspecialchars($value[0], ENT_QUOTES) . " " . $author_firstname);
                 }
                 if ($author_displayname) {
                     if (is_array($author_displayname)) {
@@ -376,11 +432,26 @@ class DatasheetController
                 
             }
         }
+
+
         if (!$error == NULL) {
             $array['dataform'] = $array;
             $array['error']    = $error;
             return $array;
         } else {
+            if ($method=="Edit") {
+                $doi=$doi;
+            }
+            else{ 
+                $doi=$config["DOI_PREFIX"]."/"."ORDAR-".self::generateDOI();
+                $identifier = $sxe->addChild('identifier',$doi);
+                $identifier->addAttribute('identifierType', 'DOI');
+            }
+            
+            $array['dataform'] = $array;
+            $array['xml']=$sxe;
+            var_dump($sxe);
+            $array['doi'] = $doi;
             return $array;
         }
     }
@@ -393,14 +464,14 @@ class DatasheetController
         } else {
             $config        = parse_ini_file("config.ini");
             $UPLOAD_FOLDER = $config["UPLOAD_FOLDER"];
-            $doi           = rand(5, 15000);
+            $doi=$array['doi'];
             for ($i = 0; $i < count($_FILES['file']['name']); $i++) {
                 $repertoireDestination         = $UPLOAD_FOLDER;
                 $nomDestination                = str_replace(' ', '_', $_FILES["file"]["name"][$i]);
                 $data["FILES"][$i]["DATA_URL"] = $nomDestination;
                 if (file_exists($repertoireDestination . $_FILES["file"]["name"][$i])) {
                     $returnarray[] = "false";
-                    $returnarray[] = $array;
+                    $returnarray[] = $array['dataform'];
                     return $returnarray;
                 } else {
                     if (is_uploaded_file($_FILES["file"]["tmp_name"][$i])) {
@@ -418,15 +489,17 @@ class DatasheetController
                             $collectionObject              = $this->db->selectCollection($config["authSource"], $collection);
                             $json                          = array(
                                 '_id' => $doi,
-                                "INTRO" => $array,
+                                "INTRO" => $array['dataform'],
                                 "DATA" => $data
-                            ); //voir pour DOI
+                            ); 
                         }
                     }
                 }
             }
             
             $collectionObject->insert($json);
+            $Request = new RequestApi();
+            $Request->send_XML_to_datacite($array['xml']->asXML(),$doi);
             return "true";
         }
     }
@@ -444,20 +517,23 @@ class DatasheetController
         } else {
             //$this->db = new MongoClient("mongodb://localhost:27017");
             $collectionObject = $this->db->selectCollection($config["authSource"], $collection);
-            if (is_numeric($doi) == true) {
+            if (strstr($doi, 'ORDAR')!==FALSE) {
                 $doi = $doi;
-                
-                // Quand les vrai DOI seront implanté il faudra modifier ici
-                
                 $collectionObject->update(array(
-                    '_id' => new \MongoInt32($doi)
+                    '_id' => $doi
                 ), array(
                     '$set' => array(
-                        "INTRO" => $array
+                        "INTRO" => $array['dataform']
                     )
                 ));
+            $Request = new RequestApi();
+            $xml=$array['xml'];
+            $identifier = $xml->addChild('identifier',$doi);
+            $identifier->addAttribute('identifierType', 'DOI');
+            $Request->send_XML_to_datacite($xml->asXML(),$doi);
             } else {
-                $newdoi = rand(5, 15000);
+                $newdoi = "ORDAR-".self::generateDOI();
+                var_dump($newdoi);
                 mkdir($UPLOAD_FOLDER . $newdoi, 0777, true);
                 $query  = array(
                     '_id' => $doi
@@ -475,7 +551,7 @@ class DatasheetController
                     '_id' => $doi
                 ), array(
                     '$set' => array(
-                        "INTRO" => $array
+                        "INTRO" => $array['dataform']
                     )
                 ));
                 $olddata = $collectionObject->find(array(
@@ -490,10 +566,16 @@ class DatasheetController
                     '_id' => $doi
                 ));
                 $collectionObject->insert(array(
-                    '_id' => $newdoi,
+                    '_id' => $config["DOI_PREFIX"]."/".$newdoi,
                     "INTRO" => $INTRO,
                     "DATA" => $DATA
                 ));
+            $Request = new RequestApi();
+            $xml=$array['xml'];
+            $identifier = $xml->addChild('identifier',$config["DOI_PREFIX"]."/".$newdoi);
+            $identifier->addAttribute('identifierType', 'DOI');
+            $Request->send_XML_to_datacite($xml->asXML(),$doi);
+            
             }
             return "true";
         }

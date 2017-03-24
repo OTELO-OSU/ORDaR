@@ -11,6 +11,7 @@ Class FileController
     {
         $config     = parse_ini_file("config.ini");
         $UPLOAD_FOLDER = $config["UPLOAD_FOLDER"];
+        $doi=str_replace($config["UPLOAD_FOLDER"],"", $doi);
         if (isset($response['_source']['DATA'])) {
             $file = $UPLOAD_FOLDER. $doi . "/" . $filename;
             header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
@@ -32,6 +33,7 @@ Class FileController
     {
         $config     = parse_ini_file("config.ini");
         $UPLOAD_FOLDER = $config["UPLOAD_FOLDER"];
+        $doi=str_replace($config["UPLOAD_FOLDER"],"", $doi);
         if (isset($response['_source']['DATA'])) {
             $file = $UPLOAD_FOLDER. $doi . "/" . $filename;
             header("Cache-Control: must-revalidate, post-check=0, pre-check=0");

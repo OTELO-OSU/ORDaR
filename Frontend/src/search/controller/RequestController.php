@@ -96,6 +96,59 @@ class RequestController
         return $responses;
         
     }
+
+
+    function send_XML_to_datacite($XML,$doi){
+    	$config        = parse_ini_file("config.ini");
+    	$url= "https://mds.datacite.org/metadata/";
+        $curlopt                = array(
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => "",
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 10,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => "POST",
+            CURLOPT_POSTFIELDS => $XML,
+            CURLOPT_HTTPHEADER => array(
+   			"authorization: Basic SU5JU1QuT1RFTE86MFTigqxsb0BkMCE=",
+   			'Content-Type: text/xml'
+   			),
+        );
+
+        $ch      = curl_init();
+        $curlopt = array(
+            CURLOPT_URL => $url
+        ) + $curlopt;
+        curl_setopt_array($ch, $curlopt);
+        $rawData = curl_exec($ch);
+        $info = curl_getinfo($ch);
+        curl_close($ch);
+        if ($info['http_code']=="201") {
+        	$url_doi=urlencode($config['URL_DOI']."/record?id=".$doi);
+        	$curl = curl_init();
+
+			curl_setopt_array($curl, array(
+			  CURLOPT_URL => "https://mds.datacite.org/doi",
+			  CURLOPT_RETURNTRANSFER => true,
+			  CURLOPT_ENCODING => "",
+			  CURLOPT_MAXREDIRS => 10,
+			  CURLOPT_TIMEOUT => 30,
+			  CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+			  CURLOPT_CUSTOMREQUEST => "POST",
+			  CURLOPT_POSTFIELDS => "doi=".$doi."&url=".$url_doi,
+			  CURLOPT_HTTPHEADER => array(
+			    "authorization: Basic SU5JU1QuT1RFTE86MFTigqxsb0BkMCE=",
+			    "cache-control: no-cache",
+			  ),
+			));
+
+		$response = curl_exec($curl);
+        };
+        
+
+
+    }
+
     
     
     function getPublicationsofUser($author_mail, $authors_name, $query)
@@ -182,7 +235,7 @@ class RequestController
     
     function get_info_for_dataset($id)
     {
-        $url      = 'http://localhost/ordar/_all/' . $id;
+        $url      = 'http://localhost/ordar/_all/' . urlencode($id);
         $curlopt  = array(
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_PORT => 9200,

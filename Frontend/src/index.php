@@ -86,9 +86,12 @@ $app->get('/login', function (Request $req,Response $responseSlim) {
 	$loader = new Twig_Loader_Filesystem('search/templates');
 	$twig = new Twig_Environment($loader);
 	echo $twig->render('login.html.twig');
-	$_SESSION['name'] = $_SERVER['HTTP_SN'];
-	$_SESSION['firstname'] = $_SERVER['HTTP_GIVENNAME'];
-	$_SESSION['mail'] = $_SERVER['HTTP_MAIL'];
+	//$_SESSION['name'] = $_SERVER['HTTP_SN'];
+	//$_SESSION['firstname'] = $_SERVER['HTTP_GIVENNAME'];
+	//$_SESSION['mail'] = $_SERVER['HTTP_MAIL'];
+	$_SESSION['name'] = "guiot";
+	$_SESSION['firstname'] ="antoh";
+	$_SESSION['mail'] = "test@gt.gf";
 	session_regenerate_id();
 
 	if ($_SESSION['HTTP_REFERER']) {
@@ -136,7 +139,7 @@ $app->post('/upload', function (Request $req,Response $responseSlim) {
 	$twig = new Twig_Environment($loader);
    	$Datasheet = new Datasheet();
    	$db=$Datasheet->connect_tomongo();
-	$array=$Datasheet->Postprocessing($_POST);
+	$array=$Datasheet->Postprocessing($_POST,"Upload",$doi);
 	$response=$Datasheet->Newdatasheet($db,$array);
 	
 	if (array_key_exists('error', $response)) {
@@ -282,7 +285,7 @@ $app->post('/editrecord', function (Request $req,Response $responseSlim) {
 	$collection=$response['_type'];
 	$doi= $response['_id'];
 	$db=$Datasheet->connect_tomongo();
-	$array=$Datasheet->Postprocessing($_POST);
+	$array=$Datasheet->Postprocessing($_POST,"Edit",$doi);
 	$return=$Datasheet->Editdatasheet($collection,$doi,$db,$array);
 	if (array_key_exists('error', $return)) {
 		$value=$response['_source']['INTRO']['LICENSE'];
@@ -337,11 +340,12 @@ $app->get('/remove/{doi}', function (Request $req,Response $responseSlim,$args) 
 
 
 
-$app->get('/files/{doi}/{filename}', function (Request $req,Response $responseSlim,$args) {
+$app->get('/files/{prefix}/{doi}/{filename}', function (Request $req,Response $responseSlim,$args) {
 	$request= new RequestApi();
    	$doi  = $args['doi'];
+   	$fulldoi=$args['prefix']."/".$args['doi'];
    	$filename  = $args['filename'];
-	$response=$request->get_info_for_dataset($doi);
+	$response=$request->get_info_for_dataset($fulldoi);
 	$File = new File();
 	$download=$File->download($doi,$filename,$response);
 	if ($download==NULL OR $download==false) {
@@ -350,11 +354,12 @@ $app->get('/files/{doi}/{filename}', function (Request $req,Response $responseSl
 
 });
 
-$app->get('/preview/{doi}/{filename}', function (Request $req,Response $responseSlim,$args) {
+$app->get('/preview/{prefix}/{doi}/{filename}', function (Request $req,Response $responseSlim,$args) {
 	$request= new RequestApi();
    	$doi  = $args['doi'];
+   	$fulldoi=$args['prefix']."/".$args['doi'];
    	$filename  = $args['filename'];
-	$response=$request->get_info_for_dataset($doi);
+	$response=$request->get_info_for_dataset($fulldoi);
 	$File = new File();
 	$download=$File->preview($doi,$filename,$response);
 	if ($download==NULL OR $download==false) {
