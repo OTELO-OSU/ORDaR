@@ -41,15 +41,19 @@ function generateDOI(){
         $collection = $dbdoi->selectCollection("DOI", "DOI");
         $query=array('STATE' => 'UNLOCKED');
         $cursor = $collection->find($query);
-        foreach ($cursor as $key => $value) {
-                $update = $collection->update(array("_id" => $value['_id']), array('$set' => array("STATE" => "LOCKED")));
-                $DOI=$value['ID'];
-                $NewDOI=++$DOI;
-                $update = $collection->update(array("_id" => $value['_id']), array('$set' => array("ID" => $NewDOI))); 
-                $update = $collection->update(array("_id" => $value['_id']), array('$set' => array("STATE" => "UNLOCKED")));
-
+        if ($cursor->count>=0) {
+            foreach ($cursor as $key => $value) {
+                    $update = $collection->update(array("_id" => $value['_id']), array('$set' => array("STATE" => "LOCKED")));
+                    $DOI=$value['ID'];
+                    $NewDOI=++$DOI;
+                    $update = $collection->update(array("_id" => $value['_id']), array('$set' => array("ID" => $NewDOI))); 
+                    $update = $collection->update(array("_id" => $value['_id']), array('$set' => array("STATE" => "UNLOCKED")));
+            }
+            return $NewDOI;
         }
-        return $NewDOI;
+        else{
+            return false;
+        }
 }
 
 
@@ -441,18 +445,29 @@ function generateDOI(){
         } else {
             if ($method=="Edit") {
                 $doi=$doi;
+                $array['dataform'] = $array;
+                $array['xml']=$sxe;
+                $array['doi'] = $doi;
+                return $array;
             }
             else{ 
-                $doi=$config["DOI_PREFIX"]."/"."ORDAR-".self::generateDOI();
-                $identifier = $sxe->addChild('identifier',$doi);
-                $identifier->addAttribute('identifierType', 'DOI');
+                $newdoi=self::generateDOI();
+                if ($newdoi!=false) {
+                    $doi=$config["DOI_PREFIX"]."/"."ORDAR-".$newdoi;
+                    $identifier = $sxe->addChild('identifier',$doi);
+                    $identifier->addAttribute('identifierType', 'DOI');
+                    $array['dataform'] = $array;
+                    $array['xml']=$sxe;
+                    $array['doi'] = $doi;
+                    return $array;
+                }
+                else{
+                    $array['dataform'] = $array;
+                    $array['error']    = "Fail to generate DOI please try again!";
+                    return $array;
+                }
             }
             
-            $array['dataform'] = $array;
-            $array['xml']=$sxe;
-            var_dump($sxe);
-            $array['doi'] = $doi;
-            return $array;
         }
     }
     
@@ -586,10 +601,13 @@ function generateDOI(){
     {
         $config        = parse_ini_file("config.ini");
         $UPLOAD_FOLDER = $config["UPLOAD_FOLDER"];
-        if (is_numeric($doi) == true) {
+        if ($collection==null) {
+            return false;
+        }
+        if (strstr($doi, 'ORDAR')!==FALSE) {
             // test de suppression si publier
+             return false;
         } else {
-            //$this->db = new MongoClient("mongodb://localhost:27017");
             $db               = self::connect_tomongo();
             $collectionObject = $this->db->selectCollection($config["authSource"], $collection);
             $query            = array(
@@ -605,7 +623,7 @@ function generateDOI(){
             ));
             unlink($UPLOAD_FOLDER . $doi . '/' . $doi . '_DATA.csv');
             rmdir($UPLOAD_FOLDER . $doi);
-            print("erase");
+            return true;
         }
         
     }

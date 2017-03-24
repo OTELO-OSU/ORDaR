@@ -139,7 +139,7 @@ $app->post('/upload', function (Request $req,Response $responseSlim) {
 	$twig = new Twig_Environment($loader);
    	$Datasheet = new Datasheet();
    	$db=$Datasheet->connect_tomongo();
-	$array=$Datasheet->Postprocessing($_POST,"Upload",$doi);
+	$array=$Datasheet->Postprocessing($_POST,"Upload","0");
 	$response=$Datasheet->Newdatasheet($db,$array);
 	
 	if (array_key_exists('error', $response)) {
@@ -333,8 +333,19 @@ $app->get('/remove/{doi}', function (Request $req,Response $responseSlim,$args) 
    	$response=$request->get_info_for_dataset($doi);
 	$collection=$response['_type'];
 	$doi= $response['_id'];
-   	$Datasheet->removeUnpublishedDatasheet($collection,$doi);
+   	$state=$Datasheet->removeUnpublishedDatasheet($collection,$doi);
+   	if ($state==true) {
+   		$loader = new Twig_Loader_Filesystem('search/templates');
+		$twig = new Twig_Environment($loader);
+		echo $twig->render('removesucess.html.twig');
 
+   		
+   	}
+   	else{
+			return $responseSlim->withStatus(403); 
+
+
+   	}
 
 });
 
