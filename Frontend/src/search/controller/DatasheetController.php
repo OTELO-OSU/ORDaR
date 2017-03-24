@@ -125,6 +125,9 @@ function generateDOI(){
                 $sxe->addChild('language',$language);
             }
             if ($key == "sampling_date") {
+                if ($value[0]=="") {
+                }
+                else{
                     if (count($value) > 1) {
                         if(count(array_unique($value))<count($value)){
                             $error="Sampling date must be unique";
@@ -138,10 +141,11 @@ function generateDOI(){
                                 $array["SAMPLING_DATE"][$key] = htmlspecialchars($value, ENT_QUOTES);
                                 }
                             }
-                    } else {
+                    }
+                     else {
                         $array["SAMPLING_DATE"][0] = htmlspecialchars($value[0], ENT_QUOTES);
                     }
-                
+                }
                 
             }
             if ($key == "description") {
@@ -380,13 +384,15 @@ function generateDOI(){
                 }
             }
             if ($key == "keywords") {
-                if (count($value <= 3)) {
-                    foreach ($value as $key => $value) {
-                        if (!empty($value)) {
-                            $array["KEYWORDS"][$key]["NAME"] = htmlspecialchars($value, ENT_QUOTES);
+                if (count($value) > 1) {
+                    if (count($value <= 3)) {
+                        foreach ($value as $key => $value) {
+                            if (!empty($value)) {
+                                $array["KEYWORDS"][$key]["NAME"] = htmlspecialchars($value, ENT_QUOTES);
+                            }
                         }
                     }
-                } else {
+                    } else {
                     if (!empty($value[0])) {
                         $array["KEYWORDS"]["NAME"] = htmlspecialchars($value, ENT_QUOTES);
                     }
@@ -394,13 +400,15 @@ function generateDOI(){
                 
             }
             if ($key == "fundings") {
-                if (count($value <= 3)) {
-                    foreach ($value as $key => $value) {
-                        if (!empty($value)) {
-                            $array["FUNDINGS"][$key]["NAME"] = htmlspecialchars($value, ENT_QUOTES);
+                if (count($value) > 1) {
+                    if (count($value <= 3)) {
+                        foreach ($value as $key => $value) {
+                            if (!empty($value)) {
+                                $array["FUNDINGS"][$key]["NAME"] = htmlspecialchars($value, ENT_QUOTES);
+                            }
                         }
-                    }
-                } else {
+                    } 
+                }else {
                     if (!empty($value[0])) {
                         $array["FUNDINGS"]["NAME"] = htmlspecialchars($value, ENT_QUOTES);
                     }
@@ -532,10 +540,16 @@ function generateDOI(){
                 }
             }
             
-            $collectionObject->insert($json);
             $Request = new RequestApi();
-            $Request->send_XML_to_datacite($array['xml']->asXML(),$doi);
-            return "true";
+            $request=$Request->send_XML_to_datacite($array['xml']->asXML(),$doi);
+            if ($request=="true") {
+                $collectionObject->insert($json);
+                return "true";
+            }
+            else{
+                $array['error']="Unable to send metadata to Datacite";
+                return $array;
+            }
         }
     }
     
@@ -554,6 +568,12 @@ function generateDOI(){
             $collectionObject = $this->db->selectCollection($config["authSource"], $collection);
             if (strstr($doi, 'ORDAR')!==FALSE) {
                 $doi = $doi;
+            $Request = new RequestApi();
+            $xml=$array['xml'];
+            $identifier = $xml->addChild('identifier',$doi);
+            $identifier->addAttribute('identifierType', 'DOI');
+            $request=$Request->send_XML_to_datacite($xml->asXML(),$doi);
+             if ($request=="true") {
                 $collectionObject->update(array(
                     '_id' => $doi
                 ), array(
@@ -561,15 +581,23 @@ function generateDOI(){
                         "INTRO" => $array['dataform']
                     )
                 ));
-            $Request = new RequestApi();
-            $xml=$array['xml'];
-            $identifier = $xml->addChild('identifier',$doi);
-            $identifier->addAttribute('identifierType', 'DOI');
-            $Request->send_XML_to_datacite($xml->asXML(),$doi);
+                return "true";
+            }
+            else{
+                $array['error']="Unable to send metadata to Datacite";
+                return $array;
+            }
             } else {
                 $newdoi = "ORDAR-".self::generateDOI();
-                var_dump($newdoi);
-                mkdir($UPLOAD_FOLDER . $newdoi, 0777, true);
+               
+            $Request = new RequestApi();
+            $xml=$array['xml'];
+            $identifier = $xml->addChild('identifier',$config["DOI_PREFIX"]."/".$newdoi);
+            $identifier->addAttribute('identifierType', 'DOI');
+            $request=$Request->send_XML_to_datacite($xml->asXML(),$newdoi);
+             if ($request=="true") {
+                return "true";
+                 mkdir($UPLOAD_FOLDER . $newdoi, 0777, true);
                 $query  = array(
                     '_id' => $doi
                 );
@@ -605,14 +633,14 @@ function generateDOI(){
                     "INTRO" => $INTRO,
                     "DATA" => $DATA
                 ));
-            $Request = new RequestApi();
-            $xml=$array['xml'];
-            $identifier = $xml->addChild('identifier',$config["DOI_PREFIX"]."/".$newdoi);
-            $identifier->addAttribute('identifierType', 'DOI');
-            $Request->send_XML_to_datacite($xml->asXML(),$doi);
+            }
+            else{
+                $array['error']="Unable to send metadata to Datacite";
+                return $array;
+            }
             
             }
-            return "true";
+            
         }
     }
     

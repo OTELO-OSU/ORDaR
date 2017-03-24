@@ -1114,6 +1114,15 @@ return{
           }
         ]
       },
+      file: {
+        identifier: 'file',
+        rules: [
+          {
+            type   : 'empty',
+            prompt : 'Please select a file'
+          }
+        ]
+      },
       
     }
   })
@@ -1125,7 +1134,7 @@ return{
 
 });
 		$("#addfile").click(function (e) {
- 		$("#files").append('<div class="row"></div><div class="ui input"><input type="file" name="file[]"><div class="ui icon delete"><i class="remove icon"></i></div> </div>'); });
+ 		$("#files").append('<div class="row"></div><div class="ui input"><input data-validate="file" type="file" name="file[]" required><div class="ui icon delete"><i class="remove icon"></i></div> </div>'); });
 		$("body").on("click", ".delete", function (e) {
 	$(this).parent("div").remove();
 });

@@ -143,7 +143,11 @@ class RequestController
 			));
 
 		$response = curl_exec($curl);
-        };
+		return "true";
+        }
+        else{
+        	return "false";
+        }
         
 
 
