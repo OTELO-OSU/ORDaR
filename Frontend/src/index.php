@@ -143,6 +143,25 @@ $app->post('/upload', function (Request $req,Response $responseSlim) {
 	$response=$Datasheet->Newdatasheet($db,$array);
 	
 	if (array_key_exists('error', $response)) {
+		$value=$response['dataform']['LICENSE'];
+			if ($value=="Creative commons Attribution alone") {
+		 		$license=1;
+		 	}
+		 	elseif ($value=="Creative commons Attribution + ShareAlike") {
+		 		$license=2;
+		 	}
+		 	elseif ($value=="Creative commons Attribution + Noncommercial") {
+		 		$license=3;
+		 	}
+		 	elseif ($value=="Creative commons Attribution + NoDerivatives") {
+		 		$license=4;
+		 	}
+		 	elseif ($value=="Creative commons Attribution + Noncommercial + ShareAlike") {
+		 		$license=5;
+		 	}
+		 	elseif ($value=="Creative commons Attribution + Noncommercial + NoDerivatives") {
+		 		$license=6;
+		 	}
 		echo $twig->render('upload.html.twig',['error'=>$response['error'],'name'=>$_SESSION['name'],'mail'=>$_SESSION['mail'],'firstname'=>$_SESSION['firstname'],'title' => $response['dataform']['TITLE'],'description'=>$response['dataform']['DATA_DESCRIPTION'],'creation_date'=>$response['dataform']['CREATION_DATE'],'sampling_dates'=>$response['dataform']['SAMPLING_DATE'],'authors'=>$response['dataform']['FILE_CREATOR'],'keywords'=>$response['dataform']['KEYWORDS'],'sample_kinds'=>$response['dataform']['SAMPLE_KIND'],'scientific_fields'=>$response['dataform']['SCIENTIFIC_FIELD'],'institutions'=>$response['dataform']['INSTITUTION'],'language'=>$response['dataform']['LANGUAGE'],'sampling_points'=>$response['dataform']['SAMPLING_POINT'],'measurements'=>$response['dataform']['MEASUREMENT'],'license'=>$license,'publisher'=>$response['dataform']['PUBLISHER'],'fundings'=>$response['dataform']['FUNDINGS'],'accessright'=>$response['dataform']['ACCESS_RIGHT'],'embargoed_date'=>$response['dataform']['PUBLICATION_DATE']]);
 	}
 	else{

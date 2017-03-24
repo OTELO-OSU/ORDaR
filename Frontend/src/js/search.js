@@ -1161,12 +1161,15 @@ $("#addinstitution").click(function (e) {
 });
 
 $("#addsampling_point").click(function (e) {
- 	$("#sampling_points").append('<div> <div class="ui input"> <input type="text" name="sampling_point_name[]" placeholder="Name" ></div>  <div><input type="text" name="sampling_point_coordonate_system[]"  placeholder="coordonate sytem"></div><div><input type="text" name="sampling_point_abbreviation[]"  placeholder="abbreviation"></div><div><input type="text" name="sampling_point_longitude[]" placeholder="longitude" ></div><div><input type="text" name="sampling_point_latitude[]"  placeholder="latitude"></div><div><input type="text" name="sampling_point_elevation[]"  placeholder="elevation"></div><div><textarea name="sampling_point_description[]"  placeholder="description"></textarea></div><div class="ui icon delete"><i class="remove icon"></i></div> </div>'); });
+ 	$("#sampling_points").append('<div> <div class="field"><label>Name</label> <input type="text" name="sampling_point_name[]" placeholder="Name" ></div> <div class="field"><label>Coordonate system</label><input type="text" name="sampling_point_coordonate_system[]" placeholder="coordonate sytem"></div> <div class="field"><label>Abbreviation</label><input type="text"  name="sampling_point_abbreviation[]" placeholder="abbreviation"></div> <div class="field"><label>Longitude</label><input type="text"  name="sampling_point_longitude[]" placeholder="longitude" ></div> <div class="field"><label>Latitude</label><input type="text"  name="sampling_point_latitude[]" placeholder="latitude"></div> <div class="field"><label>Elevation</label><input type="number"  name="sampling_point_elevation[]" placeholder="elevation"></div> <div class="field"><label>Description</label><textarea name="sampling_point_description[]" placeholder="description"></textarea></div> <div class="ui icon delete"><i class="remove icon"></i></div></div>'); });
 	$("body").on("click", ".delete", function (e) {
 	$(this).parent("div").remove();
 });
 $("#addsamplingdate").click(function (e) {
-	$("#sampling_date").append('        <div class="ui input"><input type="text"  class="date" name="sampling_date[]" placeholder="Sampling date" ><div class="ui icon delete"><i class="remove icon"></i></div> </div>'); });
+	$("#sampling_date").append('        <div class="ui input"><input type="text"  class="date" name="sampling_date[]" placeholder="Sampling date" ><div class="ui icon delete"><i class="remove icon"></i></div> </div>');
+$(".date").datepicker({dateFormat: "yy-mm-dd"});
+
+	 });
 $("body").on("click", ".delete", function (e) {
 $(this).parent("div").remove();
 });

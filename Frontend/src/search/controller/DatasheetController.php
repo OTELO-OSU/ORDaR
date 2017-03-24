@@ -41,7 +41,8 @@ function generateDOI(){
         $collection = $dbdoi->selectCollection("DOI", "DOI");
         $query=array('STATE' => 'UNLOCKED');
         $cursor = $collection->find($query);
-        if ($cursor->count>=0) {
+        $count=$cursor->count();
+        if ($count==1) {
             foreach ($cursor as $key => $value) {
                     $update = $collection->update(array("_id" => $value['_id']), array('$set' => array("STATE" => "LOCKED")));
                     $DOI=$value['ID'];
@@ -124,15 +125,23 @@ function generateDOI(){
                 $sxe->addChild('language',$language);
             }
             if ($key == "sampling_date") {
-                if (!count($value == 0)) {
                     if (count($value) > 1) {
-                        foreach ($value as $key => $value) {
-                            $array["SAMPLING_DATE"][$key] = htmlspecialchars($value, ENT_QUOTES);
-                        }
+                        if(count(array_unique($value))<count($value)){
+                            $error="Sampling date must be unique";
+                            foreach ($value as $key => $value) {
+                                $array["SAMPLING_DATE"][$key] = htmlspecialchars($value, ENT_QUOTES);
+                                }
+                            }
+                        
+                        else{  
+                            foreach ($value as $key => $value) {
+                                $array["SAMPLING_DATE"][$key] = htmlspecialchars($value, ENT_QUOTES);
+                                }
+                            }
                     } else {
                         $array["SAMPLING_DATE"][0] = htmlspecialchars($value[0], ENT_QUOTES);
                     }
-                }
+                
                 
             }
             if ($key == "description") {
@@ -155,10 +164,21 @@ function generateDOI(){
             }
             if ($key == "sampling_point_name") {
                 if (count($value) > 1) {
-                    foreach ($value as $key => $value) {
-                        if (!empty($value)) {
-                            $array["SAMPLING_POINT"][$key]["NAME"] = htmlspecialchars($value, ENT_QUOTES);
+                    if(count(array_unique($value))<count($value)){
+                        $error="Sample name must be unique";
+                         foreach ($value as $key => $value) {
+                            if (!empty($value)) {
+                                $array["SAMPLING_POINT"][$key]["NAME"] = htmlspecialchars($value, ENT_QUOTES);
+                            }
                         }
+                    }
+                    else{
+                        foreach ($value as $key => $value) {
+                            if (!empty($value)) {
+                                $array["SAMPLING_POINT"][$key]["NAME"] = htmlspecialchars($value, ENT_QUOTES);
+                            }
+                        }
+                        
                     }
                 } else {
                     if (!empty($value[0])) {
