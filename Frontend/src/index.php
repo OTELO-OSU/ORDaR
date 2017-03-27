@@ -453,7 +453,41 @@ $app->get('/export/{format}', function (Request $req,Response $responseSlim,$arg
 
 			}
 			else{
-				print $file;
+				header("Content-type: text/xml");
+                header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
+				print $file->asXML();
+			}
+
+		}
+		elseif ($format=="json") {
+			$file=$file->export_to_datacite_xml($response);
+			$file=json_decode( json_encode($file) , 1);
+			print json_encode($file);
+
+		}
+		elseif ($format=="bibtex") {
+			$file=$file->export_to_Bibtex($response);
+			if ($file==false) {
+				return $responseSlim->withStatus(403); 
+
+			}
+			else{
+			print $file;
+			header("Content-type: text");
+            header("Cache-Control: must-revalidate, post-check=0, pre-check=0");	
+			}
+
+		}
+		elseif ($format=="dublincore") {
+			$file=$file->export_to_dublincore_xml($response);
+			if ($file==false) {
+				return $responseSlim->withStatus(403); 
+
+			}
+			else{
+				header("Content-type: text/xml");
+                header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
+				print $file->asXML();
 			}
 
 		}

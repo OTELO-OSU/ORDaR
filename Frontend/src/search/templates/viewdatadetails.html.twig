@@ -261,7 +261,14 @@
             <div class="ui fluid card">
                <div class="content">
                   <div class="header">Export</div>
-                  <a href="export/datacite?id={{doi}}" target="_blank"  ><div class="ui button">Datacite</div></a>
+                  <div class="ui grid">
+                     <div class="row"></div>
+                     <a href="export/datacite?id={{doi}}" target="_blank"  ><div class="ui button">DataCite</div></a>
+                      <a href="export/json?id={{doi}}" target="_blank"  ><div class="ui button">JSON</div></a>
+                      <a href="export/dublincore?id={{doi}}" target="_blank"  ><div class="ui button">DublinCore</div></a>
+                      <a href="export/bibtex?id={{doi}}" target="_blank"  ><div class="ui button">BibTeX</div></a>
+                      <div class="row"></div>
+                  </div>
                </div>
             </div>
          </div>

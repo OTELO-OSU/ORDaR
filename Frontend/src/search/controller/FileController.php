@@ -64,15 +64,73 @@ Class FileController
                 $descriptions = $sxe->addChild('descriptions');
                 $description=$descriptions->addChild('description', $response['_source']['INTRO']['DATA_DESCRIPTION']);
                 $description->addAttribute('descriptionType', 'Abstract');
-                header("Content-Disposition: inline; filename=" . $filename);
-                header("Content-type: text/xml");
-                header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
-                return $sxe->asXML();
+                
+                return $sxe;
         }
         else{
             return false;
         }
 
+    }
+
+
+
+    function export_to_dublincore_xml($response){
+         if (isset($response['_source']['DATA'])) {
+                $sxe = new \SimpleXMLElement("<oai_dc:dc/>");
+                $sxe->addAttribute('xmlns:xmlns:dc', 'http://purl.org/dc/elements/1.1/');
+                $sxe->addAttribute('xmlns:xmlns:oai_dc', 'http://www.openarchives.org/OAI/2.0/oai_dc/');
+                $sxe->addAttribute('xmlns:xmlns:xsi', 'http://www.w3.org/2001/XMLSchema-instance');
+                $sxe->addAttribute('xsi:xsi:schemaLocation', 'http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd');
+
+                $identifier = $sxe->addChild('dc:dc:identifier',$response['_id']);
+                foreach ($response['_source']['INTRO']['FILE_CREATOR'] as $key => $value) {
+                    $sxe->addChild('dc:dc:creator',$value['DISPLAY_NAME']);
+                }
+
+                $sxe->addChild('dc:dc:title',$response['_source']['INTRO']['TITLE']);
+                $publisher = $sxe->addChild('dc:dc:publisher',$response['_source']['INTRO']['PUBLISHER']);
+                $publicationYear = $sxe->addChild('dc:dc:publicationYear',$response['_source']['INTRO']['PUBLICATION_DATE']);
+                foreach ($response['_source']['INTRO']['SCIENTIFIC_FIELD'] as $key => $value) {
+                    $sxe->addChild('dc:dc:subject',$value['NAME']);
+                }
+                
+                $RessourceType = $sxe->addChild('dc:dc:resourceType','Dataset');
+                $sxe->addChild('language',$response['_source']['INTRO']['LANGUAGE']);
+                $RessourceType->addAttribute('dc:dc:resourceTypeGeneral', 'Dataset');
+                $sxe->addChild('dc:dc:description', $response['_source']['INTRO']['DATA_DESCRIPTION']);
+                
+                return $sxe;
+        }
+        else{
+            return false;
+        }
+
+    }
+    
+    function export_to_Bibtex($response){
+        if (isset($response['_source']['DATA'])) {
+             foreach ($response['_source']['INTRO']['FILE_CREATOR'] as $key => $value) {
+                    $authors.=$value['DISPLAY_NAME']."," ;
+                }
+                $title=$response['_source']['INTRO']['TITLE'];
+                $description=$response['_source']['INTRO']['DATA_DESCRIPTION'];
+                $year=$response['_source']['INTRO']['PUBLICATION_DATE'];
+                $doi=$response['_id'];
+             $bibtex="
+             @data{
+              author       = {".$authors."},
+              title        = {{".$title."}},
+              description  = {{".$description."}},
+              year         = ".$year.",
+              doi          = {".$doi."},
+
+            }";
+            return $bibtex;
+        }
+        else{
+            return false;
+        }
     }
     
     
