@@ -39,21 +39,26 @@ function generateDOI(){
                 'password' => $config['password_doi']
             ));
         $collection = $dbdoi->selectCollection("DOI", "DOI");
-        $query=array('STATE' => 'UNLOCKED');
-        $cursor = $collection->find($query);
-        $count=$cursor->count();
-        if ($count==1) {
-            foreach ($cursor as $key => $value) {
-                    $update = $collection->update(array("_id" => $value['_id']), array('$set' => array("STATE" => "LOCKED")));
-                    $DOI=$value['ID'];
-                    $NewDOI=++$DOI;
-                    $update = $collection->update(array("_id" => $value['_id']), array('$set' => array("ID" => $NewDOI))); 
-                    $update = $collection->update(array("_id" => $value['_id']), array('$set' => array("STATE" => "UNLOCKED")));
+        if ($collection->count()==1) {
+            $query=array('STATE' => 'UNLOCKED');
+            $cursor = $collection->find($query);
+            $count=$cursor->count();
+            if ($count==1) {
+                foreach ($cursor as $key => $value) {
+                        $update = $collection->update(array("_id" => $value['_id']), array('$set' => array("STATE" => "LOCKED")));
+                        $DOI=$value['ID'];
+                        $NewDOI=++$DOI;
+                        $update = $collection->update(array("_id" => $value['_id']), array('$set' => array("ID" => $NewDOI))); 
+                        $update = $collection->update(array("_id" => $value['_id']), array('$set' => array("STATE" => "UNLOCKED")));
+                }
+                return $NewDOI;
             }
-            return $NewDOI;
+            else{
+                return false;
+            }
         }
         else{
-            return false;
+            $cursor = $collection->insert(array('_id' => "ORDAR-DOI",'ID'=>0,'STATE'=>"UNLOCKED"));
         }
 }
 
