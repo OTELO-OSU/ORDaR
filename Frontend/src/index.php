@@ -439,4 +439,30 @@ $app->post('/contact_author', function (Request $req,Response $responseSlim) {
 
 
 
+
+$app->get('/export/{format}', function (Request $req,Response $responseSlim,$args) {
+	   	$id  = $req->getparam('id');
+	   	$format=$args['format'];
+	   	$request= new RequestApi();
+		$response=$request->get_info_for_dataset($id);
+		$file= new File();
+		if ($format=="datacite") {
+			$file=$file->export_to_datacite_xml($response);
+			if ($file==false) {
+				return $responseSlim->withStatus(403); 
+
+			}
+			else{
+				print $file;
+			}
+
+		}
+			return @$responseSlim->withBody();		
+
+
+
+});
+
+
+
 $app->run();

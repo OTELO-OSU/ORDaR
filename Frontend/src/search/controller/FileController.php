@@ -11,9 +11,13 @@ Class FileController
     {
         $config     = parse_ini_file("config.ini");
         $UPLOAD_FOLDER = $config["UPLOAD_FOLDER"];
+        $DOI_PREFIX = $config["DOI_PREFIX"];
         $doi=str_replace($config["UPLOAD_FOLDER"],"", $doi);
         if (isset($response['_source']['DATA'])) {
+        if (strstr($doi, 'ORDAR')!==FALSE) {
             $file = $UPLOAD_FOLDER. $doi . "/" . $filename;
+        }
+            $file = $UPLOAD_FOLDER.$DOI_PREFIX."/". $doi . "/" . $filename;
             header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
             header("Content-Disposition: attachment; filename=" . $filename);
             $readfile = file_get_contents($file);
@@ -27,6 +31,49 @@ Class FileController
         }
         
     }
+
+
+    function export_to_datacite_xml($response){
+         if (isset($response['_source']['DATA'])) {
+                $sxe = new \SimpleXMLElement("<resource/>");
+                $sxe->addAttribute('xmlns:xmlns:xsi', 'http://www.w3.org/2001/XMLSchema-instance');
+                $sxe->addAttribute('xmlns', 'http://datacite.org/schema/kernel-4');
+                $sxe->addAttribute('xsi:xsi:schemaLocation', 'http://datacite.org/schema/kernel-4 http://schema.datacite.org/meta/kernel-4/metadata.xsd');
+
+                $identifier = $sxe->addChild('identifier',$response['_id']);
+                $identifier->addAttribute('identifierType', 'DOI');
+                $creators = $sxe->addChild('creators');
+                foreach ($response['_source']['INTRO']['FILE_CREATOR'] as $key => $value) {
+                    $creator= $creators->addChild('creator');
+                    $creator->addChild('creatorName',$value['DISPLAY_NAME']);
+                }
+                $titles = $sxe->addChild('titles');
+
+                $title = $titles->addChild('title',$response['_source']['INTRO']['TITLE']);
+                $publisher = $sxe->addChild('publisher',$response['_source']['INTRO']['PUBLISHER']);
+                $publicationYear = $sxe->addChild('publicationYear',$response['_source']['INTRO']['PUBLICATION_DATE']);
+                $subjects = $sxe->addChild('subjects');
+                foreach ($response['_source']['INTRO']['SCIENTIFIC_FIELD'] as $key => $value) {
+                    $subjects->addChild('subject',$value['NAME']);
+                }
+                
+                $RessourceType = $sxe->addChild('resourceType','Dataset');
+                $sxe->addChild('language',$response['_source']['INTRO']['LANGUAGE']);
+                $RessourceType->addAttribute('resourceTypeGeneral', 'Dataset');
+                $Version = $sxe->addChild('version','1');
+                $descriptions = $sxe->addChild('descriptions');
+                $description=$descriptions->addChild('description', $response['_source']['INTRO']['DATA_DESCRIPTION']);
+                $description->addAttribute('descriptionType', 'Abstract');
+                header("Content-Disposition: inline; filename=" . $filename);
+                header("Content-type: text/xml");
+                header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
+                return $sxe->asXML();
+        }
+        else{
+            return false;
+        }
+
+    }
     
     
     function preview($doi, $filename, $response)
@@ -35,7 +82,10 @@ Class FileController
         $UPLOAD_FOLDER = $config["UPLOAD_FOLDER"];
         $doi=str_replace($config["UPLOAD_FOLDER"],"", $doi);
         if (isset($response['_source']['DATA'])) {
+             if (strstr($doi, 'ORDAR')!==FALSE) {
             $file = $UPLOAD_FOLDER. $doi . "/" . $filename;
+        }
+            $file = $UPLOAD_FOLDER.$DOI_PREFIX."/". $doi . "/" . $filename;
             header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
             header("Content-Disposition: inline; filename=" . $filename);
             foreach ($response['_source']['DATA']['FILES'] as $key => $value) {
