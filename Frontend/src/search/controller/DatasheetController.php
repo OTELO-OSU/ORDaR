@@ -399,7 +399,7 @@ function generateDOI(){
                     }
                     } else {
                     if (!empty($value[0])) {
-                        $array["KEYWORDS"]["NAME"] = htmlspecialchars($value[0], ENT_QUOTES);
+                        $array["KEYWORDS"][0]["NAME"] = htmlspecialchars($value[0], ENT_QUOTES);
                     }
                 }
                 
@@ -415,7 +415,7 @@ function generateDOI(){
                     } 
                 }else {
                     if (!empty($value[0])) {
-                        $array["FUNDINGS"]["NAME"] = htmlspecialchars($value[0], ENT_QUOTES);
+                        $array["FUNDINGS"][0]["NAME"] = htmlspecialchars($value[0], ENT_QUOTES);
                     }
                 }
                 
@@ -523,7 +523,7 @@ function generateDOI(){
                     return $returnarray;
                 } else {
                     if (is_uploaded_file($_FILES["file"]["tmp_name"][$i])) {
-                        if (is_dir($repertoireDestination.$config['DOI_PREFIX'])==false) {                       
+                        if (is_dir($repertoireDestination.$config['DOI_PREFIX'])==false) {                
                             mkdir($repertoireDestination.$config['DOI_PREFIX']);
                         }
                         if (!file_exists($repertoireDestination . $doi)) {
@@ -543,6 +543,11 @@ function generateDOI(){
                                 "INTRO" => $array['dataform'],
                                 "DATA" => $data
                             ); 
+                        }
+                        else{
+                            $returnarray[] = "false";
+                            $returnarray[] = $array['dataform'];
+                            return $returnarray;
                         }
                     }
                 }

@@ -1,0 +1,19 @@
+
+{% include 'head.html.twig' %}
+<div class="ui grid">
+	<div class="ui eight wide centered column">
+	<div class="ui message red"  style="display: block;">Datacite is not available please try again later !</div>
+<h2> You will be redirected in 3 seconds</h2>
+</div>
+</div>
+
+
+{% include 'footer.html.twig' %}
+
+
+<script type="text/javascript">
+setTimeout(function(){
+window.location.href="/accueil";
+}, 3000);	
+
+</script>

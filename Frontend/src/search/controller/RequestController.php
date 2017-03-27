@@ -20,7 +20,14 @@ class RequestController
         return $rawData;
     }
     
-    
+    function Check_status_datacite(){
+        $handle = curl_init("https://mds.datacite.org");
+        curl_setopt($handle,  CURLOPT_RETURNTRANSFER, TRUE);
+        $response = curl_exec($handle);
+        $httpCode = curl_getinfo($handle, CURLINFO_HTTP_CODE);
+        curl_close($handle);
+        return $httpCode;
+    }
     
     
     function requestToAPI($query)

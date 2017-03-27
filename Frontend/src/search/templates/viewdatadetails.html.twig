@@ -175,6 +175,14 @@
                      {%endfor%}
                   </ul>
                   {%endif%}
+                   {%if fundings %}
+                  <h3 class="ui  header">Fundings:</h3>
+                  <ul>
+                     {%for field in fundings%}
+                     <li>{{field.NAME}}</li>
+                     {%endfor%}
+                  </ul>
+                  {%endif%}
                   {%if scientific_field %}
                   <h3 class="ui header">Scientific fields:</h3>
                   <ul>

@@ -127,7 +127,15 @@ $app->get('/upload', function (Request $req,Response $responseSlim) {
     $loader = new Twig_Loader_Filesystem('search/templates');
 	$twig = new Twig_Environment($loader);
 	if ($_SESSION) {
-	echo $twig->render('upload.html.twig',['name'=>$_SESSION['name'],'firstname'=>$_SESSION['firstname'],'mail'=>$_SESSION['mail']]);
+		$request= new RequestApi();
+		$status=$request->Check_status_datacite();
+		if ($status==200) {
+		echo $twig->render('upload.html.twig',['name'=>$_SESSION['name'],'firstname'=>$_SESSION['firstname'],'mail'=>$_SESSION['mail']]);		
+		}
+		else{
+			echo $twig->render('error_datacite.html.twig');		
+		}
+
 	}
 	else{
 		return $responseSlim->withRedirect('accueil');
@@ -230,6 +238,7 @@ $app->get('/record', function (Request $req,Response $responseSlim) {
         'sampling_points'=> $response['_source']['INTRO']['SAMPLING_POINT'],
         'measurements'=> $response['_source']['INTRO']['MEASUREMENT'],
         'language'=> $response['_source']['INTRO']['LANGUAGE'],
+        'fundings'=> $response['_source']['INTRO']['FUNDINGS'],
         'institutions'=> $response['_source']['INTRO']['INSTITUTION'],
         'scientific_field'=> $response['_source']['INTRO']['SCIENTIFIC_FIELD'],
         'sampling_date'=> $response['_source']['INTRO']['SAMPLING_DATE'],
@@ -245,53 +254,59 @@ $app->get('/editrecord', function (Request $req,Response $responseSlim) {
 	$loader = new Twig_Loader_Filesystem('search/templates');
 	$twig = new Twig_Environment($loader);
    	$request= new RequestApi();
-   	$id  = $req->getparam('id');
-	$response=$request->get_info_for_dataset($id);
-	if ($response==false) {
-		return $responseSlim->withRedirect('accueil');
-	}
-	elseif($response['_source']['DATA']==null){
-		return $responseSlim->withRedirect('accueil');
-	}
-	else{
-		$found="false";
-		foreach ($response["_source"]["INTRO"]["FILE_CREATOR"] as $key => $value) {
-			if (@$_SESSION["mail"]==$value["MAIL"]) {
-						$found="true";
+	$status=$request->Check_status_datacite();
+		if ($status==200) {		
+		   	$id  = $req->getparam('id');
+			$response=$request->get_info_for_dataset($id);
+			if ($response==false) {
+				return $responseSlim->withRedirect('accueil');
+			}
+			elseif($response['_source']['DATA']==null){
+				return $responseSlim->withRedirect('accueil');
+			}
+			else{
+				$found="false";
+				foreach ($response["_source"]["INTRO"]["FILE_CREATOR"] as $key => $value) {
+					if (@$_SESSION["mail"]==$value["MAIL"]) {
+								$found="true";
+					}
+				}
+				if ($found=="true") {
+					
+				
+					$value=$response['_source']['INTRO']['LICENSE'];
+					if ($value=="Creative commons Attribution alone") {
+				 		$license=1;
+				 	}
+				 	elseif ($value=="Creative commons Attribution + ShareAlike") {
+				 		$license=2;
+				 	}
+				 	elseif ($value=="Creative commons Attribution + Noncommercial") {
+				 		$license=3;
+				 	}
+				 	elseif ($value=="Creative commons Attribution + NoDerivatives") {
+				 		$license=4;
+				 	}
+				 	elseif ($value=="Creative commons Attribution + Noncommercial + ShareAlike") {
+				 		$license=5;
+				 	}
+				 	elseif ($value=="Creative commons Attribution + Noncommercial + NoDerivatives") {
+				 		$license=6;
+				 	}
+
+				return @$twig->render('edit_dataset.html.twig', ['name'=>$_SESSION['name'],'firstname'=>$_SESSION['firstname'],'mail'=>$_SESSION['mail'],
+			        'doi'=>$id,'title' => $response['_source']['INTRO']['TITLE'],'description'=>$response['_source']['INTRO']['DATA_DESCRIPTION'],'creation_date'=>$response['_source']['INTRO']['CREATION_DATE'],'sampling_dates'=>$response['_source']['INTRO']['SAMPLING_DATE'],'authors'=>$response['_source']['INTRO']['FILE_CREATOR'],'keywords'=>$response['_source']['INTRO']['KEYWORDS'],'sample_kinds'=>$response['_source']['INTRO']['SAMPLE_KIND'],'scientific_fields'=>$response['_source']['INTRO']['SCIENTIFIC_FIELD'],'institutions'=>$response['_source']['INTRO']['INSTITUTION'],'language'=>$response['_source']['INTRO']['LANGUAGE'],'sampling_points'=>$response['_source']['INTRO']['SAMPLING_POINT'],'measurements'=>$response['_source']['INTRO']['MEASUREMENT'],'license'=>$license,'publisher'=>$response['_source']['INTRO']['PUBLISHER'],'fundings'=>$response['_source']['INTRO']['FUNDINGS'],'accessright'=>$response['_source']['INTRO']['ACCESS_RIGHT'],'embargoed_date'=>$response['_source']['INTRO']['PUBLICATION_DATE']
+			    	]);
+				}
+			
+			else{
+				return $responseSlim->withRedirect('accueil');
 			}
 		}
-		if ($found=="true") {
-			
-		
-			$value=$response['_source']['INTRO']['LICENSE'];
-			if ($value=="Creative commons Attribution alone") {
-		 		$license=1;
-		 	}
-		 	elseif ($value=="Creative commons Attribution + ShareAlike") {
-		 		$license=2;
-		 	}
-		 	elseif ($value=="Creative commons Attribution + Noncommercial") {
-		 		$license=3;
-		 	}
-		 	elseif ($value=="Creative commons Attribution + NoDerivatives") {
-		 		$license=4;
-		 	}
-		 	elseif ($value=="Creative commons Attribution + Noncommercial + ShareAlike") {
-		 		$license=5;
-		 	}
-		 	elseif ($value=="Creative commons Attribution + Noncommercial + NoDerivatives") {
-		 		$license=6;
-		 	}
-
-		return @$twig->render('edit_dataset.html.twig', ['name'=>$_SESSION['name'],'firstname'=>$_SESSION['firstname'],'mail'=>$_SESSION['mail'],
-	        'doi'=>$id,'title' => $response['_source']['INTRO']['TITLE'],'description'=>$response['_source']['INTRO']['DATA_DESCRIPTION'],'creation_date'=>$response['_source']['INTRO']['CREATION_DATE'],'sampling_dates'=>$response['_source']['INTRO']['SAMPLING_DATE'],'authors'=>$response['_source']['INTRO']['FILE_CREATOR'],'keywords'=>$response['_source']['INTRO']['KEYWORDS'],'sample_kinds'=>$response['_source']['INTRO']['SAMPLE_KIND'],'scientific_fields'=>$response['_source']['INTRO']['SCIENTIFIC_FIELD'],'institutions'=>$response['_source']['INTRO']['INSTITUTION'],'language'=>$response['_source']['INTRO']['LANGUAGE'],'sampling_points'=>$response['_source']['INTRO']['SAMPLING_POINT'],'measurements'=>$response['_source']['INTRO']['MEASUREMENT'],'license'=>$license,'publisher'=>$response['_source']['INTRO']['PUBLISHER'],'fundings'=>$response['_source']['INTRO']['FUNDINGS'],'accessright'=>$response['_source']['INTRO']['ACCESS_RIGHT'],'embargoed_date'=>$response['_source']['INTRO']['PUBLICATION_DATE']
-	    	]);
 		}
-	
-	else{
-		return $responseSlim->withRedirect('accueil');
-	}
-}
+		else{
+			echo $twig->render('error_datacite.html.twig');		
+		}
 });
 
 $app->post('/editrecord', function (Request $req,Response $responseSlim) {
