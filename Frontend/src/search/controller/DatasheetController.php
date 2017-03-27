@@ -399,7 +399,7 @@ function generateDOI(){
                     }
                     } else {
                     if (!empty($value[0])) {
-                        $array["KEYWORDS"]["NAME"] = htmlspecialchars($value, ENT_QUOTES);
+                        $array["KEYWORDS"]["NAME"] = htmlspecialchars($value[0], ENT_QUOTES);
                     }
                 }
                 
@@ -507,7 +507,7 @@ function generateDOI(){
     
     function Newdatasheet($db, $array)
     {
-        if ($array['error']) {
+        if (isset($array['error'])) {
             return $array;
         } else {
             $config        = parse_ini_file("config.ini");
@@ -566,7 +566,7 @@ function generateDOI(){
     {
         $config        = parse_ini_file("config.ini");
         $UPLOAD_FOLDER = $config["UPLOAD_FOLDER"];
-        if ($array['error']) {
+        if (isset($array['error'])) {
             return $array;
         } else {
             //$this->db = new MongoClient("mongodb://localhost:27017");

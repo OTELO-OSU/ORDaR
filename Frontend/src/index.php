@@ -142,7 +142,7 @@ $app->post('/upload', function (Request $req,Response $responseSlim) {
 	$array=$Datasheet->Postprocessing($_POST,"Upload","0");
 	$response=$Datasheet->Newdatasheet($db,$array);
 	
-	if (array_key_exists('error', $response)) {
+	if (isset($response['error'])) {
 		$value=$response['dataform']['LICENSE'];
 			if ($value=="Creative commons Attribution alone") {
 		 		$license=1;
