@@ -19,7 +19,7 @@ $app->get('/', function (Request $req,Response $responseSlim) {
 $_SESSION['HTTP_REFERER']=$_SERVER['REQUEST_URI'];
 $loader = new Twig_Loader_Filesystem('search/templates');
 $twig = new Twig_Environment($loader);
-if ($_SESSION) {
+if ($_SESSION['name']) {
 echo $twig->render('accueil.html.twig',['name'=>$_SESSION['name'],'firstname'=>$_SESSION['firstname'],'mail'=>$_SESSION['mail']]);
 }
 else{
@@ -31,7 +31,7 @@ $app->get('/accueil', function (Request $req,Response $responseSlim) {
 $_SESSION['HTTP_REFERER']=$_SERVER['REQUEST_URI'];
 $loader = new Twig_Loader_Filesystem('search/templates');
 $twig = new Twig_Environment($loader);
-if ($_SESSION) {
+if ($_SESSION['name']) {
 echo $twig->render('accueil.html.twig',['name'=>$_SESSION['name'],'firstname'=>$_SESSION['firstname'],'mail'=>$_SESSION['mail']]);
 }
 else{
@@ -74,7 +74,7 @@ $_SESSION['HTTP_REFERER']=$_SERVER['REQUEST_URI'];
 $loader = new Twig_Loader_Filesystem('search/templates');
 $twig = new Twig_Environment($loader);
 $query=$req->getparam('query');
-if ($_SESSION) {
+if ($_SESSION['name']) {
 echo $twig->render('accueil.html.twig',['name'=>$_SESSION['name'],'firstname'=>$_SESSION['firstname'],'mail'=>$_SESSION['mail'],'query'=>$query]);
 }
 else{
@@ -114,7 +114,7 @@ $app->get('/logout', function (Request $req,Response $responseSlim) {
 $app->get('/mypublications', function (Request $req,Response $responseSlim) {
     $loader = new Twig_Loader_Filesystem('search/templates');
 	$twig = new Twig_Environment($loader);
-	if ($_SESSION) {
+	if ($_SESSION['name']) {
 	echo $twig->render('mypublications.html.twig',['name'=>$_SESSION['name'],'firstname'=>$_SESSION['firstname'],'mail'=>$_SESSION['mail']]);
 	}
 	else{
@@ -126,7 +126,7 @@ $app->get('/mypublications', function (Request $req,Response $responseSlim) {
 $app->get('/upload', function (Request $req,Response $responseSlim) {
     $loader = new Twig_Loader_Filesystem('search/templates');
 	$twig = new Twig_Environment($loader);
-	if ($_SESSION) {
+	if ($_SESSION['name']) {
 		$request= new RequestApi();
 		$status=$request->Check_status_datacite();
 		if ($status==200) {
@@ -187,7 +187,7 @@ $app->post('/upload', function (Request $req,Response $responseSlim) {
 
 $app->post('/getmypublications', function (Request $req,Response $responseSlim) {
 	$request = new RequestApi();
-	if ($_SESSION) {
+	if ($_SESSION['name']) {
 		$authors_mail= $_SESSION['mail'];
 		$authors_name= $_SESSION['name'];
 		$query  = $req->getparam('query');
@@ -206,6 +206,7 @@ $app->post('/getmypublications', function (Request $req,Response $responseSlim) 
 });
 
 $app->get('/record', function (Request $req,Response $responseSlim) {
+	$_SESSION['HTTP_REFERER']=$_SERVER['REQUEST_URI'];
 	$loader = new Twig_Loader_Filesystem('search/templates');
 	$twig = new Twig_Environment($loader);
    	$request= new RequestApi();
