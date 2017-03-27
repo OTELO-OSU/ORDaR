@@ -415,7 +415,7 @@ function generateDOI(){
                     } 
                 }else {
                     if (!empty($value[0])) {
-                        $array["FUNDINGS"]["NAME"] = htmlspecialchars($value, ENT_QUOTES);
+                        $array["FUNDINGS"]["NAME"] = htmlspecialchars($value[0], ENT_QUOTES);
                     }
                 }
                 
@@ -523,6 +523,9 @@ function generateDOI(){
                     return $returnarray;
                 } else {
                     if (is_uploaded_file($_FILES["file"]["tmp_name"][$i])) {
+                        if (is_dir($repertoireDestination.$config['DOI_PREFIX'])==false) {                       
+                            mkdir($repertoireDestination.$config['DOI_PREFIX']);
+                        }
                         if (!file_exists($repertoireDestination . $doi)) {
                             mkdir($repertoireDestination . $doi);
                         }
@@ -601,8 +604,8 @@ function generateDOI(){
             $identifier->addAttribute('identifierType', 'DOI');
             $request=$Request->send_XML_to_datacite($xml->asXML(),$newdoi);
              if ($request=="true") {
-                return "true";
-                 mkdir($UPLOAD_FOLDER . $newdoi, 0777, true);
+              
+                 mkdir($UPLOAD_FOLDER."/".$config["DOI_PREFIX"]."/" . $newdoi, 0777, true);
                 $query  = array(
                     '_id' => $doi
                 );
@@ -613,7 +616,7 @@ function generateDOI(){
                 unlink($ORIGINAL_DATA_URL);
                 //unlink(UPLOAD_FOLDER.$doi.'/'.$doi.'_INTRO.csv')
                 //$collectionObject->insert(array('_id' => new \MongoInt32($doi)),array("INTRO" => $array));
-                rename($UPLOAD_FOLDER . $doi . '/' . $doi . '_DATA.csv', $UPLOAD_FOLDER . $newdoi . "/" . $doi . '_DATA.csv');
+                rename($UPLOAD_FOLDER . $doi . '/' . $doi . '_DATA.csv', $UPLOAD_FOLDER ."/".$config["DOI_PREFIX"]."/" .$newdoi . "/" . $doi . '_DATA.csv');
                 rmdir($UPLOAD_FOLDER . $doi);
                 $collectionObject->update(array(
                     '_id' => $doi
