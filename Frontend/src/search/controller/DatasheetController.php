@@ -35,8 +35,8 @@ function generateDOI(){
         $config = parse_ini_file("config.ini");
         $dbdoi = new MongoClient("mongodb://" . $config['host'] . ':' . $config['port'], array(
                 'authSource' => "DOI",
-                'username' => "user",
-                'password' => "user"
+                'username' => $config['user_doi'],
+                'password' => $config['password_doi']
             ));
         $collection = $dbdoi->selectCollection("DOI", "DOI");
         $query=array('STATE' => 'UNLOCKED');
