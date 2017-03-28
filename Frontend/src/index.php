@@ -85,9 +85,9 @@ $app->get('/login', function (Request $req,Response $responseSlim) {
 	//$_SESSION['name'] = $_SERVER['HTTP_SN'];
 	//$_SESSION['firstname'] = $_SERVER['HTTP_GIVENNAME'];
 	//$_SESSION['mail'] = $_SERVER['HTTP_MAIL'];
-	$_SESSION['name'] = "guiot";
+	$_SESSION['name'] = "Montarges-Pelletier";
 	$_SESSION['firstname'] ="antoh";
-	$_SESSION['mail'] = "test@gt.gf";
+	$_SESSION['mail'] = "emmanuelle.montarges@univ-lorraine.fr";
 	session_regenerate_id();
 
 	if ($_SESSION['HTTP_REFERER']) {
@@ -224,11 +224,13 @@ $app->get('/record', function (Request $req,Response $responseSlim) {
 
 	}
 	else{
+		$id= split("/", $response['_id']);
 	return @$twig->render('viewdatadetails.html.twig', [
 		'name'=>$_SESSION['name'],
 		'firstname'=>$_SESSION['firstname'],
 		'mail'=>$_SESSION['mail'],
         'doi'=> $response['_id'],
+        'id'=> $id[1],
         'title' => $response['_source']['INTRO']['TITLE'],
         'datadescription'=>$response['_source']['INTRO']['DATA_DESCRIPTION'],
         'accessright'=>$response['_source']['INTRO']['ACCESS_RIGHT'],
@@ -389,12 +391,17 @@ $app->get('/remove/{doi}', function (Request $req,Response $responseSlim,$args) 
 
 
 //Route permettant le telechargement
-$app->get('/files/{prefix}/{doi}/{filename}', function (Request $req,Response $responseSlim,$args) {
+$app->get('/files/{doi}/{filename}', function (Request $req,Response $responseSlim,$args) {
 	$request= new RequestApi();
    	$doi  = $args['doi'];
-   	$fulldoi=$args['prefix']."/".$args['doi'];
    	$filename  = $args['filename'];
-	$response=$request->get_info_for_dataset($fulldoi);
+   	if (strstr($doi, 'ORDAR')!==FALSE) {
+   		$config     = parse_ini_file($_SERVER['DOCUMENT_ROOT'].'/../config.ini');
+		$response=$request->get_info_for_dataset($config["DOI_PREFIX"].'/'.$doi);
+	}
+	else{
+		$response=$request->get_info_for_dataset($doi);
+	}
 	$File = new File();
 	$download=$File->download($doi,$filename,$response);
 	if ($download==NULL OR $download==false) {

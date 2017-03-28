@@ -593,7 +593,7 @@ function generateDOI(){
         if (isset($array['error'])) {//Si une erreur est detecté
             return $array;
         } else {
-            $collectionObject = $this->db->selectCollection($config["authSource"], $collection);
+            $collectionObject = $db->selectCollection($config["authSource"], $collection);
             if (strstr($doi, 'ORDAR')!==FALSE) {//Si un DOI perrene est assigné
                 $doi = $doi;
                 $Request = new RequestApi();
@@ -622,7 +622,7 @@ function generateDOI(){
             $xml=$array['xml'];
             $identifier = $xml->addChild('identifier',$config["DOI_PREFIX"]."/".$newdoi);
             $identifier->addAttribute('identifierType', 'DOI');
-            $request=$Request->send_XML_to_datacite($xml->asXML(),$newdoi);
+            $request=$Request->send_XML_to_datacite($xml->asXML(),$config["DOI_PREFIX"]."/".$newdoi);
              if ($request=="true") {
               
                  mkdir($UPLOAD_FOLDER."/".$config["DOI_PREFIX"]."/" . $newdoi, 0777, true);

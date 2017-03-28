@@ -121,7 +121,7 @@ class RequestController
      * @return treu if ok else false
      */
     function send_XML_to_datacite($XML,$doi){
-    	$config        = parse_ini_file("config.ini");
+        $config     = parse_ini_file($_SERVER['DOCUMENT_ROOT'].'/../config.ini');
     	$url= "https://mds.datacite.org/metadata/";
         $curlopt                = array(
             CURLOPT_RETURNTRANSFER => true,
@@ -163,6 +163,7 @@ class RequestController
 			    "cache-control: no-cache",
 			  ),
 			));
+            var_dump($curl);
 
 		$response = curl_exec($curl);
 		return "true";
