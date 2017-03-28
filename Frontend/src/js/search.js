@@ -1,11 +1,10 @@
   var APP = (function() {
       return {
-          modules: {},
-          init: function() {}
+          modules: {}
       }
 
   })();
-
+  // Module datatable, Affichage des resultats sous forme de pagination
   APP.modules.datatable = (function() {
       return {
           AppendTable: function(data) {
@@ -93,8 +92,10 @@
       }
   })();
 
+// Module search, permet de rechercher un terme , par facets ou non
   APP.modules.search = (function() {
       return {
+      	//methode de recuperation d'une valeur dans l'url
           $_GET: function(param) {
               var vars = {};
               window.location.href.replace(location.hash, '').replace(
@@ -109,6 +110,7 @@
               }
               return vars;
           },
+          //Methode d'intialisation de la recherche
           init: function() {
               $('#info').hide();
               $('#facets').hide();
@@ -125,6 +127,7 @@
                   APP.modules.search.search(query);
               }
           },
+          //Methode d'affichage des facets de la recherche
           AppendFacets: function(data) {
               sample_kind = data['aggregations']['sample_kind']['buckets'];
               if (sample_kind.length == 0) {
@@ -313,6 +316,7 @@
 
 
           },
+          //Methode de trap des events sur les facets
           checkCheckbox: function() {
               checked = $("#facets input:checked");
               var samplekind;
@@ -464,6 +468,7 @@
 
 
           },
+          //Methode recherche 
           search: function(query, facets) {
               $.post("index.php/getinfo", {
                       query: query,
@@ -476,15 +481,13 @@
                       }
                       APP.modules.datatable.AppendTable(data);
                   })
-          },
-          element: function(element) {
-              console.log(element)
           }
       }
 
 
   })()
 
+  // Module mypublications, Affichage des publication de l'utilisateur courant sous forme de pagination
 
   APP.modules.mypublications = (function() {
       return {
@@ -855,7 +858,6 @@
               return vars;
           },
           search: function(query, facets) {
-              //var query=APP.modules.mypublications.$_GET('query');
               $.post("index.php/getmypublications", {
                       query: query
                   },
@@ -873,6 +875,7 @@
 
   })()
 
+  // Module upload, permet de controller le formulaire upload et edit
 
   APP.modules.upload = (function() {
       return {
@@ -1087,6 +1090,7 @@
       }
   })()
 
+  // Module preview, Affichage d'un modal permettant de visualiser un fichier
 
   APP.modules.preview = (function() {
       return {
@@ -1099,6 +1103,7 @@
       }
   })()
 
+  // Module send_email , Affichage d'un modal permettant d'envoyer un message a un auteur ou au administrateur
 
   APP.modules.send_email = (function() {
       return {
@@ -1119,12 +1124,12 @@
 
 
   $(document).ready(function() {
-
+  	//Allow dropdown
       $('.ui .dropdown.license')
           .dropdown();
       $('.ui .dropdown.publisher')
           .dropdown({
-              allowAdditions: true
+              allowAdditions: true //allo dropdown with other input
           });
       $('.ui .dropdown.scientific_field')
           .dropdown({
@@ -1134,7 +1139,7 @@
           .dropdown({
               allowAdditions: true
           });
-
+    //Check in contact form
       $('.contact')
           .form({
               fields: {
@@ -1162,14 +1167,12 @@
               }
           });
 
-
-      APP.init();
-
-      APP.modules.search.init();
-
+       //Datepicker on class date
       $(".date").datepicker({
           dateFormat: "yy-mm-dd"
       });
+
+      APP.modules.search.init(); 
 
 
 
