@@ -118,6 +118,7 @@ rendez vous dans le dossier précédemment télécharger , dans le dossier bin e
 
 
 ** Parametrage du fichier de configuration de mongo_connector:**
+
 Il s'agit de l'user qui a les droits de backup.
 Definissez un username, ainsi qu'un password.
 
@@ -127,5 +128,43 @@ Definissez un username, ainsi qu'un password.
 **Lancez Mongo-connector**
 
     sudo mongo-connector -m localhost:27017 -c mongo-connector_config.json  --namespace NOMDELABDD.*
+
+
+
+
+
+**Organisation du code:**
+
+    --src
+        --search
+            --controller contient les controllers ainsi qu'un fichier de configuration 
+            --templates contient les templates html
+        --index.php : fichier de routes
+        --img contient les images 
+        --js contient les scripts js ainsi que des librairies
+        --css contient les feuilles de styles
+    --vendor : contient les dépendances slim nécessaires au routage
+
+
+**Détails des différentes classes et fonctions PHP:**
+
+-**RequestController**: 
+
+Cette classe va permettre d'effectuer les requêtes,vers l'api ElasticSearch et récupérer les données nécessaires,vers datacite et l'envoie de mail à un administrateur.
+
+
+-**DatasheetController**: 
+
+Cette classe permet de gerer les datasets , en creer , editer, supprimer, generer un doi, envoyer un mail a un auteur.
+
+
+-**FileController**: 
+
+Cette classe permet d'effectuer des actions de telechargement, d'export et de preview de fichiers. 
+
+
+
+
+
 
 
