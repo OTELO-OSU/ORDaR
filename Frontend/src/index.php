@@ -14,7 +14,7 @@ $c = new \Slim\Container();
 $app = new \Slim\App($c);
 session_start();
 
-
+//Route permettant d'acceder a l'accueil
 $app->get('/', function (Request $req,Response $responseSlim) {
 $_SESSION['HTTP_REFERER']=$_SERVER['REQUEST_URI'];
 $loader = new Twig_Loader_Filesystem('search/templates');
@@ -26,7 +26,7 @@ else{
 	echo $twig->render('accueil.html.twig');
 }
 });
-
+//Route permettant d'acceder à l'accueil
 $app->get('/accueil', function (Request $req,Response $responseSlim) {
 $_SESSION['HTTP_REFERER']=$_SERVER['REQUEST_URI'];
 $loader = new Twig_Loader_Filesystem('search/templates');
@@ -39,24 +39,19 @@ else{
 }
 });
 
-
+//Route permettant d'acceder a la page about
 $app->get('/about', function (Request $req,Response $responseSlim) {
 	$loader = new Twig_Loader_Filesystem('search/templates');
 	$twig = new Twig_Environment($loader);
 	echo $twig->render('about.html.twig');
 });
-
+//Route permettant d'acceder a la page terms of use
 $app->get('/terms', function (Request $req,Response $responseSlim) {
 	$loader = new Twig_Loader_Filesystem('search/templates');
 	$twig = new Twig_Environment($loader);
 	echo $twig->render('terms.html.twig');
 });
 
-$app->get('/contact', function (Request $req,Response $responseSlim) {
-	$loader = new Twig_Loader_Filesystem('search/templates');
-	$twig = new Twig_Environment($loader);
-	echo $twig->render('contact.html.twig');
-});
 
 $app->post('/contact', function (Request $req,Response $responseSlim) {
 	$loader = new Twig_Loader_Filesystem('search/templates');

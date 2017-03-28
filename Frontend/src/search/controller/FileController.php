@@ -1,5 +1,4 @@
 <?php
-
 namespace search\controller;
 
 
@@ -13,7 +12,8 @@ Class FileController
      */
     function download($doi, $filename, $response)
     {
-        $config     = parse_ini_file("config.ini");
+        $config     = parse_ini_file($_SERVER['DOCUMENT_ROOT'].'/../config.ini');
+        var_dump($config);
         $UPLOAD_FOLDER = $config["UPLOAD_FOLDER"];
         $DOI_PREFIX = $config["DOI_PREFIX"];
         $doi=str_replace($config["UPLOAD_FOLDER"],"", $doi);
@@ -157,7 +157,7 @@ Class FileController
      */
     function preview($doi, $filename, $response)
     {
-        $config     = parse_ini_file("config.ini");
+        $config     = parse_ini_file($_SERVER['DOCUMENT_ROOT'].'/../config.ini');
         $UPLOAD_FOLDER = $config["UPLOAD_FOLDER"];
         $doi=str_replace($config["UPLOAD_FOLDER"],"", $doi);
         if (isset($response['_source']['DATA'])) {

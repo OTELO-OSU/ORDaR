@@ -13,7 +13,8 @@ class DatasheetController
      */
     function connect_tomongo()
     {
-        $config = parse_ini_file("config.ini");
+        $config     = parse_ini_file($_SERVER['DOCUMENT_ROOT'].'/../config.ini');
+
         
         if (empty($config['username']) && empty($config['password'])) {
             $this->db = new MongoClient("mongodb://" . $config['host'] . ':' . $config['port']);
@@ -33,7 +34,8 @@ class DatasheetController
      */
     
 function generateDOI(){
-        $config = parse_ini_file("config.ini");
+        $config     = parse_ini_file($_SERVER['DOCUMENT_ROOT'].'/../config.ini');
+
         $dbdoi = new MongoClient("mongodb://" . $config['host'] . ':' . $config['port'], array(
                 'authSource' => "DOI",
                 'username' => $config['user_doi'],
@@ -71,7 +73,8 @@ function generateDOI(){
      */
     function Postprocessing($POST,$method,$doi)
     {
-        $config             = parse_ini_file("config.ini");
+        $config     = parse_ini_file($_SERVER['DOCUMENT_ROOT'].'/../config.ini');
+
         $sxe = new \SimpleXMLElement("<resource/>");
         $sxe->addAttribute('xmlns:xmlns:xsi', 'http://www.w3.org/2001/XMLSchema-instance');
         $sxe->addAttribute('xmlns', 'http://datacite.org/schema/kernel-4');
@@ -516,7 +519,8 @@ function generateDOI(){
         if (isset($array['error'])) {//Si une erreur est detecté
             return $array;
         } else {
-            $config        = parse_ini_file("config.ini");
+            $config     = parse_ini_file($_SERVER['DOCUMENT_ROOT'].'/../config.ini');
+
             $UPLOAD_FOLDER = $config["UPLOAD_FOLDER"];
             $doi=$array['doi'];
             for ($i = 0; $i < count($_FILES['file']['name']); $i++) {
@@ -583,7 +587,8 @@ function generateDOI(){
     
     function Editdatasheet($collection, $doi, $db, $array)
     {
-        $config        = parse_ini_file("config.ini");
+        $config     = parse_ini_file($_SERVER['DOCUMENT_ROOT'].'/../config.ini');
+
         $UPLOAD_FOLDER = $config["UPLOAD_FOLDER"];
         if (isset($array['error'])) {//Si une erreur est detecté
             return $array;
@@ -673,7 +678,8 @@ function generateDOI(){
      */
     function removeUnpublishedDatasheet($collection, $doi)
     {
-        $config        = parse_ini_file("config.ini");
+        $config     = parse_ini_file($_SERVER['DOCUMENT_ROOT'].'/../config.ini');
+
         $UPLOAD_FOLDER = $config["UPLOAD_FOLDER"];
         if ($collection==null) {
             return false;
