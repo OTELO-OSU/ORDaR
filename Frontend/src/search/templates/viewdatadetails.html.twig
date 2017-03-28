@@ -1,167 +1,7 @@
 {% include 'head.html.twig' %}
 <div class="ui internally celled grid">
    <div class="row">
-      <div class="ui ten wide column ">
-         <div>
-            <h1> {{title}}</h1>
-            <div class="content">
-               {% if accessright == "Closed" %}
-               <div class="ui red label" >{{accessright}}</div>
-               {% elseif accessright == "Embargoed" %}
-               <div class="ui orange label" data-tooltip="Available as Open Access after {{publicationdate}}">{{accessright}}</div>
-               {% elseif accessright == "Open" %}
-               <div class="ui green label" >{{accessright}}</div>
-               {% elseif accessright == "Unpublished" %}
-               <div class="ui grey label" >{{accessright}}</div>
-               {% endif %}
-               <div class="ui blue label">{{creationdate}}</div>
-               <div class="ui labeled right floated mini button" >
-                  <div class="ui grey mini button">
-                     <i class="barcode icon"></i> DOI
-                  </div>
-                  <a onclick=" $('.ui.modal.doi').modal('show');" class="ui basic orange label">
-                  {{doi}}
-                  </a>
-               </div>
-               <div class="row">
-                  <div class="meta">
-                     <h4>Description:</h4>
-                     <span class="data">{{datadescription}}</span>
-                  </div>
-                  <div class="row"></div>
-                  <h4><i class="user icon"></i>Authors:</h4>
-                  <ul id="authors">
-                     {% for author in authors %}
-                     <li><a onclick="APP.modules.send_email.send_email('{{doi}}','{{author.NAME}}','{{ author.FIRST_NAME}}')">{{author.NAME}} {{ author.FIRST_NAME}}</a></li>
-                     {% endfor %}
-                  </ul>
-                  {%for author in authors%}
-                  {% if author.MAIL == mail %}
-                  {% if accessright == "Unpublished" %}
-                  <a href="remove/{{doi}}">
-                     <div class="ui right floated red button" >Remove  <i class="remove icon"></i></div>
-                  </a>
-                  {% endif %}
-                  <a href="editrecord?id={{doi}}">
-                     <div class="ui right floated primary button" >Edit<i class="right chevron icon"></i></div>
-                  </a>
-                  {%endif%}
-                  {%endfor%}
-                  <p>Uploaded on {{uploaddate}}</p>
-               </div>
-               <div class="ui container cards">
-                  <div class="ui fluid card">
-                     <div class="content files">
-                        <div class="header "> <i class="file icon"></i>Files</div>
-                        {% if accessright == "Closed" or accessright == "Unpublished" %}
-                        {% if files == NULL %}
-                        <div class="ui red message">Data are not available</div>
-                        {% else %}
-                        <div class="ui list">
-                           {% for filename in files %}
-                           <div class="item">
-                              <div class="content">
-                                 <i class="file icon"></i>
-                                 <a href="files/{{doi}}/{{filename.DATA_URL}}">{{filename.DATA_URL}}</a><a href="files/{{doi}}/{{filename.DATA_URL}}"><input value="Download" type="button" class="ui right floated button" ></a><input value="Preview" onclick="APP.modules.preview.previewdocument('preview/{{doi}}/{{filename.DATA_URL}}')" type="button" class="ui right floated button" >
-                              </div>
-                           </div>
-                           {% endfor %}
-                        </div>
-                        {% endif %}
-                        {% elseif accessright == "Embargoed" %}
-                        {% if files == NULL %}
-                        <div class="ui red message">Data are not available</div>
-                        {% else %}
-                        <div class="ui list">
-                           {% for filename in files %}
-                           <div class="item">
-                              <div class="content">
-                              <i class="file icon"></i>
-                                 <a href="files/{{doi}}/{{filename.DATA_URL}}">{{filename.DATA_URL}}</a><a href="files/{{doi}}/{{filename.DATA_URL}}"><input value="Download" type="button" class="ui right floated button" ></a><input value="Preview"onclick="APP.modules.preview.previewdocument('preview/{{doi}}/{{filename.DATA_URL}}')" type="button" class="ui right floated button" >
-                              </div>
-                           </div>
-                           {% endfor %}
-                        </div>
-                        {% endif %}     
-                        {% elseif accessright == "Open" %}
-                        <div class="ui list">
-                           {% for filename in files %}
-                           <div class="item">
-                              <div class="content">
-                              <i class="file icon"></i>
-                                 <a href="files/{{doi}}/{{filename.DATA_URL}}">{{filename.DATA_URL}}</a><a href="files/{{doi}}/{{filename.DATA_URL}}"><input value="Download" type="button" class="ui right floated button" ></a><input value="Preview" onclick="APP.modules.preview.previewdocument('preview/{{doi}}/{{filename.DATA_URL}}')" type="button" class="ui right floated button" >
-                              </div>
-                           </div>
-                           {% endfor %}
-                        </div>
-                        {% endif %}
-                     </div>
-                  </div>
-                  <div class="ui fluid card">
-                     <div class="content">
-                        <div class="header">Sampling points</div>
-                        {% if sampling_points %}
-                        <table class="ui inverted green table">
-                           <thead>
-                              <tr>
-                                 <th>Name</th>
-                                 <th>Abbreviation</th>
-                                 <th>Longitude</th>
-                                 <th>Latitude</th>
-                                 <th>Elevation</th>
-                                 <th>Description</th>
-                              </tr>
-                           </thead>
-                           <tbody>
-                              {% for sampling_point in sampling_points %}
-                              <tr>
-                                 <td>{{sampling_point.NAME}}</td>
-                                 <td>{{sampling_point.ABBREVIATION}}</td>
-                                 <td>{{sampling_point.LONGITUDE}}</td>
-                                 <td>{{sampling_point.LATITUDE}}</td>
-                                 <td>{{sampling_point.ELEVATION}}</td>
-                                 <td>{{sampling_point.DESCRIPTION}}</td>
-                              </tr>
-                              {% endfor %}
-                           </tbody>
-                        </table>
-                        {% else %}
-                        <p>No data to show </p>
-                        {%endif%}
-                     </div>
-                  </div>
-                  <div class="ui fluid card">
-                     <div class="content">
-                        <div class="header">Measurements</div>
-                        {% if measurements %}
-                        <table class="ui inverted blue table">
-                           <thead>
-                              <tr>
-                                 <th>Nature</th>
-                                 <th>Abbreviation</th>
-                                 <th>Unit</th>
-                              </tr>
-                           </thead>
-                           <tbody>
-                              {% for measurement in measurements %}
-                              <tr>
-                                 <td>{{measurement.NATURE}}</td>
-                                 <td>{{measurement.ABBREVIATION}}</td>
-                                 <td>{{measurement.UNIT}}</td>
-                              </tr>
-                              {% endfor %}
-                           </tbody>
-                        </table>
-                        {% else %}
-                        <p>No data to show </p>
-                        {% endif %}
-                     </div>
-                  </div>
-               </div>
-            </div>
-         </div>
-      </div>
-      <div class="ui six wide column ">
+    <div class="ui six wide column ">
          <div class="row">
             <div class="ui fluid card">
                <div class="row"></div>
@@ -273,6 +113,169 @@
             </div>
          </div>
       </div>
+      <div class="ui ten wide column ">
+         <div>
+            <h1> {{title}}</h1>
+            <div class="content">
+               {% if accessright == "Closed" %}
+               <div class="ui red label" >{{accessright}}</div>
+               {% elseif accessright == "Embargoed" %}
+               <div class="ui orange label" data-tooltip="Available as Open Access after {{publicationdate}}">{{accessright}}</div>
+               {% elseif accessright == "Open" %}
+               <div class="ui green label" >{{accessright}}</div>
+               {% elseif accessright == "Unpublished" %}
+               <div class="ui grey label" >{{accessright}}</div>
+               {% endif %}
+               <div class="ui blue label">{{creationdate}}</div>
+               <div class="ui labeled right floated mini button" >
+                  <div class="ui grey mini button">
+                     <i class="barcode icon"></i> DOI
+                  </div>
+                  <a onclick=" $('.ui.modal.doi').modal('show');" class="ui basic orange label">
+                  {{doi}}
+                  </a>
+               </div>
+               <div class="row">
+                  <div class="meta">
+                     <h4>Description:</h4>
+                     <span class="data">{{datadescription}}</span>
+                  </div>
+                  <div class="row"></div>
+                  <h4><i class="user icon"></i>Authors:</h4>
+                  <ul id="authors">
+                     {% for author in authors %}
+                     <li><a onclick="APP.modules.send_email.send_email('{{doi}}','{{author.NAME}}','{{ author.FIRST_NAME}}')">{{author.NAME}} {{ author.FIRST_NAME}}</a></li>
+                     {% endfor %}
+                  </ul>
+                  {%for author in authors%}
+                  {% if author.MAIL == mail %}
+                  {% if accessright == "Unpublished" %}
+                  <a href="remove/{{doi}}">
+                     <div class="ui right floated red button" >Remove  <i class="remove icon"></i></div>
+                  </a>
+                  {% endif %}
+                  <a href="editrecord?id={{doi}}">
+                     <div class="ui right floated primary button" >Edit<i class="right chevron icon"></i></div>
+                  </a>
+                  {%endif%}
+                  {%endfor%}
+                  <p>Uploaded on {{uploaddate}}</p>
+               </div>
+               <div class="ui container cards">
+                  <div class="ui fluid card">
+                     <div class="content files">
+                        <div class="header "> <i class="file icon"></i>Files</div>
+                        {% if accessright == "Closed" or accessright == "Unpublished" %}
+                        {% if files == NULL %}
+                        <div class="ui red message">Data are not available</div>
+                        {% else %}
+                        <div class="ui list">
+                           {% for filename in files %}
+                           <div class="item">
+                              <div class="content">
+                                 <i class="file icon"></i>
+                                 <a href="files/{{doi}}/{{filename.DATA_URL}}">{{filename.DATA_URL}}</a><a href="files/{{doi}}/{{filename.DATA_URL}}"><input value="Download" type="button" class="ui right floated button" ></a><input value="Preview" onclick="APP.modules.preview.previewdocument('preview/{{doi}}/{{filename.DATA_URL}}')" type="button" class="ui right floated button" >
+                              </div>
+                           </div>
+                           {% endfor %}
+                        </div>
+                        {% endif %}
+                        {% elseif accessright == "Embargoed" %}
+                        {% if files == NULL %}
+                        <div class="ui red message">Data are not available</div>
+                        {% else %}
+                        <div class="ui list">
+                           {% for filename in files %}
+                           <div class="item">
+                              <div class="content">
+                              <i class="file icon"></i>
+                                 <a href="files/{{doi}}/{{filename.DATA_URL}}">{{filename.DATA_URL}}</a><a href="files/{{doi}}/{{filename.DATA_URL}}"><input value="Download" type="button" class="ui right floated button" ></a><input value="Preview"onclick="APP.modules.preview.previewdocument('preview/{{doi}}/{{filename.DATA_URL}}')" type="button" class="ui right floated button" >
+                              </div>
+                           </div>
+                           {% endfor %}
+                        </div>
+                        {% endif %}     
+                        {% elseif accessright == "Open" %}
+                        <div class="ui list">
+                           {% for filename in files %}
+                           <div class="item">
+                              <div class="content">
+                              <i class="file icon"></i>
+                                 <a href="files/{{doi}}/{{filename.DATA_URL}}">{{filename.DATA_URL}}</a><a href="files/{{doi}}/{{filename.DATA_URL}}"><input value="Download" type="button" class="ui right floated button" ></a><input value="Preview" onclick="APP.modules.preview.previewdocument('preview/{{doi}}/{{filename.DATA_URL}}')" type="button" class="ui right floated button" >
+                              </div>
+                           </div>
+                           {% endfor %}
+                        </div>
+                        {% endif %}
+                     </div>
+                  </div>
+                  <div class="ui fluid card">
+                     <div class="content">
+                        <div class="header">Sampling points</div>
+                        {% if sampling_points %}
+                        <table class="ui inverted green table">
+                           <thead>
+                              <tr>
+                                 <th>Name</th>
+                                 <th>Coordonate system</th>
+                                 <th>Abbreviation</th>
+                                 <th>Longitude</th>
+                                 <th>Latitude</th>
+                                 <th>Elevation</th>
+                                 <th>Description</th>
+                              </tr>
+                           </thead>
+                           <tbody>
+                              {% for sampling_point in sampling_points %}
+                              <tr>
+                                 <td>{{sampling_point.NAME}}</td>
+                                 <td>{{sampling_point.COORDONATE_SYSTEM}}
+                                 <td>{{sampling_point.ABBREVIATION}}</td>
+                                 <td>{{sampling_point.LONGITUDE}}</td>
+                                 <td>{{sampling_point.LATITUDE}}</td>
+                                 <td>{{sampling_point.ELEVATION}}</td>
+                                 <td>{{sampling_point.DESCRIPTION}}</td>
+                              </tr>
+                              {% endfor %}
+                           </tbody>
+                        </table>
+                        {% else %}
+                        <p>No data to show </p>
+                        {%endif%}
+                     </div>
+                  </div>
+                  <div class="ui fluid card">
+                     <div class="content">
+                        <div class="header">Measurements</div>
+                        {% if measurements %}
+                        <table class="ui inverted blue table">
+                           <thead>
+                              <tr>
+                                 <th>Nature</th>
+                                 <th>Abbreviation</th>
+                                 <th>Unit</th>
+                              </tr>
+                           </thead>
+                           <tbody>
+                              {% for measurement in measurements %}
+                              <tr>
+                                 <td>{{measurement.NATURE}}</td>
+                                 <td>{{measurement.ABBREVIATION}}</td>
+                                 <td>{{measurement.UNIT}}</td>
+                              </tr>
+                              {% endfor %}
+                           </tbody>
+                        </table>
+                        {% else %}
+                        <p>No data to show </p>
+                        {% endif %}
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+     
    </div>
 </div>
 </div>
