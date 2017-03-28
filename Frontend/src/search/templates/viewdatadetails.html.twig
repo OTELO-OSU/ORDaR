@@ -19,7 +19,7 @@
                   <div class="ui grey mini button">
                      <i class="barcode icon"></i> DOI
                   </div>
-                  <a class="ui basic orange label">
+                  <a onclick=" $('.ui.modal.doi').modal('show');" class="ui basic orange label">
                   {{doi}}
                   </a>
                </div>
@@ -277,6 +277,20 @@
 </div>
 </div>
 </div>
+</div>
+
+<div class="ui modal doi">
+  <i class="close icon"></i>
+  <div class="header">
+  Target url
+  </div>
+  <div class="content">
+   <a href="https://doi.org/{{doi}}">https://doi.org/{{doi}}</a>
+  </div>
+  <div class="actions">
+    <button class="ui deny button" >Close</button>
+  </div>
+  </form>
 </div>
 {% include 'contact_author.html.twig' %}
 {% include 'footer.html.twig' %}
