@@ -52,7 +52,7 @@ $app->get('/terms', function (Request $req,Response $responseSlim) {
 	echo $twig->render('terms.html.twig');
 });
 
-
+//Route receptionnant les données POST contact
 $app->post('/contact', function (Request $req,Response $responseSlim) {
 	$loader = new Twig_Loader_Filesystem('search/templates');
 	$twig = new Twig_Environment($loader);
@@ -63,7 +63,7 @@ $app->post('/contact', function (Request $req,Response $responseSlim) {
 	$error=$request->Send_Contact_Mail($object,$message,$sendermail);
 	echo $twig->render('contact_request.html.twig',['name'=>$_SESSION['name'],'firstname'=>$_SESSION['firstname'],'mail'=>$_SESSION['mail'],'error'=>$error]);});
 
-
+//Route affichant les resultats
 $app->get('/searchresult', function (Request $req,Response $responseSlim) {
 $_SESSION['HTTP_REFERER']=$_SERVER['REQUEST_URI'];
 $loader = new Twig_Loader_Filesystem('search/templates');
@@ -77,6 +77,7 @@ else{
 }
 });
 
+//Route permettant la connexion d'un utilisateur
 $app->get('/login', function (Request $req,Response $responseSlim) {
 	$loader = new Twig_Loader_Filesystem('search/templates');
 	$twig = new Twig_Environment($loader);
@@ -98,6 +99,7 @@ $app->get('/login', function (Request $req,Response $responseSlim) {
 
 });
 
+//Route permettant la deconnexion d'un utilisateur
 $app->get('/logout', function (Request $req,Response $responseSlim) {
 	$loader = new Twig_Loader_Filesystem('search/templates');
 	$twig = new Twig_Environment($loader);
@@ -106,6 +108,7 @@ $app->get('/logout', function (Request $req,Response $responseSlim) {
 
 });
 
+//Route affichant les publication de l'utilisateur connecté
 $app->get('/mypublications', function (Request $req,Response $responseSlim) {
     $loader = new Twig_Loader_Filesystem('search/templates');
 	$twig = new Twig_Environment($loader);
@@ -118,6 +121,7 @@ $app->get('/mypublications', function (Request $req,Response $responseSlim) {
 
 });
 
+//Route affichant le formulaire d'upload
 $app->get('/upload', function (Request $req,Response $responseSlim) {
     $loader = new Twig_Loader_Filesystem('search/templates');
 	$twig = new Twig_Environment($loader);
@@ -137,6 +141,7 @@ $app->get('/upload', function (Request $req,Response $responseSlim) {
 	}
 })->setName('upload');
 
+//Route receptionnant les données POST de l'upload
 $app->post('/upload', function (Request $req,Response $responseSlim) {
 	 $loader = new Twig_Loader_Filesystem('search/templates');
 	$twig = new Twig_Environment($loader);
@@ -179,7 +184,7 @@ $app->post('/upload', function (Request $req,Response $responseSlim) {
 });
 
 
-
+//Route receptionnant les données POST mypublications
 $app->post('/getmypublications', function (Request $req,Response $responseSlim) {
 	$request = new RequestApi();
 	if ($_SESSION['name']) {
@@ -200,6 +205,7 @@ $app->post('/getmypublications', function (Request $req,Response $responseSlim) 
 	}
 });
 
+//Route affichant les details d'un dataset
 $app->get('/record', function (Request $req,Response $responseSlim) {
 	$_SESSION['HTTP_REFERER']=$_SERVER['REQUEST_URI'];
 	$loader = new Twig_Loader_Filesystem('search/templates');
@@ -245,7 +251,7 @@ $app->get('/record', function (Request $req,Response $responseSlim) {
 	}
 })->setName('record');
 
-
+//Route affichant le formulaire d'edition dun dataset
 $app->get('/editrecord', function (Request $req,Response $responseSlim) {
 	$loader = new Twig_Loader_Filesystem('search/templates');
 	$twig = new Twig_Environment($loader);
@@ -305,6 +311,7 @@ $app->get('/editrecord', function (Request $req,Response $responseSlim) {
 		}
 });
 
+//Route receptionnant les données POST de l'edition
 $app->post('/editrecord', function (Request $req,Response $responseSlim) {
 	$loader = new Twig_Loader_Filesystem('search/templates');
 	$twig = new Twig_Environment($loader);
@@ -348,7 +355,7 @@ return @$twig->render('edit_dataset.html.twig', ['error'=>$return['error'],'name
 
 
 
-
+//Route effectuant la query
 $app->post('/getinfo', function (Request $req,Response $responseSlim) {
     $request = new RequestApi();
 	$query  = $req->getparam('query');
@@ -356,6 +363,7 @@ $app->post('/getinfo', function (Request $req,Response $responseSlim) {
    	return $response;
 });
 
+//Route permettant la suppression d'un dataset
 $app->get('/remove/{doi}', function (Request $req,Response $responseSlim,$args) {
 	$Datasheet = new Datasheet();
 	$request= new RequestApi();
@@ -380,7 +388,7 @@ $app->get('/remove/{doi}', function (Request $req,Response $responseSlim,$args) 
 });
 
 
-
+//Route permettant le telechargement
 $app->get('/files/{prefix}/{doi}/{filename}', function (Request $req,Response $responseSlim,$args) {
 	$request= new RequestApi();
    	$doi  = $args['doi'];
@@ -395,6 +403,7 @@ $app->get('/files/{prefix}/{doi}/{filename}', function (Request $req,Response $r
 
 });
 
+//Route permettant d'effectuer une preview
 $app->get('/preview/{prefix}/{doi}/{filename}', function (Request $req,Response $responseSlim,$args) {
 	$request= new RequestApi();
    	$doi  = $args['doi'];
@@ -412,7 +421,7 @@ $app->get('/preview/{prefix}/{doi}/{filename}', function (Request $req,Response 
 
 
 
-
+//Route receptionnant les donnees POST du formulaire de contact d'auteurs
 $app->post('/contact_author', function (Request $req,Response $responseSlim) {
 	$loader = new Twig_Loader_Filesystem('search/templates');
 	$twig = new Twig_Environment($loader);
@@ -435,7 +444,7 @@ $app->post('/contact_author', function (Request $req,Response $responseSlim) {
 
 
 
-
+//Route permettant une exportation en un format specifique
 $app->get('/export/{format}', function (Request $req,Response $responseSlim,$args) {
 	   	$id  = $req->getparam('id');
 	   	$format=$args['format'];
