@@ -2,9 +2,6 @@
 
 namespace search\controller;
 use \search\controller\RequestController as RequestApi;
-
-
-
 use MongoClient;
 
 class DatasheetController
@@ -30,7 +27,11 @@ class DatasheetController
         return $this->db;
     }
 
-
+  /**
+     * Generate a new DOI
+     * @return a new doi if success 
+     */
+    
 function generateDOI(){
         $config = parse_ini_file("config.ini");
         $dbdoi = new MongoClient("mongodb://" . $config['host'] . ':' . $config['port'], array(
@@ -504,10 +505,15 @@ function generateDOI(){
         }
     }
     
+     /**
+     * Create new datasheet
+     * @param mongo connection object, array of POST data 
+     * @return true if insert is ok else array of data 
+     */
     
     function Newdatasheet($db, $array)
     {
-        if (isset($array['error'])) {
+        if (isset($array['error'])) {//Si une erreur est detecté
             return $array;
         } else {
             $config        = parse_ini_file("config.ini");
@@ -569,24 +575,28 @@ function generateDOI(){
     
     
     
+     /**
+     * Edit datasheet
+     * @param collection to edit, doi of dataset to edit,mongo connection object, array of POST data 
+     * @return true if insert is ok else array of data 
+     */
     
     function Editdatasheet($collection, $doi, $db, $array)
     {
         $config        = parse_ini_file("config.ini");
         $UPLOAD_FOLDER = $config["UPLOAD_FOLDER"];
-        if (isset($array['error'])) {
+        if (isset($array['error'])) {//Si une erreur est detecté
             return $array;
         } else {
-            //$this->db = new MongoClient("mongodb://localhost:27017");
             $collectionObject = $this->db->selectCollection($config["authSource"], $collection);
-            if (strstr($doi, 'ORDAR')!==FALSE) {
+            if (strstr($doi, 'ORDAR')!==FALSE) {//Si un DOI perrene est assigné
                 $doi = $doi;
-            $Request = new RequestApi();
-            $xml=$array['xml'];
-            $identifier = $xml->addChild('identifier',$doi);
-            $identifier->addAttribute('identifierType', 'DOI');
-            $request=$Request->send_XML_to_datacite($xml->asXML(),$doi);
-             if ($request=="true") {
+                $Request = new RequestApi();
+                $xml=$array['xml'];
+                $identifier = $xml->addChild('identifier',$doi);
+                $identifier->addAttribute('identifierType', 'DOI');
+                $request=$Request->send_XML_to_datacite($xml->asXML(),$doi);
+             if ($request=="true") {//Si les donnnées ont bien été receptionné par datacite
                 $collectionObject->update(array(
                     '_id' => $doi
                 ), array(
@@ -619,8 +629,6 @@ function generateDOI(){
                     $ORIGINAL_DATA_URL = $value["DATA"]["FILES"][0]["ORIGINAL_DATA_URL"];
                 }
                 unlink($ORIGINAL_DATA_URL);
-                //unlink(UPLOAD_FOLDER.$doi.'/'.$doi.'_INTRO.csv')
-                //$collectionObject->insert(array('_id' => new \MongoInt32($doi)),array("INTRO" => $array));
                 rename($UPLOAD_FOLDER . $doi . '/' . $doi . '_DATA.csv', $UPLOAD_FOLDER ."/".$config["DOI_PREFIX"]."/" .$newdoi . "/" . $doi . '_DATA.csv');
                 rmdir($UPLOAD_FOLDER . $doi);
                 $collectionObject->update(array(
@@ -657,7 +665,12 @@ function generateDOI(){
         }
     }
     
-    
+
+      /**
+     * Remove datasheet
+     * @param collection to edit, doi of dataset to edit 
+     * @return true if remove is ok else false
+     */
     function removeUnpublishedDatasheet($collection, $doi)
     {
         $config        = parse_ini_file("config.ini");
@@ -690,7 +703,11 @@ function generateDOI(){
     }
     
     
-    
+      /**
+     * Send a mail to author of a dataset
+     * @param  doi of dataset , data of dataset,nom de l'auteur,prenom de l'auteur,object du mail,message, mail de l'expediteur
+     * @return true if error else false
+     */
     
     function Send_Mail_author($doi, $response, $author_name, $author_firstname, $object, $message, $sendermail)
     {

@@ -6,7 +6,11 @@ namespace search\controller;
 Class FileController
 {
     
-    
+    /**
+     * Download a file
+     * @param doi of dataset, filename,data of dataset
+     * @return true if ok else false
+     */
     function download($doi, $filename, $response)
     {
         $config     = parse_ini_file("config.ini");
@@ -32,7 +36,11 @@ Class FileController
         
     }
 
-
+    /**
+     * Export to datacite xml format
+     * @param data of dataset
+     * @return true if ok else false
+     */
     function export_to_datacite_xml($response){
          if (isset($response['_source']['DATA'])) {
                 $sxe = new \SimpleXMLElement("<resource/>");
@@ -74,7 +82,11 @@ Class FileController
     }
 
 
-
+     /**
+     * Export to dublincore xml format
+     * @param data of dataset
+     * @return true if ok else false
+     */
     function export_to_dublincore_xml($response){
          if (isset($response['_source']['DATA'])) {
                 $sxe = new \SimpleXMLElement("<oai_dc:dc/>");
@@ -107,7 +119,12 @@ Class FileController
         }
 
     }
-    
+
+     /**
+     * Export to bibtex format
+     * @param data of dataset
+     * @return true if ok else false
+     */
     function export_to_Bibtex($response){
         if (isset($response['_source']['DATA'])) {
              foreach ($response['_source']['INTRO']['FILE_CREATOR'] as $key => $value) {
@@ -133,7 +150,11 @@ Class FileController
         }
     }
     
-    
+     /**
+     * Preview a file
+     * @param doi of dataset, filename,data of dataset
+     * @return true if ok else false
+     */
     function preview($doi, $filename, $response)
     {
         $config     = parse_ini_file("config.ini");

@@ -6,7 +6,11 @@ namespace search\controller;
 
 class RequestController
 {
-    
+      /**
+     * Make a curl request
+     * @param url to request,option
+     * @return data of request
+     */
     function Curlrequest($url, $curlopt)
     {
         
@@ -19,7 +23,10 @@ class RequestController
         curl_close($ch);
         return $rawData;
     }
-    
+     /**
+     * Check status of datacite service
+     * @return Code of request
+     */
     function Check_status_datacite(){
         $handle = curl_init("https://mds.datacite.org");
         curl_setopt($handle,  CURLOPT_RETURNTRANSFER, TRUE);
@@ -29,7 +36,11 @@ class RequestController
         return $httpCode;
     }
     
-    
+     /**
+     * Make a request to elasticsearch API
+     * @param query of user
+     * @return data of request
+     */
     function requestToAPI($query)
     {
         $query                      = rawurlencode($query);
@@ -104,7 +115,11 @@ class RequestController
         
     }
 
-
+     /**
+     * Send generated XML to datacite to save DOI
+     * @param xml a envoyer,doi concerné
+     * @return treu if ok else false
+     */
     function send_XML_to_datacite($XML,$doi){
     	$config        = parse_ini_file("config.ini");
     	$url= "https://mds.datacite.org/metadata/";
@@ -161,7 +176,11 @@ class RequestController
     }
 
     
-    
+    /**
+     * Make a request to elasticsearch API by user
+     * @param mail of authors,name of auhtors, query of user
+     * @return data of request
+     */
     function getPublicationsofUser($author_mail, $authors_name, $query)
     {
         $postcontent = '{ 
@@ -243,7 +262,11 @@ class RequestController
     
     
     
-    
+    /**
+     * Make a request to elasticsearch API for a specific dataset
+     * @param doi of dataset
+     * @return data of request if find, else false
+     */
     function get_info_for_dataset($id)
     {
         $url      = 'http://localhost/ordar/_all/' . urlencode($id);
@@ -320,7 +343,11 @@ class RequestController
     }
     
     
-    
+    /**
+     * Send a mail to contact ORDAR owner
+     * @param object,message,mail of sender
+     * @return true if error, else false
+     */
     function Send_Contact_Mail($object, $message, $sendermail)
     {
         
