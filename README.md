@@ -170,6 +170,7 @@ Cette classe permet d'effectuer des actions de telechargement, d'export et de pr
 
 Pour l’aspect, le framework Semantic UI a été choisi pour sa simplicité d’utilisation et sa bonne documentation. Il permet de réaliser des interfaces graphiques responsives légère et rapide.
 
+![Alt text](/Img_doc/Ordar_accueil.png?raw=true)
 
 
 
@@ -206,7 +207,7 @@ Un jeu de données peut etre supprimé si il a un statut unpublished, c'est a di
 
 
 
-** Enregistrement des DOIs: **
+**Enregistrement des DOIs: **
 
 ![Alt text](/Img_doc/DOI_save.png?raw=true)
 
