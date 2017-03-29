@@ -162,7 +162,16 @@ Cette classe permet de gerer les datasets , en creer , editer, supprimer, genere
 
 Cette classe permet d'effectuer des actions de telechargement, d'export et de preview de fichiers. 
 
-**Insertion d'un nouveau jeux de données:**
+
+
+
+
+
+
+
+# Utilisation
+
+**Insertion d'un nouveau jeu de données:**
 
 L'utilisateur rempli le formulaire,il rempli les champs marqué d'une étoile rouge qui sont obligatoire, la verification est faite coté client et coté serveur.
 
@@ -171,6 +180,21 @@ Un numero de DOI sera attribe au jeu de données.
 Les informations sont ensuite traité et inserer en base de données.
 
 Mongo connector se charge ensuite d'indexer ces données.
+
+
+**Modification d'un jeu de données existant:**
+
+L'utilisateur se rend sur la données a modifier, il clique sur edit, un formulaire apparait avec les metadonnées deja en base de données, l'utilisateur peut les modifier, il ne peut pas modifier ou ajouter des fichiers.
+
+
+**Suppresion d'un jeu de données: **
+
+Un jeu de données peut etre supprimé si il a un statut unpublished, c'est a dire pas de DOI.
+
+
+
+
+ 
 
 
 
