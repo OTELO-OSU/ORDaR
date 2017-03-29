@@ -166,6 +166,13 @@ Cette classe permet d'effectuer des actions de telechargement, d'export et de pr
 
 
 
+**Aspect de générale de l’application :**
+
+Pour l’aspect, le framework Semantic UI a été choisi pour sa simplicité d’utilisation et sa bonne documentation. Il permet de réaliser des interfaces graphiques responsives légère et rapide.
+
+
+
+
 
 
 
@@ -175,7 +182,7 @@ Cette classe permet d'effectuer des actions de telechargement, d'export et de pr
 
 L'utilisateur rempli le formulaire,il rempli les champs marqué d'une étoile rouge qui sont obligatoire, la verification est faite coté client et coté serveur.
 
-Un numero de DOI sera attribe au jeu de données.
+Un numero de DOI sera attribué au jeu de données.
 
 Les informations sont ensuite traité et inserer en base de données.
 
@@ -187,10 +194,21 @@ Mongo connector se charge ensuite d'indexer ces données.
 L'utilisateur se rend sur la données a modifier, il clique sur edit, un formulaire apparait avec les metadonnées deja en base de données, l'utilisateur peut les modifier, il ne peut pas modifier ou ajouter des fichiers.
 
 
-**Suppresion d'un jeu de données: **
+**Suppression d'un jeu de données:**
 
 Un jeu de données peut etre supprimé si il a un statut unpublished, c'est a dire pas de DOI.
 
+
+
+![Alt text](/Img_doc/Diagram_ORDAR.png?raw=true)
+
+
+
+
+
+** Enregistrement des DOIs: **
+
+![Alt text](/Img_doc/DOI_save.png?raw=true)
 
 
 
