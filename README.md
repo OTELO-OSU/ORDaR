@@ -162,6 +162,20 @@ Cette classe permet de gerer les datasets , en creer , editer, supprimer, genere
 
 Cette classe permet d'effectuer des actions de telechargement, d'export et de preview de fichiers. 
 
+**Insertion d'un nouveau jeux de données:**
+
+L'utilisateur rempli le formulaire,il rempli les champs marqué d'une étoile rouge qui sont obligatoire, la verification est faite coté client et coté serveur.
+
+Un numero de DOI sera attribe au jeu de données.
+
+Les informations sont ensuite traité et inserer en base de données.
+
+Mongo connector se charge ensuite d'indexer ces données.
+
+
+
+
+
 
 
 
