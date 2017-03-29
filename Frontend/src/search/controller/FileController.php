@@ -160,12 +160,16 @@ Class FileController
     {
         $config     = parse_ini_file($_SERVER['DOCUMENT_ROOT'].'/../config.ini');
         $UPLOAD_FOLDER = $config["UPLOAD_FOLDER"];
+                $DOI_PREFIX = $config["DOI_PREFIX"];
+
         $doi=str_replace($config["UPLOAD_FOLDER"],"", $doi);
         if (isset($response['_source']['DATA'])) {
-             if (strstr($doi, 'ORDAR')!==FALSE) {
-            $file = $UPLOAD_FOLDER. $doi . "/" . $filename;
-        }
+        if (strstr($doi, 'ORDAR')!==FALSE) {
             $file = $UPLOAD_FOLDER.$DOI_PREFIX."/". $doi . "/" . $filename;
+        }
+        else{
+            $file = $UPLOAD_FOLDER. $doi . "/" . $filename;  
+        }
             header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
             header("Content-Disposition: inline; filename=" . $filename);
             foreach ($response['_source']['DATA']['FILES'] as $key => $value) {

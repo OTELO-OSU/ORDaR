@@ -411,12 +411,20 @@ $app->get('/files/{doi}/{filename}', function (Request $req,Response $responseSl
 });
 
 //Route permettant d'effectuer une preview
-$app->get('/preview/{prefix}/{doi}/{filename}', function (Request $req,Response $responseSlim,$args) {
+$app->get('/preview/{doi}/{filename}', function (Request $req,Response $responseSlim,$args) {
+
+	$config     = parse_ini_file($_SERVER['DOCUMENT_ROOT'].'/../config.ini');
 	$request= new RequestApi();
    	$doi  = $args['doi'];
-   	$fulldoi=$args['prefix']."/".$args['doi'];
+   	$fulldoi=$config["DOI_PREFIX"]."/".$args['doi'];
    	$filename  = $args['filename'];
-	$response=$request->get_info_for_dataset($fulldoi);
+   	if (strstr($doi, 'ORDAR')!==FALSE) {
+		$response=$request->get_info_for_dataset($fulldoi);
+	}
+	else{
+		$response=$request->get_info_for_dataset($doi);
+	}
+
 	$File = new File();
 	$download=$File->preview($doi,$filename,$response);
 	if ($download==NULL OR $download==false) {
