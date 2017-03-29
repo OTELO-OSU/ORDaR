@@ -73,7 +73,7 @@ if ($_SESSION['name']) {
 echo $twig->render('accueil.html.twig',['name'=>$_SESSION['name'],'firstname'=>$_SESSION['firstname'],'mail'=>$_SESSION['mail'],'query'=>$query]);
 }
 else{
-	echo $twig->render('accueil.html.twig');
+	echo $twig->render('accueil.html.twig',['query'=>$query]);
 }
 });
 

@@ -207,7 +207,7 @@ Un jeu de données peut etre supprimé si il a un statut unpublished, c'est a di
 
 
 
-**Enregistrement des DOIs: **
+**Enregistrement des DOIs:**
 
 ![Alt text](/Img_doc/DOI_save.png?raw=true)
 
