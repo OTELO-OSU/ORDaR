@@ -147,9 +147,9 @@ Si tout s'est bien passé, il doit vous retourné acknowledge:true.
 
     sudo mongo-connector -m localhost:27017 -c mongo-connector_config.json  --namespace NOMDELABDD.*
 
-    Mongo connector permet de repliquer les données présente dans mongoDB sur un clusters elasticsearch.
+    Mongo connector permet de repliquer les données présente dans mongoDB sur un cluster elasticsearch.
 
-    Ci dessous un schema explicatif de sont fonctionnement :
+    Ci dessous un schema explicatif de son fonctionnement :
 
 ![Alt text](/Img_doc/Mongoconnector.png?raw=true)
 
@@ -204,8 +204,8 @@ Les metadonnées contiennent des champs obligatoires ainsi que facultatifs.
 Un jeu de données à un acces défini: il peut etre :
 
     - Open(libre de consultation).
-    - Closed(Seulement les metadonnées sont accessiblent).
-    - Embargoed(metadonnées accessible mais pas les fichiers avant la date donner).
+    - Closed(Seulement les metadonnées sont accessibles).
+    - Embargoed(metadonnées accessibles mais pas les fichiers avant la date donner).
     - Unpublished (fichier importé avec un script d'import que le propriétaire peut publier quand il le souhaite).
 
 
@@ -213,6 +213,22 @@ Un jeu de données à un acces défini: il peut etre :
 
 
 # Utilisation
+
+
+**Rechercher un jeu de données:**
+L'utilisateur peut effectuer une recherche par mot clé, il peut utiliser des opérateurs logique tels que AND et OR.
+A l'issue de cette recherche l'utilisateur peut trier les données à l'aide de facets:
+   
+    -Sample kind
+    -Authors
+    -Keywords
+    -Scientific fields
+    -Languages
+    -Filetypes
+    -Access right
+    -Date
+
+Lors de la selection de deux facets, l'opérateur de recherche est AND. 
 
 **Insertion d'un nouveau jeu de données:**
 
