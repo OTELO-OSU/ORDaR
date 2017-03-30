@@ -155,7 +155,7 @@ Cette classe va permettre d'effectuer les requêtes,vers l'api ElasticSearch et 
 
 -**DatasheetController**: 
 
-Cette classe permet de gerer les datasets , en creer , editer, supprimer, generer un doi, envoyer un mail a un auteur.
+Cette classe permet de gérer les datasets , en creer , éditer, supprimer, generer un doi, envoyer un mail à un auteur.
 
 
 -**FileController**: 
@@ -172,6 +172,19 @@ Pour l’aspect, le framework Semantic UI a été choisi pour sa simplicité d�
 
 ![Alt text](/Img_doc/Ordar_accueil.png?raw=true)
 
+
+
+
+**Definition d'un jeu de données:**
+
+Un jeu de données est un ensemble constitué de metadonnées et de fichiers.
+Les metadonnées contiennent des champs obligatoires ainsi que facultatifs.
+Un jeu de données à un acces défini: il peut etre :
+
+    -Open (libre de consultation).
+    -Closed(Seulement les metadonnées sont accessiblent).
+    -Embargoed(metadonnées accessible mais pas les fichiers avant la date donner).
+    -Unpublished (fichier importé avec un script d'import que le propriétaire peut publier quand il le souhaite).
 
 
 
