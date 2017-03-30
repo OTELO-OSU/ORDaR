@@ -218,11 +218,20 @@ Un jeu de données à un acces défini: il peut etre :
 
 L'utilisateur rempli le formulaire,il rempli les champs marqué d'une étoile rouge qui sont obligatoire, la verification est faite coté client et coté serveur.
 
-Un numero de DOI sera attribué au jeu de données.
+Un numero de DOI perenne sera attribué au jeu de données.
 
 Les informations sont ensuite traité et inserer en base de données.
 
 Mongo connector se charge ensuite d'indexer ces données.
+
+**Importation d'un jeu de données via OTELoCloud:**
+
+Un script d'importation se charge d'importer les données présente dans un dossier spécifiques:
+Lors de l'import celui ci importe dans les metadonnées le feuillet INTRO du fichier excel,
+Le feuillet DATA est converti en fichier csv et il est joins à ce jeux de données comme fichier.
+
+Le jeux de données est ajouter avec un statut Unpublished, il est accessible seulement pour son ou ses auteurs.
+L'auteur peut choisir de le publier ou de le supprimer.
 
 
 **Modification d'un jeu de données existant:**
@@ -232,7 +241,12 @@ L'utilisateur se rend sur la données a modifier, il clique sur edit, un formula
 
 **Suppression d'un jeu de données:**
 
-Un jeu de données peut etre supprimé si il a un statut unpublished, c'est a dire pas de DOI.
+Un jeu de données peut etre supprimé si il a un statut unpublished, c'est a dire pas de DOI perenne.
+La suppression entraine la suppression TOTALE du jeu de données:
+
+-Le fichier original
+-Le csv genéré
+-l'entrée en base de données
 
 
 
