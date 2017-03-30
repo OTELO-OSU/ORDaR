@@ -203,10 +203,10 @@ Un jeu de données est un ensemble constitué de metadonnées et de fichiers.
 Les metadonnées contiennent des champs obligatoires ainsi que facultatifs.
 Un jeu de données à un acces défini: il peut etre :
 
-    -<p style='color:green'>Open</p>(libre de consultation).
-    -Closed(Seulement les metadonnées sont accessiblent).
-    -Embargoed(metadonnées accessible mais pas les fichiers avant la date donner).
-    -Unpublished (fichier importé avec un script d'import que le propriétaire peut publier quand il le souhaite).
+    - Open(libre de consultation).
+    - Closed(Seulement les metadonnées sont accessiblent).
+    - Embargoed(metadonnées accessible mais pas les fichiers avant la date donner).
+    - Unpublished (fichier importé avec un script d'import que le propriétaire peut publier quand il le souhaite).
 
 
 
