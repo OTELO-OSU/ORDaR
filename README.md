@@ -94,6 +94,12 @@ Pour ubuntu 16.04(pour d’autre système consulter le manuel de mongodb)
 
         db.createUser({user: "USER",pwd: "PASSWORD",roles: [ { role: "readWrite", db: "ORDaR" } ]})
 
+    Créer aussi une base DOI :
+    
+        use DOI
+
+        db.createUser({user: "USER",pwd: "PASSWORD",roles: [ { role: "readWrite", db: "DOI" } ]})
+
 Ensuite démarrer elasticsearch,
 rendez vous dans le dossier précédemment télécharger , dans le dossier bin et exécuter :
 ./elasticsearch
@@ -105,19 +111,27 @@ rendez vous dans le dossier précédemment télécharger , dans le dossier bin e
     Rendez vous dans le dossier créer, une fois dans le dossier Ordar, exécuter :
     php Init_elasticsearch_index.php 
     Ce fichier permet de définir la template que doit utiliser elasticsearch.
-    Rendez vous dans Frontend/src/search/controller/config.ini
+    Rendez vous dans Frontend/config.ini
     UPLOAD_FOLDER défini ou les Uploads des utilisateurs vont être stocké, 
     choisissez un chemin et vérifier les permissions.
     Il s'agit de l'user qui a les droits de d'écriture.
     Choisissez l’authentification de mongodb 
     host = 127.0.0.1
     port = 27017
+    authSource= Le nom de votre BDD qui contiendra les jeux de données
     username =
     password =
 
+    La partie DOI:
+
+    DOI_PREFIX= Votre prefix de DOI
+    URL_DOI= Votre URL associé au DOI entre double quotes.
+    user_doi = Votre utilisateur de la base DOI
+    password_doi = 
 
 
-** Parametrage du fichier de configuration de mongo_connector:**
+
+**Parametrage du fichier de configuration de mongo_connector:**
 
 Il s'agit de l'user qui a les droits de backup.
 Definissez un username, ainsi qu'un password.
