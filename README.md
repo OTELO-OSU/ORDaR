@@ -94,8 +94,8 @@ Pour ubuntu 16.04(pour d’autre système consulter le manuel de mongodb)
 
         db.createUser({user: "USER",pwd: "PASSWORD",roles: [ { role: "readWrite", db: "ORDaR" } ]})
 
-    Créer aussi une base DOI :
-    
+    Créer aussi une base DOI et crée l'utilisateur qui pourra modifier les données:
+
         use DOI
 
         db.createUser({user: "USER",pwd: "PASSWORD",roles: [ { role: "readWrite", db: "DOI" } ]})
@@ -137,13 +137,21 @@ Il s'agit de l'user qui a les droits de backup.
 Definissez un username, ainsi qu'un password.
 
 
+**Initialisation du mapping d'elasticsearch:**
+
+Afin d'intialiser le mapping, qui va permettre un bon fonctionnement des facets de recherche, il faut lancer le script Init_elasticsearch_index.php.
+Si tout s'est bien passé, il doit vous retourné acknowledge:true.
 
 
 **Lancez Mongo-connector**
 
     sudo mongo-connector -m localhost:27017 -c mongo-connector_config.json  --namespace NOMDELABDD.*
 
+    Mongo connector permet de repliquer les données présente dans mongoDB sur un clusters elasticsearch.
 
+    Ci dessous un schema explicatif de sont fonctionnement :
+
+![Alt text](/Img_doc/Mongoconnector.png?raw=true)
 
 
 
