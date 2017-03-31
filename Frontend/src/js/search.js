@@ -351,9 +351,14 @@
                       var value = $(value).parent().attr('title').split(" ");;
                       if (authors === undefined) {
                           authors = 'INTRO.FILE_CREATOR.NAME:"' + value[0] + '" AND INTRO.FILE_CREATOR.FIRST_NAME:"' + value[1] + '"';
-
+                            if (value.length==3) {
+                      	  authors = 'INTRO.FILE_CREATOR.NAME:"' + value[0] +" "+value[1] + '" AND INTRO.FILE_CREATOR.FIRST_NAME:"' + value[2] + '"';
+                    	  }
                       } else {
                           authors = ' AND INTRO.FILE_CREATOR.NAME:"' + value[0] + '" AND INTRO.FILE_CREATOR.FIRST_NAME:"' + value[1] + '"';
+                            if (value.length==3) {
+                      	  authors = 'AND INTRO.FILE_CREATOR.NAME:"' + value[0] +" "+value[1] + '" AND INTRO.FILE_CREATOR.FIRST_NAME:"' + value[2] + '"';
+                      }
                       }
                       if (facets !== undefined) {
                           facets += " " + authors;
