@@ -38,7 +38,7 @@ class RequestController
 
 
      function Inactivate_doi($doi){
-      
+        $config     = parse_ini_file($_SERVER['DOCUMENT_ROOT'].'/../config.ini');
         $url= "https://mds.datacite.org/metadata/".$doi;
         $curlopt                = array(
             CURLOPT_RETURNTRANSFER => true,
@@ -48,7 +48,7 @@ class RequestController
             CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
             CURLOPT_CUSTOMREQUEST => "DELETE",
             CURLOPT_HTTPHEADER => array(
-            "authorization: Basic SU5JU1QuT1RFTE86MFTigqxsb0BkMCE=",
+            "authorization: ".$config['Auth_config_datacite'],
             'Content-Type: text/xml'
             ),
         );
@@ -242,7 +242,7 @@ class RequestController
             CURLOPT_CUSTOMREQUEST => "POST",
             CURLOPT_POSTFIELDS => $XML,
             CURLOPT_HTTPHEADER => array(
-   			"authorization: Basic SU5JU1QuT1RFTE86MFTigqxsb0BkMCE=",
+   			"authorization: ".$config['Auth_config_datacite'],
    			'Content-Type: text/xml'
    			),
         );
@@ -269,7 +269,7 @@ class RequestController
 			  CURLOPT_CUSTOMREQUEST => "POST",
 			  CURLOPT_POSTFIELDS => "doi=".$doi."&url=".$url_doi,
 			  CURLOPT_HTTPHEADER => array(
-			    "authorization: Basic SU5JU1QuT1RFTE86MFTigqxsb0BkMCE=",
+			    "authorization: ".$config['Auth_config_datacite'],
 			    "cache-control: no-cache",
 			  ),
 			));
