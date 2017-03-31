@@ -1,7 +1,7 @@
 <?php
 
 namespace search\controller;
-
+ini_set('memory_limit', '-1');
 
 
 class RequestController
@@ -35,6 +35,116 @@ class RequestController
         curl_close($handle);
         return $httpCode;
     }
+
+
+     function Inactivate_doi($doi){
+      
+        $url= "https://mds.datacite.org/metadata/".$doi;
+        $curlopt                = array(
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => "",
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 10,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => "DELETE",
+            CURLOPT_HTTPHEADER => array(
+            "authorization: Basic SU5JU1QuT1RFTE86MFTigqxsb0BkMCE=",
+            'Content-Type: text/xml'
+            ),
+        );
+
+        $ch      = curl_init();
+        $curlopt = array(
+            CURLOPT_URL => $url
+        ) + $curlopt;
+        curl_setopt_array($ch, $curlopt);
+        $rawData = curl_exec($ch);
+        $info = curl_getinfo($ch);
+        curl_close($ch);
+    }
+
+
+
+     function requestToAPIAdmin($query)
+    {
+        if (!empty($query)) {
+        $query                      = rawurlencode($query);
+        }
+        else{
+            $query="*";
+        }
+        $postcontent                = '{ 
+            "aggs" : {  
+                "sample_kind" : {  
+                    "terms" : {  
+                      "field" : "INTRO.SAMPLE_KIND.NAME" 
+                    } 
+                }, 
+                "keywords" : {  
+                    "terms" : {  
+                      "field" : "INTRO.KEYWORDS.NAME" 
+                    } 
+                }, 
+                 "authors" : {  
+                    "terms" : {  
+                      "field" : "INTRO.FILE_CREATOR.DISPLAY_NAME" 
+                    } 
+                }, 
+                "scientific_field" : {  
+                    "terms" : {  
+                      "field" : "INTRO.SCIENTIFIC_FIELD.NAME" 
+                    } 
+                }, 
+                "date" : {  
+                    "terms" : {  
+                      "field" : "INTRO.CREATION_DATE" 
+                    } 
+                }, 
+                "language" : {  
+                    "terms" : {  
+                      "field" : "INTRO.LANGUAGE" 
+                    } 
+                }, 
+                "filetype" : {  
+                    "terms" : {  
+                      "field" : "DATA.FILES.FILETYPE" 
+                    } 
+                }, 
+                 "access_right" : {  
+                    "terms" : {  
+                      "field" : "INTRO.ACCESS_RIGHT" 
+                    } 
+                } 
+            } 
+        }';
+        $url                        = 'http://localhost/ordar/_search?q='.$query.'&size=10000';
+        $curlopt                    = array(
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_PORT => 9200,
+            CURLOPT_ENCODING => "",
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 40,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => "POST",
+            CURLOPT_POSTFIELDS => $postcontent
+        );
+        $response                   = self::Curlrequest($url, $curlopt);
+        $response                   = json_decode($response, TRUE);
+        $responses["hits"]["total"] = $response["hits"]["total"];
+        $responses['aggregations']  = $response['aggregations'];
+        foreach ($response["hits"]["hits"] as $key => $value) {
+            $responses["hits"]["hits"][$key]           = $value["_source"]["INTRO"];
+            $responses["hits"]["hits"][$key]["_index"] = $value["_index"];
+            $responses["hits"]["hits"][$key]["_id"]    = $value["_id"];
+            $responses["hits"]["hits"][$key]["_type"]  = $value["_type"];
+        }
+        ;
+        $responses = json_encode($responses);
+        return $responses;
+        
+    }
+
+
     
      /**
      * Make a request to elasticsearch API
@@ -282,63 +392,68 @@ class RequestController
         );
         $response = self::Curlrequest($url, $curlopt);
         $response = json_decode($response, TRUE);
-        
-        if ($response["_source"]["INTRO"]["ACCESS_RIGHT"] == "Open") {
-            //$response=json_encode($response);
+        if ($_SESSION['admin']=="1") {
             return $response;
-        } elseif ($response["_source"]["INTRO"]["ACCESS_RIGHT"] == "Embargoed") {
-            $embargoeddate = $response["_source"]["INTRO"]["PUBLICATION_DATE"];
-            $now           = new \Datetime();
+        }
+        else{
             
-            foreach ($response["_source"]["INTRO"]["FILE_CREATOR"] as $key => $value) {
-                if (@$_SESSION["mail"] == $value["MAIL"]) {
-                    return $response;
-                } else {
-                    $notfound = "notfound";
-                }
-            }
-            if ($notfound = "notfound") {
+            if ($response["_source"]["INTRO"]["ACCESS_RIGHT"] == "Open") {
+                //$response=json_encode($response);
+                return $response;
+            } elseif ($response["_source"]["INTRO"]["ACCESS_RIGHT"] == "Embargoed") {
+                $embargoeddate = $response["_source"]["INTRO"]["PUBLICATION_DATE"];
+                $now           = new \Datetime();
                 
-                $responses["_source"]["INTRO"] = $response["_source"]["INTRO"];
-                $responses["_index"]           = $response["_index"];
-                $responses["_id"]              = $response["_id"];
-                $responses["_type"]            = $response["_type"];
-                return $responses;
-            }
-            
-        } elseif ($response["_source"]["INTRO"]["ACCESS_RIGHT"] == "Closed") {
-            foreach ($response["_source"]["INTRO"]["FILE_CREATOR"] as $key => $value) {
-                if (@$_SESSION["mail"] == $value["MAIL"]) {
-                    return $response;
-                } else {
-                    $notfound = "notfound";
+                foreach ($response["_source"]["INTRO"]["FILE_CREATOR"] as $key => $value) {
+                    if (@$_SESSION["mail"] == $value["MAIL"]) {
+                        return $response;
+                    } else {
+                        $notfound = "notfound";
+                    }
+                }
+                if ($notfound = "notfound") {
+                    
+                    $responses["_source"]["INTRO"] = $response["_source"]["INTRO"];
+                    $responses["_index"]           = $response["_index"];
+                    $responses["_id"]              = $response["_id"];
+                    $responses["_type"]            = $response["_type"];
+                    return $responses;
+                }
+                
+            } elseif ($response["_source"]["INTRO"]["ACCESS_RIGHT"] == "Closed") {
+                foreach ($response["_source"]["INTRO"]["FILE_CREATOR"] as $key => $value) {
+                    if (@$_SESSION["mail"] == $value["MAIL"]) {
+                        return $response;
+                    } else {
+                        $notfound = "notfound";
+                        
+                    }
+                }
+                if ($notfound = "notfound") {
+                    $responses["_source"]["INTRO"] = $response["_source"]["INTRO"];
+                    $responses["_index"]           = $response["_index"];
+                    $responses["_id"]              = $response["_id"];
+                    $responses["_type"]            = $response["_type"];
+                    return $responses;
+                }
+                
+                
+            } elseif ($response["_source"]["INTRO"]["ACCESS_RIGHT"] == "Unpublished") {
+                $found = "false";
+                foreach ($response["_source"]["INTRO"]["FILE_CREATOR"] as $key => $value) {
+                    if (@$_SESSION["mail"] == $value["MAIL"]) {
+                        $found = "true";
+                    }
                     
                 }
-            }
-            if ($notfound = "notfound") {
-                $responses["_source"]["INTRO"] = $response["_source"]["INTRO"];
-                $responses["_index"]           = $response["_index"];
-                $responses["_id"]              = $response["_id"];
-                $responses["_type"]            = $response["_type"];
-                return $responses;
-            }
-            
-            
-        } elseif ($response["_source"]["INTRO"]["ACCESS_RIGHT"] == "Unpublished") {
-            $found = "false";
-            foreach ($response["_source"]["INTRO"]["FILE_CREATOR"] as $key => $value) {
-                if (@$_SESSION["mail"] == $value["MAIL"]) {
-                    $found = "true";
+                if ($found == "true") {
+                    return $response;
+                } else {
+                    return false;
                 }
                 
+                
             }
-            if ($found == "true") {
-                return $response;
-            } else {
-                return false;
-            }
-            
-            
         }
         
     }

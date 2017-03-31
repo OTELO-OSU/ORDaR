@@ -82,16 +82,27 @@ $app->get('/login', function (Request $req,Response $responseSlim) {
 	$loader = new Twig_Loader_Filesystem('search/templates');
 	$twig = new Twig_Environment($loader);
 	echo $twig->render('login.html.twig');
+	$config     = parse_ini_file($_SERVER['DOCUMENT_ROOT'].'/../config.ini');
 	//$_SESSION['name'] = $_SERVER['HTTP_SN'];
 	//$_SESSION['firstname'] = $_SERVER['HTTP_GIVENNAME'];
 	//$_SESSION['mail'] = $_SERVER['HTTP_MAIL'];
 	$_SESSION['name'] = "Montarges-Pelletier";
 	$_SESSION['firstname'] ="antoh";
 	$_SESSION['mail'] = "emmanuelle.montarges@univ-lorraine.fr";
+	foreach ($config["admin"] as $key => $value) {
+	$array=explode(",",$value);
+	}
+	foreach ($array as $key => $value) {
+		if ($value==$_SESSION['mail']) {
+			$_SESSION['admin']="1";
+		}
+	}
+
+
 	session_regenerate_id();
 
 	if ($_SESSION['HTTP_REFERER']) {
-	return $responseSlim->withRedirect($_SESSION['HTTP_REFERER']);
+		return $responseSlim->withRedirect($_SESSION['HTTP_REFERER']);
 	}	
 	else{
 		return $responseSlim->withRedirect('accueil');
@@ -187,21 +198,28 @@ $app->post('/upload', function (Request $req,Response $responseSlim) {
 //Route receptionnant les données POST mypublications
 $app->post('/getmypublications', function (Request $req,Response $responseSlim) {
 	$request = new RequestApi();
-	if ($_SESSION['name']) {
-		$authors_mail= $_SESSION['mail'];
-		$authors_name= $_SESSION['name'];
+	if ($_SESSION['admin']=="1") {
 		$query  = $req->getparam('query');
-
-		if (!empty($query)) {
-			$response=$request->getPublicationsofUser($authors_mail,$authors_name,$query);
-		}
-		else{
-		$response=$request->getPublicationsofUser($authors_mail,$authors_name,"null");
-		}
-   	return $response;
+		$response=$request->requestToAPIAdmin($query);
+		return $response;
 	}
 	else{
-		return $responseSlim->withRedirect('accueil');
+		if ($_SESSION['name']) {
+			$authors_mail= $_SESSION['mail'];
+			$authors_name= $_SESSION['name'];
+			$query  = $req->getparam('query');
+
+			if (!empty($query)) {
+				$response=$request->getPublicationsofUser($authors_mail,$authors_name,$query);
+			}
+			else{
+				$response=$request->getPublicationsofUser($authors_mail,$authors_name,"null");
+			}
+	   	return $response;
+		}
+		else{
+			return $responseSlim->withRedirect('accueil');
+		}
 	}
 });
 
@@ -230,6 +248,7 @@ $app->get('/record', function (Request $req,Response $responseSlim) {
 		'firstname'=>$_SESSION['firstname'],
 		'mail'=>$_SESSION['mail'],
         'doi'=> $response['_id'],
+        'admin'=>$_SESSION['admin'],
         'id'=> $id[1],
         'title' => $response['_source']['INTRO']['TITLE'],
         'datadescription'=>$response['_source']['INTRO']['DATA_DESCRIPTION'],
@@ -271,7 +290,7 @@ $app->get('/editrecord', function (Request $req,Response $responseSlim) {
 			else{
 				$found="false";
 				foreach ($response["_source"]["INTRO"]["FILE_CREATOR"] as $key => $value) {
-					if (@$_SESSION["mail"]==$value["MAIL"]) {
+					if (@$_SESSION["mail"]==$value["MAIL"] OR $_SESSION['admin']==1) {
 								$found="true";
 					}
 				}
@@ -366,10 +385,10 @@ $app->post('/getinfo', function (Request $req,Response $responseSlim) {
 });
 
 //Route permettant la suppression d'un dataset
-$app->get('/remove/{doi}', function (Request $req,Response $responseSlim,$args) {
+$app->get('/remove', function (Request $req,Response $responseSlim,$args) {
 	$Datasheet = new Datasheet();
 	$request= new RequestApi();
-   	$doi  = $args['doi'];
+   	$doi = $req->getparam('id');
    	$response=$request->get_info_for_dataset($doi);
 	$collection=$response['_type'];
 	$doi= $response['_id'];

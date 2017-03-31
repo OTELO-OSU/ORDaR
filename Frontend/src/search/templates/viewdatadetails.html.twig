@@ -148,9 +148,9 @@
                      {% endfor %}
                   </ul>
                   {%for author in authors%}
-                  {% if author.MAIL == mail %}
-                  {% if accessright == "Unpublished" %}
-                  <a href="remove/{{doi}}">
+                  {% if (author.MAIL == mail and admin!=1) %}
+                  {% if (accessright == "Unpublished") %}
+                  <a href="remove?id={{doi}}">
                      <div class="ui right floated red button" >Remove  <i class="remove icon"></i></div>
                   </a>
                   {% endif %}
@@ -159,6 +159,14 @@
                   </a>
                   {%endif%}
                   {%endfor%}
+                  {% if (admin==1) %}
+                  <a href="remove?id={{doi}}">
+                     <div class="ui right floated red button" >Remove  <i class="remove icon"></i></div>
+                  </a>
+                  <a href="editrecord?id={{doi}}">
+                     <div class="ui right floated primary button" >Edit<i class="right chevron icon"></i></div>
+                  </a>
+                  {%endif%}
                   <p>Uploaded on {{uploaddate}}</p>
                </div>
                <div class="ui container cards">

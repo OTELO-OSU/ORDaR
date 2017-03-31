@@ -685,8 +685,31 @@ function generateDOI(){
             return false;
         }
         if (strstr($doi, 'ORDAR')!==FALSE) {
-            // test de suppression si publier
+            if ($_SESSION['admin']==1) {
+                    $db               = self::connect_tomongo();
+                    $collectionObject = $this->db->selectCollection($config["authSource"], $collection);
+                    $query            = array(
+                        '_id' => $doi
+                    );
+                    $cursor           = $collectionObject->find($query);
+                    foreach ($cursor as $key => $value) {
+                        $ORIGINAL_DATA_URL = $value["DATA"]["FILES"][0]["ORIGINAL_DATA_URL"];
+                    }
+                    unlink($ORIGINAL_DATA_URL);
+                    $collectionObject->remove(array(
+                        '_id' => $doi
+                    ));
+                    unlink($UPLOAD_FOLDER . $doi . '/' . $doi . '_DATA.csv');
+                    rmdir($UPLOAD_FOLDER . $doi);
+                    $request= new RequestApi();
+                    $request->Inactivate_doi($doi);
+
+                    return true;
+            }
+            else{
+
              return false;
+            }
         } else {
             $db               = self::connect_tomongo();
             $collectionObject = $this->db->selectCollection($config["authSource"], $collection);
