@@ -14,6 +14,31 @@
       </div>
       {%endif%}
       <form class="ui form" action="editrecord?id={{doi}}" method="post" enctype="multipart/form-data" >
+      {% if admin %}
+      <div class="ui message">
+         <div class="header">
+            Instructions:
+         </div>
+         <p>Upload minimum one file and fill-in required fields (marked with a red star ).</p>
+      </div>
+         <h4 class="ui dividing header">Files <i class="file icon"></i> </h4>
+         <div class="required field">
+            <label for="file" class="custom-file-upload">
+            File 
+            </label>
+         </div>
+         <div class="ui grid">
+            <div class="required field" id="files">
+               <div class="ui input">
+                  <input id="file" data-validate="file" type="file" name="file[]" required="">
+               </div>
+            </div>
+            <div class="row"></div>
+         </div>
+         <div class="ui primary  button" id="addfile">
+            <i class="plus icon"></i> Add a file
+         </div>
+         {%endif%}
          {% include 'formdataset.html.twig' %}
          <div class="ui grid ">
             <div class="ui sixteen wide column ">

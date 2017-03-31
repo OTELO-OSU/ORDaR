@@ -273,7 +273,6 @@ class RequestController
 			    "cache-control: no-cache",
 			  ),
 			));
-            var_dump($curl);
 
 		$response = curl_exec($curl);
 		return "true";
