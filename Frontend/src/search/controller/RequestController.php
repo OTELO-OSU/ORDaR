@@ -377,7 +377,7 @@ class RequestController
      * @param doi of dataset
      * @return data of request if find, else false
      */
-    function get_info_for_dataset($id)
+    function get_info_for_dataset($id,$restricted)
     {
         $url      = 'http://localhost/ordar/_all/' . urlencode($id);
         $curlopt  = array(
@@ -391,69 +391,76 @@ class RequestController
         );
         $response = self::Curlrequest($url, $curlopt);
         $response = json_decode($response, TRUE);
-        if ($_SESSION['admin']=="1") {
+
+        if ($restricted=="Unrestricted") {
             return $response;
         }
         else{
-            
-            if ($response["_source"]["INTRO"]["ACCESS_RIGHT"] == "Open") {
-                //$response=json_encode($response);
-                return $response;
-            } elseif ($response["_source"]["INTRO"]["ACCESS_RIGHT"] == "Embargoed") {
-                $embargoeddate = $response["_source"]["INTRO"]["PUBLICATION_DATE"];
-                $now           = new \Datetime();
-                
-                foreach ($response["_source"]["INTRO"]["FILE_CREATOR"] as $key => $value) {
-                    if (@$_SESSION["mail"] == $value["MAIL"]) {
-                        return $response;
-                    } else {
-                        $notfound = "notfound";
-                    }
+
+                if ($_SESSION['admin']=="1") {
+                    return $response;
                 }
-                if ($notfound = "notfound") {
+                else{
                     
-                    $responses["_source"]["INTRO"] = $response["_source"]["INTRO"];
-                    $responses["_index"]           = $response["_index"];
-                    $responses["_id"]              = $response["_id"];
-                    $responses["_type"]            = $response["_type"];
-                    return $responses;
-                }
-                
-            } elseif ($response["_source"]["INTRO"]["ACCESS_RIGHT"] == "Closed") {
-                foreach ($response["_source"]["INTRO"]["FILE_CREATOR"] as $key => $value) {
-                    if (@$_SESSION["mail"] == $value["MAIL"]) {
+                    if ($response["_source"]["INTRO"]["ACCESS_RIGHT"] == "Open") {
+                        //$response=json_encode($response);
                         return $response;
-                    } else {
-                        $notfound = "notfound";
+                    } elseif ($response["_source"]["INTRO"]["ACCESS_RIGHT"] == "Embargoed") {
+                        $embargoeddate = $response["_source"]["INTRO"]["PUBLICATION_DATE"];
+                        $now           = new \Datetime();
+                        
+                        foreach ($response["_source"]["INTRO"]["FILE_CREATOR"] as $key => $value) {
+                            if (@$_SESSION["mail"] == $value["MAIL"]) {
+                                return $response;
+                            } else {
+                                $notfound = "notfound";
+                            }
+                        }
+                        if ($notfound = "notfound") {
+                            
+                            $responses["_source"]["INTRO"] = $response["_source"]["INTRO"];
+                            $responses["_index"]           = $response["_index"];
+                            $responses["_id"]              = $response["_id"];
+                            $responses["_type"]            = $response["_type"];
+                            return $responses;
+                        }
+                        
+                    } elseif ($response["_source"]["INTRO"]["ACCESS_RIGHT"] == "Closed") {
+                        foreach ($response["_source"]["INTRO"]["FILE_CREATOR"] as $key => $value) {
+                            if (@$_SESSION["mail"] == $value["MAIL"]) {
+                                return $response;
+                            } else {
+                                $notfound = "notfound";
+                                
+                            }
+                        }
+                        if ($notfound = "notfound") {
+                            $responses["_source"]["INTRO"] = $response["_source"]["INTRO"];
+                            $responses["_index"]           = $response["_index"];
+                            $responses["_id"]              = $response["_id"];
+                            $responses["_type"]            = $response["_type"];
+                            return $responses;
+                        }
+                        
+                        
+                    } elseif ($response["_source"]["INTRO"]["ACCESS_RIGHT"] == "Unpublished") {
+                        $found = "false";
+                        foreach ($response["_source"]["INTRO"]["FILE_CREATOR"] as $key => $value) {
+                            if (@$_SESSION["mail"] == $value["MAIL"]) {
+                                $found = "true";
+                            }
+                            
+                        }
+                        if ($found == "true") {
+                            return $response;
+                        } else {
+                            return false;
+                        }
+                        
                         
                     }
                 }
-                if ($notfound = "notfound") {
-                    $responses["_source"]["INTRO"] = $response["_source"]["INTRO"];
-                    $responses["_index"]           = $response["_index"];
-                    $responses["_id"]              = $response["_id"];
-                    $responses["_type"]            = $response["_type"];
-                    return $responses;
-                }
-                
-                
-            } elseif ($response["_source"]["INTRO"]["ACCESS_RIGHT"] == "Unpublished") {
-                $found = "false";
-                foreach ($response["_source"]["INTRO"]["FILE_CREATOR"] as $key => $value) {
-                    if (@$_SESSION["mail"] == $value["MAIL"]) {
-                        $found = "true";
-                    }
-                    
-                }
-                if ($found == "true") {
-                    return $response;
-                } else {
-                    return false;
-                }
-                
-                
             }
-        }
         
     }
     

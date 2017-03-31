@@ -159,7 +159,7 @@ Class FileController
     {
         $config     = parse_ini_file($_SERVER['DOCUMENT_ROOT'].'/../config.ini');
         $UPLOAD_FOLDER = $config["UPLOAD_FOLDER"];
-                $DOI_PREFIX = $config["DOI_PREFIX"];
+        $DOI_PREFIX = $config["DOI_PREFIX"];
 
         $doi=str_replace($config["UPLOAD_FOLDER"],"", $doi);
         if (isset($response['_source']['DATA'])) {

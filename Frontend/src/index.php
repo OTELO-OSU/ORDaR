@@ -230,7 +230,7 @@ $app->get('/record', function (Request $req,Response $responseSlim) {
 	$twig = new Twig_Environment($loader);
    	$request= new RequestApi();
    	$id  = $req->getparam('id');
-	$response=$request->get_info_for_dataset($id);
+	$response=$request->get_info_for_dataset($id,"Restricted");
 	if (isset($response['_source']['DATA'])){
 		$files =  $response['_source']['DATA']['FILES'];
 	}
@@ -242,14 +242,22 @@ $app->get('/record', function (Request $req,Response $responseSlim) {
 
 	}
 	else{
+  
+   	if (strstr($id, 'ORDAR')!==FALSE) {
 		$id= split("/", $response['_id']);
+   		$id=$id[1];
+   	}
+   	else{
+   		$id=$id;
+   	}
+   	
 	return @$twig->render('viewdatadetails.html.twig', [
 		'name'=>$_SESSION['name'],
 		'firstname'=>$_SESSION['firstname'],
 		'mail'=>$_SESSION['mail'],
         'doi'=> $response['_id'],
         'admin'=>$_SESSION['admin'],
-        'id'=> $id[1],
+        'id'=> $id,
         'title' => $response['_source']['INTRO']['TITLE'],
         'datadescription'=>$response['_source']['INTRO']['DATA_DESCRIPTION'],
         'accessright'=>$response['_source']['INTRO']['ACCESS_RIGHT'],
@@ -339,7 +347,8 @@ $app->post('/editrecord', function (Request $req,Response $responseSlim) {
    	$Datasheet = new Datasheet();
    	$doi = $req->getparam('id');
    	$request= new RequestApi();
-	$response=$request->get_info_for_dataset($doi);
+	$response=$request->get_info_for_dataset($doi,"Restricted")
+;
 	$collection=$response['_type'];
 	$doi= $response['_id'];
 	$db=$Datasheet->connect_tomongo();
@@ -389,7 +398,8 @@ $app->get('/remove', function (Request $req,Response $responseSlim,$args) {
 	$Datasheet = new Datasheet();
 	$request= new RequestApi();
    	$doi = $req->getparam('id');
-   	$response=$request->get_info_for_dataset($doi);
+   	$response=$request->get_info_for_dataset($doi,"Restricted")
+;
 	$collection=$response['_type'];
 	$doi= $response['_id'];
    	$state=$Datasheet->removeUnpublishedDatasheet($collection,$doi);
@@ -416,10 +426,11 @@ $app->get('/files/{doi}/{filename}', function (Request $req,Response $responseSl
    	$filename  = $args['filename'];
    	if (strstr($doi, 'ORDAR')!==FALSE) {
    		$config     = parse_ini_file($_SERVER['DOCUMENT_ROOT'].'/../config.ini');
-		$response=$request->get_info_for_dataset($config["DOI_PREFIX"].'/'.$doi);
+		$response=$request->get_info_for_dataset($config["DOI_PREFIX"].'/'.$doi,"Restricted");
 	}
 	else{
-		$response=$request->get_info_for_dataset($doi);
+		$response=$request->get_info_for_dataset($doi,"Restricted")
+;
 	}
 	$File = new File();
 	$download=$File->download($doi,$filename,$response);
@@ -438,12 +449,12 @@ $app->get('/preview/{doi}/{filename}', function (Request $req,Response $response
    	$fulldoi=$config["DOI_PREFIX"]."/".$args['doi'];
    	$filename  = $args['filename'];
    	if (strstr($doi, 'ORDAR')!==FALSE) {
-		$response=$request->get_info_for_dataset($fulldoi);
+		$response=$request->get_info_for_dataset($fulldoi,"Restricted");
 	}
 	else{
-		$response=$request->get_info_for_dataset($doi);
+		$response=$request->get_info_for_dataset($doi,"Restricted")
+;
 	}
-
 	$File = new File();
 	$download=$File->preview($doi,$filename,$response);
 	if ($download==NULL OR $download==false) {
@@ -470,7 +481,8 @@ $app->post('/contact_author', function (Request $req,Response $responseSlim) {
 	$sendermail = $req->getparam('User-email');
 	$message = $req->getparam('User-message');
 	$object = $req->getparam('User-object');
-	$response=$request->get_info_for_dataset($doi);
+	$response=$request->get_info_for_dataset($doi,"Restricted")
+;
 	$error=$Datasheet->Send_Mail_author($doi,$response,$author_name,$author_firstname,$object,$message,$sendermail);
 	echo $twig->render('contact_request.html.twig',['name'=>$_SESSION['name'],'firstname'=>$_SESSION['firstname'],'mail'=>$_SESSION['mail'],'error'=>$error]);
 
@@ -483,7 +495,7 @@ $app->get('/export/{format}', function (Request $req,Response $responseSlim,$arg
 	   	$id  = $req->getparam('id');
 	   	$format=$args['format'];
 	   	$request= new RequestApi();
-		$response=$request->get_info_for_dataset($id);
+		$response=$request->get_info_for_dataset($id,"Unrestricted");
 		$file= new File();
 		if ($format=="datacite") {
 			$file=$file->export_to_datacite_xml($response);
