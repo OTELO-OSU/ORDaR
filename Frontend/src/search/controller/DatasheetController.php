@@ -527,6 +527,7 @@ function generateDOI(){
                 $repertoireDestination         = $UPLOAD_FOLDER;
                 $nomDestination                = str_replace(' ', '_', $_FILES["file"]["name"][$i]);
                 $data["FILES"][$i]["DATA_URL"] = $nomDestination;
+                $data["FILES"][$i]["ORIGINAL_DATA_URL"]= $UPLOAD_FOLDER."/".$doi."/".$nomDestination;
                 if (file_exists($repertoireDestination . $_FILES["file"]["name"][$i])) {
                     $returnarray[] = "false";
                     $returnarray[] = $array['dataform'];
@@ -648,7 +649,7 @@ function generateDOI(){
                 ));
                 foreach ($olddata as $key => $value) {
                     $INTRO                                          = $value["INTRO"];
-                    $value["DATA"]["FILES"][0]["ORIGINAL_DATA_URL"] = NULL;
+                    $value["DATA"]["FILES"][0]["ORIGINAL_DATA_URL"] = $UPLOAD_FOLDER."/".$config["DOI_PREFIX"]."/" . $newdoi."/".$value["DATA"]["FILES"][0]["DATA_URL"];
                     $DATA                                           = $value["DATA"];
                 }
                 $collectionObject->remove(array(
@@ -693,9 +694,11 @@ function generateDOI(){
                     );
                     $cursor           = $collectionObject->find($query);
                     foreach ($cursor as $key => $value) {
-                        $ORIGINAL_DATA_URL = $value["DATA"]["FILES"][0]["ORIGINAL_DATA_URL"];
+                        foreach ($value["DATA"]["FILES"] as $key => $value) {
+                        $ORIGINAL_DATA_URL = $value["ORIGINAL_DATA_URL"];
+                        unlink($ORIGINAL_DATA_URL);
+                        }
                     }
-                    unlink($ORIGINAL_DATA_URL);
                     $collectionObject->remove(array(
                         '_id' => $doi
                     ));
