@@ -336,12 +336,12 @@
                           samplekind = 'INTRO.SAMPLE_KIND.NAME:"' + value + '"';
 
                       } else {
-                          samplekind = 'AND INTRO.SAMPLE_KIND.NAME:"' + value + '"';
+                          samplekind = 'INTRO.SAMPLE_KIND.NAME:"' + value + '"';
                       }
                       if (facets !== undefined) {
-                          facets += " " + samplekind;
+                          facets += " AND " + samplekind;
                       } else {
-                          facets = samplekind;
+                          facets =" AND " + samplekind;
 
                       }
                   }
@@ -355,15 +355,15 @@
                       	  authors = 'INTRO.FILE_CREATOR.NAME:"' + value[0] +" "+value[1] + '" AND INTRO.FILE_CREATOR.FIRST_NAME:"' + value[2] + '"';
                     	  }
                       } else {
-                          authors = ' AND INTRO.FILE_CREATOR.NAME:"' + value[0] + '" AND INTRO.FILE_CREATOR.FIRST_NAME:"' + value[1] + '"';
+                          authors = ' INTRO.FILE_CREATOR.NAME:"' + value[0] + '" AND INTRO.FILE_CREATOR.FIRST_NAME:"' + value[1] + '"';
                             if (value.length==3) {
-                      	  authors = 'AND INTRO.FILE_CREATOR.NAME:"' + value[0] +" "+value[1] + '" AND INTRO.FILE_CREATOR.FIRST_NAME:"' + value[2] + '"';
+                      	  authors = ' INTRO.FILE_CREATOR.NAME:"' + value[0] +" "+value[1] + '" AND INTRO.FILE_CREATOR.FIRST_NAME:"' + value[2] + '"';
                       }
                       }
                       if (facets !== undefined) {
-                          facets += " " + authors;
+                          facets += " AND " + authors;
                       } else {
-                          facets = authors;
+                          facets = " AND " +authors;
 
                       } 
                   }
@@ -375,12 +375,12 @@
                           keywords = 'INTRO.KEYWORDS.NAME:"' + value + '"';
 
                       } else {
-                          keywords = keywords + ' AND INTRO.KEYWORDS.NAME:"' + value + '"';
+                          keywords = keywords + '  INTRO.KEYWORDS.NAME:"' + value + '"';
                       }
                       if (facets !== undefined) {
-                          facets = facets + " " + keywords;
+                          facets = facets + " AND " + keywords;
                       } else {
-                          facets = keywords;
+                          facets =" AND " + keywords;
 
                       }
                   }
@@ -391,12 +391,12 @@
                           scientific_field = 'INTRO.SCIENTIFIC_FIELD.NAME:"' + value + '"';
 
                       } else {
-                          scientific_field = scientific_field + ' AND INTRO.SCIENTIFIC_FIELD.NAME:"' + value + '"';
+                          scientific_field = scientific_field + '  INTRO.SCIENTIFIC_FIELD.NAME:"' + value + '"';
                       }
                       if (facets !== undefined) {
-                          facets = facets + " " + scientific_field;
+                          facets = facets + " AND " + scientific_field;
                       } else {
-                          facets = scientific_field;
+                          facets = " AND " +scientific_field;
 
                       }
                   }
@@ -407,12 +407,12 @@
                           language = 'INTRO.LANGUAGE:"' + value + '"';
 
                       } else {
-                          language = language + ' AND INTRO.LANGUAGE:"' + value + '"';
+                          language = language + ' INTRO.LANGUAGE:"' + value + '"';
                       }
                       if (facets !== undefined) {
-                          facets = facets + " " + language;
+                          facets = facets + " AND " + language;
                       } else {
-                          facets = language;
+                          facets = " AND " +language;
 
                       }
                   }
@@ -424,12 +424,12 @@
                           filetype = 'DATA.FILES.FILETYPE:"' + value + '"';
 
                       } else {
-                          filetype = filetype + ' AND DATA.FILES.FILETYPE:"' + value + '"';
+                          filetype = filetype + ' DATA.FILES.FILETYPE:"' + value + '"';
                       }
                       if (facets !== undefined) {
-                          facets = facets + " " + filetype;
+                          facets = facets + " AND " + filetype;
                       } else {
-                          facets = filetype;
+                          facets = " AND " +filetype;
 
                       }
                   }
@@ -440,12 +440,12 @@
                           access_right = 'INTRO.ACCESS_RIGHT:"' + value + '"';
 
                       } else {
-                          access_right = access_right + ' AND INTRO.ACCESS_RIGHT:"' + value + '"';
+                          access_right = access_right + ' INTRO.ACCESS_RIGHT:"' + value + '"';
                       }
                       if (facets !== undefined) {
-                          facets = facets + "  " + access_right;
+                          facets = facets + " AND " + access_right;
                       } else {
-                          facets = access_right;
+                          facets = " AND " + access_right;
 
                       }
                   }
@@ -460,7 +460,7 @@
                   facets = "";
               } else {
 
-                  facets = " AND " + facets
+                  facets =  facets
               }
 
 
@@ -718,12 +718,12 @@
                           samplekind = 'INTRO.SAMPLE_KIND.NAME:"' + value + '"';
 
                       } else {
-                          samplekind = 'AND INTRO.SAMPLE_KIND.NAME:"' + value + '"';
+                          samplekind = ' INTRO.SAMPLE_KIND.NAME:"' + value + '"';
                       }
                       if (facets !== undefined) {
-                          facets += " " + samplekind;
+                          facets += " AND " + samplekind;
                       } else {
-                          facets = samplekind;
+                          facets = ' AND '+samplekind;
 
                       }
                   }
@@ -731,21 +731,21 @@
                   if (value.name == "authors") {
                       var value = $(value).parent().attr('title').split(" ");
                       if (authors === undefined) {
-                          authors = 'INTRO.FILE_CREATOR.NAME:"' + value[0] + '" AND INTRO.FILE_CREATOR.FIRST_NAME:"' + value[1] + '"';
+                          authors = ' INTRO.FILE_CREATOR.NAME:"' + value[0] + '" AND INTRO.FILE_CREATOR.FIRST_NAME:"' + value[1] + '"';
                       if (value.length==3) {
-                      	  authors = 'INTRO.FILE_CREATOR.NAME:"' + value[0] +" "+value[1] + '" AND INTRO.FILE_CREATOR.FIRST_NAME:"' + value[2] + '"';
+                      	  authors = ' INTRO.FILE_CREATOR.NAME:"' + value[0] +" "+value[1] + '" AND INTRO.FILE_CREATOR.FIRST_NAME:"' + value[2] + '"';
                       }
 
                       } else {
-                          authors = ' AND INTRO.FILE_CREATOR.NAME:"' + value[0] + '" AND INTRO.FILE_CREATOR.FIRST_NAME:"' + value[1] + '"';
+                          authors = '  INTRO.FILE_CREATOR.NAME:"' + value[0] + '" AND INTRO.FILE_CREATOR.FIRST_NAME:"' + value[1] + '"';
                             if (value.length==3) {
-                      	  authors = ' AND INTRO.FILE_CREATOR.NAME:"' + value[0] +" "+value[1] + '" AND INTRO.FILE_CREATOR.FIRST_NAME:"' + value[2] + '"';
+                      	  authors = '  INTRO.FILE_CREATOR.NAME:"' + value[0] +" "+value[1] + '" AND INTRO.FILE_CREATOR.FIRST_NAME:"' + value[2] + '"';
                       }
                       }
                       if (facets !== undefined) {
                           facets += " " + authors;
                       } else {
-                          facets = authors;
+                          facets = ' AND '+authors;
 
                       } 
                   }
@@ -757,12 +757,12 @@
                           keywords = 'INTRO.KEYWORDS.NAME:"' + value + '"';
 
                       } else {
-                          keywords = keywords + ' AND INTRO.KEYWORDS.NAME:"' + value + '"';
+                          keywords = keywords + '  INTRO.KEYWORDS.NAME:"' + value + '"';
                       }
                       if (facets !== undefined) {
-                          facets = facets + " " + keywords;
+                          facets = facets + " AND " + keywords;
                       } else {
-                          facets = keywords;
+                          facets = ' AND '+keywords;
 
                       }
                   }
@@ -774,12 +774,12 @@
                           scientific_field = 'INTRO.SCIENTIFIC_FIELD.NAME:"' + value + '"';
 
                       } else {
-                          scientific_field = scientific_field + ' AND INTRO.SCIENTIFIC_FIELD.NAME:"' + value + '"';
+                          scientific_field = scientific_field + '  INTRO.SCIENTIFIC_FIELD.NAME:"' + value + '"';
                       }
                       if (facets !== undefined) {
-                          facets = facets + " " + scientific_field;
+                          facets = facets + " AND " + scientific_field;
                       } else {
-                          facets = scientific_field;
+                          facets = ' AND '+scientific_field;
 
                       }
                   }
@@ -790,12 +790,12 @@
                           language = 'INTRO.LANGUAGE:"' + value + '"';
 
                       } else {
-                          language = language + ' AND INTRO.LANGUAGE:"' + value + '"';
+                          language = language + '  INTRO.LANGUAGE:"' + value + '"';
                       }
                       if (facets !== undefined) {
-                          facets = facets + " " + language;
+                          facets = facets + " AND " + language;
                       } else {
-                          facets = language;
+                          facets = ' AND '+language;
 
                       }
                   }
@@ -807,12 +807,12 @@
                           filetype = 'DATA.FILES.FILETYPE:"' + value + '"';
 
                       } else {
-                          filetype = filetype + ' AND DATA.FILES.FILETYPE:"' + value + '"';
+                          filetype = filetype + '  DATA.FILES.FILETYPE:"' + value + '"';
                       }
                       if (facets !== undefined) {
-                          facets = facets + " " + filetype;
+                          facets = facets + " AND " + filetype;
                       } else {
-                          facets = filetype;
+                          facets = ' AND '+filetype;
 
                       }
                   }
@@ -823,12 +823,12 @@
                           access_right = 'INTRO.ACCESS_RIGHT:"' + value + '"';
 
                       } else {
-                          access_right = access_right + ' AND INTRO.ACCESS_RIGHT:"' + value + '"';
+                          access_right = access_right + '  INTRO.ACCESS_RIGHT:"' + value + '"';
                       }
                       if (facets !== undefined) {
-                          facets = facets + "  " + access_right;
+                          facets = facets + " AND " + access_right;
                       } else {
-                          facets = access_right;
+                          facets = ' AND '+access_right;
 
                       }
                   }
@@ -840,7 +840,7 @@
                   facets = "";
               } else {
 
-                  facets = " AND (" + facets + ")"
+                  facets =  facets 
               }
 
               $('#results').empty();
