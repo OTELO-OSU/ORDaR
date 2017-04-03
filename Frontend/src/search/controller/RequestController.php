@@ -407,7 +407,12 @@ class RequestController
         else{
 
                 if ($_SESSION['admin']=="1") {
-                    return $response;
+                    if ($response['found']==false) {
+                        return false;
+                    }
+                    else{
+                        return $response;    
+                    }
                 }
                 else{
                     

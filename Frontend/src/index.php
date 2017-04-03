@@ -238,8 +238,7 @@ $app->get('/record', function (Request $req,Response $responseSlim) {
 		$files=NULL;
 	}
 	if ($response==false) {
-				return $responseSlim->withRedirect('accueil');
-
+			return $responseSlim->withRedirect('accueil');
 	}
 	else{
   
