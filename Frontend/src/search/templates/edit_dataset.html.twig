@@ -29,8 +29,13 @@
          </div>
          <div class="ui grid">
             <div class="required field" id="files">
+            {%if files%}
+            {%for file in files%}
                <div class="ui input">
+                   
                </div>
+            {%endfor%}
+            {%endif%}
             </div>
             <div class="row"></div>
          </div>
