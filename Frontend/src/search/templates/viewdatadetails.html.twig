@@ -150,17 +150,17 @@
                   {%for author in authors%}
                   {% if (author.MAIL == mail and admin!=1) %}
                   {% if (accessright == "Unpublished") %}
-                  <a href="remove?id={{doi}}">
+                  <a onclick=" $('.ui.modal.remove').modal('show');">
                      <div class="ui right floated red button" >Remove  <i class="remove icon"></i></div>
                   </a>
                   {% endif %}
-                  <a href="editrecord?id={{doi}}">
+                  <a onclick=" $('.ui.modal.remove').modal('show');">
                      <div class="ui right floated primary button" >Edit<i class="right chevron icon"></i></div>
                   </a>
                   {%endif%}
                   {%endfor%}
                   {% if (admin==1) %}
-                  <a href="remove?id={{doi}}">
+                  <a onclick=" $('.ui.modal.remove').modal('show');">
                      <div class="ui right floated red button" >Remove  <i class="remove icon"></i></div>
                   </a>
                   <a href="editrecord?id={{doi}}">
@@ -289,6 +289,22 @@
 </div>
 </div>
 </div>
+
+<div class="ui modal remove">
+  <i class="close icon"></i>
+  <div class="header">
+  Are you sure ?
+  </div>
+  <div class="content">
+   <h2>Remove {{doi}}</h2>
+  </div>
+  <div class="actions">
+    <a href="remove?id={{doi}}"><button class="ui red button" >Yes</button></a>
+    <button class="ui green deny button" >No</button>
+  </div>
+  </form>
+</div>
+
 
 <div class="ui modal doi">
   <i class="close icon"></i>
