@@ -74,6 +74,9 @@ class RequestController
             $query="*";
         }
         $postcontent                = '{ 
+             "_source": {
+            "excludes": [ "DATA" ]
+             },
             "aggs" : {  
                 "sample_kind" : {  
                     "terms" : {  
@@ -155,6 +158,9 @@ class RequestController
     {
         $query                      = rawurlencode($query);
         $postcontent                = '{ 
+            "_source": {
+            "excludes": [ "DATA" ]
+             },
             "aggs" : {  
                 "sample_kind" : {  
                     "terms" : {  
@@ -294,6 +300,9 @@ class RequestController
     function getPublicationsofUser($author_mail, $authors_name, $query)
     {
         $postcontent = '{ 
+            "_source": {
+            "excludes": [ "DATA" ]
+             },
             "aggs" : {  
                 "sample_kind" : {  
                     "terms" : {  
