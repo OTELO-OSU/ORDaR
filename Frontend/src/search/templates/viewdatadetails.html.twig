@@ -319,5 +319,16 @@
   </div>
   </form>
 </div>
+
+
+<script type="text/javascript">
+     $('.table').DataTable( {
+      "lengthMenu": [[5, 25, 50, -1], [5, 25, 50, "All"]],
+      "pageLength": 5, "order": [[ 2, "desc" ]],
+        "pagingType": "numbers",
+                  responsive: true,
+
+    } );
+</script>
 {% include 'contact_author.html.twig' %}
 {% include 'footer.html.twig' %}
