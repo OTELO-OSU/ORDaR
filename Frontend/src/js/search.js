@@ -12,10 +12,9 @@
                   $('#info-noresult').append('No result found!');
                   $('#info-noresult').addClass('red');
                   $('#info-noresult').show();
-                  $('#info').remove();
+                  $('#info').hide();
                   $('#gridlogo').show();
                   $('.easyPaginateNav').remove();
-                  $('#facets').hide();
 
               } else {
                   $('.easyPaginateNav').remove();
@@ -77,6 +76,7 @@
                   $('#info').append(total + ' result(s) found!');
                   $('#info').addClass('green');
                   $('#info').show();
+                  $('#info-noresult').hide();
                   $('#logosearch').hide();
                   $('#gridlogo .row').remove();
                   $('#results').easyPaginate({
@@ -503,9 +503,6 @@
           AppendFacets: function(data) {
               $('#info').hide();
               $('#facets').hide();
-              $('#info').removeClass('red');
-              $('#info').removeClass('green');
-              $('#info').empty();
               $('#results').empty();
               $('.easyPaginateNav').remove();
               $('#facets_type').empty();
