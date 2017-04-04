@@ -59,6 +59,11 @@
 
 <script type="text/javascript">
    APP.modules.upload.init();
+</script>
+
+ {% if admin and accessright != "Unpublished" %}
+ <script type="text/javascript">
+
    $('form').submit(function () {
     var file = $.trim($('#files input').val());
     if (file==="") {
@@ -68,6 +73,6 @@
     }
    
 });
-   
 </script>
+{%endif%}
 {% include 'footer.html.twig' %}
