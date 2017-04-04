@@ -13,8 +13,8 @@ class DatasheetController
      */
     function connect_tomongo()
     {
-        $config     = parse_ini_file($_SERVER['DOCUMENT_ROOT'].'/../config.ini');
-
+        $config = parse_ini_file($_SERVER['DOCUMENT_ROOT'] . '/../config.ini');
+        
         
         if (empty($config['username']) && empty($config['password'])) {
             $this->db = new MongoClient("mongodb://" . $config['host'] . ':' . $config['port']);
@@ -27,74 +27,97 @@ class DatasheetController
         }
         return $this->db;
     }
-
-  /**
+    
+    /**
      * Generate a new DOI
      * @return a new doi if success 
      */
     
-function generateDOI(){
-        $config     = parse_ini_file($_SERVER['DOCUMENT_ROOT'].'/../config.ini');
-
-        $dbdoi = new MongoClient("mongodb://" . $config['host'] . ':' . $config['port'], array(
-                'authSource' => "DOI",
-                'username' => $config['user_doi'],
-                'password' => $config['password_doi']
-            ));
+    function generateDOI()
+    {
+        $config = parse_ini_file($_SERVER['DOCUMENT_ROOT'] . '/../config.ini');
+        
+        $dbdoi      = new MongoClient("mongodb://" . $config['host'] . ':' . $config['port'], array(
+            'authSource' => "DOI",
+            'username' => $config['user_doi'],
+            'password' => $config['password_doi']
+        ));
         $collection = $dbdoi->selectCollection("DOI", "DOI");
-        if ($collection->count()==1) {
-            $query=array('STATE' => 'UNLOCKED');
+        if ($collection->count() == 1) {
+            $query  = array(
+                'STATE' => 'UNLOCKED'
+            );
             $cursor = $collection->find($query);
-            $count=$cursor->count();
-            if ($count==1) {
+            $count  = $cursor->count();
+            if ($count == 1) {
                 foreach ($cursor as $key => $value) {
-                        $update = $collection->update(array("_id" => $value['_id']), array('$set' => array("STATE" => "LOCKED")));
-                        $DOI=$value['ID'];
-                        $NewDOI=++$DOI;
-                        $update = $collection->update(array("_id" => $value['_id']), array('$set' => array("ID" => $NewDOI))); 
-                        $update = $collection->update(array("_id" => $value['_id']), array('$set' => array("STATE" => "UNLOCKED")));
+                    $update = $collection->update(array(
+                        "_id" => $value['_id']
+                    ), array(
+                        '$set' => array(
+                            "STATE" => "LOCKED"
+                        )
+                    ));
+                    $DOI    = $value['ID'];
+                    $NewDOI = ++$DOI;
+                    $update = $collection->update(array(
+                        "_id" => $value['_id']
+                    ), array(
+                        '$set' => array(
+                            "ID" => $NewDOI
+                        )
+                    ));
+                    $update = $collection->update(array(
+                        "_id" => $value['_id']
+                    ), array(
+                        '$set' => array(
+                            "STATE" => "UNLOCKED"
+                        )
+                    ));
                 }
                 return $NewDOI;
-            }
-            else{
+            } else {
                 return false;
             }
+        } else {
+            $cursor = $collection->insert(array(
+                '_id' => "ORDAR-DOI",
+                'ID' => 0,
+                'STATE' => "UNLOCKED"
+            ));
         }
-        else{
-            $cursor = $collection->insert(array('_id' => "ORDAR-DOI",'ID'=>0,'STATE'=>"UNLOCKED"));
-        }
-}
-
-
+    }
+    
+    
     /**
      * Parse Post Data 
      * @param array, post request
      * @return array, parsed data to write
      */
-    function Postprocessing($POST,$method,$doi)
+    function Postprocessing($POST, $method, $doi)
     {
-        $config     = parse_ini_file($_SERVER['DOCUMENT_ROOT'].'/../config.ini');
-
+        $config = parse_ini_file($_SERVER['DOCUMENT_ROOT'] . '/../config.ini');
+        
         $sxe = new \SimpleXMLElement("<resource/>");
         $sxe->addAttribute('xmlns:xmlns:xsi', 'http://www.w3.org/2001/XMLSchema-instance');
         $sxe->addAttribute('xmlns', 'http://datacite.org/schema/kernel-4');
         $sxe->addAttribute('xsi:xsi:schemaLocation', 'http://datacite.org/schema/kernel-4 http://schema.datacite.org/meta/kernel-4/metadata.xsd');
-      
-        $creators = $sxe->addChild('creators');
-        $publicationYear = $sxe->addChild('publicationYear',date('Y'));
-        $subjects = $sxe->addChild('subjects');
-        $titles = $sxe->addChild('titles');
-        $RessourceType = $sxe->addChild('resourceType','Dataset');
+        
+        $creators        = $sxe->addChild('creators');
+        $publicationYear = $sxe->addChild('publicationYear', date('Y'));
+        $subjects        = $sxe->addChild('subjects');
+        $titles          = $sxe->addChild('titles');
+        $RessourceType   = $sxe->addChild('resourceType', 'Dataset');
         $RessourceType->addAttribute('resourceTypeGeneral', 'Dataset');
-        $Version = $sxe->addChild('version','1');
+        $Version      = $sxe->addChild('version', '1');
         $descriptions = $sxe->addChild('descriptions');
-
-
-
-        $error              = null;
-        $author_displayname = null;
-        $UPLOAD_FOLDER      = $config["UPLOAD_FOLDER"];
-        $required           = array(
+        
+        
+        
+        $error                          = null;
+        $author_displayname             = null;
+        $UPLOAD_FOLDER                  = $config["UPLOAD_FOLDER"];
+        $required                       = array(
             'title',
             'creation_date',
             'language',
@@ -121,7 +144,7 @@ function generateDOI(){
             }
             if ($key == "title") {
                 $array["TITLE"] = htmlspecialchars($value, ENT_QUOTES);
-                $title = $titles->addChild('title',htmlspecialchars($value, ENT_QUOTES));
+                $title          = $titles->addChild('title', htmlspecialchars($value, ENT_QUOTES));
             }
             if ($key == "language") {
                 if ($value == '0') {
@@ -131,27 +154,25 @@ function generateDOI(){
                     $language = "ENGLISH";
                 }
                 $array["LANGUAGE"] = $language;
-                $sxe->addChild('language',$language);
+                $sxe->addChild('language', $language);
             }
             if ($key == "sampling_date") {
-                if ($value[0]=="") {
-                }
-                else{
+                if ($value[0] == "") {
+                } else {
                     if (count($value) > 1) {
-                        if(count(array_unique($value))<count($value)){
-                            $error="Sampling date must be unique";
+                        if (count(array_unique($value)) < count($value)) {
+                            $error = "Sampling date must be unique";
                             foreach ($value as $key => $value) {
                                 $array["SAMPLING_DATE"][$key] = htmlspecialchars($value, ENT_QUOTES);
-                                }
                             }
+                        }
                         
-                        else{  
+                        else {
                             foreach ($value as $key => $value) {
                                 $array["SAMPLING_DATE"][$key] = htmlspecialchars($value, ENT_QUOTES);
-                                }
                             }
-                    }
-                     else {
+                        }
+                    } else {
                         $array["SAMPLING_DATE"][0] = htmlspecialchars($value[0], ENT_QUOTES);
                     }
                 }
@@ -159,33 +180,32 @@ function generateDOI(){
             }
             if ($key == "description") {
                 $array["DATA_DESCRIPTION"] = htmlspecialchars($value, ENT_QUOTES);
-                $description=$descriptions->addChild('description', htmlspecialchars($value, ENT_QUOTES));
+                $description               = $descriptions->addChild('description', htmlspecialchars($value, ENT_QUOTES));
                 $description->addAttribute('descriptionType', 'Abstract');
-
-
+                
+                
             }
             if ($key == "scientific_field") {
                 if (count($value) > 1) {
                     foreach ($value as $key => $value) {
                         $array["SCIENTIFIC_FIELD"][$key]["NAME"] = htmlspecialchars($value, ENT_QUOTES);
-                        $subjects->addChild('subject',htmlspecialchars($value, ENT_QUOTES));
+                        $subjects->addChild('subject', htmlspecialchars($value, ENT_QUOTES));
                     }
                 } else {
                     $array["SCIENTIFIC_FIELD"][0]["NAME"] = htmlspecialchars($value[0], ENT_QUOTES);
-                    $subjects->addChild('subject',htmlspecialchars($value[0], ENT_QUOTES));
+                    $subjects->addChild('subject', htmlspecialchars($value[0], ENT_QUOTES));
                 }
             }
             if ($key == "sampling_point_name") {
                 if (count($value) > 1) {
-                    if(count(array_unique($value))<count($value)){
-                        $error="Sample name must be unique";
-                         foreach ($value as $key => $value) {
+                    if (count(array_unique($value)) < count($value)) {
+                        $error = "Sample name must be unique";
+                        foreach ($value as $key => $value) {
                             if (!empty($value)) {
                                 $array["SAMPLING_POINT"][$key]["NAME"] = htmlspecialchars($value, ENT_QUOTES);
                             }
                         }
-                    }
-                    else{
+                    } else {
                         foreach ($value as $key => $value) {
                             if (!empty($value)) {
                                 $array["SAMPLING_POINT"][$key]["NAME"] = htmlspecialchars($value, ENT_QUOTES);
@@ -314,7 +334,7 @@ function generateDOI(){
             }
             if ($key == "publisher") {
                 $array["PUBLISHER"] = htmlspecialchars($value, ENT_QUOTES);
-                $publisher = $sxe->addChild('publisher',htmlspecialchars($value, ENT_QUOTES));
+                $publisher          = $sxe->addChild('publisher', htmlspecialchars($value, ENT_QUOTES));
             }
             if ($key == "sample_kind") {
                 if (count($value) > 1) {
@@ -355,22 +375,22 @@ function generateDOI(){
                     $author_firstname                       = htmlspecialchars($value[0], ENT_QUOTES);
                 }
             }
-
-
+            
+            
             if ($key == "authors_name") {
                 if (count($value) > 1) {
                     foreach ($value as $keys => $value) {
                         $array["FILE_CREATOR"][$keys]["NAME"] = htmlspecialchars($value, ENT_QUOTES);
                         $author_displayname[]                 = htmlspecialchars($value, ENT_QUOTES) . " " . $author_firstname[$keys];
-                        $creator= $creators->addChild('creator');
+                        $creator                              = $creators->addChild('creator');
                         $creator->addChild('creatorName', htmlspecialchars($value, ENT_QUOTES) . " " . $author_firstname[$keys]);
                         
                     }
                 } else {
                     $array["FILE_CREATOR"][0]["NAME"] = htmlspecialchars($value[0], ENT_QUOTES);
                     $author_displayname               = htmlspecialchars($value[0], ENT_QUOTES) . " " . $author_firstname;
-                    $creator= $creators->addChild('creator');
-                    $creator->addChild('creatorName',htmlspecialchars($value[0], ENT_QUOTES) . " " . $author_firstname);
+                    $creator                          = $creators->addChild('creator');
+                    $creator->addChild('creatorName', htmlspecialchars($value[0], ENT_QUOTES) . " " . $author_firstname);
                 }
                 if ($author_displayname) {
                     if (is_array($author_displayname)) {
@@ -401,7 +421,7 @@ function generateDOI(){
                             }
                         }
                     }
-                    } else {
+                } else {
                     if (!empty($value[0])) {
                         $array["KEYWORDS"][0]["NAME"] = htmlspecialchars($value[0], ENT_QUOTES);
                     }
@@ -416,8 +436,8 @@ function generateDOI(){
                                 $array["FUNDINGS"][$key]["NAME"] = htmlspecialchars($value, ENT_QUOTES);
                             }
                         }
-                    } 
-                }else {
+                    }
+                } else {
                     if (!empty($value[0])) {
                         $array["FUNDINGS"][0]["NAME"] = htmlspecialchars($value[0], ENT_QUOTES);
                     }
@@ -472,33 +492,38 @@ function generateDOI(){
                 $array["UPLOAD_DATE"] = date('Y-m-d');
                 
             }
+            if ($key == "file_already_uploaded") {
+                $array['file_already_uploaded'] = $value;
+            }
+            else{
+                $array['file_already_uploaded'] = array();
+            }
         }
-
-
+        
+        
         if (!$error == NULL) {
             $array['dataform'] = $array;
             $array['error']    = $error;
             return $array;
         } else {
-            if ($method=="Edit") {
-                $doi=$doi;
+            if ($method == "Edit") {
+                $doi               = $doi;
                 $array['dataform'] = $array;
-                $array['xml']=$sxe;
-                $array['doi'] = $doi;
+                $array['xml']      = $sxe;
+                $array['doi']      = $doi;
                 return $array;
-            }
-            else{ 
-                $newdoi=self::generateDOI();
-                if ($newdoi!=false) {
-                    $doi=$config["DOI_PREFIX"]."/"."ORDAR-".$newdoi;
-                    $identifier = $sxe->addChild('identifier',$doi);
+            } else {
+                $newdoi = self::generateDOI();
+                if ($newdoi != false) {
+                    $doi        = $config["DOI_PREFIX"] . "/" . "ORDAR-" . $newdoi;
+                    $identifier = $sxe->addChild('identifier', $doi);
                     $identifier->addAttribute('identifierType', 'DOI');
                     $array['dataform'] = $array;
-                    $array['xml']=$sxe;
-                    $array['doi'] = $doi;
+                    $array['xml']      = $sxe;
+                    $array['doi']      = $doi;
+
                     return $array;
-                }
-                else{
+                } else {
                     $array['dataform'] = $array;
                     $array['error']    = "Fail to generate DOI please try again!";
                     return $array;
@@ -508,7 +533,7 @@ function generateDOI(){
         }
     }
     
-     /**
+    /**
      * Create new datasheet
      * @param mongo connection object, array of POST data 
      * @return true if insert is ok else array of data 
@@ -516,26 +541,26 @@ function generateDOI(){
     
     function Newdatasheet($db, $array)
     {
-        if (isset($array['error'])) {//Si une erreur est detecté
+        if (isset($array['error'])) { //Si une erreur est detecté
             return $array;
         } else {
-            $config     = parse_ini_file($_SERVER['DOCUMENT_ROOT'].'/../config.ini');
-
+            $config = parse_ini_file($_SERVER['DOCUMENT_ROOT'] . '/../config.ini');
+            
             $UPLOAD_FOLDER = $config["UPLOAD_FOLDER"];
-            $doi=$array['doi'];
+            $doi           = $array['doi'];
             for ($i = 0; $i < count($_FILES['file']['name']); $i++) {
-                $repertoireDestination         = $UPLOAD_FOLDER;
-                $nomDestination                = str_replace(' ', '_', $_FILES["file"]["name"][$i]);
-                $data["FILES"][$i]["DATA_URL"] = $nomDestination;
-                $data["FILES"][$i]["ORIGINAL_DATA_URL"]= $UPLOAD_FOLDER."/".$doi."/".$nomDestination;
+                $repertoireDestination                  = $UPLOAD_FOLDER;
+                $nomDestination                         = str_replace(' ', '_', $_FILES["file"]["name"][$i]);
+                $data["FILES"][$i]["DATA_URL"]          = $nomDestination;
+                $data["FILES"][$i]["ORIGINAL_DATA_URL"] = $UPLOAD_FOLDER . "/" . $doi . "/" . $nomDestination;
                 if (file_exists($repertoireDestination . $_FILES["file"]["name"][$i])) {
                     $returnarray[] = "false";
                     $returnarray[] = $array['dataform'];
                     return $returnarray;
                 } else {
                     if (is_uploaded_file($_FILES["file"]["tmp_name"][$i])) {
-                        if (is_dir($repertoireDestination.$config['DOI_PREFIX'])==false) {                
-                            mkdir($repertoireDestination.$config['DOI_PREFIX']);
+                        if (is_dir($repertoireDestination . $config['DOI_PREFIX']) == false) {
+                            mkdir($repertoireDestination . $config['DOI_PREFIX']);
                         }
                         if (!file_exists($repertoireDestination . $doi)) {
                             mkdir($repertoireDestination . $doi);
@@ -553,9 +578,8 @@ function generateDOI(){
                                 '_id' => $doi,
                                 "INTRO" => $array['dataform'],
                                 "DATA" => $data
-                            ); 
-                        }
-                        else{
+                            );
+                        } else {
                             $returnarray[] = "false";
                             $returnarray[] = $array['dataform'];
                             return $returnarray;
@@ -565,13 +589,12 @@ function generateDOI(){
             }
             
             $Request = new RequestApi();
-            $request=$Request->send_XML_to_datacite($array['xml']->asXML(),$doi);
-            if ($request=="true") {
+            $request = $Request->send_XML_to_datacite($array['xml']->asXML(), $doi);
+            if ($request == "true") {
                 $collectionObject->insert($json);
                 return "true";
-            }
-            else{
-                $array['error']="Unable to send metadata to Datacite";
+            } else {
+                $array['error'] = "Unable to send metadata to Datacite";
                 return $array;
             }
         }
@@ -580,7 +603,7 @@ function generateDOI(){
     
     
     
-     /**
+    /**
      * Edit datasheet
      * @param collection to edit, doi of dataset to edit,mongo connection object, array of POST data 
      * @return true if insert is ok else array of data 
@@ -588,130 +611,197 @@ function generateDOI(){
     
     function Editdatasheet($collection, $doi, $db, $array)
     {
-        $config     = parse_ini_file($_SERVER['DOCUMENT_ROOT'].'/../config.ini');
-
+        $config        = parse_ini_file($_SERVER['DOCUMENT_ROOT'] . '/../config.ini');
         $UPLOAD_FOLDER = $config["UPLOAD_FOLDER"];
-        if (isset($array['error'])) {//Si une erreur est detecté
+        if (isset($array['error'])) { //Si une erreur est detecté
             return $array;
         } else {
             $collectionObject = $db->selectCollection($config["authSource"], $collection);
-            if (strstr($doi, 'ORDAR')!==FALSE) {//Si un DOI perrene est assigné
-                $doi = $doi;
-                $Request = new RequestApi();
-                $xml=$array['xml'];
-                $identifier = $xml->addChild('identifier',$doi);
+            if (strstr($doi, 'ORDAR') !== FALSE) { //Si un DOI perrene est assigné
+                
+                if ($_SESSION['admin'] == 1) {
+                    $query    = array(
+                        '_id' => $doi
+                    );
+                    $cursor   = $collectionObject->find($query);
+                    $tmparray = array();
+                    foreach ($cursor as $key => $value) {
+                        foreach ($value["DATA"]["FILES"] as $key => $value) {
+                            $tmparray[] = $value['DATA_URL'];
+                        }
+                    }
+                    
+                    $diff = array_diff($tmparray, $array['file_already_uploaded']);
+                    foreach ($diff as $key => $value) {
+                        unlink($UPLOAD_FOLDER . "/" . $doi . "/" . $value['DATA_URL']);
+                    }
+                    $intersect = array_intersect($tmparray, $array['file_already_uploaded']);
+                    // trouver comment ajouter nouveau doc en BDD
+                    
+                    
+                    
+                    for ($i = 0; $i < count($_FILES['file']['name']); $i++) {
+                        $repertoireDestination         = $UPLOAD_FOLDER;
+                        $nomDestination                = str_replace(' ', '_', $_FILES["file"]["name"][$i]);
+                        $data[$i]["DATA_URL"]          = $nomDestination;
+                        $data[$i]["ORIGINAL_DATA_URL"] = $UPLOAD_FOLDER . "/" . $doi . "/" . $nomDestination;
+                        if (file_exists($repertoireDestination . $_FILES["file"]["name"][$i])) {
+                            $returnarray[] = "false";
+                            $returnarray[] = $array['dataform'];
+                            return $returnarray;
+                        } else {
+                            if (is_uploaded_file($_FILES["file"]["tmp_name"][$i])) {
+                                if (is_dir($repertoireDestination . $config['DOI_PREFIX']) == false) {
+                                    mkdir($repertoireDestination . $config['DOI_PREFIX']);
+                                }
+                                if (!file_exists($repertoireDestination . $doi)) {
+                                    mkdir($repertoireDestination . $doi);
+                                }
+                                if (rename($_FILES["file"]["tmp_name"][$i], $repertoireDestination . $doi . "/" . $nomDestination)) {
+                                    $extension = new \SplFileInfo($repertoireDestination . $doi . "/" . $nomDestination);
+                                    $filetypes = $extension->getExtension();
+                                    if (strlen($filetypes) == 0 OR strlen($filetypes) > 4) {
+                                        $filetypes = 'unknow';
+                                    }
+                                    $data[$i]["FILETYPE"] = $filetypes;
+                                    $collectionObject     = $this->db->selectCollection($config["authSource"], $collection);
+                                } else {
+                                    $returnarray[] = "false";
+                                    $returnarray[] = $array['dataform'];
+                                    return $returnarray;
+                                }
+                            }
+                        }
+                    }
+                    foreach ($intersect as $key => $value) {
+                        $data[]=$value;
+                        var_dump($value);
+                        // a voir pour l'ajout de fichier deja present en BDD
+                    }
+                       $json= array(
+                            '$set' => array(
+                                "INTRO" => $array['dataform'],
+                                "DATA.FILES" => $data
+                            )
+                        );
+                } else {
+                    $json = 
+                        array(
+                            '$set' => array(
+                                "INTRO" => $array['dataform']
+                            )
+                        )
+                    ;
+                }
+                $doi        = $doi;
+                $Request    = new RequestApi();
+                $xml        = $array['xml'];
+                $identifier = $xml->addChild('identifier', $doi);
                 $identifier->addAttribute('identifierType', 'DOI');
-                $request=$Request->send_XML_to_datacite($xml->asXML(),$doi);
-             if ($request=="true") {//Si les donnnées ont bien été receptionné par datacite
-                $collectionObject->update(array(
-                    '_id' => $doi
-                ), array(
-                    '$set' => array(
-                        "INTRO" => $array['dataform']
-                    )
-                ));
-                return "true";
-            }
-            else{
-                $array['error']="Unable to send metadata to Datacite";
-                return $array;
-            }
+                $request = $Request->send_XML_to_datacite($xml->asXML(), $doi);
+                if ($request == "true") { //Si les donnnées ont bien été receptionné par datacite
+                    $collectionObject->update(array(
+                            '_id' => $doi
+                        ),$json);
+                    return "true";
+                } else {
+                    $array['error'] = "Unable to send metadata to Datacite";
+                    return $array;
+                }
             } else {
-                $newdoi = "ORDAR-".self::generateDOI();
-               
-            $Request = new RequestApi();
-            $xml=$array['xml'];
-            $identifier = $xml->addChild('identifier',$config["DOI_PREFIX"]."/".$newdoi);
-            $identifier->addAttribute('identifierType', 'DOI');
-            $request=$Request->send_XML_to_datacite($xml->asXML(),$config["DOI_PREFIX"]."/".$newdoi);
-             if ($request=="true") {
-              
-                 mkdir($UPLOAD_FOLDER."/".$config["DOI_PREFIX"]."/" . $newdoi, 0777, true);
-                $query  = array(
-                    '_id' => $doi
-                );
-                $cursor = $collectionObject->find($query);
-                foreach ($cursor as $key => $value) {
-                    $ORIGINAL_DATA_URL = $value["DATA"]["FILES"][0]["ORIGINAL_DATA_URL"];
+                $newdoi = "ORDAR-" . self::generateDOI();
+                
+                $Request    = new RequestApi();
+                $xml        = $array['xml'];
+                $identifier = $xml->addChild('identifier', $config["DOI_PREFIX"] . "/" . $newdoi);
+                $identifier->addAttribute('identifierType', 'DOI');
+                $request = $Request->send_XML_to_datacite($xml->asXML(), $config["DOI_PREFIX"] . "/" . $newdoi);
+                if ($request == "true") {
+                    
+                    mkdir($UPLOAD_FOLDER . "/" . $config["DOI_PREFIX"] . "/" . $newdoi, 0777, true);
+                    $query  = array(
+                        '_id' => $doi
+                    );
+                    $cursor = $collectionObject->find($query);
+                    foreach ($cursor as $key => $value) {
+                        $ORIGINAL_DATA_URL = $value["DATA"]["FILES"][0]["ORIGINAL_DATA_URL"];
+                    }
+                    unlink($ORIGINAL_DATA_URL);
+                    rename($UPLOAD_FOLDER . $doi . '/' . $doi . '_DATA.csv', $UPLOAD_FOLDER . "/" . $config["DOI_PREFIX"] . "/" . $newdoi . "/" . $doi . '_DATA.csv');
+                    rmdir($UPLOAD_FOLDER . $doi);
+                    $collectionObject->update(array(
+                        '_id' => $doi
+                    ), array(
+                        '$set' => array(
+                            "INTRO" => $array['dataform']
+                        )
+                    ));
+                    $olddata = $collectionObject->find(array(
+                        '_id' => $doi
+                    ));
+                    foreach ($olddata as $key => $value) {
+                        $INTRO                                          = $value["INTRO"];
+                        $value["DATA"]["FILES"][0]["ORIGINAL_DATA_URL"] = $UPLOAD_FOLDER . "/" . $config["DOI_PREFIX"] . "/" . $newdoi . "/" . $value["DATA"]["FILES"][0]["DATA_URL"];
+                        $DATA                                           = $value["DATA"];
+                    }
+                    $collectionObject->remove(array(
+                        '_id' => $doi
+                    ));
+                    $collectionObject->insert(array(
+                        '_id' => $config["DOI_PREFIX"] . "/" . $newdoi,
+                        "INTRO" => $INTRO,
+                        "DATA" => $DATA
+                    ));
+                } else {
+                    $array['error'] = "Unable to send metadata to Datacite";
+                    return $array;
                 }
-                unlink($ORIGINAL_DATA_URL);
-                rename($UPLOAD_FOLDER . $doi . '/' . $doi . '_DATA.csv', $UPLOAD_FOLDER ."/".$config["DOI_PREFIX"]."/" .$newdoi . "/" . $doi . '_DATA.csv');
-                rmdir($UPLOAD_FOLDER . $doi);
-                $collectionObject->update(array(
-                    '_id' => $doi
-                ), array(
-                    '$set' => array(
-                        "INTRO" => $array['dataform']
-                    )
-                ));
-                $olddata = $collectionObject->find(array(
-                    '_id' => $doi
-                ));
-                foreach ($olddata as $key => $value) {
-                    $INTRO                                          = $value["INTRO"];
-                    $value["DATA"]["FILES"][0]["ORIGINAL_DATA_URL"] = $UPLOAD_FOLDER."/".$config["DOI_PREFIX"]."/" . $newdoi."/".$value["DATA"]["FILES"][0]["DATA_URL"];
-                    $DATA                                           = $value["DATA"];
-                }
-                $collectionObject->remove(array(
-                    '_id' => $doi
-                ));
-                $collectionObject->insert(array(
-                    '_id' => $config["DOI_PREFIX"]."/".$newdoi,
-                    "INTRO" => $INTRO,
-                    "DATA" => $DATA
-                ));
-            }
-            else{
-                $array['error']="Unable to send metadata to Datacite";
-                return $array;
-            }
-            
+                
             }
             
         }
     }
     
-
-      /**
+    
+    /**
      * Remove datasheet
      * @param collection to edit, doi of dataset to edit 
      * @return true if remove is ok else false
      */
     function removeUnpublishedDatasheet($collection, $doi)
     {
-        $config     = parse_ini_file($_SERVER['DOCUMENT_ROOT'].'/../config.ini');
-
+        $config = parse_ini_file($_SERVER['DOCUMENT_ROOT'] . '/../config.ini');
+        
         $UPLOAD_FOLDER = $config["UPLOAD_FOLDER"];
-        if ($collection==null) {
+        if ($collection == null) {
             return false;
         }
-        if (strstr($doi, 'ORDAR')!==FALSE) {
-            if ($_SESSION['admin']==1) {
-                    $db               = self::connect_tomongo();
-                    $collectionObject = $this->db->selectCollection($config["authSource"], $collection);
-                    $query            = array(
-                        '_id' => $doi
-                    );
-                    $cursor           = $collectionObject->find($query);
-                    foreach ($cursor as $key => $value) {
-                        foreach ($value["DATA"]["FILES"] as $key => $value) {
+        if (strstr($doi, 'ORDAR') !== FALSE) {
+            if ($_SESSION['admin'] == 1) {
+                $db               = self::connect_tomongo();
+                $collectionObject = $this->db->selectCollection($config["authSource"], $collection);
+                $query            = array(
+                    '_id' => $doi
+                );
+                $cursor           = $collectionObject->find($query);
+                foreach ($cursor as $key => $value) {
+                    foreach ($value["DATA"]["FILES"] as $key => $value) {
                         $ORIGINAL_DATA_URL = $value["ORIGINAL_DATA_URL"];
                         unlink($ORIGINAL_DATA_URL);
-                        }
                     }
-                    $collectionObject->remove(array(
-                        '_id' => $doi
-                    ));
-                    unlink($UPLOAD_FOLDER . $doi . '/' . $doi . '_DATA.csv');
-                    rmdir($UPLOAD_FOLDER . $doi);
-                    $request= new RequestApi();
-                    $request->Inactivate_doi($doi);
-
-                    return true;
-            }
-            else{
-
-             return false;
+                }
+                $collectionObject->remove(array(
+                    '_id' => $doi
+                ));
+                unlink($UPLOAD_FOLDER . $doi . '/' . $doi . '_DATA.csv');
+                rmdir($UPLOAD_FOLDER . $doi);
+                $request = new RequestApi();
+                $request->Inactivate_doi($doi);
+                
+                return true;
+            } else {
+                
+                return false;
             }
         } else {
             $db               = self::connect_tomongo();
@@ -735,7 +825,7 @@ function generateDOI(){
     }
     
     
-      /**
+    /**
      * Send a mail to author of a dataset
      * @param  doi of dataset , data of dataset,nom de l'auteur,prenom de l'auteur,object du mail,message, mail de l'expediteur
      * @return true if error else false

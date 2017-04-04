@@ -14,7 +14,7 @@
       </div>
       {%endif%}
       <form class="ui form" action="editrecord?id={{doi}}" method="post" enctype="multipart/form-data" >
-      {% if admin %}
+      {% if admin and accessright != "Unpublished" %}
       <div class="ui message">
          <div class="header">
             Instructions:
@@ -32,7 +32,7 @@
             {%if files%}
             {%for file in files%}
                <div class="ui input">
-                   
+                     <input id="text" type="text" name="file_already_uploaded[]" value={{file.DATA_URL}} readonly><div class="ui icon delete"><i class="remove icon"></i></div>
                </div>
             {%endfor%}
             {%endif%}

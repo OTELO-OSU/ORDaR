@@ -238,7 +238,10 @@ $app->get('/record', function (Request $req,Response $responseSlim) {
 		$files=NULL;
 	}
 	if ($response==false) {
-			return $responseSlim->withRedirect('accueil');
+		$loader = new Twig_Loader_Filesystem('search/templates');
+		$twig = new Twig_Environment($loader);	
+		echo $twig->render('notfound.html.twig');
+
 	}
 	else{
   

@@ -242,7 +242,8 @@
               }
               accessright = data['aggregations']['access_right']['buckets'];
               if (accessright.length == 0) {
-                  $(".ui.card #accessright").parent().hide();
+                  $(".ui.card #accesright").parent().hide();
+                  $(".ui.card #date").parent().hide();
               }
               $("#accesright").append('<div class="header" >Access right</div>');
               for (var k in accessright) {
@@ -269,6 +270,7 @@
               }
               var creationdatearray = [];
               data = data['hits']['hits'];
+              
               $("#date").append('<div class="header" >Date</div>');
               for (var k in data) {
                   creationdate = data[k]['CREATION_DATE'].split("-", 2);
