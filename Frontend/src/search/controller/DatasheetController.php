@@ -514,7 +514,12 @@ class DatasheetController
             if ($method == "Edit") {
                 $doi               = $doi;
                 $array['dataform'] = $array;
-                $array['file_already_uploaded']=$file_already_uploaded;
+                if (empty($file_already_uploaded)) {
+                    $array['file_already_uploaded']=array(); 
+                }
+                else{
+                    $array['file_already_uploaded']=$file_already_uploaded; 
+                }
                 $array['xml']      = $sxe;
                 $array['doi']      = $doi;
                 return $array;
@@ -636,14 +641,11 @@ class DatasheetController
                             $tmparray[] = $value;
                         }
                     }
-                    
                     $diff = array_diff_assoc($tmparray, $array['file_already_uploaded']);
-                    
-                    var_dump($diff);
-                    var_dump($array['file_already_uploaded']);
+                    var_dump($array);
+                   
                     $intersect = array_intersect_assoc($tmparray, $array['file_already_uploaded']);
                   
-                    var_dump($intersect);
                     
                     for ($i = 0; $i < count($_FILES['file']['name']); $i++) {
                         $repertoireDestination         = $UPLOAD_FOLDER;
@@ -679,17 +681,21 @@ class DatasheetController
                         }
                     }
                    if (count($intersect)!=0 and $data!=0) {
+                    echo"test";
                         $merge=array_merge($intersect,$data);
                    }
+
                    else if(count($diff)!=0 and $data!=0){
                         $merge=array_merge($diff,$data);
                          foreach ($diff as $key => $value) {
+                            echo $UPLOAD_FOLDER . "/" . $doi . "/" . $value['DATA_URL'];
                         unlink($UPLOAD_FOLDER . "/" . $doi . "/" . $value['DATA_URL']);
                     }
                    }
                    else if (count($diff)!=0){
                         $merge=$intersect;
                         foreach ($diff as $key => $value) {
+                            echo $UPLOAD_FOLDER . "/" . $doi . "/" . $value['DATA_URL'];
                         unlink($UPLOAD_FOLDER . "/" . $doi . "/" . $value['DATA_URL']);
                     }
                    }
@@ -697,8 +703,9 @@ class DatasheetController
                         $merge=$intersect;
                    }
                    else{
-                    $merge=$data;
+                        $merge=$data;
                    }
+
 
                        $json= array(
                             '$set' => array(
