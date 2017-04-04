@@ -493,11 +493,16 @@ class DatasheetController
                 
             }
             if ($key == "file_already_uploaded") {
-                $array['file_already_uploaded'] = $value;
+                if (count($value) > 1) {
+                    foreach ($value as $key => $value) {
+                         $file_already_uploaded[$key]['DATA_URL'] = $value;
+                    }
+                }
+                else{
+                    $file_already_uploaded[0]['DATA_URL'] = $value[0];
+                }
             }
-            else{
-                $array['file_already_uploaded'] = array();
-            }
+           
         }
         
         
@@ -509,6 +514,7 @@ class DatasheetController
             if ($method == "Edit") {
                 $doi               = $doi;
                 $array['dataform'] = $array;
+                $array['file_already_uploaded']=$file_already_uploaded;
                 $array['xml']      = $sxe;
                 $array['doi']      = $doi;
                 return $array;
@@ -627,18 +633,17 @@ class DatasheetController
                     $tmparray = array();
                     foreach ($cursor as $key => $value) {
                         foreach ($value["DATA"]["FILES"] as $key => $value) {
-                            $tmparray[] = $value['DATA_URL'];
+                            $tmparray[] = $value;
                         }
                     }
                     
-                    $diff = array_diff($tmparray, $array['file_already_uploaded']);
-                    foreach ($diff as $key => $value) {
-                        unlink($UPLOAD_FOLDER . "/" . $doi . "/" . $value['DATA_URL']);
-                    }
-                    $intersect = array_intersect($tmparray, $array['file_already_uploaded']);
-                    // trouver comment ajouter nouveau doc en BDD
+                    $diff = array_diff_assoc($tmparray, $array['file_already_uploaded']);
                     
-                    
+                    var_dump($diff);
+                    var_dump($array['file_already_uploaded']);
+                    $intersect = array_intersect_assoc($tmparray, $array['file_already_uploaded']);
+                  
+                    var_dump($intersect);
                     
                     for ($i = 0; $i < count($_FILES['file']['name']); $i++) {
                         $repertoireDestination         = $UPLOAD_FOLDER;
@@ -673,15 +678,32 @@ class DatasheetController
                             }
                         }
                     }
-                    foreach ($intersect as $key => $value) {
-                        $data[]=$value;
-                        var_dump($value);
-                        // a voir pour l'ajout de fichier deja present en BDD
+                   if (count($intersect)!=0 and $data!=0) {
+                        $merge=array_merge($intersect,$data);
+                   }
+                   else if(count($diff)!=0 and $data!=0){
+                        $merge=array_merge($diff,$data);
+                         foreach ($diff as $key => $value) {
+                        unlink($UPLOAD_FOLDER . "/" . $doi . "/" . $value['DATA_URL']);
                     }
+                   }
+                   else if (count($diff)!=0){
+                        $merge=$intersect;
+                        foreach ($diff as $key => $value) {
+                        unlink($UPLOAD_FOLDER . "/" . $doi . "/" . $value['DATA_URL']);
+                    }
+                   }
+                  else if (count($intersect)!=0){
+                        $merge=$intersect;
+                   }
+                   else{
+                    $merge=$data;
+                   }
+
                        $json= array(
                             '$set' => array(
                                 "INTRO" => $array['dataform'],
-                                "DATA.FILES" => $data
+                                "DATA.FILES" => $merge
                             )
                         );
                 } else {
