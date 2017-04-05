@@ -641,28 +641,15 @@ class DatasheetController
                             $tmparray[] = $value;
                         }
                     }
-                    
-                     $diff=array();
-                    foreach ($tmparray as $key => $value) {
-                       foreach ($array['file_already_uploaded'] as $key => $value2) {
-                        if ($value['DATA_URL']!=$value2['DATA_URL']) {
-                            $diff[]=$value;
-                        }
-                           
-                       }
-                    }
-                
+
                     $intersect=array();
                     foreach ($tmparray as $key => $value) {
                        foreach ($array['file_already_uploaded'] as $key => $value2) {
                         if ($value['DATA_URL']==$value2['DATA_URL']) {
                             $intersect[]=$value;
                         }
-                           
-                       }
+                        }
                     }
-                
-                  
                     
                     for ($i = 0; $i < count($_FILES['file']['name']); $i++) {
                         $repertoireDestination         = $UPLOAD_FOLDER;
@@ -697,30 +684,34 @@ class DatasheetController
                             }
                         }
                     }
+
                   if(count($intersect)!=0 and $data!=0){
                         $merge=array_merge($intersect,$data);
-                         foreach ($diff as $key => $value) {
-                        unlink($UPLOAD_FOLDER . "/" . $doi . "/" . $value['DATA_URL']);
-                    }
+                       
                    }
                    else if (count($intersect)!=0){
                         $merge=$intersect;
-                        foreach ($diff as $key => $value) {
-                        unlink($UPLOAD_FOLDER . "/" . $doi . "/" . $value['DATA_URL']);
-                    }
-                   }
-                    else if ($data!=0){
-                        $merge=$data;
-                        foreach ($diff as $key => $value) {
-                        unlink($UPLOAD_FOLDER . "/" . $doi . "/" . $value['DATA_URL']);
-                    }
+                      
                    }
                    else{
                         $merge=$data;
-                         foreach ($diff as $key => $value) {
-                        unlink($UPLOAD_FOLDER . "/" . $doi . "/" . $value['DATA_URL']);
-                    }
+                       
                    }
+                   
+                   
+                   mkdir($UPLOAD_FOLDER . "/" . $doi . "/tmp");
+                   foreach ($merge as $key => $value) {
+                        rename($UPLOAD_FOLDER . "/" . $doi . "/" .$value['DATA_URL'],$UPLOAD_FOLDER . "/" . $doi . "/tmp/" .$value['DATA_URL'] );
+                   }
+                        $files = glob($UPLOAD_FOLDER . "/" . $doi ."/*" ); // get all file names
+                        foreach($files as $file){ // iterate files
+                          if(is_file($file))
+                            unlink($file); // delete file
+                        }
+                    foreach ($merge as $key => $value) {
+                           rename($UPLOAD_FOLDER . "/" . $doi . "/tmp/" .$value['DATA_URL'],$UPLOAD_FOLDER . "/" . $doi . "/" .$value['DATA_URL'] );
+                    }
+                   rmdir($UPLOAD_FOLDER . "/" . $doi . "/tmp/");
 
 
                        $json= array(
