@@ -7,8 +7,12 @@
   // Module datatable, Affichage des resultats sous forme de pagination
   APP.modules.datatable = (function() {
       return {
-          AppendTable: function(data) {
+          AppendTable: function(data,facets) {
               if (data['hits']['total'] == 0) {
+                  $('#facets').hide();
+                    if (facets) {
+                    $('#facets').show();
+                  }
                   $('#info-noresult').append('No result found!');
                   $('#info-noresult').addClass('red');
                   $('#info-noresult').show();
@@ -486,7 +490,8 @@
 
                           APP.modules.search.AppendFacets(data);
                       }
-                      APP.modules.datatable.AppendTable(data);
+
+                      APP.modules.datatable.AppendTable(data,facets);
                   })
           }
       }
@@ -875,7 +880,7 @@
 
                           APP.modules.mypublications.AppendFacets(data);
                       }
-                      APP.modules.datatable.AppendTable(data);
+                      APP.modules.datatable.AppendTable(data,facets);
                   })
           }
       }
