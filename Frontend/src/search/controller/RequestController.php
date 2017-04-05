@@ -238,6 +238,34 @@ class RequestController
      */
     function send_XML_to_datacite($XML,$doi){
         $config     = parse_ini_file($_SERVER['DOCUMENT_ROOT'].'/../config.ini');
+
+
+        $url= "https://mds.datacite.org/metadata/".$doi;
+        $curlopt                = array(
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => "",
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 10,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => "GET",
+            CURLOPT_POSTFIELDS => $XML,
+            CURLOPT_HTTPHEADER => array(
+            "authorization: ".$config['Auth_config_datacite'],
+            'Content-Type: text/xml'
+            ),
+        );
+
+        $ch      = curl_init();
+        $curlopt = array(
+            CURLOPT_URL => $url
+        ) + $curlopt;
+        curl_setopt_array($ch, $curlopt);
+        $XMLondatacite = curl_exec($ch);
+        curl_close($ch);
+        if ($XMLondatacite==$XML) {
+           return "true";
+        }else{
+
     	$url= "https://mds.datacite.org/metadata/";
         $curlopt                = array(
             CURLOPT_RETURNTRANSFER => true,
@@ -286,6 +314,12 @@ class RequestController
         else{
         	return "false";
         }
+            
+        }
+
+
+
+
         
 
 
