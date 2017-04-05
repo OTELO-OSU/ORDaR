@@ -74,6 +74,7 @@ class RequestController
             $query="*";
         }
         $postcontent                = '{ 
+            "sort": { "INTRO.UPLOAD_DATE": { "order": "desc" }} ,
              "_source": {
             "excludes": [ "DATA" ]
              },
@@ -157,10 +158,13 @@ class RequestController
     function requestToAPI($query)
     {
         $query                      = rawurlencode($query);
-        $postcontent                = '{ 
+        $postcontent                = '{
+
+            "sort": { "INTRO.UPLOAD_DATE": { "order": "desc" }} ,
             "_source": {
             "excludes": [ "DATA" ]
              },
+            
             "aggs" : {  
                 "sample_kind" : {  
                     "terms" : {  
@@ -203,6 +207,7 @@ class RequestController
                     } 
                 } 
             } 
+
         }';
         $url                        = 'http://localhost/ordar/_search?q=' . $query . '%20AND%20NOT%20INTRO.ACCESS_RIGHT:Unpublished&size=10000';
         $curlopt                    = array(
@@ -334,6 +339,7 @@ class RequestController
     function getPublicationsofUser($author_mail, $authors_name, $query)
     {
         $postcontent = '{ 
+            "sort": { "INTRO.UPLOAD_DATE": { "order": "desc" }} ,
             "_source": {
             "excludes": [ "DATA" ]
              },

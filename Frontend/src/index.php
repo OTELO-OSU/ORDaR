@@ -47,13 +47,13 @@ else{
 $app->get('/about', function (Request $req,Response $responseSlim) {
 	$loader = new Twig_Loader_Filesystem('search/templates');
 	$twig = new Twig_Environment($loader);
-	echo $twig->render('about.html.twig');
+	echo $twig->render('about.html.twig',['name'=>$_SESSION['name'],'firstname'=>$_SESSION['firstname'],'mail'=>$_SESSION['mail']]);;
 });
 //Route permettant d'acceder a la page terms of use
 $app->get('/terms', function (Request $req,Response $responseSlim) {
 	$loader = new Twig_Loader_Filesystem('search/templates');
 	$twig = new Twig_Environment($loader);
-	echo $twig->render('terms.html.twig');
+	echo $twig->render('terms.html.twig',['name'=>$_SESSION['name'],'firstname'=>$_SESSION['firstname'],'mail'=>$_SESSION['mail']]);;
 });
 
 //Route receptionnant les données POST contact
@@ -151,7 +151,7 @@ $app->get('/upload', function (Request $req,Response $responseSlim) {
 		echo $twig->render('upload.html.twig',['name'=>$_SESSION['name'],'firstname'=>$_SESSION['firstname'],'mail'=>$_SESSION['mail'],'name_CSRF'=>$name,'value_CSRF'=>$value]);		
 		}
 		else{
-			echo $twig->render('error_datacite.html.twig');		
+			echo $twig->render('error_datacite.html.twig',['name'=>$_SESSION['name'],'firstname'=>$_SESSION['firstname'],'mail'=>$_SESSION['mail']]);;		
 		}
 
 	}
@@ -252,7 +252,7 @@ $app->get('/record', function (Request $req,Response $responseSlim) {
 	if ($response==false) {
 		$loader = new Twig_Loader_Filesystem('search/templates');
 		$twig = new Twig_Environment($loader);	
-		echo $twig->render('notfound.html.twig');
+		echo $twig->render('notfound.html.twig',['name'=>$_SESSION['name'],'firstname'=>$_SESSION['firstname'],'mail'=>$_SESSION['mail']]);;
 
 	}
 	else{
@@ -354,7 +354,7 @@ $app->get('/editrecord', function (Request $req,Response $responseSlim) {
 		}
 		}
 		else{
-			echo $twig->render('error_datacite.html.twig');		
+			echo $twig->render('error_datacite.html.twig',['name'=>$_SESSION['name'],'firstname'=>$_SESSION['firstname'],'mail'=>$_SESSION['mail']]);;		
 		}
 })->add($container->get('csrf'));
 
@@ -397,7 +397,7 @@ return @$twig->render('edit_dataset.html.twig', ['error'=>$return['error'],'name
 	    	]);	}
 	else{
 
-	return @$twig->render('editsuccess.html.twig');
+	return @$twig->render('editsuccess.html.twig',['name'=>$_SESSION['name'],'firstname'=>$_SESSION['firstname'],'mail'=>$_SESSION['mail']]);;
 	}
 })->add($container->get('csrf'));
 
@@ -424,7 +424,7 @@ $app->post('/remove', function (Request $req,Response $responseSlim,$args) {
    	if ($state==true) {
    		$loader = new Twig_Loader_Filesystem('search/templates');
 		$twig = new Twig_Environment($loader);
-		echo $twig->render('removesucess.html.twig');
+		echo $twig->render('removesucess.html.twig',['name'=>$_SESSION['name'],'firstname'=>$_SESSION['firstname'],'mail'=>$_SESSION['mail']]);;
 
    		
    	}

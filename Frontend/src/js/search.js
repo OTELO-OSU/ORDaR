@@ -381,7 +381,7 @@
                           keywords = 'INTRO.KEYWORDS.NAME:"' + value + '"';
 
                       } else {
-                          keywords = keywords + '  INTRO.KEYWORDS.NAME:"' + value + '"';
+                          keywords = '  INTRO.KEYWORDS.NAME:"' + value + '"';
                       }
                       if (facets !== undefined) {
                           facets = facets + " AND " + keywords;
@@ -397,7 +397,7 @@
                           scientific_field = 'INTRO.SCIENTIFIC_FIELD.NAME:"' + value + '"';
 
                       } else {
-                          scientific_field = scientific_field + '  INTRO.SCIENTIFIC_FIELD.NAME:"' + value + '"';
+                          scientific_field = '  INTRO.SCIENTIFIC_FIELD.NAME:"' + value + '"';
                       }
                       if (facets !== undefined) {
                           facets = facets + " AND " + scientific_field;
@@ -413,7 +413,7 @@
                           language = 'INTRO.LANGUAGE:"' + value + '"';
 
                       } else {
-                          language = language + ' INTRO.LANGUAGE:"' + value + '"';
+                          language = ' INTRO.LANGUAGE:"' + value + '"';
                       }
                       if (facets !== undefined) {
                           facets = facets + " AND " + language;
@@ -430,7 +430,7 @@
                           filetype = 'DATA.FILES.FILETYPE:"' + value + '"';
 
                       } else {
-                          filetype = filetype + ' DATA.FILES.FILETYPE:"' + value + '"';
+                          filetype = ' DATA.FILES.FILETYPE:"' + value + '"';
                       }
                       if (facets !== undefined) {
                           facets = facets + " AND " + filetype;
@@ -446,7 +446,7 @@
                           access_right = 'INTRO.ACCESS_RIGHT:"' + value + '"';
 
                       } else {
-                          access_right = access_right + ' INTRO.ACCESS_RIGHT:"' + value + '"';
+                          access_right =  ' INTRO.ACCESS_RIGHT:"' + value + '"';
                       }
                       if (facets !== undefined) {
                           facets = facets + " AND " + access_right;
@@ -764,7 +764,7 @@
                           keywords = 'INTRO.KEYWORDS.NAME:"' + value + '"';
 
                       } else {
-                          keywords = keywords + '  INTRO.KEYWORDS.NAME:"' + value + '"';
+                          keywords = '  INTRO.KEYWORDS.NAME:"' + value + '"';
                       }
                       if (facets !== undefined) {
                           facets = facets + " AND " + keywords;
@@ -781,7 +781,7 @@
                           scientific_field = 'INTRO.SCIENTIFIC_FIELD.NAME:"' + value + '"';
 
                       } else {
-                          scientific_field = scientific_field + '  INTRO.SCIENTIFIC_FIELD.NAME:"' + value + '"';
+                          scientific_field = '  INTRO.SCIENTIFIC_FIELD.NAME:"' + value + '"';
                       }
                       if (facets !== undefined) {
                           facets = facets + " AND " + scientific_field;
@@ -797,7 +797,7 @@
                           language = 'INTRO.LANGUAGE:"' + value + '"';
 
                       } else {
-                          language = language + '  INTRO.LANGUAGE:"' + value + '"';
+                          language =  '  INTRO.LANGUAGE:"' + value + '"';
                       }
                       if (facets !== undefined) {
                           facets = facets + " AND " + language;
@@ -814,7 +814,7 @@
                           filetype = 'DATA.FILES.FILETYPE:"' + value + '"';
 
                       } else {
-                          filetype = filetype + '  DATA.FILES.FILETYPE:"' + value + '"';
+                          filetype = '  DATA.FILES.FILETYPE:"' + value + '"';
                       }
                       if (facets !== undefined) {
                           facets = facets + " AND " + filetype;
@@ -830,7 +830,7 @@
                           access_right = 'INTRO.ACCESS_RIGHT:"' + value + '"';
 
                       } else {
-                          access_right = access_right + '  INTRO.ACCESS_RIGHT:"' + value + '"';
+                          access_right =  '  INTRO.ACCESS_RIGHT:"' + value + '"';
                       }
                       if (facets !== undefined) {
                           facets = facets + " AND " + access_right;
