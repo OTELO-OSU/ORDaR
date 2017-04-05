@@ -299,8 +299,14 @@
    <h2>Remove {{doi}}</h2>
   </div>
   <div class="actions">
-    <a href="remove?id={{doi}}"><button class="ui red button" >Yes</button></a>
+   <form action="remove?id={{doi}}" method="post" enctype="multipart/form-data" >
+   <input type="hidden" name="csrf_name" value="{{name_CSRF}}">
+   <input type="hidden" name="csrf_value" value="{{value_CSRF}}">
+      
+
+    <button type="submit" class="ui red button" >Yes</button>
     <button class="ui green deny button" >No</button>
+   </form>
   </div>
   </form>
 </div>

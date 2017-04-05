@@ -12,6 +12,10 @@ require '../vendor/autoload.php';
 
 $c = new \Slim\Container();
 $app = new \Slim\App($c);
+$container = $app->getContainer();
+$container['csrf'] = function ($c) {
+    return new \Slim\Csrf\Guard;
+};
 session_start();
 
 //Route permettant d'acceder a l'accueil
@@ -137,10 +141,14 @@ $app->get('/upload', function (Request $req,Response $responseSlim) {
     $loader = new Twig_Loader_Filesystem('search/templates');
 	$twig = new Twig_Environment($loader);
 	if ($_SESSION['name']) {
+		$nameKey = $this->csrf->getTokenNameKey();
+	    $valueKey = $this->csrf->getTokenValueKey();
+	    $name = $req->getAttribute($nameKey);
+	    $value = $req->getAttribute($valueKey);
 		$request= new RequestApi();
 		$status=$request->Check_status_datacite();
 		if ($status==200) {
-		echo $twig->render('upload.html.twig',['name'=>$_SESSION['name'],'firstname'=>$_SESSION['firstname'],'mail'=>$_SESSION['mail']]);		
+		echo $twig->render('upload.html.twig',['name'=>$_SESSION['name'],'firstname'=>$_SESSION['firstname'],'mail'=>$_SESSION['mail'],'name_CSRF'=>$name,'value_CSRF'=>$value]);		
 		}
 		else{
 			echo $twig->render('error_datacite.html.twig');		
@@ -150,7 +158,7 @@ $app->get('/upload', function (Request $req,Response $responseSlim) {
 	else{
 		return $responseSlim->withRedirect('accueil');
 	}
-})->setName('upload');
+})->setName('upload')->add($container->get('csrf'));
 
 //Route receptionnant les données POST de l'upload
 $app->post('/upload', function (Request $req,Response $responseSlim) {
@@ -192,7 +200,7 @@ $app->post('/upload', function (Request $req,Response $responseSlim) {
 	//return $response;
 	//return $responseSlim->withRedirect('upload');
 
-});
+})->add($container->get('csrf'));
 
 
 //Route receptionnant les données POST mypublications
@@ -230,6 +238,10 @@ $app->get('/record', function (Request $req,Response $responseSlim) {
 	$twig = new Twig_Environment($loader);
    	$request= new RequestApi();
    	$id  = $req->getparam('id');
+   	$nameKey = $this->csrf->getTokenNameKey();
+    $valueKey = $this->csrf->getTokenValueKey();
+    $name = $req->getAttribute($nameKey);
+    $value = $req->getAttribute($valueKey);
 	$response=$request->get_info_for_dataset($id,"Restricted");
 	if (isset($response['_source']['DATA'])){
 		$files =  $response['_source']['DATA']['FILES'];
@@ -277,10 +289,10 @@ $app->get('/record', function (Request $req,Response $responseSlim) {
         'sampling_date'=> $response['_source']['INTRO']['SAMPLING_DATE'],
         'sample_kinds'=> $response['_source']['INTRO']['SAMPLE_KIND'],
         'keywords'=> $response['_source']['INTRO']['KEYWORDS'],
-        'license'=> $response['_source']['INTRO']['LICENSE']
+        'license'=> $response['_source']['INTRO']['LICENSE'],'name_CSRF'=>$name,'value_CSRF'=>$value
     	]);
 	}
-})->setName('record');
+})->setName('record')->add($container->get('csrf'));
 
 //Route affichant le formulaire d'edition dun dataset
 $app->get('/editrecord', function (Request $req,Response $responseSlim) {
@@ -288,6 +300,10 @@ $app->get('/editrecord', function (Request $req,Response $responseSlim) {
 	$twig = new Twig_Environment($loader);
    	$request= new RequestApi();
 	$status=$request->Check_status_datacite();
+	$nameKey = $this->csrf->getTokenNameKey();
+	$valueKey = $this->csrf->getTokenValueKey();
+	$namecsrf = $req->getAttribute($nameKey);
+	$valuecsrf = $req->getAttribute($valueKey);
 		if ($status==200) {		
 		   	$id  = $req->getparam('id');
 			$response=$request->get_info_for_dataset($id);
@@ -328,7 +344,7 @@ $app->get('/editrecord', function (Request $req,Response $responseSlim) {
 				 	}
 
 				return @$twig->render('edit_dataset.html.twig', ['name'=>$_SESSION['name'],'firstname'=>$_SESSION['firstname'],'mail'=>$_SESSION['mail'],'admin'=>$_SESSION['admin'],
-			        'doi'=>$id,'title' => $response['_source']['INTRO']['TITLE'],'description'=>$response['_source']['INTRO']['DATA_DESCRIPTION'],'creation_date'=>$response['_source']['INTRO']['CREATION_DATE'],'sampling_dates'=>$response['_source']['INTRO']['SAMPLING_DATE'],'authors'=>$response['_source']['INTRO']['FILE_CREATOR'],'keywords'=>$response['_source']['INTRO']['KEYWORDS'],'sample_kinds'=>$response['_source']['INTRO']['SAMPLE_KIND'],'scientific_fields'=>$response['_source']['INTRO']['SCIENTIFIC_FIELD'],'institutions'=>$response['_source']['INTRO']['INSTITUTION'],'language'=>$response['_source']['INTRO']['LANGUAGE'],'sampling_points'=>$response['_source']['INTRO']['SAMPLING_POINT'],'measurements'=>$response['_source']['INTRO']['MEASUREMENT'],'license'=>$license,'publisher'=>$response['_source']['INTRO']['PUBLISHER'],'fundings'=>$response['_source']['INTRO']['FUNDINGS'],'accessright'=>$response['_source']['INTRO']['ACCESS_RIGHT'],'embargoed_date'=>$response['_source']['INTRO']['PUBLICATION_DATE'],'files'=>$response['_source']['DATA']['FILES']
+			        'doi'=>$id,'title' => $response['_source']['INTRO']['TITLE'],'description'=>$response['_source']['INTRO']['DATA_DESCRIPTION'],'creation_date'=>$response['_source']['INTRO']['CREATION_DATE'],'sampling_dates'=>$response['_source']['INTRO']['SAMPLING_DATE'],'authors'=>$response['_source']['INTRO']['FILE_CREATOR'],'keywords'=>$response['_source']['INTRO']['KEYWORDS'],'sample_kinds'=>$response['_source']['INTRO']['SAMPLE_KIND'],'scientific_fields'=>$response['_source']['INTRO']['SCIENTIFIC_FIELD'],'institutions'=>$response['_source']['INTRO']['INSTITUTION'],'language'=>$response['_source']['INTRO']['LANGUAGE'],'sampling_points'=>$response['_source']['INTRO']['SAMPLING_POINT'],'measurements'=>$response['_source']['INTRO']['MEASUREMENT'],'license'=>$license,'publisher'=>$response['_source']['INTRO']['PUBLISHER'],'fundings'=>$response['_source']['INTRO']['FUNDINGS'],'accessright'=>$response['_source']['INTRO']['ACCESS_RIGHT'],'embargoed_date'=>$response['_source']['INTRO']['PUBLICATION_DATE'],'files'=>$response['_source']['DATA']['FILES'],'name_CSRF'=>$namecsrf,'value_CSRF'=>$valuecsrf
 			    	]);
 				}
 			
@@ -340,7 +356,7 @@ $app->get('/editrecord', function (Request $req,Response $responseSlim) {
 		else{
 			echo $twig->render('error_datacite.html.twig');		
 		}
-});
+})->add($container->get('csrf'));
 
 //Route receptionnant les données POST de l'edition
 $app->post('/editrecord', function (Request $req,Response $responseSlim) {
@@ -383,7 +399,7 @@ return @$twig->render('edit_dataset.html.twig', ['error'=>$return['error'],'name
 
 	return @$twig->render('editsuccess.html.twig');
 	}
-});
+})->add($container->get('csrf'));
 
 
 
@@ -396,7 +412,7 @@ $app->post('/getinfo', function (Request $req,Response $responseSlim) {
 });
 
 //Route permettant la suppression d'un dataset
-$app->get('/remove', function (Request $req,Response $responseSlim,$args) {
+$app->post('/remove', function (Request $req,Response $responseSlim,$args) {
 	$Datasheet = new Datasheet();
 	$request= new RequestApi();
    	$doi = $req->getparam('id');
@@ -418,7 +434,7 @@ $app->get('/remove', function (Request $req,Response $responseSlim,$args) {
 
    	}
 
-});
+})->add($container->get('csrf'));
 
 
 //Route permettant le telechargement
