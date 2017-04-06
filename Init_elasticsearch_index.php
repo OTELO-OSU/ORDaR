@@ -6,7 +6,7 @@ $bdd      = strtolower($config['authSource']);
 
 curl_setopt_array($curl, array(
   CURLOPT_PORT => "9200",
-  CURLOPT_URL => "http://localhost:9200/ordar",
+  CURLOPT_URL => "http://localhost:9200/".$bdd,
   CURLOPT_RETURNTRANSFER => true,
   CURLOPT_ENCODING => "",
   CURLOPT_MAXREDIRS => 10,

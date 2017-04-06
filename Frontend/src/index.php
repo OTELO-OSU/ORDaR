@@ -180,6 +180,10 @@ $app->get('/upload', function (Request $req,Response $responseSlim) {
 $app->post('/upload', function (Request $req,Response $responseSlim) {
 	 $loader = new Twig_Loader_Filesystem('search/templates');
 	$twig = new Twig_Environment($loader);
+	$nameKey = $this->csrf->getTokenNameKey();
+	$valueKey = $this->csrf->getTokenValueKey();
+	$namecsrf = $req->getAttribute($nameKey);
+	$valuecsrf = $req->getAttribute($valueKey);
    	$Datasheet = new Datasheet();
    	$db=$Datasheet->connect_tomongo();
 	$array=$Datasheet->Postprocessing($_POST,"Upload","0");
@@ -205,7 +209,7 @@ $app->post('/upload', function (Request $req,Response $responseSlim) {
 		 	elseif ($value=="Creative commons Attribution + Noncommercial + NoDerivatives") {
 		 		$license=6;
 		 	}
-		echo $twig->render('upload.html.twig',['error'=>$response['error'],'name'=>$_SESSION['name'],'mail'=>$_SESSION['mail'],'firstname'=>$_SESSION['firstname'],'title' => $response['dataform']['TITLE'],'description'=>$response['dataform']['DATA_DESCRIPTION'],'creation_date'=>$response['dataform']['CREATION_DATE'],'sampling_dates'=>$response['dataform']['SAMPLING_DATE'],'authors'=>$response['dataform']['FILE_CREATOR'],'keywords'=>$response['dataform']['KEYWORDS'],'sample_kinds'=>$response['dataform']['SAMPLE_KIND'],'scientific_fields'=>$response['dataform']['SCIENTIFIC_FIELD'],'institutions'=>$response['dataform']['INSTITUTION'],'language'=>$response['dataform']['LANGUAGE'],'sampling_points'=>$response['dataform']['SAMPLING_POINT'],'measurements'=>$response['dataform']['MEASUREMENT'],'license'=>$license,'publisher'=>$response['dataform']['PUBLISHER'],'fundings'=>$response['dataform']['FUNDINGS'],'accessright'=>$response['dataform']['ACCESS_RIGHT'],'embargoed_date'=>$response['dataform']['PUBLICATION_DATE']]);
+		echo $twig->render('upload.html.twig',['error'=>$response['error'],'name'=>$_SESSION['name'],'mail'=>$_SESSION['mail'],'firstname'=>$_SESSION['firstname'],'title' => $response['dataform']['TITLE'],'description'=>$response['dataform']['DATA_DESCRIPTION'],'creation_date'=>$response['dataform']['CREATION_DATE'],'sampling_dates'=>$response['dataform']['SAMPLING_DATE'],'authors'=>$response['dataform']['FILE_CREATOR'],'keywords'=>$response['dataform']['KEYWORDS'],'sample_kinds'=>$response['dataform']['SAMPLE_KIND'],'scientific_fields'=>$response['dataform']['SCIENTIFIC_FIELD'],'institutions'=>$response['dataform']['INSTITUTION'],'language'=>$response['dataform']['LANGUAGE'],'sampling_points'=>$response['dataform']['SAMPLING_POINT'],'measurements'=>$response['dataform']['MEASUREMENT'],'license'=>$license,'publisher'=>$response['dataform']['PUBLISHER'],'fundings'=>$response['dataform']['FUNDINGS'],'accessright'=>$response['dataform']['ACCESS_RIGHT'],'embargoed_date'=>$response['dataform']['PUBLICATION_DATE'],'name_CSRF'=>$namecsrf,'value_CSRF'=>$valuecsrf]);
 	}
 	else{
 	$loader = new Twig_Loader_Filesystem('search/templates');
@@ -381,6 +385,10 @@ $app->post('/editrecord', function (Request $req,Response $responseSlim) {
    	$Datasheet = new Datasheet();
    	$doi = $req->getparam('id');
    	$request= new RequestApi();
+   	$nameKey = $this->csrf->getTokenNameKey();
+	$valueKey = $this->csrf->getTokenValueKey();
+	$namecsrf = $req->getAttribute($nameKey);
+	$valuecsrf = $req->getAttribute($valueKey);
 	$response=$request->get_info_for_dataset($doi,"Restricted")
 ;
 	$collection=$response['_type'];
@@ -409,7 +417,7 @@ $app->post('/editrecord', function (Request $req,Response $responseSlim) {
 		 		$license=6;
 		 	}
 return @$twig->render('edit_dataset.html.twig', ['error'=>$return['error'],'name'=>$_SESSION['name'],'firstname'=>$_SESSION['firstname'],'mail'=>$_SESSION['mail'],
-	        'doi'=>$doi,'title' => $response['_source']['INTRO']['TITLE'],'description'=>$response['_source']['INTRO']['DATA_DESCRIPTION'],'creation_date'=>$response['_source']['INTRO']['CREATION_DATE'],'sampling_dates'=>$response['_source']['INTRO']['SAMPLING_DATE'],'authors'=>$response['_source']['INTRO']['FILE_CREATOR'],'keywords'=>$response['_source']['INTRO']['KEYWORDS'],'sample_kinds'=>$response['_source']['INTRO']['SAMPLE_KIND'],'scientific_fields'=>$response['_source']['INTRO']['SCIENTIFIC_FIELD'],'institutions'=>$response['_source']['INTRO']['INSTITUTION'],'language'=>$response['_source']['INTRO']['LANGUAGE'],'sampling_points'=>$response['_source']['INTRO']['SAMPLING_POINT'],'measurements'=>$response['_source']['INTRO']['MEASUREMENT'],'license'=>$license,'publisher'=>$response['_source']['INTRO']['PUBLISHER'],'fundings'=>$response['_source']['INTRO']['FUNDINGS'],'accessright'=>$response['_source']['INTRO']['ACCESS_RIGHT'],'embargoed_date'=>$response['_source']['INTRO']['PUBLICATION_DATE'],'files'=>$response['_source']['DATA']['FILES']
+	        'doi'=>$doi,'title' => $response['_source']['INTRO']['TITLE'],'description'=>$response['_source']['INTRO']['DATA_DESCRIPTION'],'creation_date'=>$response['_source']['INTRO']['CREATION_DATE'],'sampling_dates'=>$response['_source']['INTRO']['SAMPLING_DATE'],'authors'=>$response['_source']['INTRO']['FILE_CREATOR'],'keywords'=>$response['_source']['INTRO']['KEYWORDS'],'sample_kinds'=>$response['_source']['INTRO']['SAMPLE_KIND'],'scientific_fields'=>$response['_source']['INTRO']['SCIENTIFIC_FIELD'],'institutions'=>$response['_source']['INTRO']['INSTITUTION'],'language'=>$response['_source']['INTRO']['LANGUAGE'],'sampling_points'=>$response['_source']['INTRO']['SAMPLING_POINT'],'measurements'=>$response['_source']['INTRO']['MEASUREMENT'],'license'=>$license,'publisher'=>$response['_source']['INTRO']['PUBLISHER'],'fundings'=>$response['_source']['INTRO']['FUNDINGS'],'accessright'=>$response['_source']['INTRO']['ACCESS_RIGHT'],'embargoed_date'=>$response['_source']['INTRO']['PUBLICATION_DATE'],'files'=>$response['_source']['DATA']['FILES'],'name_CSRF'=>$namecsrf,'value_CSRF'=>$valuecsrf
 	    	]);	}
 	else{
 
