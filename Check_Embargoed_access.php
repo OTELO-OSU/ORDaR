@@ -1,12 +1,14 @@
 <?php
 
 $config = parse_ini_file('Frontend/config.ini');
-$db = new MongoClient("mongodb://".$config['username'].":".$config['password']."@".$config['host'].":".$config['port']);
+$db = new MongoClient("mongodb://" . $config['host'] . ':' . $config['port'], array(
+                'username' => $config['username'],
+                'password' => $config['password']
+            ));
 $bdd      = $config['authSource'];
 $db = $db->selectDB($bdd);
 
 $collections = $db->getCollectionNames();
-
 foreach ($collections as $collection) {
 	$collection= $db->selectCollection($collection);
 	$query=array('INTRO.ACCESS_RIGHT' => 'Embargoed');
