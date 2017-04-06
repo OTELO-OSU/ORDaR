@@ -67,6 +67,7 @@ class RequestController
 
      function requestToAPIAdmin($query)
     {
+        $config     = parse_ini_file($_SERVER['DOCUMENT_ROOT'].'/../config.ini');
         if (!empty($query)) {
         $query                      = rawurlencode($query);
         }
@@ -121,7 +122,8 @@ class RequestController
                 } 
             } 
         }';
-        $url                        = 'http://localhost/ordar/_search?q='.$query.'&size=10000';
+        $bdd      = strtolower($config['authSource']);
+        $url                        = 'http://localhost/'.$bdd.'/_search?q='.$query.'&size=10000';
         $curlopt                    = array(
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_PORT => 9200,
@@ -157,6 +159,7 @@ class RequestController
      */
     function requestToAPI($query)
     {
+        $config     = parse_ini_file($_SERVER['DOCUMENT_ROOT'].'/../config.ini');
         $query                      = rawurlencode($query);
         $postcontent                = '{
 
@@ -209,7 +212,8 @@ class RequestController
             } 
 
         }';
-        $url                        = 'http://localhost/ordar/_search?q=' . $query . '%20AND%20NOT%20INTRO.ACCESS_RIGHT:Unpublished&size=10000';
+        $bdd      = strtolower($config['authSource']);
+        $url                        = 'http://localhost/'.$bdd.'/_search?q=' . $query . '%20AND%20NOT%20INTRO.ACCESS_RIGHT:Unpublished&size=10000';
         $curlopt                    = array(
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_PORT => 9200,
@@ -338,6 +342,7 @@ class RequestController
      */
     function getPublicationsofUser($author_mail, $authors_name, $query)
     {
+        $config     = parse_ini_file($_SERVER['DOCUMENT_ROOT'].'/../config.ini');
         $postcontent = '{ 
             "sort": { "INTRO.UPLOAD_DATE": { "order": "desc" }} ,
             "_source": {
@@ -387,11 +392,12 @@ class RequestController
                 } 
             } 
         }';
+        $bdd      = strtolower($config['authSource']);
         if ($query == "null") {
-            $url = 'http://localhost/ordar/_search?q=INTRO.FILE_CREATOR.MAIL:' . $author_mail . '%20AND%20(INTRO.FILE_CREATOR.NAME:' . $authors_name . ')&size=10000';
+            $url = 'http://localhost/'.$bdd.'/_search?q=INTRO.FILE_CREATOR.MAIL:' . $author_mail . '%20AND%20(INTRO.FILE_CREATOR.NAME:' . $authors_name . ')&size=10000';
         } else {
             $query = rawurlencode($query);
-            $url   = 'http://localhost/ordar/_search?q=' . $query . '%20AND%20(INTRO.FILE_CREATOR.MAIL:' . $author_mail . ')%20AND%20(INTRO.FILE_CREATOR.NAME:' . $authors_name . ')&size=10000';
+            $url   = 'http://localhost/'.$bdd.'/_search?q=' . $query . '%20AND%20(INTRO.FILE_CREATOR.MAIL:' . $author_mail . ')%20AND%20(INTRO.FILE_CREATOR.NAME:' . $authors_name . ')&size=10000';
         }
         $curlopt                    = array(
             CURLOPT_RETURNTRANSFER => true,
@@ -428,7 +434,9 @@ class RequestController
      */
     function get_info_for_dataset($id,$restricted)
     {
-        $url      = 'http://localhost/ordar/_all/' . urlencode($id);
+        $config     = parse_ini_file($_SERVER['DOCUMENT_ROOT'].'/../config.ini');
+        $bdd      = strtolower($config['authSource']);
+        $url      = 'http://localhost/'.$bdd.'/_all/' . urlencode($id);
         $curlopt  = array(
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_PORT => 9200,
