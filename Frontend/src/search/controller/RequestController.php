@@ -6,7 +6,7 @@ ini_set('memory_limit', '-1');
 
 class RequestController
 {
-      /**
+    /**
      * Make a curl request
      * @param url to request,option
      * @return data of request
@@ -23,24 +23,26 @@ class RequestController
         curl_close($ch);
         return $rawData;
     }
-     /**
+    /**
      * Check status of datacite service
      * @return Code of request
      */
-    function Check_status_datacite(){
+    function Check_status_datacite()
+    {
         $handle = curl_init("https://mds.datacite.org");
-        curl_setopt($handle,  CURLOPT_RETURNTRANSFER, TRUE);
+        curl_setopt($handle, CURLOPT_RETURNTRANSFER, TRUE);
         $response = curl_exec($handle);
         $httpCode = curl_getinfo($handle, CURLINFO_HTTP_CODE);
         curl_close($handle);
         return $httpCode;
     }
-
-
-     function Inactivate_doi($doi){
-        $config     = parse_ini_file($_SERVER['DOCUMENT_ROOT'].'/../config.ini');
-        $url= "https://mds.datacite.org/metadata/".$doi;
-        $curlopt                = array(
+    
+    
+    function Inactivate_doi($doi)
+    {
+        $config  = parse_ini_file($_SERVER['DOCUMENT_ROOT'] . '/../config.ini');
+        $url     = "https://mds.datacite.org/metadata/" . $doi;
+        $curlopt = array(
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => "",
             CURLOPT_MAXREDIRS => 10,
@@ -48,82 +50,81 @@ class RequestController
             CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
             CURLOPT_CUSTOMREQUEST => "DELETE",
             CURLOPT_HTTPHEADER => array(
-            "authorization: ".$config['Auth_config_datacite'],
-            'Content-Type: text/xml'
-            ),
+                "authorization: " . $config['Auth_config_datacite'],
+                'Content-Type: text/xml'
+            )
         );
-
+        
         $ch      = curl_init();
         $curlopt = array(
             CURLOPT_URL => $url
         ) + $curlopt;
         curl_setopt_array($ch, $curlopt);
         $rawData = curl_exec($ch);
-        $info = curl_getinfo($ch);
+        $info    = curl_getinfo($ch);
         curl_close($ch);
     }
-
-
-
-     function requestToAPIAdmin($query)
+    
+    
+    
+    function requestToAPIAdmin($query)
     {
-        $config     = parse_ini_file($_SERVER['DOCUMENT_ROOT'].'/../config.ini');
+        $config = parse_ini_file($_SERVER['DOCUMENT_ROOT'] . '/../config.ini');
         if (!empty($query)) {
-        $query                      = rawurlencode($query);
+            $query = rawurlencode($query);
+        } else {
+            $query = "*";
         }
-        else{
-            $query="*";
-        }
-        $postcontent                = '{ 
-            "sort": { "INTRO.UPLOAD_DATE": { "order": "desc" }} ,
-             "_source": {
-            "excludes": [ "DATA" ]
-             },
-            "aggs" : {  
-                "sample_kind" : {  
-                    "terms" : {  
-                      "field" : "INTRO.SAMPLE_KIND.NAME" 
-                    } 
-                }, 
-                "keywords" : {  
-                    "terms" : {  
-                      "field" : "INTRO.KEYWORDS.NAME" 
-                    } 
-                }, 
-                 "authors" : {  
-                    "terms" : {  
-                      "field" : "INTRO.FILE_CREATOR.DISPLAY_NAME" 
-                    } 
-                }, 
-                "scientific_field" : {  
-                    "terms" : {  
-                      "field" : "INTRO.SCIENTIFIC_FIELD.NAME" 
-                    } 
-                }, 
-                "date" : {  
-                    "terms" : {  
-                      "field" : "INTRO.CREATION_DATE" 
-                    } 
-                }, 
-                "language" : {  
-                    "terms" : {  
-                      "field" : "INTRO.LANGUAGE" 
-                    } 
-                }, 
-                "filetype" : {  
-                    "terms" : {  
-                      "field" : "DATA.FILES.FILETYPE" 
-                    } 
-                }, 
-                 "access_right" : {  
-                    "terms" : {  
-                      "field" : "INTRO.ACCESS_RIGHT" 
-                    } 
-                } 
-            } 
+        $postcontent                = '{  
+            "sort": { "INTRO.UPLOAD_DATE": { "order": "desc" }} , 
+             "_source": { 
+            "excludes": [ "DATA" ] 
+             }, 
+            "aggs" : {   
+                "sample_kind" : {   
+                    "terms" : {   
+                      "field" : "INTRO.SAMPLE_KIND.NAME"  
+                    }  
+                },  
+                "keywords" : {   
+                    "terms" : {   
+                      "field" : "INTRO.KEYWORDS.NAME"  
+                    }  
+                },  
+                 "authors" : {   
+                    "terms" : {   
+                      "field" : "INTRO.FILE_CREATOR.DISPLAY_NAME"  
+                    }  
+                },  
+                "scientific_field" : {   
+                    "terms" : {   
+                      "field" : "INTRO.SCIENTIFIC_FIELD.NAME"  
+                    }  
+                },  
+                "date" : {   
+                    "terms" : {   
+                      "field" : "INTRO.CREATION_DATE"  
+                    }  
+                },  
+                "language" : {   
+                    "terms" : {   
+                      "field" : "INTRO.LANGUAGE"  
+                    }  
+                },  
+                "filetype" : {   
+                    "terms" : {   
+                      "field" : "DATA.FILES.FILETYPE"  
+                    }  
+                },  
+                 "access_right" : {   
+                    "terms" : {   
+                      "field" : "INTRO.ACCESS_RIGHT"  
+                    }  
+                }  
+            }  
         }';
-        $bdd      = strtolower($config['authSource']);
-        $url                        = 'http://localhost/'.$bdd.'/_search?q='.$query.'&size=10000';
+        $bdd                        = strtolower($config['authSource']);
+        $url                        = 'http://localhost/' . $bdd . '/_search?q=' . $query . '&size=10000';
         $curlopt                    = array(
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_PORT => 9200,
@@ -149,71 +150,71 @@ class RequestController
         return $responses;
         
     }
-
-
     
-     /**
+    
+    
+    /**
      * Make a request to elasticsearch API
      * @param query of user
      * @return data of request
      */
     function requestToAPI($query)
     {
-        $config     = parse_ini_file($_SERVER['DOCUMENT_ROOT'].'/../config.ini');
+        $config                     = parse_ini_file($_SERVER['DOCUMENT_ROOT'] . '/../config.ini');
         $query                      = rawurlencode($query);
-        $postcontent                = '{
+        $postcontent                = '{ 
 
-            "sort": { "INTRO.UPLOAD_DATE": { "order": "desc" }} ,
-            "_source": {
-            "excludes": [ "DATA" ]
-             },
-            
-            "aggs" : {  
-                "sample_kind" : {  
-                    "terms" : {  
-                      "field" : "INTRO.SAMPLE_KIND.NAME" 
-                    } 
-                }, 
-                "keywords" : {  
-                    "terms" : {  
-                      "field" : "INTRO.KEYWORDS.NAME" 
-                    } 
-                }, 
-                 "authors" : {  
-                    "terms" : {  
-                      "field" : "INTRO.FILE_CREATOR.DISPLAY_NAME" 
-                    } 
-                }, 
-                "scientific_field" : {  
-                    "terms" : {  
-                      "field" : "INTRO.SCIENTIFIC_FIELD.NAME" 
-                    } 
-                }, 
-                "date" : {  
-                    "terms" : {  
-                      "field" : "INTRO.CREATION_DATE" 
-                    } 
-                }, 
-                "language" : {  
-                    "terms" : {  
-                      "field" : "INTRO.LANGUAGE" 
-                    } 
-                }, 
-                "filetype" : {  
-                    "terms" : {  
-                      "field" : "DATA.FILES.FILETYPE" 
-                    } 
-                }, 
-                 "access_right" : {  
-                    "terms" : {  
-                      "field" : "INTRO.ACCESS_RIGHT" 
-                    } 
-                } 
-            } 
+            "sort": { "INTRO.UPLOAD_DATE": { "order": "desc" }} , 
+            "_source": { 
+            "excludes": [ "DATA" ] 
+             }, 
+             
+            "aggs" : {   
+                "sample_kind" : {   
+                    "terms" : {   
+                      "field" : "INTRO.SAMPLE_KIND.NAME"  
+                    }  
+                },  
+                "keywords" : {   
+                    "terms" : {   
+                      "field" : "INTRO.KEYWORDS.NAME"  
+                    }  
+                },  
+                 "authors" : {   
+                    "terms" : {   
+                      "field" : "INTRO.FILE_CREATOR.DISPLAY_NAME"  
+                    }  
+                },  
+                "scientific_field" : {   
+                    "terms" : {   
+                      "field" : "INTRO.SCIENTIFIC_FIELD.NAME"  
+                    }  
+                },  
+                "date" : {   
+                    "terms" : {   
+                      "field" : "INTRO.CREATION_DATE"  
+                    }  
+                },  
+                "language" : {   
+                    "terms" : {   
+                      "field" : "INTRO.LANGUAGE"  
+                    }  
+                },  
+                "filetype" : {   
+                    "terms" : {   
+                      "field" : "DATA.FILES.FILETYPE"  
+                    }  
+                },  
+                 "access_right" : {   
+                    "terms" : {   
+                      "field" : "INTRO.ACCESS_RIGHT"  
+                    }  
+                }  
+            }  
 
         }';
-        $bdd      = strtolower($config['authSource']);
-        $url                        = 'http://localhost/'.$bdd.'/_search?q=' . $query . '%20AND%20NOT%20INTRO.ACCESS_RIGHT:Unpublished&size=10000';
+        $bdd                        = strtolower($config['authSource']);
+        $url                        = 'http://localhost/' . $bdd . '/_search?q=' . $query . '%20AND%20NOT%20INTRO.ACCESS_RIGHT:Unpublished&size=10000';
         $curlopt                    = array(
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_PORT => 9200,
@@ -239,18 +240,19 @@ class RequestController
         return $responses;
         
     }
-
-     /**
+    
+    /**
      * Send generated XML to datacite to save DOI
      * @param xml a envoyer,doi concerné
      * @return treu if ok else false
      */
-    function send_XML_to_datacite($XML,$doi){
-        $config     = parse_ini_file($_SERVER['DOCUMENT_ROOT'].'/../config.ini');
-
-
-        $url= "https://mds.datacite.org/metadata/".$doi;
-        $curlopt                = array(
+    function send_XML_to_datacite($XML, $doi)
+    {
+        $config = parse_ini_file($_SERVER['DOCUMENT_ROOT'] . '/../config.ini');
+        
+        
+        $url     = "https://mds.datacite.org/metadata/" . $doi;
+        $curlopt = array(
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => "",
             CURLOPT_MAXREDIRS => 10,
@@ -259,11 +261,11 @@ class RequestController
             CURLOPT_CUSTOMREQUEST => "GET",
             CURLOPT_POSTFIELDS => $XML,
             CURLOPT_HTTPHEADER => array(
-            "authorization: ".$config['Auth_config_datacite'],
-            'Content-Type: text/xml'
-            ),
+                "authorization: " . $config['Auth_config_datacite'],
+                'Content-Type: text/xml'
+            )
         );
-
+        
         $ch      = curl_init();
         $curlopt = array(
             CURLOPT_URL => $url
@@ -271,69 +273,62 @@ class RequestController
         curl_setopt_array($ch, $curlopt);
         $XMLondatacite = curl_exec($ch);
         curl_close($ch);
-        if ($XMLondatacite==$XML) {
-           return "true";
-        }else{
-
-    	$url= "https://mds.datacite.org/metadata/";
-        $curlopt                = array(
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_ENCODING => "",
-            CURLOPT_MAXREDIRS => 10,
-            CURLOPT_TIMEOUT => 10,
-            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            CURLOPT_CUSTOMREQUEST => "POST",
-            CURLOPT_POSTFIELDS => $XML,
-            CURLOPT_HTTPHEADER => array(
-   			"authorization: ".$config['Auth_config_datacite'],
-   			'Content-Type: text/xml'
-   			),
-        );
-
-        $ch      = curl_init();
-        $curlopt = array(
-            CURLOPT_URL => $url
-        ) + $curlopt;
-        curl_setopt_array($ch, $curlopt);
-        $rawData = curl_exec($ch);
-        $info = curl_getinfo($ch);
-        curl_close($ch);
-        if ($info['http_code']=="201") {
-        	$url_doi=urlencode($config['URL_DOI']."/record?id=".$doi);
-        	$curl = curl_init();
-
-			curl_setopt_array($curl, array(
-			  CURLOPT_URL => "https://mds.datacite.org/doi",
-			  CURLOPT_RETURNTRANSFER => true,
-			  CURLOPT_ENCODING => "",
-			  CURLOPT_MAXREDIRS => 10,
-			  CURLOPT_TIMEOUT => 30,
-			  CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-			  CURLOPT_CUSTOMREQUEST => "POST",
-			  CURLOPT_POSTFIELDS => "doi=".$doi."&url=".$url_doi,
-			  CURLOPT_HTTPHEADER => array(
-			    "authorization: ".$config['Auth_config_datacite'],
-			    "cache-control: no-cache",
-			  ),
-			));
-
-		$response = curl_exec($curl);
-		return "true";
-        }
-        else{
-        	return "false";
-        }
+        if ($XMLondatacite == $XML) {
+            return "true";
+        } else {
             
-        }
-
-
-
-
+            $url     = "https://mds.datacite.org/metadata/";
+            $curlopt = array(
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_ENCODING => "",
+                CURLOPT_MAXREDIRS => 10,
+                CURLOPT_TIMEOUT => 10,
+                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                CURLOPT_CUSTOMREQUEST => "POST",
+                CURLOPT_POSTFIELDS => $XML,
+                CURLOPT_HTTPHEADER => array(
+                    "authorization: " . $config['Auth_config_datacite'],
+                    'Content-Type: text/xml'
+                )
+            );
+            
+            $ch      = curl_init();
+            $curlopt = array(
+                CURLOPT_URL => $url
+            ) + $curlopt;
+            curl_setopt_array($ch, $curlopt);
+            $rawData = curl_exec($ch);
+            $info    = curl_getinfo($ch);
+            curl_close($ch);
+            if ($info['http_code'] == "201") {
+                $url_doi = urlencode($config['URL_DOI'] . "/record?id=" . $doi);
+                $curl    = curl_init();
+                
+                curl_setopt_array($curl, array(
+                    CURLOPT_URL => "https://mds.datacite.org/doi",
+                    CURLOPT_RETURNTRANSFER => true,
+                    CURLOPT_ENCODING => "",
+                    CURLOPT_MAXREDIRS => 10,
+                    CURLOPT_TIMEOUT => 30,
+                    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                    CURLOPT_CUSTOMREQUEST => "POST",
+                    CURLOPT_POSTFIELDS => "doi=" . $doi . "&url=" . $url_doi,
+                    CURLOPT_HTTPHEADER => array(
+                        "authorization: " . $config['Auth_config_datacite'],
+                        "cache-control: no-cache"
+                    )
+                ));
+                
+                $response = curl_exec($curl);
+                return "true";
+            } else {
+                return "false";
+            }
+            
+        }     
         
-
-
     }
-
+    
     
     /**
      * Make a request to elasticsearch API by user
@@ -342,62 +337,62 @@ class RequestController
      */
     function getPublicationsofUser($author_mail, $authors_name, $query)
     {
-        $config     = parse_ini_file($_SERVER['DOCUMENT_ROOT'].'/../config.ini');
-        $postcontent = '{ 
-            "sort": { "INTRO.UPLOAD_DATE": { "order": "desc" }} ,
-            "_source": {
-            "excludes": [ "DATA" ]
-             },
-            "aggs" : {  
-                "sample_kind" : {  
-                    "terms" : {  
-                      "field" : "INTRO.SAMPLE_KIND.NAME" 
-                    } 
-                }, 
-                "keywords" : {  
-                    "terms" : {  
-                      "field" : "INTRO.KEYWORDS.NAME" 
-                    } 
-                }, 
+        $config      = parse_ini_file($_SERVER['DOCUMENT_ROOT'] . '/../config.ini');
+        $postcontent = '{  
+            "sort": { "INTRO.UPLOAD_DATE": { "order": "desc" }} , 
+            "_source": { 
+            "excludes": [ "DATA" ] 
+             }, 
+            "aggs" : {   
+                "sample_kind" : {   
+                    "terms" : {   
+                      "field" : "INTRO.SAMPLE_KIND.NAME"  
+                    }  
+                },  
+                "keywords" : {   
+                    "terms" : {   
+                      "field" : "INTRO.KEYWORDS.NAME"  
+                    }  
+                },  
                  
-                 "authors" : {  
-                    "terms" : {  
-                      "field" : "INTRO.FILE_CREATOR.DISPLAY_NAME" 
-                    } 
-                }, 
-                "scientific_field" : {  
-                    "terms" : {  
-                      "field" : "INTRO.SCIENTIFIC_FIELD.NAME" 
-                    } 
-                }, 
-                "date" : {  
-                    "terms" : {  
-                      "field" : "INTRO.CREATION_DATE" 
-                    } 
-                }, 
-                "language" : {  
-                    "terms" : {  
-                      "field" : "INTRO.LANGUAGE" 
-                    } 
-                }, 
-                "filetype" : {  
-                    "terms" : {  
-                      "field" : "DATA.FILES.FILETYPE" 
-                    } 
-                }, 
-                 "access_right" : {  
-                    "terms" : {  
-                      "field" : "INTRO.ACCESS_RIGHT" 
-                    } 
-                } 
-            } 
+                 "authors" : {   
+                    "terms" : {   
+                      "field" : "INTRO.FILE_CREATOR.DISPLAY_NAME"  
+                    }  
+                },  
+                "scientific_field" : {   
+                    "terms" : {   
+                      "field" : "INTRO.SCIENTIFIC_FIELD.NAME"  
+                    }  
+                },  
+                "date" : {   
+                    "terms" : {   
+                      "field" : "INTRO.CREATION_DATE"  
+                    }  
+                },  
+                "language" : {   
+                    "terms" : {   
+                      "field" : "INTRO.LANGUAGE"  
+                    }  
+                },  
+                "filetype" : {   
+                    "terms" : {   
+                      "field" : "DATA.FILES.FILETYPE"  
+                    }  
+                },  
+                 "access_right" : {   
+                    "terms" : {   
+                      "field" : "INTRO.ACCESS_RIGHT"  
+                    }  
+                }  
+            }  
         }';
-        $bdd      = strtolower($config['authSource']);
+        $bdd         = strtolower($config['authSource']);
         if ($query == "null") {
-            $url = 'http://localhost/'.$bdd.'/_search?q=INTRO.FILE_CREATOR.MAIL:' . $author_mail . '%20AND%20(INTRO.FILE_CREATOR.NAME:' . $authors_name . ')&size=10000';
+            $url = 'http://localhost/' . $bdd . '/_search?q=INTRO.FILE_CREATOR.MAIL:' . $author_mail . '%20AND%20(INTRO.FILE_CREATOR.NAME:' . $authors_name . ')&size=10000';
         } else {
             $query = rawurlencode($query);
-            $url   = 'http://localhost/'.$bdd.'/_search?q=' . $query . '%20AND%20(INTRO.FILE_CREATOR.MAIL:' . $author_mail . ')%20AND%20(INTRO.FILE_CREATOR.NAME:' . $authors_name . ')&size=10000';
+            $url   = 'http://localhost/' . $bdd . '/_search?q=' . $query . '%20AND%20(INTRO.FILE_CREATOR.MAIL:' . $author_mail . ')%20AND%20(INTRO.FILE_CREATOR.NAME:' . $authors_name . ')&size=10000';
         }
         $curlopt                    = array(
             CURLOPT_RETURNTRANSFER => true,
@@ -432,11 +427,11 @@ class RequestController
      * @param doi of dataset
      * @return data of request if find, else false
      */
-    function get_info_for_dataset($id,$restricted)
+    function get_info_for_dataset($id, $restricted)
     {
-        $config     = parse_ini_file($_SERVER['DOCUMENT_ROOT'].'/../config.ini');
+        $config   = parse_ini_file($_SERVER['DOCUMENT_ROOT'] . '/../config.ini');
         $bdd      = strtolower($config['authSource']);
-        $url      = 'http://localhost/'.$bdd.'/_all/' . urlencode($id);
+        $url      = 'http://localhost/' . $bdd . '/_all/' . urlencode($id);
         $curlopt  = array(
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_PORT => 9200,
@@ -448,81 +443,77 @@ class RequestController
         );
         $response = self::Curlrequest($url, $curlopt);
         $response = json_decode($response, TRUE);
-
-        if ($restricted=="Unrestricted") {
+        
+        if ($restricted == "Unrestricted") {
             return $response;
-        }
-        else{
-
-                if ($_SESSION['admin']=="1") {
-                    if ($response['found']==false) {
-                        return false;
-                    }
-                    else{
-                        return $response;    
-                    }
+        } else {
+            
+            if ($_SESSION['admin'] == "1") {
+                if ($response['found'] == false) {
+                    return false;
+                } else {
+                    return $response;
                 }
-                else{
+            } else {
+                
+                if ($response["_source"]["INTRO"]["ACCESS_RIGHT"] == "Open") {
+                    return $response;
+                } elseif ($response["_source"]["INTRO"]["ACCESS_RIGHT"] == "Embargoed") {
+                    $embargoeddate = $response["_source"]["INTRO"]["PUBLICATION_DATE"];
+                    $now           = new \Datetime();
                     
-                    if ($response["_source"]["INTRO"]["ACCESS_RIGHT"] == "Open") {
-                        //$response=json_encode($response);
-                        return $response;
-                    } elseif ($response["_source"]["INTRO"]["ACCESS_RIGHT"] == "Embargoed") {
-                        $embargoeddate = $response["_source"]["INTRO"]["PUBLICATION_DATE"];
-                        $now           = new \Datetime();
-                        
-                        foreach ($response["_source"]["INTRO"]["FILE_CREATOR"] as $key => $value) {
-                            if (@$_SESSION["mail"] == $value["MAIL"]) {
-                                return $response;
-                            } else {
-                                $notfound = "notfound";
-                            }
-                        }
-                        if ($notfound = "notfound") {
-                            
-                            $responses["_source"]["INTRO"] = $response["_source"]["INTRO"];
-                            $responses["_index"]           = $response["_index"];
-                            $responses["_id"]              = $response["_id"];
-                            $responses["_type"]            = $response["_type"];
-                            return $responses;
-                        }
-                        
-                    } elseif ($response["_source"]["INTRO"]["ACCESS_RIGHT"] == "Closed") {
-                        foreach ($response["_source"]["INTRO"]["FILE_CREATOR"] as $key => $value) {
-                            if (@$_SESSION["mail"] == $value["MAIL"]) {
-                                return $response;
-                            } else {
-                                $notfound = "notfound";
-                                
-                            }
-                        }
-                        if ($notfound = "notfound") {
-                            $responses["_source"]["INTRO"] = $response["_source"]["INTRO"];
-                            $responses["_index"]           = $response["_index"];
-                            $responses["_id"]              = $response["_id"];
-                            $responses["_type"]            = $response["_type"];
-                            return $responses;
-                        }
-                        
-                        
-                    } elseif ($response["_source"]["INTRO"]["ACCESS_RIGHT"] == "Unpublished") {
-                        $found = "false";
-                        foreach ($response["_source"]["INTRO"]["FILE_CREATOR"] as $key => $value) {
-                            if (@$_SESSION["mail"] == $value["MAIL"]) {
-                                $found = "true";
-                            }
-                            
-                        }
-                        if ($found == "true") {
+                    foreach ($response["_source"]["INTRO"]["FILE_CREATOR"] as $key => $value) {
+                        if (@$_SESSION["mail"] == $value["MAIL"]) {
                             return $response;
                         } else {
-                            return false;
+                            $notfound = "notfound";
+                        }
+                    }
+                    if ($notfound = "notfound") {
+                        
+                        $responses["_source"]["INTRO"] = $response["_source"]["INTRO"];
+                        $responses["_index"]           = $response["_index"];
+                        $responses["_id"]              = $response["_id"];
+                        $responses["_type"]            = $response["_type"];
+                        return $responses;
+                    }
+                    
+                } elseif ($response["_source"]["INTRO"]["ACCESS_RIGHT"] == "Closed") {
+                    foreach ($response["_source"]["INTRO"]["FILE_CREATOR"] as $key => $value) {
+                        if (@$_SESSION["mail"] == $value["MAIL"]) {
+                            return $response;
+                        } else {
+                            $notfound = "notfound";
+                            
+                        }
+                    }
+                    if ($notfound = "notfound") {
+                        $responses["_source"]["INTRO"] = $response["_source"]["INTRO"];
+                        $responses["_index"]           = $response["_index"];
+                        $responses["_id"]              = $response["_id"];
+                        $responses["_type"]            = $response["_type"];
+                        return $responses;
+                    }
+                    
+                    
+                } elseif ($response["_source"]["INTRO"]["ACCESS_RIGHT"] == "Unpublished") {
+                    $found = "false";
+                    foreach ($response["_source"]["INTRO"]["FILE_CREATOR"] as $key => $value) {
+                        if (@$_SESSION["mail"] == $value["MAIL"]) {
+                            $found = "true";
                         }
                         
-                        
                     }
+                    if ($found == "true") {
+                        return $response;
+                    } else {
+                        return false;
+                    }
+                    
+                    
                 }
             }
+        }
         
     }
     

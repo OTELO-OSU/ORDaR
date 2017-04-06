@@ -114,10 +114,10 @@ class DatasheetController
         
         
         
-        $error                          = null;
-        $author_displayname             = null;
-        $UPLOAD_FOLDER                  = $config["UPLOAD_FOLDER"];
-        $required                       = array(
+        $error              = null;
+        $author_displayname = null;
+        $UPLOAD_FOLDER      = $config["UPLOAD_FOLDER"];
+        $required           = array(
             'title',
             'creation_date',
             'language',
@@ -495,14 +495,13 @@ class DatasheetController
             if ($key == "file_already_uploaded") {
                 if (count($value) > 1) {
                     foreach ($value as $key => $value) {
-                         $file_already_uploaded[$key]['DATA_URL'] = $value;
+                        $file_already_uploaded[$key]['DATA_URL'] = $value;
                     }
-                }
-                else{
+                } else {
                     $file_already_uploaded[0]['DATA_URL'] = $value[0];
                 }
             }
-           
+            
         }
         
         
@@ -515,13 +514,12 @@ class DatasheetController
                 $doi               = $doi;
                 $array['dataform'] = $array;
                 if (empty($file_already_uploaded)) {
-                    $array['file_already_uploaded']=array(); 
+                    $array['file_already_uploaded'] = array();
+                } else {
+                    $array['file_already_uploaded'] = $file_already_uploaded;
                 }
-                else{
-                    $array['file_already_uploaded']=$file_already_uploaded; 
-                }
-                $array['xml']      = $sxe;
-                $array['doi']      = $doi;
+                $array['xml'] = $sxe;
+                $array['doi'] = $doi;
                 return $array;
             } else {
                 $newdoi = self::generateDOI();
@@ -532,7 +530,7 @@ class DatasheetController
                     $array['dataform'] = $array;
                     $array['xml']      = $sxe;
                     $array['doi']      = $doi;
-
+                    
                     return $array;
                 } else {
                     $array['dataform'] = $array;
@@ -641,13 +639,13 @@ class DatasheetController
                             $tmparray[] = $value;
                         }
                     }
-
-                    $intersect=array();
+                    
+                    $intersect = array();
                     foreach ($tmparray as $key => $value) {
-                       foreach ($array['file_already_uploaded'] as $key => $value2) {
-                        if ($value['DATA_URL']==$value2['DATA_URL']) {
-                            $intersect[]=$value;
-                        }
+                        foreach ($array['file_already_uploaded'] as $key => $value2) {
+                            if ($value['DATA_URL'] == $value2['DATA_URL']) {
+                                $intersect[] = $value;
+                            }
                         }
                     }
                     
@@ -684,50 +682,46 @@ class DatasheetController
                             }
                         }
                     }
-
-                  if(count($intersect)!=0 and $data!=0){
-                        $merge=array_merge($intersect,$data);
-                       
-                   }
-                   else if (count($intersect)!=0){
-                        $merge=$intersect;
-                      
-                   }
-                   else{
-                        $merge=$data;
-                       
-                   }
-                   
-                   
-                   mkdir($UPLOAD_FOLDER . "/" . $doi . "/tmp");
-                   foreach ($merge as $key => $value) {
-                        rename($UPLOAD_FOLDER . "/" . $doi . "/" .$value['DATA_URL'],$UPLOAD_FOLDER . "/" . $doi . "/tmp/" .$value['DATA_URL'] );
-                   }
-                        $files = glob($UPLOAD_FOLDER . "/" . $doi ."/*" ); // get all file names
-                        foreach($files as $file){ // iterate files
-                          if(is_file($file))
-                            unlink($file); // delete file
-                        }
-                    foreach ($merge as $key => $value) {
-                           rename($UPLOAD_FOLDER . "/" . $doi . "/tmp/" .$value['DATA_URL'],$UPLOAD_FOLDER . "/" . $doi . "/" .$value['DATA_URL'] );
+                    
+                    if (count($intersect) != 0 and $data != 0) {
+                        $merge = array_merge($intersect, $data);
+                        
+                    } else if (count($intersect) != 0) {
+                        $merge = $intersect;
+                        
+                    } else {
+                        $merge = $data;
+                        
                     }
-                   rmdir($UPLOAD_FOLDER . "/" . $doi . "/tmp/");
-
-
-                       $json= array(
-                            '$set' => array(
-                                "INTRO" => $array['dataform'],
-                                "DATA.FILES" => $merge
-                            )
-                        );
-                } else {
-                    $json = 
-                        array(
-                            '$set' => array(
-                                "INTRO" => $array['dataform']
-                            )
+                    
+                    
+                    mkdir($UPLOAD_FOLDER . "/" . $doi . "/tmp");
+                    foreach ($merge as $key => $value) {
+                        rename($UPLOAD_FOLDER . "/" . $doi . "/" . $value['DATA_URL'], $UPLOAD_FOLDER . "/" . $doi . "/tmp/" . $value['DATA_URL']);
+                    }
+                    $files = glob($UPLOAD_FOLDER . "/" . $doi . "/*"); // get all file names
+                    foreach ($files as $file) { // iterate files
+                        if (is_file($file))
+                            unlink($file); // delete file
+                    }
+                    foreach ($merge as $key => $value) {
+                        rename($UPLOAD_FOLDER . "/" . $doi . "/tmp/" . $value['DATA_URL'], $UPLOAD_FOLDER . "/" . $doi . "/" . $value['DATA_URL']);
+                    }
+                    rmdir($UPLOAD_FOLDER . "/" . $doi . "/tmp/");
+                    
+                    
+                    $json = array(
+                        '$set' => array(
+                            "INTRO" => $array['dataform'],
+                            "DATA.FILES" => $merge
                         )
-                    ;
+                    );
+                } else {
+                    $json = array(
+                        '$set' => array(
+                            "INTRO" => $array['dataform']
+                        )
+                    );
                 }
                 $doi        = $doi;
                 $Request    = new RequestApi();
@@ -737,8 +731,8 @@ class DatasheetController
                 $request = $Request->send_XML_to_datacite($xml->asXML(), $doi);
                 if ($request == "true") { //Si les donnnées ont bien été receptionné par datacite
                     $collectionObject->update(array(
-                            '_id' => $doi
-                        ),$json);
+                        '_id' => $doi
+                    ), $json);
                     return "true";
                 } else {
                     $array['error'] = "Unable to send metadata to Datacite";
