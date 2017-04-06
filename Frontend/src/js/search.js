@@ -8,7 +8,7 @@
   APP.modules.datatable = (function() {
       return {
           AppendTable: function(data,facets) {
-              if (data['hits']['total'] == 0) {
+              if (data['hits']['total'] == 0 || data['hits']['total'] == null ) {
                   $('#facets').hide();
                     if (facets) {
                     $('#facets').show();
@@ -133,6 +133,11 @@
           },
           //Methode d'affichage des facets de la recherche
           AppendFacets: function(data) {
+            if (data['aggregations'] ==null) {
+              
+            }
+            else{
+
               sample_kind = data['aggregations']['sample_kind']['buckets'];
               if (sample_kind.length == 0) {
                   $(".ui.card #samplekind").parent().hide();
@@ -318,6 +323,7 @@
 
 
               $('#facets').show();
+            }
 
 
 
@@ -508,6 +514,10 @@
               APP.modules.mypublications.search(query);
           },
           AppendFacets: function(data) {
+            if (data['aggregations'] == null) {
+              
+            }
+            else{
               $('#info').hide();
               $('#facets').hide();
               $('#results').empty();
@@ -700,6 +710,7 @@
 
 
               $('#facets').show();
+            }
 
 
 
