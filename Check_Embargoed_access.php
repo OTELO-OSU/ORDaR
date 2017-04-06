@@ -2,6 +2,7 @@
 
 $config = parse_ini_file('Frontend/config.ini');
 $db = new MongoClient("mongodb://" . $config['host'] . ':' . $config['port'], array(
+			'authSource' => $config['authSource'],
                 'username' => $config['username'],
                 'password' => $config['password']
             ));
