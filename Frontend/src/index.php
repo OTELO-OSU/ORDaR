@@ -16,6 +16,22 @@ $container = $app->getContainer();
 $container['csrf'] = function ($c) {
     return new \Slim\Csrf\Guard;
 };
+$c['notFoundHandler'] = function ($c) {
+    return function ($request, $response) use ($c) {
+        $loader = new Twig_Loader_Filesystem('search/templates');
+		$twig = new Twig_Environment($loader);
+		echo $twig->render('notfound.html.twig');
+    };
+};
+
+$c['notAllowedHandler'] = function ($c) {
+    return function ($request, $response, $methods) use ($c) {
+        $loader = new Twig_Loader_Filesystem('search/templates');
+		$twig = new Twig_Environment($loader);
+		echo $twig->render('forbidden.html.twig');
+    };
+};
+
 session_start();
 
 //Route permettant d'acceder a l'accueil
@@ -565,6 +581,7 @@ $app->get('/export/{format}', function (Request $req,Response $responseSlim,$arg
 
 
 });
+
 
 
 
