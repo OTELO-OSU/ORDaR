@@ -2,7 +2,7 @@
 
 $db = new MongoClient("mongodb://localhost:27017");
 $config = parse_ini_file('Frontend/config.ini');
-$bdd      = strtolower($config['authSource']);
+$bdd      = $config['authSource'];
 $db = $db->selectDB($bdd);
 
 $collections = $db->getCollectionNames();
