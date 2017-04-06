@@ -1,6 +1,8 @@
 <?php
 
 $curl = curl_init();
+$config = parse_ini_file('Frontend/config.ini');
+$bdd      = strtolower($config['authSource']);
 
 curl_setopt_array($curl, array(
   CURLOPT_PORT => "9200",
@@ -15,7 +17,6 @@ curl_setopt_array($curl, array(
   CURLOPT_HTTPHEADER => array(
     "cache-control: no-cache",
     "content-type: application/json",
-    "postman-token: a1c5768d-18e7-67d7-8f5e-e3a6e61a7dec"
   ),
 ));
 
