@@ -1,7 +1,7 @@
 <?php
 
-$db = new MongoClient("mongodb://localhost:27017");
 $config = parse_ini_file('Frontend/config.ini');
+$db = new MongoClient("mongodb://".$config['host'].":".$config['port']);
 $bdd      = $config['authSource'];
 $db = $db->selectDB($bdd);
 
