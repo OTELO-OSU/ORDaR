@@ -38,7 +38,7 @@ class DatasheetController
         $config = parse_ini_file($_SERVER['DOCUMENT_ROOT'] . '/../config.ini');
         
         $dbdoi      = new MongoClient("mongodb://" . $config['host'] . ':' . $config['port'], array(
-            'authSource' => "DOI",
+            'authSource' => $config['DOI_database'],
             'username' => $config['user_doi'],
             'password' => $config['password_doi']
         ));
