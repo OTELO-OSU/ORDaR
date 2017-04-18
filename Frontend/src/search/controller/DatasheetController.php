@@ -654,11 +654,7 @@ class DatasheetController
                         $nomDestination                = str_replace(' ', '_', $_FILES["file"]["name"][$i]);
                         $data[$i]["DATA_URL"]          = $nomDestination;
                         $data[$i]["ORIGINAL_DATA_URL"] = $UPLOAD_FOLDER . "/" . $doi . "/" . $nomDestination;
-                        if (file_exists($repertoireDestination . $_FILES["file"]["name"][$i])) {
-                            $returnarray[] = "false";
-                            $returnarray[] = $array['dataform'];
-                            return $returnarray;
-                        } else {
+                      
                             if (is_uploaded_file($_FILES["file"]["tmp_name"][$i])) {
                                 if (is_dir($repertoireDestination . $config['DOI_PREFIX']) == false) {
                                     mkdir($repertoireDestination . $config['DOI_PREFIX']);
@@ -680,12 +676,11 @@ class DatasheetController
                                     return $returnarray;
                                 }
                             }
-                        }
+                        
                     }
                     
                     if (count($intersect) != 0 and $data != 0) {
-                        $merge = array_merge($intersect, $data);
-                        
+                        $merge = array_merge($intersect, $data);                        
                     } else if (count($intersect) != 0) {
                         $merge = $intersect;
                         
@@ -694,7 +689,7 @@ class DatasheetController
                         
                     }
                     
-                    
+                    $merge=array_map("unserialize", array_unique(array_map("serialize", $merge)));
                     mkdir($UPLOAD_FOLDER . "/" . $doi . "/tmp");
                     foreach ($merge as $key => $value) {
                         rename($UPLOAD_FOLDER . "/" . $doi . "/" . $value['DATA_URL'], $UPLOAD_FOLDER . "/" . $doi . "/tmp/" . $value['DATA_URL']);
