@@ -406,7 +406,7 @@ $app->post('/editrecord', function (Request $req, Response $responseSlim) {
         elseif ($value == "Creative commons Attribution + Noncommercial + NoDerivatives") {
             $license = 6;
         }
-        return @$twig->render('edit_dataset.html.twig', ['error' => $return['error'], 'name' => $_SESSION['name'], 'firstname' => $_SESSION['firstname'], 'mail' => $_SESSION['mail'], 'doi' => $doi, 'title' => $response['_source']['INTRO']['TITLE'], 'description' => $response['_source']['INTRO']['DATA_DESCRIPTION'], 'creation_date' => $response['_source']['INTRO']['CREATION_DATE'], 'sampling_dates' => $response['_source']['INTRO']['SAMPLING_DATE'], 'authors' => $response['_source']['INTRO']['FILE_CREATOR'], 'keywords' => $response['_source']['INTRO']['KEYWORDS'], 'sample_kinds' => $response['_source']['INTRO']['SAMPLE_KIND'], 'scientific_fields' => $response['_source']['INTRO']['SCIENTIFIC_FIELD'], 'institutions' => $response['_source']['INTRO']['INSTITUTION'], 'language' => $response['_source']['INTRO']['LANGUAGE'], 'sampling_points' => $response['_source']['INTRO']['SAMPLING_POINT'], 'measurements' => $response['_source']['INTRO']['MEASUREMENT'], 'license' => $license, 'publisher' => $response['_source']['INTRO']['PUBLISHER'], 'fundings' => $response['_source']['INTRO']['FUNDINGS'], 'accessright' => $response['_source']['INTRO']['ACCESS_RIGHT'], 'embargoed_date' => $response['_source']['INTRO']['PUBLICATION_DATE'], 'files' => $response['_source']['DATA']['FILES'], 'name_CSRF' => $namecsrf, 'value_CSRF' => $valuecsrf]);
+        return @$twig->render('edit_dataset.html.twig', ['error' => $return['error'], 'name' => $_SESSION['name'], 'firstname' => $_SESSION['firstname'], 'mail' => $_SESSION['mail'],'admin' => $_SESSION['admin'], 'doi' => $doi, 'title' => $response['_source']['INTRO']['TITLE'], 'description' => $response['_source']['INTRO']['DATA_DESCRIPTION'], 'creation_date' => $response['_source']['INTRO']['CREATION_DATE'], 'sampling_dates' => $response['_source']['INTRO']['SAMPLING_DATE'], 'authors' => $response['_source']['INTRO']['FILE_CREATOR'], 'keywords' => $response['_source']['INTRO']['KEYWORDS'], 'sample_kinds' => $response['_source']['INTRO']['SAMPLE_KIND'], 'scientific_fields' => $response['_source']['INTRO']['SCIENTIFIC_FIELD'], 'institutions' => $response['_source']['INTRO']['INSTITUTION'], 'language' => $response['_source']['INTRO']['LANGUAGE'], 'sampling_points' => $response['_source']['INTRO']['SAMPLING_POINT'], 'measurements' => $response['_source']['INTRO']['MEASUREMENT'], 'license' => $license, 'publisher' => $response['_source']['INTRO']['PUBLISHER'], 'fundings' => $response['_source']['INTRO']['FUNDINGS'], 'accessright' => $response['_source']['INTRO']['ACCESS_RIGHT'], 'embargoed_date' => $response['_source']['INTRO']['PUBLICATION_DATE'], 'files' => $response['_source']['DATA']['FILES'], 'name_CSRF' => $namecsrf, 'value_CSRF' => $valuecsrf]);
     }
     else {
 
@@ -484,8 +484,8 @@ $app->get('/preview/{doi}/{filename}', function (Request $req, Response $respons
     if ($download == NULL or $download == false) {
         return $responseSlim->withStatus(403);
     }
-
-    return @$responseSlim->withBody();
+   return $responseSlim->withHeader('Content-type', 'application/pdf');
+    
 });
 
 //Route receptionnant les donnees POST du formulaire de contact d'auteurs
@@ -519,8 +519,9 @@ $app->get('/export/{format}', function (Request $req, Response $responseSlim, $a
     if ($format == "datacite") {
         $file = $file->export_to_datacite_xml($response);
         if ($file == false) {
-            return $responseSlim->withStatus(403);
-
+ 		$loader = new Twig_Loader_Filesystem('search/templates');
+        $twig = new Twig_Environment($loader);
+        echo $twig->render('notfound.html.twig');
         }
         else {
             header("Content-type: text/xml");
@@ -538,8 +539,9 @@ $app->get('/export/{format}', function (Request $req, Response $responseSlim, $a
     elseif ($format == "bibtex") {
         $file = $file->export_to_Bibtex($response);
         if ($file == false) {
-            return $responseSlim->withStatus(403);
-
+ 		$loader = new Twig_Loader_Filesystem('search/templates');
+        $twig = new Twig_Environment($loader);
+        echo $twig->render('notfound.html.twig');
         }
         else {
             print $file;
@@ -551,8 +553,9 @@ $app->get('/export/{format}', function (Request $req, Response $responseSlim, $a
     elseif ($format == "dublincore") {
         $file = $file->export_to_dublincore_xml($response);
         if ($file == false) {
-            return $responseSlim->withStatus(403);
-
+ 		$loader = new Twig_Loader_Filesystem('search/templates');
+        $twig = new Twig_Environment($loader);
+        echo $twig->render('notfound.html.twig');
         }
         else {
             header("Content-type: text/xml");

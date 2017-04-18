@@ -168,7 +168,7 @@ Class FileController
                 $file = $UPLOAD_FOLDER . $doi . "/" . $filename;
             }
             header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
-            header("Content-Disposition: inline; filename=" . $filename);
+            header("Content-Disposition: inline; filename='" . $filename."'");
             foreach ($response['_source']['DATA']['FILES'] as $key => $value) {
                 if ($filename == $value["DATA_URL"]) {
                     $mime = $value["FILETYPE"];

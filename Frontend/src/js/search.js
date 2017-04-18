@@ -13,6 +13,7 @@
                     if (facets) {
                     $('#facets').show();
                   }
+                  $('#info-noresult').empty();
                   $('#info-noresult').append('No result found!');
                   $('#info-noresult').addClass('red');
                   $('#info-noresult').show();
@@ -907,6 +908,7 @@
               $('.ui.accordion').accordion();
               $('.ui .form')
                   .form({
+                    keyboardShortcuts:false,
                       fields: {
                           title: {
                               identifier: 'title',
@@ -1148,6 +1150,11 @@
 
 
   $(document).ready(function() {
+$('form ').on('keypress', function(e) {
+    return e.which !== 13;
+});
+
+
   	//Allow dropdown
       $('.ui .dropdown.license')
           .dropdown();
