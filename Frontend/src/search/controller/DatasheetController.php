@@ -900,7 +900,30 @@ class DatasheetController
             foreach ($response['_source']['INTRO']['FILE_CREATOR'] as $key => $value) {
                 if ($author_name == $value["NAME"] && $author_firstname == $value["FIRST_NAME"]) {
                     $mail = $value["MAIL"];
-                    mail("<" . $mail . ">", 'Contact from ORDaR :' . $object, $sendermail . " want to know something about this dataset: <br>DOI: " . $doi . "<br>Title: " . $title . " <br> Message from " . $sendermail . ": <br> " . $message, $headers);
+                    mail("<" . $mail . ">", 'Contact from ORDaR :' . $object,
+                        '<html>
+                            <body>
+                                <h2>Contact from ordar!</h2>
+                                <table cellspacing="0" style="border: 2px solid black; width: 400px; height: 200px;">
+                                    <tr>
+                                        <th>From:</th><td>'.$sendermail.'</td>
+                                    </tr>
+                                    <tr style="background-color: #e0e0e0;">
+                                        <th>Title </th><td>'.$title.'</td>
+                                    </tr>
+                                     <tr>
+                                        <th>DOI </th><td>'.$doi.'</td>
+                                    </tr>
+                                    <tr style="background-color: #e0e0e0;">
+                                        <th>Object:</th><td>'.$object.'</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Message:</th><td>'.$message.'</td>
+                                    </tr>
+
+                                </table>
+                            </body>
+                        </html> ', $headers);
                 }
             }
             if ($mail == true) {

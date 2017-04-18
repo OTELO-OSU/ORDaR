@@ -906,7 +906,7 @@
       return {
           init: function() {
               $('.ui.accordion').accordion();
-              $('.ui .form')
+              $('.ui .form.dataset')
                   .form({
                     keyboardShortcuts:false,
                       fields: {
@@ -1020,7 +1020,38 @@
                       }
                   });
               $("#addauthors").click(function(e) {
-                  $("#authors").append('<div class="required field" > <div class="three fields"> <div class="field"><label>Author firstname</label><input type="text" name="authors_firstname[]" data-validate="authors_firstname" placeholder="First Name" ></div> <div class="field"><label>Author name</label><input type="text" name="authors_name[]" data-validate="authors_name" placeholder="Family Name, Given names" ></div> <div class="field"><label>Author mail</label><input type="email" name="authors_email[]" data-validate="authors_email" placeholder="Email" required ></div> <div class="ui icon delete center"><i class="remove icon"></i></div> </div> </div>');
+                occurence=$('#authors .fields').length;
+                occurence=occurence+1;
+                  $("#authors").append('<div class="required field" > <div class="three fields"> <div class="field"><label>Author firstname</label><input type="text" name="authors_firstname[]" data-validate="authors_firstname_'+occurence+'" placeholder="First Name" ></div> <div class="field"><label>Author name</label><input type="text" name="authors_name[]" data-validate="authors_name_'+occurence+'" placeholder="Family Name, Given names" ></div> <div class="field"><label>Author mail</label><input type="email" name="authors_email[]" data-validate="authors_email_'+occurence+'" placeholder="Email" required ></div> <div class="ui icon delete center"><i class="remove icon"></i></div> </div> </div>');
+               $('.ui .form.dataset#authors')
+                  .form({
+                    keyboardShortcuts:false,
+                      fields: {
+                          authors_firstname: {
+                              identifier: 'authors_firstname_'+occurence+'',
+                              rules: [{
+                                  type: 'regExp[^[a-zA-Z][a-zA-Z -.,]*$]',
+                                  prompt: 'Please enter a valid firstname'
+
+                              }]
+                          },
+                          authors_name: {
+                              identifier: 'authors_name_'+occurence+'',
+                              rules: [{
+                                  type: 'regExp[^[a-zA-Z][a-zA-Z -.,]*$]',
+                                  prompt: 'Please enter a valid name'
+                              }]
+                          },
+                          authors_email: {
+                              identifier: 'authors_email_'+occurence+'',
+                              rules: [{
+                                  type: 'empty',
+                                  prompt: 'Please enter authors email'
+                              }]
+                          }
+                      }
+                        
+                  });
               });
               $("body").on("click", ".delete", function(e) {
                   $(this).parent("div").remove();
