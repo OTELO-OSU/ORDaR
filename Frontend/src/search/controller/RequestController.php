@@ -320,6 +320,7 @@ class RequestController
                 ));
                 
                 $response = curl_exec($curl);
+                var_dump($response);
                 return "true";
             } else {
                 return "false";

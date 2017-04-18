@@ -85,6 +85,40 @@ class DatasheetController
                 'ID' => 0,
                 'STATE' => "UNLOCKED"
             ));
+           
+            $query  = array(
+                'STATE' => 'UNLOCKED'
+            );
+            $cursor = $collection->find($query);
+            $count  = $cursor->count();
+            if ($count == 1) {
+                foreach ($cursor as $key => $value) {
+                    $update = $collection->update(array(
+                        "_id" => $value['_id']
+                    ), array(
+                        '$set' => array(
+                            "STATE" => "LOCKED"
+                        )
+                    ));
+                    $DOI    = $value['ID'];
+                    $NewDOI = ++$DOI;
+                    $update = $collection->update(array(
+                        "_id" => $value['_id']
+                    ), array(
+                        '$set' => array(
+                            "ID" => $NewDOI
+                        )
+                    ));
+                    $update = $collection->update(array(
+                        "_id" => $value['_id']
+                    ), array(
+                        '$set' => array(
+                            "STATE" => "UNLOCKED"
+                        )
+                    ));
+                }
+                return $NewDOI;
+            }
         }
     }
     
