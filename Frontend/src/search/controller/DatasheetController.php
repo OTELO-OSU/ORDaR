@@ -42,7 +42,7 @@ class DatasheetController
             'username' => $config['user_doi'],
             'password' => $config['password_doi']
         ));
-        $collection = $dbdoi->selectCollection("DOI", "DOI");
+        $collection = $dbdoi->selectCollection($config['DOI_database'], "DOI");
         if ($collection->count() == 1) {
             $query  = array(
                 'STATE' => 'UNLOCKED'
