@@ -211,7 +211,8 @@ Un jeu de données à un acces défini: il peut etre :
     - Unpublished (fichier importé avec un script d'import que le propriétaire peut publier quand il le souhaite).
 
 
-
+**Modification du statut Embargoed -> Open:**
+Le script Check_Embargoed_access.php doit etre exécuté une fois par jour afin de changer les statuts des jeux de données arrivé à échéance: des lors que la date du jour est égale à la date de l'embargo, le jeu de données est modifié en statut Open.
 
 
 # Utilisation
