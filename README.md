@@ -229,7 +229,7 @@ A l'issue de cette recherche l'utilisateur peut trier les données à l'aide de 
     -Access right
     -Date
 
-Lors de la selection de deux facets, l'opérateur de recherche est AND. 
+Lors de la selection de plusieurs facets, l'opérateur de recherche est AND. 
 
 **Insertion d'un nouveau jeu de données:**
 
@@ -271,13 +271,20 @@ La suppression entraine la suppression TOTALE du jeu de données:
 
 
 
-
-
 **Enregistrement des DOIs:**
 
 ![Alt text](/Img_doc/DOI_save.png?raw=true)
 
 
+
+
+**Mode Administrateur:**
+
+Il existe un mode administrateur qui permet de visualiser tout les jeux de données de tout le monde, même les données "Unpublished".
+L'administrateur peut visualiser, modifier, et supprimer un jeu de données, même si celui ci a été publié.
+Dans le cas ou l'administrateur supprime un jeu de données le DOI est alors désactivé.
+
+L'administrateur peut aussi modifier et ajouter des fichiers, dans la limite qu'il doit avoir obligatoirement un fichier minimum lié aux metadonnées.
 
  
 
