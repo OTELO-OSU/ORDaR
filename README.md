@@ -257,7 +257,7 @@ L'utilisateur se rend sur la données a modifier, il clique sur edit, un formula
 
 **Suppression d'un jeu de données:**
 
-Un jeu de données peut etre supprimé si il a un statut unpublished, c'est a dire pas de DOI perenne.
+Un jeu de données peut etre supprimé si il a un statut unpublished, c'est a dire pas de DOI.
 La suppression entraine la suppression TOTALE du jeu de données:
 
 -Le fichier original

@@ -399,8 +399,12 @@ class DatasheetController
             }
             
             if ($key == "authors_firstname") {
+                var_dump($value);
                 if (count($value) > 1) {
                     foreach ($value as $key => $value) {
+                if (empty($value)) {
+                    $error = "Warning there are empty fields: author ";
+                }
                         $array["FILE_CREATOR"][$key]["FIRST_NAME"] = htmlspecialchars($value, ENT_QUOTES);
                         $author_firstname[]                        = htmlspecialchars($value, ENT_QUOTES);
                     }
@@ -414,6 +418,9 @@ class DatasheetController
             if ($key == "authors_name") {
                 if (count($value) > 1) {
                     foreach ($value as $keys => $value) {
+                if (empty($value)) {
+                    $error = "Warning there are empty fields: author  ";
+                }
                         $array["FILE_CREATOR"][$keys]["NAME"] = htmlspecialchars($value, ENT_QUOTES);
                         $author_displayname[]                 = htmlspecialchars($value, ENT_QUOTES) . " " . $author_firstname[$keys];
                         $creator                              = $creators->addChild('creator');
@@ -440,6 +447,13 @@ class DatasheetController
             if ($key == "authors_email") {
                 if (count($value) > 1) {
                     foreach ($value as $key => $value) {
+                if (empty($value)) {
+                    $error = "Warning there are empty fields: author ";
+                }
+                if (!filter_var($value, FILTER_VALIDATE_EMAIL)) {
+                    $error = "Warning author mail invalid ";
+                }
+
                         $array["FILE_CREATOR"][$key]["MAIL"] = htmlspecialchars($value, ENT_QUOTES);
                     }
                 } else {
