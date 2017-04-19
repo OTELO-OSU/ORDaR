@@ -178,12 +178,13 @@ Cette classe va permettre d'effectuer les requêtes,vers l'api ElasticSearch et 
 -**DatasheetController**: 
 
 Cette classe permet de gérer les datasets , en creer , éditer, supprimer, generer un doi, envoyer un mail à un auteur.
+Avant tout ajout d'un jeu de données ou modification d'un jeu existant, une verification de disponibilité du service Datacite est effectué.
 
 
 -**FileController**: 
 
-Cette classe permet d'effectuer des actions de telechargement, d'export et de preview de fichiers. 
-
+Cette classe permet d'effectuer des actions de telechargement, de preview en ligne de certains fichiers (extension disponible en preview : txt, png, jpg, gif, pdf.
+Elle permet aussi un export des metadonnées en différents format: Datacite, Dublincore, JSON , BibTex.
 
 
 
