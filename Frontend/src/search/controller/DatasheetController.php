@@ -399,7 +399,6 @@ class DatasheetController
             }
             
             if ($key == "authors_firstname") {
-                var_dump($value);
                 if (count($value) > 1) {
                     foreach ($value as $key => $value) {
                 if (empty($value)) {
