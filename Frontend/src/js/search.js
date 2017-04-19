@@ -1020,11 +1020,12 @@
                       }
                   });
               $("#addauthors").click(function(e) {
-                occurence=$('#authors .fields').length;
-                occurence=occurence+1;
-                  $("#authors").append('<div class="required field" > <div class="three fields"> <div class="field"><label>Author firstname</label><input type="text" name="authors_firstname[]" data-validate="authors_firstname_'+occurence+'" placeholder="First Name" ></div> <div class="field"><label>Author name</label><input type="text" name="authors_name[]" data-validate="authors_name_'+occurence+'" placeholder="Family Name, Given names" ></div> <div class="field"><label>Author mail</label><input type="email" name="authors_email[]" data-validate="authors_email_'+occurence+'" placeholder="Email" required ></div> <div class="ui icon delete center"><i class="remove icon"></i></div> </div> </div>');
-               $('.ui .form.dataset#authors')
-                  .form({
+               
+                  $("#authors").append('<div class="required field" > <div class="three fields"> <div class="field"><label>Author firstname</label><input type="text" name="authors_firstname[]"  data-validate="authors_firstname_'+occurence+'" placeholder="First Name" ></div> <div class="field"><label>Author name</label><input type="text" name="authors_name[]" data-validate="authors_name_'+occurence+'" placeholder="Family Name, Given names" ></div> <div class="field"><label>Author mail</label><input type="email" name="authors_email[]" data-validate="authors_email_'+occurence+'" placeholder="Email" required ></div> <div class="ui icon delete center"><i class="remove icon"></i></div> </div> </div>');
+            
+
+                $('.ui .form.dataset')
+                  .form('validate field',{
                     keyboardShortcuts:false,
                       fields: {
                           authors_firstname: {
@@ -1051,7 +1052,7 @@
                           }
                       }
                         
-                  });
+                  },'name',true);
               });
               $("body").on("click", ".delete", function(e) {
                   $(this).parent("div").remove();

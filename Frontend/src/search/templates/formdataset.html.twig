@@ -141,7 +141,7 @@
                {% if scientific_fields %}
                {% for scientific_field in scientific_fields %}
                <div class="ui input">
-                  <select class="ui fluid search dropdown scientific_field" name="scientific_field[]"  >
+                  <select class="ui fluid search dropdown scientific_field" data-validate="scientific_field" name="scientific_field[]"  >
                      <option value="{{scientific_field.NAME}}">{{scientific_field.NAME}}</option>
                      <option value="Addresses">Addresses</option>
                      <option value="Hydrography">  Hydrography</option>
@@ -183,7 +183,7 @@
                {% endfor %}
                {% else %}
                <div class="ui input">
-                  <select class="ui fluid search dropdown scientific_field" name="scientific_field[]"  >
+                  <select class="ui fluid search dropdown scientific_field" data-validate="scientific_field" name="scientific_field[]"  >
                      <option value="">Select a field</option>
                      <option value="Addresses">Addresses</option>
                      <option value="Hydrography">  Hydrography</option>
