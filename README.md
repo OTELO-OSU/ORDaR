@@ -264,7 +264,9 @@ Un jeu de données peut etre supprimé si il a un statut unpublished, c'est a di
 La suppression entraine la suppression TOTALE du jeu de données:
 
 -Le fichier original
+
 -Le csv genéré
+
 -l'entrée en base de données
 
 
