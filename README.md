@@ -198,6 +198,19 @@ Elle permet aussi un export des metadonnées en différents format: Datacite, Du
 
 
 
+**Détails des différentes module JS:**
+    
+   L'application est composé de six modules JS différents:
+        
+        - datatable (Affichage des resultats sous forme de pagination)
+        - search (permet de rechercher un terme , par facets ou non)
+        - mypublications (Affichage des publication de l'utilisateur courant sous forme de pagination, permet aussi une recherche par facets)
+        - upload (permet de controller le formulaire upload et edit, rends dynamique le formualire et réalise les check de contenu Frontend)
+        - preview (Affichage d'un modal permettant de visualiser un fichier dans une iframe)
+        - send_email (Affichage d'un modal permettant d'envoyer un message a un auteur (contact depuis un jeu de données) ou au administrateur (contact depuis le footer de l'application)
+
+
+
 
 **Aspect de générale de l’application :**
 
