@@ -119,15 +119,16 @@ rendez vous dans le dossier précédemment télécharger , dans le dossier bin e
     host = 127.0.0.1
     port = 27017
     authSource= Le nom de votre BDD qui contiendra les jeux de données
-    username =
-    password =
-
-    La partie DOI:
-
-    DOI_PREFIX= Votre prefix de DOI
-    URL_DOI= Votre URL associé au DOI entre double quotes.
-    user_doi = Votre utilisateur de la base DOI
-    password_doi = 
+    username = Le username de votre BDD qui contiendra les jeux de données
+    password = Le mot de passe de votre BDD qui contiendra les jeux de données
+    DOI_PREFIX = Votre prefix DOI datacite
+    URL_DOI = votre url d'enregitrement des DOIs
+    DOI_database = Le nom de votre BDD qui contiendra le numero de DOI
+    user_doi = Le username de votre BDD qui contiendra le numero de DOI
+    password_doi = Le mot de passe de votre BDD qui contiendra le numero de DOI
+    admin[]= l'adresse mail des administrateur entre double quotes séparé d'une virgule
+    Auth_config_datacite = Token de d'authentification (Basic https) de datacite
+     
 
 
 
