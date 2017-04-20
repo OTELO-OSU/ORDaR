@@ -180,6 +180,7 @@ Class FileController
                 $readfile = readfile($file);
                 $mime     = "application/pdf";
                 header('Content-Type:  ' . $mime);
+
             } elseif ($mime == 'csv') {
                 $file            = fopen($file, "r");
                 $firstTimeHeader = true;
@@ -243,7 +244,7 @@ Class FileController
             if ($readfile == false) {
                 return false;
             } else {
-                return true;
+                return $mime;
             }
             exit;
         }

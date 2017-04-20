@@ -484,7 +484,7 @@ $app->get('/preview/{doi}/{filename}', function (Request $req, Response $respons
     if ($download == NULL or $download == false) {
         return $responseSlim->withStatus(403);
     }
-   return $responseSlim->withHeader('Content-type', 'application/pdf');
+   return $responseSlim->withHeader('Content-type', $download);
     
 });
 
