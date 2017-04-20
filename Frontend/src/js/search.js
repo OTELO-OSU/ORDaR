@@ -7,11 +7,11 @@
   // Module datatable, Affichage des resultats sous forme de pagination
   APP.modules.datatable = (function() {
       return {
-          AppendTable: function(data,facets) {
-              if (data['hits']['total'] == 0 || data['hits']['total'] == null ) {
+          AppendTable: function(data, facets) {
+              if (data['hits']['total'] == 0 || data['hits']['total'] == null) {
                   $('#facets').hide();
-                    if (facets) {
-                    $('#facets').show();
+                  if (facets) {
+                      $('#facets').show();
                   }
                   $('#info-noresult').empty();
                   $('#info-noresult').append('No result found!');
@@ -97,10 +97,10 @@
       }
   })();
 
-// Module search, permet de rechercher un terme , par facets ou non
+  // Module search, permet de rechercher un terme , par facets ou non
   APP.modules.search = (function() {
       return {
-      	//methode de recuperation d'une valeur dans l'url
+          //methode de recuperation d'une valeur dans l'url
           $_GET: function(param) {
               var vars = {};
               window.location.href.replace(location.hash, '').replace(
@@ -134,197 +134,196 @@
           },
           //Methode d'affichage des facets de la recherche
           AppendFacets: function(data) {
-            if (data['aggregations'] ==null) {
-              
-            }
-            else{
+              if (data['aggregations'] == null) {
 
-              sample_kind = data['aggregations']['sample_kind']['buckets'];
-              if (sample_kind.length == 0) {
-                  $(".ui.card #samplekind").parent().hide();
-              }
-              $("#samplekind").append('<div class="header" >Sample kind</div>');
-              for (var k in sample_kind) {
-                  count = sample_kind[k]['doc_count']
-                  type = sample_kind[k]['key']
-                  longtype = type
-                  if (type.length >= 25) {
-                      type = type.substring(0, 20) + "...";
-                  }
-                  if (type == "" || type == " ") {
+              } else {
 
-                  } else {
-                      $('#samplekind').append('<label title="' + longtype + '"  class="item" for="' + type + '"> <input onclick="APP.modules.search.checkCheckbox()" id="' + type + '" name="sample_kind" value="' + type + '" type="checkbox"> <div class="ui blue horizontal label">' + type + '</div>' + count + '</label>')
+                  sample_kind = data['aggregations']['sample_kind']['buckets'];
+                  if (sample_kind.length == 0) {
+                      $(".ui.card #samplekind").parent().hide();
                   }
-              }
-              authors = data['aggregations']['authors']['buckets'];
-              if (authors.length == 0) {
-                  $(".ui.card #authors").parent().hide();
-              }
-              $("#authors").append('<div class="header" >Authors</div>');
-              for (var k in authors) {
-                  type = authors[k]['key']
-                  count = authors[k]['doc_count']
+                  $("#samplekind").append('<div class="header" >Sample kind</div>');
+                  for (var k in sample_kind) {
+                      count = sample_kind[k]['doc_count']
+                      type = sample_kind[k]['key']
+                      longtype = type
+                      if (type.length >= 25) {
+                          type = type.substring(0, 20) + "...";
+                      }
+                      if (type == "" || type == " ") {
 
-                  longtype = type
-                  if (type.length >= 25) {
-                      type = type.substring(0, 25) + "...";
+                      } else {
+                          $('#samplekind').append('<label title="' + longtype + '"  class="item" for="' + type + '"> <input onclick="APP.modules.search.checkCheckbox()" id="' + type + '" name="sample_kind" value="' + type + '" type="checkbox"> <div class="ui blue horizontal label">' + type + '</div>' + count + '</label>')
+                      }
                   }
-                  if (type == "" || type == " ") {
+                  authors = data['aggregations']['authors']['buckets'];
+                  if (authors.length == 0) {
+                      $(".ui.card #authors").parent().hide();
+                  }
+                  $("#authors").append('<div class="header" >Authors</div>');
+                  for (var k in authors) {
+                      type = authors[k]['key']
+                      count = authors[k]['doc_count']
 
-                  } else {
-                      $('#authors').append('<label title="' + longtype + '"  class="item" for="' + type + 'authors"> <input onclick="APP.modules.search.checkCheckbox()" id="' + type + 'authors" name="authors" value="' + type + '" type="checkbox"> <div class="ui blue horizontal label">' + type + '</div>' + count + '</label>')
-                  }
+                      longtype = type
+                      if (type.length >= 25) {
+                          type = type.substring(0, 25) + "...";
+                      }
+                      if (type == "" || type == " ") {
 
-              }
-              keywords = data['aggregations']['keywords']['buckets'];
-              if (keywords.length == 0) {
-                  $(".ui.card #keywords").parent().hide();
-              }
-              $("#keywords").append('<div class="header" >Keywords</div>');
-              for (var k in keywords) {
-                  count = keywords[k]['doc_count']
-                  type = keywords[k]['key']
-                  longtype = type
-                  if (type.length >= 25) {
-                      type = type.substring(0, 20) + "...";
-                  }
-                  if (type == "" || type == " ") {
+                      } else {
+                          $('#authors').append('<label title="' + longtype + '"  class="item" for="' + type + 'authors"> <input onclick="APP.modules.search.checkCheckbox()" id="' + type + 'authors" name="authors" value="' + type + '" type="checkbox"> <div class="ui blue horizontal label">' + type + '</div>' + count + '</label>')
+                      }
 
-                  } else {
+                  }
+                  keywords = data['aggregations']['keywords']['buckets'];
+                  if (keywords.length == 0) {
+                      $(".ui.card #keywords").parent().hide();
+                  }
+                  $("#keywords").append('<div class="header" >Keywords</div>');
+                  for (var k in keywords) {
+                      count = keywords[k]['doc_count']
+                      type = keywords[k]['key']
+                      longtype = type
+                      if (type.length >= 25) {
+                          type = type.substring(0, 20) + "...";
+                      }
+                      if (type == "" || type == " ") {
 
-                      $('#keywords').append('<label title="' + longtype + '"  class="item" for="' + type + 'keywords"> <input onclick="APP.modules.search.checkCheckbox()" id="' + type + 'keywords" name="keywords" value="' + type + '" type="checkbox"> <div class="ui blue horizontal label">' + type + '</div>' + count + '</label>')
-                  }
-              }
-              scientific_field = data['aggregations']['scientific_field']['buckets'];
-              if (scientific_field.length == 0) {
-                  $(".ui.card #scientificfield").parent().hide();
-              }
-              $("#scientificfield").append('<div class="header" >Scientific fields</div>');
-              for (var k in scientific_field) {
-                  count = scientific_field[k]['doc_count']
-                  type = scientific_field[k]['key']
-                  longtype = type;
-                  if (type.length >= 25) {
-                      type = type.substring(0, 20) + "...";
-                  }
-                  if (type == "" || type == " ") {
+                      } else {
 
-                  } else {
-                      $('#scientificfield').append('<label title="' + longtype + '"  class="item" for="' + type + 'scientificfield"> <input onclick="APP.modules.search.checkCheckbox()" id="' + type + 'scientificfield" name="scientific_field" value="' + type + '" type="checkbox"> <div class="ui blue horizontal label">' + type + '</div>' + count + '</label>')
+                          $('#keywords').append('<label title="' + longtype + '"  class="item" for="' + type + 'keywords"> <input onclick="APP.modules.search.checkCheckbox()" id="' + type + 'keywords" name="keywords" value="' + type + '" type="checkbox"> <div class="ui blue horizontal label">' + type + '</div>' + count + '</label>')
+                      }
                   }
-              }
-              language = data['aggregations']['language']['buckets'];
-              if (language.length == 0) {
-                  $(".ui.card #language").parent().hide();
-              }
-              $("#language").append('<div class="header" >Languages</div>');
-              for (var k in language) {
-                  count = language[k]['doc_count']
-                  type = language[k]['key'];
-                  longtype = type;
-                  if (type.length >= 25) {
-                      type = type.substring(0, 20) + "...";
+                  scientific_field = data['aggregations']['scientific_field']['buckets'];
+                  if (scientific_field.length == 0) {
+                      $(".ui.card #scientificfield").parent().hide();
                   }
-                  if (type == "" || type == " ") {
+                  $("#scientificfield").append('<div class="header" >Scientific fields</div>');
+                  for (var k in scientific_field) {
+                      count = scientific_field[k]['doc_count']
+                      type = scientific_field[k]['key']
+                      longtype = type;
+                      if (type.length >= 25) {
+                          type = type.substring(0, 20) + "...";
+                      }
+                      if (type == "" || type == " ") {
 
-                  } else {
-                      $('#language').append('<label title="' + longtype + '"  class="item" for="' + type + 'language"> <input onclick="APP.modules.search.checkCheckbox()" id="' + type + 'language" name="language" value="' + type + '" type="checkbox"> <div class="ui blue horizontal label">' + type + '</div>' + count + '</label>')
+                      } else {
+                          $('#scientificfield').append('<label title="' + longtype + '"  class="item" for="' + type + 'scientificfield"> <input onclick="APP.modules.search.checkCheckbox()" id="' + type + 'scientificfield" name="scientific_field" value="' + type + '" type="checkbox"> <div class="ui blue horizontal label">' + type + '</div>' + count + '</label>')
+                      }
                   }
-              }
-              filetype = data['aggregations']['filetype']['buckets'];
-              if (filetype.length == 0) {
-                  $(".ui.card #filetype").parent().hide();
-              }
-              $("#filetype").append('<div class="header" >Filetypes</div>');
-              for (var k in filetype) {
-                  count = filetype[k]['doc_count']
-                  type = filetype[k]['key'];
-                  longtype = type
-                  if (type.length >= 25) {
-                      type = type.substring(0, 20) + "...";
+                  language = data['aggregations']['language']['buckets'];
+                  if (language.length == 0) {
+                      $(".ui.card #language").parent().hide();
                   }
-                  if (type == "" || type == " ") {
+                  $("#language").append('<div class="header" >Languages</div>');
+                  for (var k in language) {
+                      count = language[k]['doc_count']
+                      type = language[k]['key'];
+                      longtype = type;
+                      if (type.length >= 25) {
+                          type = type.substring(0, 20) + "...";
+                      }
+                      if (type == "" || type == " ") {
 
-                  } else {
-                      $('#filetype').append('<label title="' + longtype + '"  class="item" for="' + type + 'filetype"> <input onclick="APP.modules.search.checkCheckbox()" id="' + type + 'filetype" name="filetype" value="' + type + '" type="checkbox"> <div class="ui blue horizontal label">' + type + '</div>' + count + '</label>')
+                      } else {
+                          $('#language').append('<label title="' + longtype + '"  class="item" for="' + type + 'language"> <input onclick="APP.modules.search.checkCheckbox()" id="' + type + 'language" name="language" value="' + type + '" type="checkbox"> <div class="ui blue horizontal label">' + type + '</div>' + count + '</label>')
+                      }
                   }
-              }
-              accessright = data['aggregations']['access_right']['buckets'];
-              if (accessright.length == 0) {
-                  $(".ui.card #accesright").parent().hide();
-                  $(".ui.card #date").parent().hide();
-              }
-              $("#accesright").append('<div class="header" >Access right</div>');
-              for (var k in accessright) {
-                  count = accessright[k]['doc_count']
-                  type = accessright[k]['key'];
-                  longtype = type
-                  if (type.length >= 25) {
-                      type = type.substring(0, 20) + "...";
+                  filetype = data['aggregations']['filetype']['buckets'];
+                  if (filetype.length == 0) {
+                      $(".ui.card #filetype").parent().hide();
                   }
-                  if (type == "Open") {
-                      color = "green";
-                  }
-                  if (type == "Closed") {
-                      color = "red";
-                  }
-                  if (type == "Embargoed") {
-                      color = "orange";
-                  }
-                  if (type == "" || type == " ") {
+                  $("#filetype").append('<div class="header" >Filetypes</div>');
+                  for (var k in filetype) {
+                      count = filetype[k]['doc_count']
+                      type = filetype[k]['key'];
+                      longtype = type
+                      if (type.length >= 25) {
+                          type = type.substring(0, 20) + "...";
+                      }
+                      if (type == "" || type == " ") {
 
-                  } else {
-                      $('#accesright').append('<label  class="item" for="' + type + 'accessright"> <input onclick="APP.modules.search.checkCheckbox()" id="' + type + 'accessright" name="accessright" value="' + type + '" type="checkbox"> <div class="ui ' + color + ' horizontal label">' + type + '</div>' + count + '</label>')
+                      } else {
+                          $('#filetype').append('<label title="' + longtype + '"  class="item" for="' + type + 'filetype"> <input onclick="APP.modules.search.checkCheckbox()" id="' + type + 'filetype" name="filetype" value="' + type + '" type="checkbox"> <div class="ui blue horizontal label">' + type + '</div>' + count + '</label>')
+                      }
                   }
-              }
-              var creationdatearray = [];
-              data = data['hits']['hits'];
-              
-              $("#date").append('<div class="header" >Date</div>');
-              for (var k in data) {
-                  creationdate = data[k]['CREATION_DATE'].split("-", 2);
-                  creationdatearray.push(creationdate[0])
-              }
-              minyear = Math.min.apply(null, creationdatearray);
-              maxyear = Math.max.apply(null, creationdatearray);
-              if (minyear == maxyear) {
-                  minyear = maxyear - 1;
-              }
-              $('#date').append('<input class="range-slider" value="' + minyear + ',' + maxyear + '" type="hidden">');
-
-              $('.range-slider').jRange({
-                  from: minyear,
-                  to: maxyear,
-                  step: 1,
-                  format: '%s',
-                  width: 300,
-                  showLabels: true,
-                  isRange: true,
-                  ondragend: function(val) {
-                      var query = APP.modules.search.$_GET('query');
-                      range = val.split(",", 2);
-                      mindate = range[0];
-                      maxdate = range[1];
-                      date = " AND INTRO.CREATION_DATE:[" + mindate + "-01-01 TO " + maxdate + "-12-31]"
-                      $('#results').empty();
-                      APP.modules.search.search(query + date, "facets");
-
-                  },
-                  onbarclicked: function(val) {
-                      var query = APP.modules.search.$_GET('query');
-                      range = val.split(",", 2);
-                      mindate = range[0];
-                      maxdate = range[1];
-                      date = " AND INTRO.CREATION_DATE:[" + mindate + "-01-01 TO " + maxdate + "-12-31]"
-                      $('#results').empty();
-                      APP.modules.search.search(query + date, "facets");
+                  accessright = data['aggregations']['access_right']['buckets'];
+                  if (accessright.length == 0) {
+                      $(".ui.card #accesright").parent().hide();
+                      $(".ui.card #date").parent().hide();
                   }
-              });
+                  $("#accesright").append('<div class="header" >Access right</div>');
+                  for (var k in accessright) {
+                      count = accessright[k]['doc_count']
+                      type = accessright[k]['key'];
+                      longtype = type
+                      if (type.length >= 25) {
+                          type = type.substring(0, 20) + "...";
+                      }
+                      if (type == "Open") {
+                          color = "green";
+                      }
+                      if (type == "Closed") {
+                          color = "red";
+                      }
+                      if (type == "Embargoed") {
+                          color = "orange";
+                      }
+                      if (type == "" || type == " ") {
+
+                      } else {
+                          $('#accesright').append('<label  class="item" for="' + type + 'accessright"> <input onclick="APP.modules.search.checkCheckbox()" id="' + type + 'accessright" name="accessright" value="' + type + '" type="checkbox"> <div class="ui ' + color + ' horizontal label">' + type + '</div>' + count + '</label>')
+                      }
+                  }
+                  var creationdatearray = [];
+                  data = data['hits']['hits'];
+
+                  $("#date").append('<div class="header" >Date</div>');
+                  for (var k in data) {
+                      creationdate = data[k]['CREATION_DATE'].split("-", 2);
+                      creationdatearray.push(creationdate[0])
+                  }
+                  minyear = Math.min.apply(null, creationdatearray);
+                  maxyear = Math.max.apply(null, creationdatearray);
+                  if (minyear == maxyear) {
+                      minyear = maxyear - 1;
+                  }
+                  $('#date').append('<input class="range-slider" value="' + minyear + ',' + maxyear + '" type="hidden">');
+
+                  $('.range-slider').jRange({
+                      from: minyear,
+                      to: maxyear,
+                      step: 1,
+                      format: '%s',
+                      width: 300,
+                      showLabels: true,
+                      isRange: true,
+                      ondragend: function(val) {
+                          var query = APP.modules.search.$_GET('query');
+                          range = val.split(",", 2);
+                          mindate = range[0];
+                          maxdate = range[1];
+                          date = " AND INTRO.CREATION_DATE:[" + mindate + "-01-01 TO " + maxdate + "-12-31]"
+                          $('#results').empty();
+                          APP.modules.search.search(query + date, "facets");
+
+                      },
+                      onbarclicked: function(val) {
+                          var query = APP.modules.search.$_GET('query');
+                          range = val.split(",", 2);
+                          mindate = range[0];
+                          maxdate = range[1];
+                          date = " AND INTRO.CREATION_DATE:[" + mindate + "-01-01 TO " + maxdate + "-12-31]"
+                          $('#results').empty();
+                          APP.modules.search.search(query + date, "facets");
+                      }
+                  });
 
 
-              $('#facets').show();
-            }
+                  $('#facets').show();
+              }
 
 
 
@@ -354,7 +353,7 @@
                       if (facets !== undefined) {
                           facets += " AND " + samplekind;
                       } else {
-                          facets =" AND " + samplekind;
+                          facets = " AND " + samplekind;
 
                       }
                   }
@@ -364,19 +363,19 @@
                       var value = $(value).parent().attr('title').split(" ");;
                       if (authors === undefined) {
                           authors = 'INTRO.FILE_CREATOR.NAME:"' + value[0] + '" AND INTRO.FILE_CREATOR.FIRST_NAME:"' + value[1] + '"';
-                            if (value.length==3) {
-                      	  authors = 'INTRO.FILE_CREATOR.NAME:"' + value[0] +" "+value[1] + '" AND INTRO.FILE_CREATOR.FIRST_NAME:"' + value[2] + '"';
-                    	  }
+                          if (value.length == 3) {
+                              authors = 'INTRO.FILE_CREATOR.NAME:"' + value[0] + " " + value[1] + '" AND INTRO.FILE_CREATOR.FIRST_NAME:"' + value[2] + '"';
+                          }
                       } else {
                           authors = ' INTRO.FILE_CREATOR.NAME:"' + value[0] + '" AND INTRO.FILE_CREATOR.FIRST_NAME:"' + value[1] + '"';
-                            if (value.length==3) {
-                      	  authors = ' INTRO.FILE_CREATOR.NAME:"' + value[0] +" "+value[1] + '" AND INTRO.FILE_CREATOR.FIRST_NAME:"' + value[2] + '"';
-                      }
+                          if (value.length == 3) {
+                              authors = ' INTRO.FILE_CREATOR.NAME:"' + value[0] + " " + value[1] + '" AND INTRO.FILE_CREATOR.FIRST_NAME:"' + value[2] + '"';
+                          }
                       }
                       if (facets !== undefined) {
                           facets += " AND " + authors;
                       } else {
-                          facets = " AND " +authors;
+                          facets = " AND " + authors;
 
                       } 
                   }
@@ -393,7 +392,7 @@
                       if (facets !== undefined) {
                           facets = facets + " AND " + keywords;
                       } else {
-                          facets =" AND " + keywords;
+                          facets = " AND " + keywords;
 
                       }
                   }
@@ -409,7 +408,7 @@
                       if (facets !== undefined) {
                           facets = facets + " AND " + scientific_field;
                       } else {
-                          facets = " AND " +scientific_field;
+                          facets = " AND " + scientific_field;
 
                       }
                   }
@@ -425,7 +424,7 @@
                       if (facets !== undefined) {
                           facets = facets + " AND " + language;
                       } else {
-                          facets = " AND " +language;
+                          facets = " AND " + language;
 
                       }
                   }
@@ -442,7 +441,7 @@
                       if (facets !== undefined) {
                           facets = facets + " AND " + filetype;
                       } else {
-                          facets = " AND " +filetype;
+                          facets = " AND " + filetype;
 
                       }
                   }
@@ -453,7 +452,7 @@
                           access_right = 'INTRO.ACCESS_RIGHT:"' + value + '"';
 
                       } else {
-                          access_right =  ' INTRO.ACCESS_RIGHT:"' + value + '"';
+                          access_right = ' INTRO.ACCESS_RIGHT:"' + value + '"';
                       }
                       if (facets !== undefined) {
                           facets = facets + " AND " + access_right;
@@ -473,7 +472,7 @@
                   facets = "";
               } else {
 
-                  facets =  facets
+                  facets = facets
               }
 
 
@@ -498,7 +497,7 @@
                           APP.modules.search.AppendFacets(data);
                       }
 
-                      APP.modules.datatable.AppendTable(data,facets);
+                      APP.modules.datatable.AppendTable(data, facets);
                   })
           }
       }
@@ -515,203 +514,202 @@
               APP.modules.mypublications.search(query);
           },
           AppendFacets: function(data) {
-            if (data['aggregations'] == null) {
-              
-            }
-            else{
-              $('#info').hide();
-              $('#facets').hide();
-              $('#results').empty();
-              $('.easyPaginateNav').remove();
-              $('#facets_type').empty();
-              sample_kind = data['aggregations']['sample_kind']['buckets'];
-              if (sample_kind.length == 0) {
-                  $(".ui.card #samplekind").parent().hide();
-              }
-              $("#samplekind").append('<div class="header" >Sample kind</div>');
-              for (var k in sample_kind) {
-                  count = sample_kind[k]['doc_count']
-                  type = sample_kind[k]['key']
-                  longtype = type
-                  if (type.length >= 25) {
-                      type = type.substring(0, 20) + "...";
-                  }
-                  if (type == "" || type == " ") {
+              if (data['aggregations'] == null) {
 
-                  } else {
-                      $('#samplekind').append('<label title="' + longtype + '"  class="item" for="' + type + '"> <input onclick="APP.modules.mypublications.checkCheckbox()" id="' + type + '" name="sample_kind" value="' + type + '" type="checkbox"> <div class="ui blue horizontal label">' + type + '</div>' + count + '</label>')
+              } else {
+                  $('#info').hide();
+                  $('#facets').hide();
+                  $('#results').empty();
+                  $('.easyPaginateNav').remove();
+                  $('#facets_type').empty();
+                  sample_kind = data['aggregations']['sample_kind']['buckets'];
+                  if (sample_kind.length == 0) {
+                      $(".ui.card #samplekind").parent().hide();
                   }
-              }
-              authors = data['aggregations']['authors']['buckets'];
-              if (authors.length == 0) {
-                  $(".ui.card #authors").parent().hide();
-              }
-              $("#authors").append('<div class="header" >Authors</div>');
-              for (var k in authors) {
-                  type = authors[k]['key']
-                  count = authors[k]['doc_count']
+                  $("#samplekind").append('<div class="header" >Sample kind</div>');
+                  for (var k in sample_kind) {
+                      count = sample_kind[k]['doc_count']
+                      type = sample_kind[k]['key']
+                      longtype = type
+                      if (type.length >= 25) {
+                          type = type.substring(0, 20) + "...";
+                      }
+                      if (type == "" || type == " ") {
 
-                  longtype = type
-                  if (type.length >= 25) {
-                      type = type.substring(0, 25) + "...";
+                      } else {
+                          $('#samplekind').append('<label title="' + longtype + '"  class="item" for="' + type + '"> <input onclick="APP.modules.mypublications.checkCheckbox()" id="' + type + '" name="sample_kind" value="' + type + '" type="checkbox"> <div class="ui blue horizontal label">' + type + '</div>' + count + '</label>')
+                      }
                   }
-                  if (type == "" || type == " ") {
+                  authors = data['aggregations']['authors']['buckets'];
+                  if (authors.length == 0) {
+                      $(".ui.card #authors").parent().hide();
+                  }
+                  $("#authors").append('<div class="header" >Authors</div>');
+                  for (var k in authors) {
+                      type = authors[k]['key']
+                      count = authors[k]['doc_count']
 
-                  } else {
-                      $('#authors').append('<label title="' + longtype + '"  class="item" for="' + type + 'authors"> <input onclick="APP.modules.mypublications.checkCheckbox()" id="' + type + 'authors" name="authors" value="' + type + '" type="checkbox"> <div class="ui blue horizontal label">' + type + '</div>' + count + '</label>')
-                  }
+                      longtype = type
+                      if (type.length >= 25) {
+                          type = type.substring(0, 25) + "...";
+                      }
+                      if (type == "" || type == " ") {
 
-
-              }
-              keywords = data['aggregations']['keywords']['buckets'];
-              if (keywords.length == 0) {
-                  $(".ui.card #keywords").parent().hide();
-              }
-              $("#keywords").append('<div class="header" >Keywords</div>');
-              for (var k in keywords) {
-                  count = keywords[k]['doc_count']
-                  type = keywords[k]['key']
-                  longtype = type
-                  if (type.length >= 25) {
-                      type = type.substring(0, 20) + "...";
-                  }
-                  if (type == "") {
-
-                  } else {
-
-                      $('#keywords').append('<label title="' + longtype + '"  class="item" for="' + type + 'keywords"> <input onclick="APP.modules.mypublications.checkCheckbox()" id="' + type + 'keywords" name="keywords" value="' + type + '" type="checkbox"> <div class="ui blue horizontal label">' + type + '</div>' + count + '</label>')
-                  }
-              }
-              scientific_field = data['aggregations']['scientific_field']['buckets'];
-              if (scientific_field.length == 0) {
-                  $(".ui.card #scientificfields").parent().hide();
-              }
-              $("#scientificfield").append('<div class="header" >Scientific fields</div>');
-              for (var k in scientific_field) {
-                  count = scientific_field[k]['doc_count']
-                  type = scientific_field[k]['key']
-                  longtype = type;
-                  if (type.length >= 25) {
-                      type = type.substring(0, 20) + "...";
-                  }
-                  if (type == "") {
-
-                  } else {
-                      $('#scientificfield').append('<label title="' + longtype + '"  class="item" for="' + type + 'scientificfield"> <input onclick="APP.modules.mypublications.checkCheckbox()" id="' + type + 'scientificfield" name="scientific_field" value="' + type + '" type="checkbox"> <div class="ui blue horizontal label">' + type + '</div>' + count + '</label>')
-                  }
-              }
-              language = data['aggregations']['language']['buckets'];
-              if (language.length == 0) {
-                  $(".ui.card #language").parent().hide();
-              }
-              $("#language").append('<div class="header" >Languages</div>');
-              for (var k in language) {
-                  count = language[k]['doc_count']
-                  type = language[k]['key'];
-                  longtype = type;
-                  if (type.length >= 25) {
-                      type = type.substring(0, 20) + "...";
-                  }
-                  if (type == "") {
-
-                  } else {
-                      $('#language').append('<label title="' + longtype + '"  class="item" for="' + type + 'language"> <input onclick="APP.modules.mypublications.checkCheckbox()" id="' + type + 'language" name="language" value="' + type + '" type="checkbox"> <div class="ui blue horizontal label">' + type + '</div>' + count + '</label>')
-                  }
-              }
-              filetype = data['aggregations']['filetype']['buckets'];
-              if (filetype.length == 0) {
-                  $(".ui.card #filetype").parent().hide();
-              }
-              $("#filetype").append('<div class="header" >Filetypes</div>');
-              for (var k in filetype) {
-                  count = filetype[k]['doc_count']
-                  type = filetype[k]['key'];
-                  longtype = type
-                  if (type.length >= 25) {
-                      type = type.substring(0, 20) + "...";
-                  }
-                  if (type == "") {
-
-                  } else {
-                      $('#filetype').append('<label title="' + longtype + '"  class="item" for="' + type + 'filetype"> <input onclick="APP.modules.mypublications.checkCheckbox()" id="' + type + 'filetype" name="filetype" value="' + type + '" type="checkbox"> <div class="ui blue horizontal label">' + type + '</div>' + count + '</label>')
-                  }
-              }
-              accessright = data['aggregations']['access_right']['buckets'];
-              if (accessright.length == 0) {
-                  $(".ui.card #accessright").parent().hide();
-              }
-              $("#accesright").append('<div class="header" >Access right</div>');
-              for (var k in accessright) {
-                  count = accessright[k]['doc_count']
-                  type = accessright[k]['key'];
-                  longtype = type
-                  if (type == "Open") {
-                      color = "green";
-                  }
-                  if (type == "Closed") {
-                      color = "red";
-                  }
-                  if (type == "Embargoed") {
-                      color = "orange";
-                  }
-                  if (type == "Unpublished") {
-                      color = "grey";
-                  }
-                  if (type.length >= 25) {
-                      type = type.substring(0, 20) + "...";
-                  }
-                  if (type == "") {
-
-                  } else {
-                      $('#accesright').append('<label  class="item" for="' + type + 'accessright"> <input onclick="APP.modules.mypublications.checkCheckbox()" id="' + type + 'accessright" name="accessright" value="' + type + '" type="checkbox"> <div class="ui ' + color + ' horizontal label">' + type + '</div>' + count + '</label>')
-                  }
-              }
-              var creationdatearray = [];
-              data = data['hits']['hits'];
-              $("#date").append('<div class="header" >Date</div>');
-              for (var k in data) {
-                  creationdate = data[k]['CREATION_DATE'].split("-", 2);
-                  creationdatearray.push(creationdate[0])
-              }
-              minyear = Math.min.apply(null, creationdatearray);
-              maxyear = Math.max.apply(null, creationdatearray);
-              if (minyear == maxyear) {
-                  minyear = maxyear - 1;
-              }
-              $('#date').append('<input class="range-slider" value="' + minyear + ',' + maxyear + '" type="hidden">');
-
-              $('.range-slider').jRange({
-                  from: minyear,
-                  to: maxyear,
-                  step: 1,
-                  format: '%s',
-                  width: 300,
-                  showLabels: true,
-                  isRange: true,
-                  ondragend: function(val) {
-                      var query = "*";
-                      range = val.split(",", 2);
-                      mindate = range[0];
-                      maxdate = range[1];
-                      date = " AND INTRO.CREATION_DATE:[" + mindate + "-01-01 TO " + maxdate + "-12-31]"
-                      $('#results').empty();
-                      APP.modules.mypublications.search(query + date, "facets");
-
-                  },
-                  onbarclicked: function(val) {
-                      var query = "*";
-                      range = val.split(",", 2);
-                      mindate = range[0];
-                      maxdate = range[1];
-                      date = " AND INTRO.CREATION_DATE:[" + mindate + "-01-01 TO " + maxdate + "-12-31]"
-                      $('#results').empty();
-                      APP.modules.mypublications.search(query + date, "facets");
-                  }
-              });
+                      } else {
+                          $('#authors').append('<label title="' + longtype + '"  class="item" for="' + type + 'authors"> <input onclick="APP.modules.mypublications.checkCheckbox()" id="' + type + 'authors" name="authors" value="' + type + '" type="checkbox"> <div class="ui blue horizontal label">' + type + '</div>' + count + '</label>')
+                      }
 
 
-              $('#facets').show();
-            }
+                  }
+                  keywords = data['aggregations']['keywords']['buckets'];
+                  if (keywords.length == 0) {
+                      $(".ui.card #keywords").parent().hide();
+                  }
+                  $("#keywords").append('<div class="header" >Keywords</div>');
+                  for (var k in keywords) {
+                      count = keywords[k]['doc_count']
+                      type = keywords[k]['key']
+                      longtype = type
+                      if (type.length >= 25) {
+                          type = type.substring(0, 20) + "...";
+                      }
+                      if (type == "") {
+
+                      } else {
+
+                          $('#keywords').append('<label title="' + longtype + '"  class="item" for="' + type + 'keywords"> <input onclick="APP.modules.mypublications.checkCheckbox()" id="' + type + 'keywords" name="keywords" value="' + type + '" type="checkbox"> <div class="ui blue horizontal label">' + type + '</div>' + count + '</label>')
+                      }
+                  }
+                  scientific_field = data['aggregations']['scientific_field']['buckets'];
+                  if (scientific_field.length == 0) {
+                      $(".ui.card #scientificfields").parent().hide();
+                  }
+                  $("#scientificfield").append('<div class="header" >Scientific fields</div>');
+                  for (var k in scientific_field) {
+                      count = scientific_field[k]['doc_count']
+                      type = scientific_field[k]['key']
+                      longtype = type;
+                      if (type.length >= 25) {
+                          type = type.substring(0, 20) + "...";
+                      }
+                      if (type == "") {
+
+                      } else {
+                          $('#scientificfield').append('<label title="' + longtype + '"  class="item" for="' + type + 'scientificfield"> <input onclick="APP.modules.mypublications.checkCheckbox()" id="' + type + 'scientificfield" name="scientific_field" value="' + type + '" type="checkbox"> <div class="ui blue horizontal label">' + type + '</div>' + count + '</label>')
+                      }
+                  }
+                  language = data['aggregations']['language']['buckets'];
+                  if (language.length == 0) {
+                      $(".ui.card #language").parent().hide();
+                  }
+                  $("#language").append('<div class="header" >Languages</div>');
+                  for (var k in language) {
+                      count = language[k]['doc_count']
+                      type = language[k]['key'];
+                      longtype = type;
+                      if (type.length >= 25) {
+                          type = type.substring(0, 20) + "...";
+                      }
+                      if (type == "") {
+
+                      } else {
+                          $('#language').append('<label title="' + longtype + '"  class="item" for="' + type + 'language"> <input onclick="APP.modules.mypublications.checkCheckbox()" id="' + type + 'language" name="language" value="' + type + '" type="checkbox"> <div class="ui blue horizontal label">' + type + '</div>' + count + '</label>')
+                      }
+                  }
+                  filetype = data['aggregations']['filetype']['buckets'];
+                  if (filetype.length == 0) {
+                      $(".ui.card #filetype").parent().hide();
+                  }
+                  $("#filetype").append('<div class="header" >Filetypes</div>');
+                  for (var k in filetype) {
+                      count = filetype[k]['doc_count']
+                      type = filetype[k]['key'];
+                      longtype = type
+                      if (type.length >= 25) {
+                          type = type.substring(0, 20) + "...";
+                      }
+                      if (type == "") {
+
+                      } else {
+                          $('#filetype').append('<label title="' + longtype + '"  class="item" for="' + type + 'filetype"> <input onclick="APP.modules.mypublications.checkCheckbox()" id="' + type + 'filetype" name="filetype" value="' + type + '" type="checkbox"> <div class="ui blue horizontal label">' + type + '</div>' + count + '</label>')
+                      }
+                  }
+                  accessright = data['aggregations']['access_right']['buckets'];
+                  if (accessright.length == 0) {
+                      $(".ui.card #accessright").parent().hide();
+                  }
+                  $("#accesright").append('<div class="header" >Access right</div>');
+                  for (var k in accessright) {
+                      count = accessright[k]['doc_count']
+                      type = accessright[k]['key'];
+                      longtype = type
+                      if (type == "Open") {
+                          color = "green";
+                      }
+                      if (type == "Closed") {
+                          color = "red";
+                      }
+                      if (type == "Embargoed") {
+                          color = "orange";
+                      }
+                      if (type == "Unpublished") {
+                          color = "grey";
+                      }
+                      if (type.length >= 25) {
+                          type = type.substring(0, 20) + "...";
+                      }
+                      if (type == "") {
+
+                      } else {
+                          $('#accesright').append('<label  class="item" for="' + type + 'accessright"> <input onclick="APP.modules.mypublications.checkCheckbox()" id="' + type + 'accessright" name="accessright" value="' + type + '" type="checkbox"> <div class="ui ' + color + ' horizontal label">' + type + '</div>' + count + '</label>')
+                      }
+                  }
+                  var creationdatearray = [];
+                  data = data['hits']['hits'];
+                  $("#date").append('<div class="header" >Date</div>');
+                  for (var k in data) {
+                      creationdate = data[k]['CREATION_DATE'].split("-", 2);
+                      creationdatearray.push(creationdate[0])
+                  }
+                  minyear = Math.min.apply(null, creationdatearray);
+                  maxyear = Math.max.apply(null, creationdatearray);
+                  if (minyear == maxyear) {
+                      minyear = maxyear - 1;
+                  }
+                  $('#date').append('<input class="range-slider" value="' + minyear + ',' + maxyear + '" type="hidden">');
+
+                  $('.range-slider').jRange({
+                      from: minyear,
+                      to: maxyear,
+                      step: 1,
+                      format: '%s',
+                      width: 300,
+                      showLabels: true,
+                      isRange: true,
+                      ondragend: function(val) {
+                          var query = "*";
+                          range = val.split(",", 2);
+                          mindate = range[0];
+                          maxdate = range[1];
+                          date = " AND INTRO.CREATION_DATE:[" + mindate + "-01-01 TO " + maxdate + "-12-31]"
+                          $('#results').empty();
+                          APP.modules.mypublications.search(query + date, "facets");
+
+                      },
+                      onbarclicked: function(val) {
+                          var query = "*";
+                          range = val.split(",", 2);
+                          mindate = range[0];
+                          maxdate = range[1];
+                          date = " AND INTRO.CREATION_DATE:[" + mindate + "-01-01 TO " + maxdate + "-12-31]"
+                          $('#results').empty();
+                          APP.modules.mypublications.search(query + date, "facets");
+                      }
+                  });
+
+
+                  $('#facets').show();
+              }
 
 
 
@@ -742,7 +740,7 @@
                       if (facets !== undefined) {
                           facets += " AND " + samplekind;
                       } else {
-                          facets = ' AND '+samplekind;
+                          facets = ' AND ' + samplekind;
 
                       }
                   }
@@ -751,20 +749,20 @@
                       var value = $(value).parent().attr('title').split(" ");
                       if (authors === undefined) {
                           authors = ' INTRO.FILE_CREATOR.NAME:"' + value[0] + '" AND INTRO.FILE_CREATOR.FIRST_NAME:"' + value[1] + '"';
-                      if (value.length==3) {
-                      	  authors = ' INTRO.FILE_CREATOR.NAME:"' + value[0] +" "+value[1] + '" AND INTRO.FILE_CREATOR.FIRST_NAME:"' + value[2] + '"';
-                      }
+                          if (value.length == 3) {
+                              authors = ' INTRO.FILE_CREATOR.NAME:"' + value[0] + " " + value[1] + '" AND INTRO.FILE_CREATOR.FIRST_NAME:"' + value[2] + '"';
+                          }
 
                       } else {
                           authors = '  INTRO.FILE_CREATOR.NAME:"' + value[0] + '" AND INTRO.FILE_CREATOR.FIRST_NAME:"' + value[1] + '"';
-                            if (value.length==3) {
-                      	  authors = '  INTRO.FILE_CREATOR.NAME:"' + value[0] +" "+value[1] + '" AND INTRO.FILE_CREATOR.FIRST_NAME:"' + value[2] + '"';
-                      }
+                          if (value.length == 3) {
+                              authors = '  INTRO.FILE_CREATOR.NAME:"' + value[0] + " " + value[1] + '" AND INTRO.FILE_CREATOR.FIRST_NAME:"' + value[2] + '"';
+                          }
                       }
                       if (facets !== undefined) {
                           facets += " " + authors;
                       } else {
-                          facets = ' AND '+authors;
+                          facets = ' AND ' + authors;
 
                       } 
                   }
@@ -781,7 +779,7 @@
                       if (facets !== undefined) {
                           facets = facets + " AND " + keywords;
                       } else {
-                          facets = ' AND '+keywords;
+                          facets = ' AND ' + keywords;
 
                       }
                   }
@@ -798,7 +796,7 @@
                       if (facets !== undefined) {
                           facets = facets + " AND " + scientific_field;
                       } else {
-                          facets = ' AND '+scientific_field;
+                          facets = ' AND ' + scientific_field;
 
                       }
                   }
@@ -809,12 +807,12 @@
                           language = 'INTRO.LANGUAGE:"' + value + '"';
 
                       } else {
-                          language =  '  INTRO.LANGUAGE:"' + value + '"';
+                          language = '  INTRO.LANGUAGE:"' + value + '"';
                       }
                       if (facets !== undefined) {
                           facets = facets + " AND " + language;
                       } else {
-                          facets = ' AND '+language;
+                          facets = ' AND ' + language;
 
                       }
                   }
@@ -831,7 +829,7 @@
                       if (facets !== undefined) {
                           facets = facets + " AND " + filetype;
                       } else {
-                          facets = ' AND '+filetype;
+                          facets = ' AND ' + filetype;
 
                       }
                   }
@@ -842,12 +840,12 @@
                           access_right = 'INTRO.ACCESS_RIGHT:"' + value + '"';
 
                       } else {
-                          access_right =  '  INTRO.ACCESS_RIGHT:"' + value + '"';
+                          access_right = '  INTRO.ACCESS_RIGHT:"' + value + '"';
                       }
                       if (facets !== undefined) {
                           facets = facets + " AND " + access_right;
                       } else {
-                          facets = ' AND '+access_right;
+                          facets = ' AND ' + access_right;
 
                       }
                   }
@@ -859,7 +857,7 @@
                   facets = "";
               } else {
 
-                  facets =  facets 
+                  facets = facets
               }
 
               $('#results').empty();
@@ -892,7 +890,7 @@
 
                           APP.modules.mypublications.AppendFacets(data);
                       }
-                      APP.modules.datatable.AppendTable(data,facets);
+                      APP.modules.datatable.AppendTable(data, facets);
                   })
           }
       }
@@ -905,13 +903,13 @@
   APP.modules.upload = (function() {
       return {
           init: function() {
-            $('form ').on('keypress', function(e) {
-                return e.which !== 13;
-            });
+              $('form ').on('keypress', function(e) {
+                  return e.which !== 13;
+              });
               $('.ui.accordion').accordion();
               $('.ui .form.dataset')
                   .form({
-                    keyboardShortcuts:false,
+                      keyboardShortcuts: false,
                       fields: {
                           title: {
                               identifier: 'title',
@@ -1023,7 +1021,7 @@
                       }
                   });
               $("#addauthors").click(function(e) {
-                $("#authors").append('<div class="required field" > <div class="three fields"> <div class="field"><label>Author firstname</label><input type="text" name="authors_firstname[]"   placeholder="First Name" required></div> <div class="field"><label>Author name</label><input type="text" name="authors_name[]" placeholder="Family Name, Given names" required></div> <div class="field"><label>Author mail</label><input type="email" name="authors_email[]" placeholder="Email" required ></div> <div class="ui icon delete center"><i class="remove icon"></i></div> </div> </div>');
+                  $("#authors").append('<div class="required field" > <div class="three fields"> <div class="field"><label>Author firstname</label><input type="text" name="authors_firstname[]"   placeholder="First Name" required></div> <div class="field"><label>Author name</label><input type="text" name="authors_name[]" placeholder="Family Name, Given names" required></div> <div class="field"><label>Author mail</label><input type="email" name="authors_email[]" placeholder="Email" required ></div> <div class="ui icon delete center"><i class="remove icon"></i></div> </div> </div>');
               });
               $("body").on("click", ".delete", function(e) {
                   $(this).parent("div").remove();
@@ -1155,7 +1153,7 @@
   $(document).ready(function() {
 
 
-  	//Allow dropdown
+      //Allow dropdown
       $('.ui .dropdown.license')
           .dropdown();
       $('.ui .dropdown.publisher')
@@ -1170,7 +1168,7 @@
           .dropdown({
               allowAdditions: true
           });
-    //Check in contact form
+      //Check in contact form
       $('.contact')
           .form({
               fields: {
@@ -1198,12 +1196,12 @@
               }
           });
 
-       //Datepicker on class date
+      //Datepicker on class date
       $(".date").datepicker({
           dateFormat: "yy-mm-dd"
       });
 
-      APP.modules.search.init(); 
+      APP.modules.search.init();
 
 
 
