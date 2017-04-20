@@ -905,6 +905,9 @@
   APP.modules.upload = (function() {
       return {
           init: function() {
+            $('form ').on('keypress', function(e) {
+                return e.which !== 13;
+            });
               $('.ui.accordion').accordion();
               $('.ui .form.dataset')
                   .form({
@@ -1150,9 +1153,6 @@
 
 
   $(document).ready(function() {
-$('form ').on('keypress', function(e) {
-    return e.which !== 13;
-});
 
 
   	//Allow dropdown
