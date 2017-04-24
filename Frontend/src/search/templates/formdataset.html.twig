@@ -15,7 +15,7 @@
          </div>
          <div class="required field">
             <label>Title</label>
-            <input type="text" name="title" placeholder="Title" value="{{title|convert_encoding('UTF-8', 'HTML-ENTITIES')}}" >
+            <input type="text" name="title" placeholder="Title" value="{{title|raw}}" >
          </div>
          <div class="required field">
             <label>Language</label>
@@ -81,7 +81,7 @@
          </div>
          <div class="required field">
             <label>Description</label>
-            <textarea name="description" >{{description|convert_encoding('UTF-8', 'HTML-ENTITIES')}}</textarea>
+            <textarea name="description" >{{description|raw}}</textarea>
          </div>
          <div class="required field " >
             <label>Publisher</label>

@@ -115,7 +115,7 @@
       </div>
       <div class="ui ten wide column ">
          <div>
-            <h1>{{title|convert_encoding('UTF-8', 'HTML-ENTITIES')}}</h1>
+            <h1>{{title|raw}}</h1>
             <div class="content">
                {% if accessright == "Closed" %}
                <div class="ui red label" >{{accessright}}</div>
@@ -138,7 +138,7 @@
                <div class="row">
                   <div class="meta">
                      <h4>Description:</h4>
-                     <span class="data">{{datadescription|convert_encoding('UTF-8', 'HTML-ENTITIES')}}</span>
+                     <span class="data">{{datadescription|raw}}</span>
                   </div>
                   <div class="row"></div>
                   <h4><i class="user icon"></i>Authors:</h4>
