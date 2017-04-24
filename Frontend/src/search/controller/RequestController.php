@@ -35,6 +35,64 @@ class RequestController
         $httpCode = curl_getinfo($handle, CURLINFO_HTTP_CODE);
         curl_close($handle);
         return $httpCode;
+
+    }
+
+    function Check_if_DOI_exist(){
+        $config = parse_ini_file($_SERVER['DOCUMENT_ROOT'] . '/../config.ini');        
+        $dbdoi      = new \MongoClient("mongodb://" . $config['host'] . ':' . $config['port'], array(
+            'authSource' => $config['DOI_database'],
+            'username' => $config['user_doi'],
+            'password' => $config['password_doi']
+        ));
+        $collection = $dbdoi->selectCollection($config['DOI_database'], "DOI");
+        if ($collection->count() == 1) {
+            $query  = array(
+                'STATE' => 'UNLOCKED'
+            );
+            $cursor = $collection->find($query);
+            $count  = $cursor->count();
+            if ($count == 1) {
+                foreach ($cursor as $key => $value) {
+                    $DOI    = $value['ID'];
+                    $NewDOI = ++$DOI;
+                }
+            }
+        }
+        
+        $url     = "https://mds.datacite.org/metadata/".$config['DOI_PREFIX'] ."/ORDAR-". $NewDOI;
+        $curlopt = array(
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => "",
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 10,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => "GET",
+            CURLOPT_HTTPHEADER => array(
+                "authorization: " . $config['Auth_config_datacite'],
+                'Content-Type: text/xml'
+            )
+        );
+        $ch      = curl_init();
+        $curlopt = array(
+            CURLOPT_URL => $url
+        ) + $curlopt;
+        curl_setopt_array($ch, $curlopt);
+        $DOI_exist = curl_exec($ch);
+        $info    = curl_getinfo($ch);
+        curl_close($ch);
+        if ($info['http_code']==200) {
+            $mail = mail("<test@test.fr>", 'Error in ORDaR :', '<html>
+    <body>
+        <h2>Error occured in ordar!</h2>
+        <p>This DOI ORDAR-'. $NewDOI.' is already registred check your database DOI.<p>
+    </body>
+    </html> ', "From:<noreply@ordar.otelo.univ-lorraine.fr>");
+            return true;
+        }
+        else{
+            return false;
+        }
     }
     
     

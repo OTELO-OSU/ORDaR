@@ -163,8 +163,10 @@ $app->get('/upload', function (Request $req, Response $responseSlim) {
         $name = $req->getAttribute($nameKey);
         $value = $req->getAttribute($valueKey);
         $request = new RequestApi();
+        $dataset = new Datasheet();
         $status = $request->Check_status_datacite();
-        if ($status == 200) {
+        $doi_already_exist = $request->Check_if_DOI_exist();
+        if ($status == 200 && $doi_already_exist==false) {
             echo $twig->render('upload.html.twig', ['name' => $_SESSION['name'], 'firstname' => $_SESSION['firstname'], 'mail' => $_SESSION['mail'], 'name_CSRF' => $name, 'value_CSRF' => $value]);
         }
         else {
