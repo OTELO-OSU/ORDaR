@@ -154,15 +154,15 @@ Si tout s'est bien passé, il doit vous retourné acknowledge:true.
 
 ![Alt text](/Img_doc/Mongoconnector.png?raw=true)
 
-**Organisation des base de données:**
+**Organisation des bases de données:**
 
-Ordar comporte 2 base de données:
+Ordar comporte 2 bases de données:
 
     - ORDAR
     - DOI
- La base Ordar contient plusieurs collections, une constante: Manual_Depot et plusieurs autres en fonction des projets importé avec Otelo-Cloud.
+ La base Ordar contient plusieurs collections, une constante: Manual_Depot et plusieurs autres en fonction des projets importés avec Otelo-Cloud.
  
- La base DOI contient une seule collection, DOI, elle contient un document avec un ID ORDAR-DOI, un ID et l'etat du document(cet etat permet de gerer des accées concurrents, ainsi des lors qu'il est unlocked on peut utiliser la ressources). 
+ La base DOI contient une seule collection, DOI, elle contient un document avec un ID ORDAR-DOI, un ID et l'etat du document(cet etat permet de gerer des accées concurrents, ainsi des lors qu'il est unlocked on peut utiliser la ressource). 
 
 
 **Organisation du code:**
