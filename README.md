@@ -19,7 +19,7 @@
     -Mongo php driver
 
 
-Pour ubuntu 16.04(pour d’autre système consulter le manuel de mongodb)
+Pour ubuntu 16.04(pour d’autre systèmes consulter le manuel de mongodb)
 
 **Installation de mongodb :**
 
@@ -127,7 +127,7 @@ rendez vous dans le dossier précédemment télécharger , dans le dossier bin e
     user_doi = Le username de votre BDD qui contiendra le numero de DOI
     password_doi = Le mot de passe de votre BDD qui contiendra le numero de DOI
     admin[]= l'adresse mail des administrateur entre double quotes séparé d'une virgule
-    Auth_config_datacite = Token de d'authentification (Basic https) de datacite
+    Auth_config_datacite = Token d'authentification (Basic https) de datacite
      
 
 
