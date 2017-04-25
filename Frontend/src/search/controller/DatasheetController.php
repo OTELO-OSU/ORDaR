@@ -919,8 +919,7 @@ class DatasheetController
                             <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
                             </head>
                             <body>
-                                <img src="https://ordar.otelo.univ-lorraine.fr/img/ordar_logo.png" alt="Logo ordar" />
-                                <h2>Contact from ordar!</h2> 
+                                <h2>Contact from :  <img src="https://ordar.otelo.univ-lorraine.fr/img/ordar_logo.png" alt="Logo ordar" height="30" width="120" /> </h2> 
                                 <table cellspacing="0" style="border: 2px solid black; width: 400px; height: 200px;">
                                     <tr>
                                         <th>From:</th><td>'.$sendermail.'</td>
