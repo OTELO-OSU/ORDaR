@@ -909,14 +909,18 @@ class DatasheetController
             $title = $response['_source']['INTRO']['TITLE'];
             $headers .= "From:<noreply@ordar.otelo.univ-lorraine.fr>\r\n";
             $headers .= "MIME-Version: 1.0\r\n";
-            $headers .= "Content-Type: text/html; charset=ISO-8859-1\r\n";
+            $headers .= "Content-Type: text/html; charset=utf-8\r\n";
             foreach ($response['_source']['INTRO']['FILE_CREATOR'] as $key => $value) {
                 if ($author_name == $value["NAME"] && $author_firstname == $value["FIRST_NAME"]) {
                     $mail = $value["MAIL"];
-                    mail("<" . $mail . ">", 'Contact from ORDaR :' . $object,
+                    mail("<" . $mail . ">", 'Contact from ORDaR : ' . $object,
                         '<html>
+                            <head>
+                            <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+                            </head>
                             <body>
-                                <h2>Contact from ordar!</h2>
+                                <img src="https://ordar.otelo.univ-lorraine.fr/img/ordar_logo.png" alt="Logo ordar" />
+                                <h2>Contact from ordar!</h2> 
                                 <table cellspacing="0" style="border: 2px solid black; width: 400px; height: 200px;">
                                     <tr>
                                         <th>From:</th><td>'.$sendermail.'</td>
@@ -925,7 +929,7 @@ class DatasheetController
                                         <th>Title </th><td>'.$title.'</td>
                                     </tr>
                                      <tr>
-                                        <th>DOI </th><td>'.$doi.'</td>
+                                        <th>DOI </th><td><a href="http://dx.doi.org/'.$doi.'">'.$doi.'</a></td>
                                     </tr>
                                     <tr style="background-color: #e0e0e0;">
                                         <th>Object:</th><td>'.$object.'</td>

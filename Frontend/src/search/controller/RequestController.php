@@ -590,7 +590,13 @@ class RequestController
     {
         
         if (!empty($object) && !empty($message) && filter_var($sendermail, FILTER_VALIDATE_EMAIL)) {
-            $mail = mail("<otelo-si@univ-lorraine.fr>", 'Contact from ORDaR :' . $object, '<html>
+            $headers .= "From:<noreply@ordar.otelo.univ-lorraine.fr>\r\n";
+            $headers .= "MIME-Version: 1.0\r\n";
+            $headers .= "Content-Type: text/html; charset=utf-8\r\n";
+            $mail = mail("<otelo-si@univ-lorraine.fr>", 'Contact from ORDaR : ' . $object, '<html>
+    <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    </head>
     <body>
         <h2>Contact from ordar!</h2>
         <table cellspacing="0" style="border: 2px solid black; width: 400px; height: 200px;">
@@ -605,7 +611,7 @@ class RequestController
             </tr>
         </table>
     </body>
-    </html> ', "From:<noreply@ordar.otelo.univ-lorraine.fr>");
+    </html> ', $headers);
             if ($mail == true) {
                 $error = "false";
             } else {
