@@ -82,12 +82,17 @@ class RequestController
         $info    = curl_getinfo($ch);
         curl_close($ch);
         if ($info['http_code']==200) {
-            $mail = mail("<test@test.fr>", 'Error in ORDaR :', '<html>
-    <body>
-        <h2>Error occured in ordar!</h2>
-        <p>This DOI ORDAR-'. $NewDOI.' is already registred check your database DOI.<p>
-    </body>
-    </html> ', "From:<noreply@ordar.otelo.univ-lorraine.fr>");
+             foreach ($config["admin"] as $key => $value) {
+                $array = explode(",", $value);
+            }
+            foreach ($array as $key => $value) {
+                $mail = mail($value, 'Error in ORDaR :', '<html>
+                <body>
+                    <h2>Error occured in ordar!</h2>
+                    <p>This DOI ORDAR-'. $NewDOI.' is already registred check your database DOI.<p>
+                </body>
+                </html> ', "From:<noreply@ordar.otelo.univ-lorraine.fr>");
+            }
             return true;
         }
         else{
