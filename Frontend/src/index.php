@@ -316,7 +316,8 @@ $app->get('/editrecord', function (Request $req, Response $responseSlim) {
         ->getTokenValueKey();
     $namecsrf = $req->getAttribute($nameKey);
     $valuecsrf = $req->getAttribute($valueKey);
-    if ($status == 200) {
+    $doi_already_exist = $request->Check_if_DOI_exist();
+    if ($status == 200 && $doi_already_exist==false) {
         $id = $req->getparam('id');
         $response = $request->get_info_for_dataset($id);
         if ($response == false) {
