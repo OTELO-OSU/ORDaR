@@ -86,12 +86,15 @@ class RequestController
                 $array = explode(",", $value);
             }
             foreach ($array as $key => $value) {
-                $mail = mail($value, 'Error in ORDaR :', '<html>
+                $headers .= "From:<noreply@ordar.otelo.univ-lorraine.fr>\r\n";
+                $headers .= "MIME-Version: 1.0\r\n";
+                $headers .= "Content-Type: text/html; charset=utf-8\r\n";
+                $mail = mail($value, 'Error in ORDaR ', '<html>
                 <body>
                     <h2>Error occured in ordar!</h2>
                     <p>This DOI ORDAR-'. $NewDOI.' is already registred check your database DOI.<p>
                 </body>
-                </html> ', "From:<noreply@ordar.otelo.univ-lorraine.fr>");
+                </html> ', $headers);
             }
             return true;
         }
