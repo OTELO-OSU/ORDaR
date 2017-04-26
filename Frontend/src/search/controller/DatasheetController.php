@@ -181,7 +181,7 @@ class DatasheetController
                 $title          = $titles->addChild('title', htmlspecialchars($value, ENT_QUOTES));
             }
             if ($key == "language") {
-                if ($value == '0') {
+                if ($value == '2') {
                     $language = "FRENCH";
                 }
                 if ($value == "1") {
