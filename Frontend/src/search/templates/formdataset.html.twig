@@ -451,7 +451,7 @@
                <div class="field"><label>Latitude</label><input type="text" value="{{sampling_point.LATITUDE}}" name="sampling_point_latitude[]"  placeholder="latitude"></div>
                <div class="field"><label>Elevation</label><input type="number" value="{{sampling_point.ELEVATION}}" name="sampling_point_elevation[]"  placeholder="elevation"></div>
                <div class="field"><label>Description</label><textarea name="sampling_point_description[]"  placeholder="description">{{sampling_point.DESCRIPTION}}</textarea></div>
-               <div class="ui icon delete"><i class="remove icon"></i></div>
+               <div id="deletesamplingpoint" class="ui icon delete"><i class="remove icon"></i></div>
             </div>
             {% endfor %}
             {%else%}
@@ -463,13 +463,13 @@
                <div class="field"><label>Latitude</label><input type="text" value="{{sampling_point.LATITUDE}}" name="sampling_point_latitude[]"  placeholder="latitude"></div>
                <div class="field"><label>Elevation</label><input type="number" value="{{sampling_point.ELEVATION}}" name="sampling_point_elevation[]"  placeholder="elevation"></div>
                <div class="field"><label>Description</label><textarea name="sampling_point_description[]"  placeholder="description">{{sampling_point.DESCRIPTION}}</textarea></div>
-               <div class="ui icon delete"><i class="remove icon"></i></div>
+               <div id="deletesamplingpoint" class="ui icon delete"><i class="remove icon"></i></div>
             </div>
             {%endif%}
+         </div>
             <div class="ui primary right floated button"  id="addsampling_point">
                <i class="plus icon"></i> Add a new sampling point
             </div>
-         </div>
       </div>
    </div>
 </div>
