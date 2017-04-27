@@ -221,10 +221,17 @@ class DatasheetController
             }
             if ($key == "scientific_field") {
                 if (count($value) > 1) {
+                    $x=0;
                     foreach ($value as $key => $value) {
+                         $x++;
+                            if ($x>3) {
+                                break;
+                            }
+                            else{
                         $array["SCIENTIFIC_FIELD"][$key]["NAME"] = htmlspecialchars($value, ENT_QUOTES);
                         $subjects->addChild('subject', htmlspecialchars($value, ENT_QUOTES));
                     }
+                }
                 } else {
                     $array["SCIENTIFIC_FIELD"][0]["NAME"] = htmlspecialchars($value[0], ENT_QUOTES);
                     $subjects->addChild('subject', htmlspecialchars($value[0], ENT_QUOTES));
@@ -462,11 +469,18 @@ class DatasheetController
             if ($key == "keywords") {
                 if (count($value) > 1) {
                     if (count($value <= 3)) {
+                        $x=0;
                         foreach ($value as $key => $value) {
+                             $x++;
+                            if ($x>3) {
+                                break;
+                            }
+                            else{
                             if (!empty($value)) {
                                 $array["KEYWORDS"][$key]["NAME"] = htmlspecialchars($value, ENT_QUOTES);
                             }
                         }
+                    }
                     }
                 } else {
                     if (!empty($value[0])) {
@@ -478,9 +492,16 @@ class DatasheetController
             if ($key == "fundings") {
                 if (count($value) > 1) {
                     if (count($value <= 3)) {
-                        foreach ($value as $key => $value) {
-                            if (!empty($value)) {
-                                $array["FUNDINGS"][$key]["NAME"] = htmlspecialchars($value, ENT_QUOTES);
+                        $x=0;
+                            foreach ($value as $key => $value) {
+                            $x++;
+                            if ($x>3) {
+                                break;
+                            }
+                            else{
+                                if (!empty($value)) {
+                                    $array["FUNDINGS"][$key]["NAME"] = htmlspecialchars($value, ENT_QUOTES);
+                                }
                             }
                         }
                     }
