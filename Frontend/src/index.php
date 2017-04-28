@@ -132,7 +132,8 @@ $app->get('/logout', function (Request $req, Response $responseSlim) {
     $loader = new Twig_Loader_Filesystem('search/templates');
     $twig = new Twig_Environment($loader);
     session_destroy();
-    return $responseSlim->withRedirect('https://ordar.otelo.univ-lorraine.fr/Shibboleth.sso/Logout?return=https://ordar.otelo.univ-lorraine.fr/');
+    $config = parse_ini_file($_SERVER['DOCUMENT_ROOT'] . '/../config.ini');
+    return $responseSlim->withRedirect($config['URL_DOI'].'/Shibboleth.sso/Logout?return='.$config['URL_DOI']);
 
 });
 
