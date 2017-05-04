@@ -607,7 +607,7 @@ class RequestController
                 <th>From:</th><td>'.$sendermail.'</td>
             </tr>
             <tr style="background-color: #e0e0e0;">
-                <th>Object:</th><td>'.$object.'</td>
+                <th>Subject:</th><td>'.$object.'</td>
             </tr>
             <tr>
                 <th>Message:</th><td>'.$message.'</td>

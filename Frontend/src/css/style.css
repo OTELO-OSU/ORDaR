@@ -126,3 +126,6 @@
     
     font-size: 18px;
 }
+.ui.form .required.field>.checkbox:after, .ui.form .required.field>label:after, .ui.form .required.fields.grouped>label:after, .ui.form .required.fields:not(.grouped)>.field>.checkbox:after, .ui.form .required.fields:not(.grouped)>.field>label:after{
+    font-size: x-large; :important;
+}
