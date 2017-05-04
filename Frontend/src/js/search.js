@@ -928,7 +928,7 @@
                           authors_firstname: {
                               identifier: 'authors_firstname',
                               rules: [{
-                                  type: 'regExp[^[a-zA-Z][a-zA-Z -.,]*$]',
+                                  type: 'regExp[^[a-zA-ZÀ-ÿ][a-zA-ZÀ-ÿ -.,]*$]',
                                   prompt: 'Please enter a valid firstname'
 
                               }]
@@ -936,7 +936,7 @@
                           authors_name: {
                               identifier: 'authors_name',
                               rules: [{
-                                  type: 'regExp[^[a-zA-Z][a-zA-Z -.,]*$]',
+                                  type: 'regExp[^[a-zA-ZÀ-ÿ][a-zA-ZÀ-ÿ -.,]*$]',
                                   prompt: 'Please enter a valid name'
                               }]
                           },

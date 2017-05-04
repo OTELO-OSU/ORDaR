@@ -105,7 +105,7 @@ $app->get('/login', function (Request $req, Response $responseSlim) {
     //$_SESSION['firstname'] = $_SERVER['HTTP_GIVENNAME'];
     //$_SESSION['mail'] = $_SERVER['HTTP_MAIL'];
     $_SESSION['name'] = "Montarges-Pelletier";
-    $_SESSION['firstname'] = "antoh";
+    $_SESSION['firstname'] = "Jerômé";
     $_SESSION['mail'] = "emmanuelle.montarges@univ-lorraine.fr";
     foreach ($config["admin"] as $key => $value) {
         $array = explode(",", $value);
