@@ -106,7 +106,7 @@
                         <div class="item">Cité des sciences et Palais de la découverte</div>
                         <div class="item">National Museum of the History of Immigration</div>
                         <div class="item">CNES National Center for Space Studies</div>
-                        <div class="item">CNRS National Center for sciences Research</div>
+                        <div class="item">CNRS National Center for Scientific Research</div>
                         <div class="item">GENOPOLE France’s leading biocluster for biotechnologies and research in genomics and genetics</div>
                         <div class="item">IFE French Institute of Education</div>
                         <div class="item">IFREMER French Research Institute for Exploitation of the Sea</div>
@@ -263,7 +263,7 @@
                         <div class="item">Cité des sciences et Palais de la découverte</div>
                         <div class="item">National Museum of the History of Immigration</div>
                         <div class="item">CNES National Center for Space Studies</div>
-                        <div class="item">CNRS National Center for sciences Research</div>
+                        <div class="item">CNRS National Center for Scientific Research</div>
                         <div class="item">GENOPOLE France’s leading biocluster for biotechnologies and research in genomics and genetics</div>
                         <div class="item">IFE French Institute of Education</div>
                         <div class="item">IFREMER French Research Institute for Exploitation of the Sea</div>
@@ -309,7 +309,7 @@
                         <div class="item">Cité des sciences et Palais de la découverte</div>
                         <div class="item">National Museum of the History of Immigration</div>
                         <div class="item">CNES National Center for Space Studies</div>
-                        <div class="item">CNRS National Center for sciences Research</div>
+                        <div class="item">CNRS National Center for Scientific Research</div>
                         <div class="item">GENOPOLE France’s leading biocluster for biotechnologies and research in genomics and genetics</div>
                         <div class="item">IFE French Institute of Education</div>
                         <div class="item">IFREMER French Research Institute for Exploitation of the Sea</div>
@@ -360,7 +360,7 @@
          <div class="three fields">
             <div class="field"><label>Measurement nature</label><input type="text" value="{{measurement.NATURE}}" name="measurement_nature[]" data-validate="measurement_nature" placeholder="Nature"  ></div>
             <div class="field"><label>Measurement abbreviation</label><input type="text" value="{{measurement.ABBREVIATION}}" name="measurement_abbreviation[]" data-validate="measurement_abbreviation" placeholder="Abbreviation" ></div>
-            <div class="field"><label>Measurement unit</label><input type="text" value="{{measurement.UNIT}}" name="measurement_unit[]" data-validate="measurement_unit" placeholder="Unit"></div>
+            <div class="field"><label>Measurement unit(s)</label><input type="text" value="{{measurement.UNIT}}" name="measurement_unit[]" data-validate="measurement_unit" placeholder="Unit(s)"></div>
             <div class="ui icon delete center"><i class="remove icon"></i></div>
          </div>
       </div>
@@ -378,7 +378,7 @@
          <div class="three fields">
             <div class="field"><label>Measurement nature</label><input type="text" value="{{measurement.NATURE}}" name="measurement_nature[]" data-validate="measurement_nature" placeholder="Nature"  ></div>
             <div class="field"><label>Measurement abbreviation</label><input type="text" value="{{measurement.ABBREVIATION}}" name="measurement_abbreviation[]" data-validate="measurement_abbreviation" placeholder="Abbreviation" ></div>
-            <div class="field"><label>Measurement unit</label><input type="text" value="{{measurement.UNIT}}" name="measurement_unit[]" data-validate="measurement_unit" placeholder="Unit" ></div>
+            <div class="field"><label>Measurement unit(s)</label><input type="text" value="{{measurement.UNIT}}" name="measurement_unit[]" data-validate="measurement_unit" placeholder="Unit(s)" ></div>
          </div>
       </div>
       <div class="ui primary right floated button"  id="addmeasurement">
@@ -445,24 +445,24 @@
             {% for sampling_point in sampling_points %}
             <div>
                <div class="field"><label>Name</label> <input type="text" value="{{sampling_point.NAME}}" name="sampling_point_name[]" placeholder="Name" ></div>
-               <div class="field"><label>Coordonate system</label><input type="text" value="{{sampling_point.COORDONATE_SYSTEM}}" name="sampling_point_coordonate_system[]"  placeholder="coordonate sytem"></div>
+               <div class="field"><label>Coordinate system</label><input type="text" value="{{sampling_point.COORDONATE_SYSTEM}}" name="sampling_point_coordonate_system[]"  placeholder="coordonate sytem"></div>
                <div class="field"><label>Abbreviation</label><input type="text" value="{{sampling_point.ABBREVIATION}}" name="sampling_point_abbreviation[]"  placeholder="abbreviation"></div>
                <div class="field"><label>Longitude</label><input type="text" value="{{sampling_point.LONGITUDE}}" name="sampling_point_longitude[]" placeholder="longitude" ></div>
                <div class="field"><label>Latitude</label><input type="text" value="{{sampling_point.LATITUDE}}" name="sampling_point_latitude[]"  placeholder="latitude"></div>
                <div class="field"><label>Elevation</label><input type="number" value="{{sampling_point.ELEVATION}}" name="sampling_point_elevation[]"  placeholder="elevation"></div>
-               <div class="field"><label>Description</label><textarea name="sampling_point_description[]"  placeholder="description">{{sampling_point.DESCRIPTION}}</textarea></div>
+               <div class="field"><label>Additionnal description</label><textarea name="sampling_point_description[]"  placeholder="Additionnal description">{{sampling_point.DESCRIPTION}}</textarea></div>
                <div id="deletesamplingpoint" class="ui icon delete"><i class="remove icon"></i></div>
             </div>
             {% endfor %}
             {%else%}
             <div>
                <div class="field"><label>Name</label><input type="text" value="{{sampling_point.NAME}}" name="sampling_point_name[]" placeholder="Name" ></div>
-               <div class="field"><label>Coordonate system</label><input type="text" value="{{sampling_point.COORDONATE_SYSTEM}}" name="sampling_point_coordonate_system[]"  placeholder="coordonate sytem"></div>
+               <div class="field"><label>Coordinate system</label><input type="text" value="{{sampling_point.COORDONATE_SYSTEM}}" name="sampling_point_coordonate_system[]"  placeholder="coordonate sytem"></div>
                <div class="field"><label>Abbreviation</label><input type="text" value="{{sampling_point.ABBREVIATION}}" name="sampling_point_abbreviation[]"  placeholder="abbreviation"></div>
                <div class="field"><label>Longitude</label><input type="text" value="{{sampling_point.LONGITUDE}}" name="sampling_point_longitude[]" placeholder="longitude" ></div>
                <div class="field"><label>Latitude</label><input type="text" value="{{sampling_point.LATITUDE}}" name="sampling_point_latitude[]"  placeholder="latitude"></div>
                <div class="field"><label>Elevation</label><input type="number" value="{{sampling_point.ELEVATION}}" name="sampling_point_elevation[]"  placeholder="elevation"></div>
-               <div class="field"><label>Description</label><textarea name="sampling_point_description[]"  placeholder="description">{{sampling_point.DESCRIPTION}}</textarea></div>
+               <div class="field"><label>Additionnal description</label><textarea name="sampling_point_description[]"  placeholder="Additionnal description">{{sampling_point.DESCRIPTION}}</textarea></div>
                <div id="deletesamplingpoint" class="ui icon delete"><i class="remove icon"></i></div>
             </div>
             {%endif%}
