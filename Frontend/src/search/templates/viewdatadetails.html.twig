@@ -126,7 +126,8 @@
                {% elseif accessright == "Unpublished" %}
                <div class="ui grey label" >{{accessright}}</div>
                {% endif %}
-               <div class="ui blue label">{{creationdate}}</div>
+               <div class="ui blue label"  data-tooltip="Creation Date">{{creationdate}}</div>
+               <div class="ui blue label"  data-tooltip="Last modification of metadata">{{metadatadate}}</div>
                <div class="ui labeled right floated mini button" >
                   <div class="ui grey mini button">
                      <i class="barcode icon"></i> DOI

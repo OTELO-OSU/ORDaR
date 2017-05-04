@@ -918,13 +918,7 @@
                                   prompt: 'Please enter title'
                               }]
                           },
-                          creation_date: {
-                              identifier: 'creation_date',
-                              rules: [{
-                                  type: 'regExp[^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])*$]',
-                                  prompt: 'Please enter creation date'
-                              }]
-                          },
+                         
                           authors_firstname: {
                               identifier: 'authors_firstname',
                               rules: [{
@@ -1107,6 +1101,15 @@
               $("body").on("click", ".delete", function(e) {
                   $(this).parent("div").remove();
               });
+              $('#checker').on('click', function(){
+    if($(this).is(':checked')){
+        $('#units').prop('readonly', true);
+        $('#units').val('No units');   
+    }else{
+        $('#units').prop('readonly', false);
+        $('#units').val('');    
+    }    
+});
           },
           checkformbutton: function() {
               if (document.getElementById('embargoed').checked) {

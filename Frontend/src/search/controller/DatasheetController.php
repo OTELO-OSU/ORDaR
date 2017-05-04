@@ -153,7 +153,6 @@ class DatasheetController
         $UPLOAD_FOLDER      = $config["UPLOAD_FOLDER"];
         $required           = array(
             'title',
-            'creation_date',
             'language',
             'authors_name',
             'authors_firstname',
@@ -173,9 +172,7 @@ class DatasheetController
             }
         }
         foreach ($POST as $key => $value) {
-            if ($key == "creation_date") {
-                $array["CREATION_DATE"] = htmlspecialchars($value, ENT_QUOTES);
-            }
+           
             if ($key == "title") {
                 $array["TITLE"] = htmlspecialchars($value, ENT_QUOTES);
                 $title          = $titles->addChild('title', htmlspecialchars($value, ENT_QUOTES));
@@ -551,13 +548,12 @@ class DatasheetController
                     }
                 }
                 
-                
-                
+                $array["METADATA_DATE"] = date("Y-m-d");
+
                 $array["PUBLICATION_DATE"] = $publication_date;
                 
                 
                 
-                $array["UPLOAD_DATE"] = date('Y-m-d');
                 
             }
             if ($key == "file_already_uploaded") {
@@ -622,7 +618,8 @@ class DatasheetController
             return $array;
         } else {
             $config = parse_ini_file($_SERVER['DOCUMENT_ROOT'] . '/../config.ini');
-            
+            $array['dataform']["UPLOAD_DATE"] = date('Y-m-d');
+            $array['dataform']["CREATION_DATE"] = date('Y-m-d');
             $UPLOAD_FOLDER = $config["UPLOAD_FOLDER"];
             $doi           = $array['doi'];
             for ($i = 0; $i < count($_FILES['file']['name']); $i++) {
@@ -691,6 +688,20 @@ class DatasheetController
     {
         $config        = parse_ini_file($_SERVER['DOCUMENT_ROOT'] . '/../config.ini');
         $UPLOAD_FOLDER = $config["UPLOAD_FOLDER"];
+        $collectionObject = $db->selectCollection($config["authSource"], $collection);
+        $query    = array(
+                        '_id' => $doi
+                    );
+        $cursor   = $collectionObject->find($query);
+        foreach ($cursor as $key => $value) {
+               if ($value['INTRO']["UPLOAD_DATE"]) {
+                   $array['dataform']['UPLOAD_DATE']=$value['INTRO']['UPLOAD_DATE'];
+               }
+                 if ($value['INTRO']["CREATION_DATE"]) {
+                   $array['dataform']['CREATION_DATE']=$value['INTRO']['CREATION_DATE'];
+               }
+        }
+
         if (isset($array['error'])) { //Si une erreur est detecté
             return $array;
         } else {
@@ -846,7 +857,7 @@ class DatasheetController
                         "INTRO" => $INTRO,
                         "DATA" => $DATA
                     ));
-                                    $Request->Send_Mail_To_uploader($array['dataform']['TITLE'], $config["DOI_PREFIX"] . "/" . $newdoi, $array['dataform']['DATA_DESCRIPTION']);
+                    $Request->Send_Mail_To_uploader($array['dataform']['TITLE'], $config["DOI_PREFIX"] . "/" . $newdoi, $array['dataform']['DATA_DESCRIPTION']);
 
                 } else {
                     $array['error'] = "Unable to send metadata to Datacite";
