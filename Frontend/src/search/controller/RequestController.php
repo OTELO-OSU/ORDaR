@@ -627,6 +627,48 @@ class RequestController
         
         
     }
+
+
+
+
+    /**
+     * Send a mail when upload successfull
+     * @return true if error, else false
+     */
+    function Send_Mail_To_uploader($title, $doi, $description)
+    {
+        
+      
+            $headers .= "From:<noreply@ordar.otelo.univ-lorraine.fr>\r\n";
+            $headers .= "MIME-Version: 1.0\r\n";
+            $headers .= "Content-Type: text/html; charset=utf-8\r\n";
+            $mail = mail("<otelo-si@univ-lorraine.fr>", 'Dataset submit successfully! ' , '<html>
+    <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    </head>
+    <body>
+        <h2>Your dataset is now on ORDaR!</h2>
+        <p> Hello , your dataset is on our database, this is your DOI: <a href="http://dx.doi.org/'.$doi.'">'.$doi.'</a></p>
+         <table cellspacing="0" style="border: 2px solid black; width: 500px; height: 200px;">
+            <tr>
+                <th>Title</th><td>'.$title.'</td>
+            </tr>
+             <tr style="background-color: #e0e0e0;">
+                <th>Description: </th><td>'.$description.'</td>
+            </tr>
+        </table>
+    </body>
+    </html> ', $headers);
+            if ($mail == true) {
+                $error = "false";
+            } else {
+                $error = "true";
+            }
+            return $error;
+      
+        
+        
+    }
     
     
 }
