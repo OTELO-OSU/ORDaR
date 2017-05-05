@@ -642,7 +642,7 @@ class RequestController
             $headers .= "From:<noreply@ordar.otelo.univ-lorraine.fr>\r\n";
             $headers .= "MIME-Version: 1.0\r\n";
             $headers .= "Content-Type: text/html; charset=utf-8\r\n";
-            $mail = mail("<otelo-si@univ-lorraine.fr>", 'Dataset submit successfully! ' , '<html>
+            $mail = mail($_SESSION['mail'], 'Dataset submit successfully! ' , '<html>
     <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     </head>

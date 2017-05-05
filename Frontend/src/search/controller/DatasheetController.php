@@ -258,7 +258,7 @@ class DatasheetController
                 }
                 
             }
-            if ($key == "sampling_point_coordonate_system") {
+            if ($key == "sampling_point_coordinate_system") {
                 if (count($value) > 1) {
                     foreach ($value as $key => $value) {
                         if (!empty($value)) {

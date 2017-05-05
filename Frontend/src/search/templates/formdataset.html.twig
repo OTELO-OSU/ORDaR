@@ -451,7 +451,27 @@
             {% for sampling_point in sampling_points %}
             <div>
                <div class="field"><label>Name</label> <input type="text" value="{{sampling_point.NAME}}" name="sampling_point_name[]" placeholder="Name" ></div>
-               <div class="field"><label>Coordinate system</label><input type="text" value="{{sampling_point.COORDINATE_SYSTEM}}" name="sampling_point_coordonate_system[]"  placeholder="coordonate sytem"></div>
+               <div class="field">
+               <label>Coordinate reference system</label>
+               <div class="ui input">
+                  <div class="ui dropdown fluid search selection optgroup coordinate">
+                     <input value="{{sampling_point.COORDINATE_SYSTEM}}"  type="hidden" name="sampling_point_coordinate_system[]">
+                     <div  class="text">Select a coordinate system or type one</div>
+                     <i class="dropdown icon"></i>
+                     <div class="menu">
+                        <div class="item">NTF meridian of Paris</div>
+                        <div class="item">NTF meridian of Greenwich</div>
+                        <div class="item">ED50 Greenwich</div>
+                        <div class="item">WGS84 Greenwich</div>
+                        <div class="item">NTF Lambert I</div>
+                        <div class="item">NTF Lambert II extend</div>
+                        <div class="item">ED50 UTM</div>
+                        <div class="item">WGS84 UTM</div>
+                        <div class="item">RGF93 projection Lambert93</div>
+                     </div>
+                  </div>
+               </div>
+               </div>
                <div class="field"><label>Abbreviation</label><input type="text" value="{{sampling_point.ABBREVIATION}}" name="sampling_point_abbreviation[]"  placeholder="abbreviation"></div>
                <div class="field"><label>Longitude</label><input type="text" value="{{sampling_point.LONGITUDE}}" name="sampling_point_longitude[]" placeholder="longitude" ></div>
                <div class="field"><label>Latitude</label><input type="text" value="{{sampling_point.LATITUDE}}" name="sampling_point_latitude[]"  placeholder="latitude"></div>
@@ -463,7 +483,27 @@
             {%else%}
             <div>
                <div class="field"><label>Name</label><input type="text" value="{{sampling_point.NAME}}" name="sampling_point_name[]" placeholder="Name" ></div>
-               <div class="field"><label>Coordinate system</label><input type="text" value="{{sampling_point.COORDINATE_SYSTEM}}" name="sampling_point_coordonate_system[]"  placeholder="coordonate sytem"></div>
+                <div class="field">
+               <label>Coordinate reference system</label>
+               <div class="ui input">
+                  <div class="ui dropdown fluid search selection optgroup coordinate">
+                     <input value="{{sampling_point.COORDINATE_SYSTEM}}"  type="hidden" name="sampling_point_coordinate_system[]">
+                     <div  class="text">Select a coordinate system or type one</div>
+                     <i class="dropdown icon"></i>
+                     <div class="menu">
+                        <div class="item">NTF meridian of Paris</div>
+                        <div class="item">NTF meridian of Greenwich</div>
+                        <div class="item">ED50 Greenwich</div>
+                        <div class="item">WGS84 Greenwich</div>
+                        <div class="item">NTF Lambert I</div>
+                        <div class="item">NTF Lambert II extend</div>
+                        <div class="item">ED50 UTM</div>
+                        <div class="item">WGS84 UTM</div>
+                        <div class="item">RGF93 projection Lambert93</div>
+                     </div>
+                  </div>
+               </div>
+               </div>
                <div class="field"><label>Abbreviation</label><input type="text" value="{{sampling_point.ABBREVIATION}}" name="sampling_point_abbreviation[]"  placeholder="abbreviation"></div>
                <div class="field"><label>Longitude</label><input type="text" value="{{sampling_point.LONGITUDE}}" name="sampling_point_longitude[]" placeholder="longitude" ></div>
                <div class="field"><label>Latitude</label><input type="text" value="{{sampling_point.LATITUDE}}" name="sampling_point_latitude[]"  placeholder="latitude"></div>
