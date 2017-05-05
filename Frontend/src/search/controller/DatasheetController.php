@@ -262,13 +262,13 @@ class DatasheetController
                 if (count($value) > 1) {
                     foreach ($value as $key => $value) {
                         if (!empty($value)) {
-                            $array["SAMPLING_POINT"][$key]["COORDONATE_SYSTEM"] = htmlspecialchars($value, ENT_QUOTES);
+                            $array["SAMPLING_POINT"][$key]["COORDINATE_SYSTEM"] = htmlspecialchars($value, ENT_QUOTES);
                             ;
                         }
                     }
                 } else {
                     if (!empty($value[0])) {
-                        $array["SAMPLING_POINT"][0]["COORDONATE_SYSTEM"] = htmlspecialchars($value[0], ENT_QUOTES);
+                        $array["SAMPLING_POINT"][0]["COORDINATE_SYSTEM"] = htmlspecialchars($value[0], ENT_QUOTES);
                     }
                 }
                 
