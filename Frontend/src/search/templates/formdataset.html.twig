@@ -134,9 +134,7 @@
          </div>
          <div class="required field">
             <label>Scientific field</label>
-              <div class="ui message">
                <p>You can select a scientific field in list or type one.</p>
-            </div>
             <div class=" field" id="scientificfields">
                {% if scientific_fields %}
                {% for scientific_field in scientific_fields %}
@@ -245,9 +243,9 @@
          <div class="required field institution" id="institution">
             <label>Institutions</label>
             <div class=" field" >
-            <div class="ui message">
+            
                <p>You can select an institution in list or type one.</p>
-            </div>
+            
                {% if institutions %}
                {% for institution in institutions %}
                <div  class="ui input">

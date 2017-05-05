@@ -342,6 +342,23 @@
               var language;
               facets = undefined;
               $.each(checked, function(index, value) {
+                  if (value.name == "accessright") {
+                      var value = value.value;
+                      if (access_right === undefined) {
+                          access_right = 'INTRO.ACCESS_RIGHT:"' + value + '"';
+
+                      } else {
+                          access_right = access_right+' OR INTRO.ACCESS_RIGHT:"' + value + '"';
+                      }
+                      if (facets !== undefined) {
+                        facets=facets.replace(/ AND \([^)]*\) */g, "");
+                          facets +=  " AND "+"("+access_right+")";
+                      } else {
+                          facets = ' AND ' +  "("+access_right+")";
+
+                      }
+                  }
+
                   if (value.name == "sample_kind") {
                       var value = $(value).parent().attr('title');
                       if (samplekind === undefined) {
@@ -445,22 +462,7 @@
 
                       }
                   }
-                  if (value.name == "accessright") {
-
-                      var value = value.value;
-                      if (access_right === undefined) {
-                          access_right = 'INTRO.ACCESS_RIGHT:"' + value + '"';
-
-                      } else {
-                          access_right = ' INTRO.ACCESS_RIGHT:"' + value + '"';
-                      }
-                      if (facets !== undefined) {
-                          facets = facets + " AND " + access_right;
-                      } else {
-                          facets = " AND " + access_right;
-
-                      }
-                  }
+                
 
 
 
@@ -727,6 +729,22 @@
               var language;
               facets = undefined;
               $.each(checked, function(index, value) {
+                if (value.name == "accessright") {
+                      var value = value.value;
+                      if (access_right === undefined) {
+                          access_right = 'INTRO.ACCESS_RIGHT:"' + value + '"';
+
+                      } else {
+                          access_right = access_right+' OR INTRO.ACCESS_RIGHT:"' + value + '"';
+                      }
+                      if (facets !== undefined) {
+                        facets=facets.replace(/ AND \([^)]*\) */g, "");
+                          facets +=  " AND "+"("+access_right+")";
+                      } else {
+                          facets = ' AND ' +  "("+access_right+")";
+
+                      }
+                  }
 
                   if (value.name == "sample_kind") {
 
@@ -833,22 +851,7 @@
 
                       }
                   }
-                  if (value.name == "accessright") {
 
-                      var value = value.value;
-                      if (access_right === undefined) {
-                          access_right = 'INTRO.ACCESS_RIGHT:"' + value + '"';
-
-                      } else {
-                          access_right = '  INTRO.ACCESS_RIGHT:"' + value + '"';
-                      }
-                      if (facets !== undefined) {
-                          facets = facets + " AND " + access_right;
-                      } else {
-                          facets = ' AND ' + access_right;
-
-                      }
-                  }
 
 
               })
