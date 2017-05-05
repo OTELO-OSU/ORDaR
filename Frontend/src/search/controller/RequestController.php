@@ -648,13 +648,13 @@ class RequestController
     </head>
     <body>
         <h2>Your dataset is now on ORDaR!</h2>
-        <p> Hello , your dataset is on our database, this is your DOI: <a href="http://dx.doi.org/'.$doi.'">'.$doi.'</a></p>
+        <p> Your DOI is : <a href="http://dx.doi.org/'.$doi.'">'.$doi.'</a></p>
          <table cellspacing="0" style="border: 2px solid black; width: 500px; height: 200px;">
             <tr>
-                <th>Title</th><td>'.$title.'</td>
+                <th>Title : </th><td>'.$title.'</td>
             </tr>
              <tr style="background-color: #e0e0e0;">
-                <th>Description: </th><td>'.$description.'</td>
+                <th>Description : </th><td>'.$description.'</td>
             </tr>
         </table>
     </body>
