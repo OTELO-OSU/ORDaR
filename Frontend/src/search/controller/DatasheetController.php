@@ -85,7 +85,7 @@ class DatasheetController
                 'ID' => 0,
                 'STATE' => "UNLOCKED"
             ));
-           
+            
             $query  = array(
                 'STATE' => 'UNLOCKED'
             );
@@ -172,7 +172,7 @@ class DatasheetController
             }
         }
         foreach ($POST as $key => $value) {
-           
+            
             if ($key == "title") {
                 $array["TITLE"] = htmlspecialchars($value, ENT_QUOTES);
                 $title          = $titles->addChild('title', htmlspecialchars($value, ENT_QUOTES));
@@ -218,17 +218,16 @@ class DatasheetController
             }
             if ($key == "scientific_field") {
                 if (count($value) > 1) {
-                    $x=0;
+                    $x = 0;
                     foreach ($value as $key => $value) {
-                         $x++;
-                            if ($x>3) {
-                                break;
-                            }
-                            else{
-                        $array["SCIENTIFIC_FIELD"][$key]["NAME"] = htmlspecialchars($value, ENT_QUOTES);
-                        $subjects->addChild('subject', htmlspecialchars($value, ENT_QUOTES));
+                        $x++;
+                        if ($x > 3) {
+                            break;
+                        } else {
+                            $array["SCIENTIFIC_FIELD"][$key]["NAME"] = htmlspecialchars($value, ENT_QUOTES);
+                            $subjects->addChild('subject', htmlspecialchars($value, ENT_QUOTES));
+                        }
                     }
-                }
                 } else {
                     $array["SCIENTIFIC_FIELD"][0]["NAME"] = htmlspecialchars($value[0], ENT_QUOTES);
                     $subjects->addChild('subject', htmlspecialchars($value[0], ENT_QUOTES));
@@ -405,9 +404,9 @@ class DatasheetController
             if ($key == "authors_firstname") {
                 if (count($value) > 1) {
                     foreach ($value as $key => $value) {
-                if (empty($value)) {
-                    $error = "Warning there are empty fields: author ";
-                }
+                        if (empty($value)) {
+                            $error = "Warning there are empty fields: author ";
+                        }
                         $array["FILE_CREATOR"][$key]["FIRST_NAME"] = htmlspecialchars($value, ENT_QUOTES);
                         $author_firstname[]                        = htmlspecialchars($value, ENT_QUOTES);
                     }
@@ -421,9 +420,9 @@ class DatasheetController
             if ($key == "authors_name") {
                 if (count($value) > 1) {
                     foreach ($value as $keys => $value) {
-                if (empty($value)) {
-                    $error = "Warning there are empty fields: author  ";
-                }
+                        if (empty($value)) {
+                            $error = "Warning there are empty fields: author  ";
+                        }
                         $array["FILE_CREATOR"][$keys]["NAME"] = htmlspecialchars($value, ENT_QUOTES);
                         $author_displayname[]                 = htmlspecialchars($value, ENT_QUOTES) . " " . $author_firstname[$keys];
                         $creator                              = $creators->addChild('creator');
@@ -450,13 +449,13 @@ class DatasheetController
             if ($key == "authors_email") {
                 if (count($value) > 1) {
                     foreach ($value as $key => $value) {
-                if (empty($value)) {
-                    $error = "Warning there are empty fields: author ";
-                }
-                if (!filter_var($value, FILTER_VALIDATE_EMAIL)) {
-                    $error = "Warning author mail invalid ";
-                }
-
+                        if (empty($value)) {
+                            $error = "Warning there are empty fields: author ";
+                        }
+                        if (!filter_var($value, FILTER_VALIDATE_EMAIL)) {
+                            $error = "Warning author mail invalid ";
+                        }
+                        
                         $array["FILE_CREATOR"][$key]["MAIL"] = htmlspecialchars($value, ENT_QUOTES);
                     }
                 } else {
@@ -466,18 +465,17 @@ class DatasheetController
             if ($key == "keywords") {
                 if (count($value) > 1) {
                     if (count($value <= 3)) {
-                        $x=0;
+                        $x = 0;
                         foreach ($value as $key => $value) {
-                             $x++;
-                            if ($x>3) {
+                            $x++;
+                            if ($x > 3) {
                                 break;
-                            }
-                            else{
-                            if (!empty($value)) {
-                                $array["KEYWORDS"][$key]["NAME"] = htmlspecialchars($value, ENT_QUOTES);
+                            } else {
+                                if (!empty($value)) {
+                                    $array["KEYWORDS"][$key]["NAME"] = htmlspecialchars($value, ENT_QUOTES);
+                                }
                             }
                         }
-                    }
                     }
                 } else {
                     if (!empty($value[0])) {
@@ -489,13 +487,12 @@ class DatasheetController
             if ($key == "fundings") {
                 if (count($value) > 1) {
                     if (count($value <= 3)) {
-                        $x=0;
-                            foreach ($value as $key => $value) {
+                        $x = 0;
+                        foreach ($value as $key => $value) {
                             $x++;
-                            if ($x>3) {
+                            if ($x > 3) {
                                 break;
-                            }
-                            else{
+                            } else {
                                 if (!empty($value)) {
                                     $array["FUNDINGS"][$key]["NAME"] = htmlspecialchars($value, ENT_QUOTES);
                                 }
@@ -549,7 +546,7 @@ class DatasheetController
                 }
                 
                 $array["METADATA_DATE"] = date("Y-m-d");
-
+                
                 $array["PUBLICATION_DATE"] = $publication_date;
                 
                 
@@ -617,11 +614,11 @@ class DatasheetController
         if (isset($array['error'])) { //Si une erreur est detecté
             return $array;
         } else {
-            $config = parse_ini_file($_SERVER['DOCUMENT_ROOT'] . '/../config.ini');
-            $array['dataform']["UPLOAD_DATE"] = date('Y-m-d');
+            $config                             = parse_ini_file($_SERVER['DOCUMENT_ROOT'] . '/../config.ini');
+            $array['dataform']["UPLOAD_DATE"]   = date('Y-m-d');
             $array['dataform']["CREATION_DATE"] = date('Y-m-d');
-            $UPLOAD_FOLDER = $config["UPLOAD_FOLDER"];
-            $doi           = $array['doi'];
+            $UPLOAD_FOLDER                      = $config["UPLOAD_FOLDER"];
+            $doi                                = $array['doi'];
             for ($i = 0; $i < count($_FILES['file']['name']); $i++) {
                 $repertoireDestination                  = $UPLOAD_FOLDER;
                 $nomDestination                         = str_replace(' ', '_', $_FILES["file"]["name"][$i]);
@@ -686,22 +683,22 @@ class DatasheetController
     
     function Editdatasheet($collection, $doi, $db, $array)
     {
-        $config        = parse_ini_file($_SERVER['DOCUMENT_ROOT'] . '/../config.ini');
-        $UPLOAD_FOLDER = $config["UPLOAD_FOLDER"];
+        $config           = parse_ini_file($_SERVER['DOCUMENT_ROOT'] . '/../config.ini');
+        $UPLOAD_FOLDER    = $config["UPLOAD_FOLDER"];
         $collectionObject = $db->selectCollection($config["authSource"], $collection);
-        $query    = array(
-                        '_id' => $doi
-                    );
-        $cursor   = $collectionObject->find($query);
+        $query            = array(
+            '_id' => $doi
+        );
+        $cursor           = $collectionObject->find($query);
         foreach ($cursor as $key => $value) {
-               if ($value['INTRO']["UPLOAD_DATE"]) {
-                   $array['dataform']['UPLOAD_DATE']=$value['INTRO']['UPLOAD_DATE'];
-               }
-                 if ($value['INTRO']["CREATION_DATE"]) {
-                   $array['dataform']['CREATION_DATE']=$value['INTRO']['CREATION_DATE'];
-               }
+            if ($value['INTRO']["UPLOAD_DATE"]) {
+                $array['dataform']['UPLOAD_DATE'] = $value['INTRO']['UPLOAD_DATE'];
+            }
+            if ($value['INTRO']["CREATION_DATE"]) {
+                $array['dataform']['CREATION_DATE'] = $value['INTRO']['CREATION_DATE'];
+            }
         }
-
+        
         if (isset($array['error'])) { //Si une erreur est detecté
             return $array;
         } else {
@@ -734,33 +731,33 @@ class DatasheetController
                         $nomDestination                = str_replace(' ', '_', $_FILES["file"]["name"][$i]);
                         $data[$i]["DATA_URL"]          = $nomDestination;
                         $data[$i]["ORIGINAL_DATA_URL"] = $UPLOAD_FOLDER . "/" . $doi . "/" . $nomDestination;
-                      
-                            if (is_uploaded_file($_FILES["file"]["tmp_name"][$i])) {
-                                if (is_dir($repertoireDestination . $config['DOI_PREFIX']) == false) {
-                                    mkdir($repertoireDestination . $config['DOI_PREFIX']);
-                                }
-                                if (!file_exists($repertoireDestination . $doi)) {
-                                    mkdir($repertoireDestination . $doi);
-                                }
-                                if (rename($_FILES["file"]["tmp_name"][$i], $repertoireDestination . $doi . "/" . $nomDestination)) {
-                                    $extension = new \SplFileInfo($repertoireDestination . $doi . "/" . $nomDestination);
-                                    $filetypes = $extension->getExtension();
-                                    if (strlen($filetypes) == 0 OR strlen($filetypes) > 4) {
-                                        $filetypes = 'unknow';
-                                    }
-                                    $data[$i]["FILETYPE"] = $filetypes;
-                                    $collectionObject     = $this->db->selectCollection($config["authSource"], $collection);
-                                } else {
-                                    $returnarray[] = "false";
-                                    $returnarray[] = $array['dataform'];
-                                    return $returnarray;
-                                }
+                        
+                        if (is_uploaded_file($_FILES["file"]["tmp_name"][$i])) {
+                            if (is_dir($repertoireDestination . $config['DOI_PREFIX']) == false) {
+                                mkdir($repertoireDestination . $config['DOI_PREFIX']);
                             }
+                            if (!file_exists($repertoireDestination . $doi)) {
+                                mkdir($repertoireDestination . $doi);
+                            }
+                            if (rename($_FILES["file"]["tmp_name"][$i], $repertoireDestination . $doi . "/" . $nomDestination)) {
+                                $extension = new \SplFileInfo($repertoireDestination . $doi . "/" . $nomDestination);
+                                $filetypes = $extension->getExtension();
+                                if (strlen($filetypes) == 0 OR strlen($filetypes) > 4) {
+                                    $filetypes = 'unknow';
+                                }
+                                $data[$i]["FILETYPE"] = $filetypes;
+                                $collectionObject     = $this->db->selectCollection($config["authSource"], $collection);
+                            } else {
+                                $returnarray[] = "false";
+                                $returnarray[] = $array['dataform'];
+                                return $returnarray;
+                            }
+                        }
                         
                     }
                     
                     if (count($intersect) != 0 and $data != 0) {
-                        $merge = array_merge($intersect, $data);                        
+                        $merge = array_merge($intersect, $data);
                     } else if (count($intersect) != 0) {
                         $merge = $intersect;
                         
@@ -769,7 +766,7 @@ class DatasheetController
                         
                     }
                     
-                    $merge=array_map("unserialize", array_unique(array_map("serialize", $merge)));
+                    $merge = array_map("unserialize", array_unique(array_map("serialize", $merge)));
                     mkdir($UPLOAD_FOLDER . "/" . $doi . "/tmp");
                     foreach ($merge as $key => $value) {
                         rename($UPLOAD_FOLDER . "/" . $doi . "/" . $value['DATA_URL'], $UPLOAD_FOLDER . "/" . $doi . "/tmp/" . $value['DATA_URL']);
@@ -858,7 +855,7 @@ class DatasheetController
                         "DATA" => $DATA
                     ));
                     $Request->Send_Mail_To_uploader($array['dataform']['TITLE'], $config["DOI_PREFIX"] . "/" . $newdoi, $array['dataform']['DATA_DESCRIPTION']);
-
+                    
                 } else {
                     $array['error'] = "Unable to send metadata to Datacite";
                     return $array;
@@ -948,34 +945,33 @@ class DatasheetController
             foreach ($response['_source']['INTRO']['FILE_CREATOR'] as $key => $value) {
                 if ($author_name == $value["NAME"] && $author_firstname == $value["FIRST_NAME"]) {
                     $mail = $value["MAIL"];
-                    mail("<" . $mail . ">", 'Contact from ORDaR : ' . $object,
-                        '<html>
-                            <head>
-                            <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-                            </head>
-                            <body>
-                                <h2>Contact from :  <img src="https://ordar.otelo.univ-lorraine.fr/img/ordar_logo.png" alt="Logo ordar" height="30" width="120" /> </h2> 
-                                <table cellspacing="0" style="border: 2px solid black; width: 500px; height: 200px;">
-                                    <tr>
-                                        <th>Title</th><td>'.$title.'</td>
-                                    </tr>
-                                     <tr style="background-color: #e0e0e0;">
-                                        <th>DOI </th><td><a href="http://dx.doi.org/'.$doi.'">'.$doi.'</a></td>
-                                    </tr>
-                                   <tr></tr>
-                                    <br>
-                                    <tr>
-                                        <th>From:</th><td>'.$sendermail.'</td>
-                                    </tr>
-                                    <tr style="background-color: #e0e0e0;">
-                                        <th>Subject:</th><td>'.$object.'</td>
-                                    </tr>
-                                    <tr>
-                                        <th>Message:</th><td>'.$message.'</td>
-                                    </tr>
+                    mail("<" . $mail . ">", 'Contact from ORDaR : ' . $object, '<html> 
+                            <head> 
+                            <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+                            </head> 
+                            <body> 
+                                <h2>Contact from :  <img src="https://ordar.otelo.univ-lorraine.fr/img/ordar_logo.png" alt="Logo ordar" height="30" width="120" /> </h2>  
+                                <table cellspacing="0" style="border: 2px solid black; width: 500px; height: 200px;"> 
+                                    <tr> 
+                                        <th>Title</th><td>' . $title . '</td> 
+                                    </tr> 
+                                     <tr style="background-color: #e0e0e0;"> 
+                                        <th>DOI </th><td><a href="http://dx.doi.org/' . $doi . '">' . $doi . '</a></td> 
+                                    </tr> 
+                                   <tr></tr> 
+                                    <br> 
+                                    <tr> 
+                                        <th>From:</th><td>' . $sendermail . '</td> 
+                                    </tr> 
+                                    <tr style="background-color: #e0e0e0;"> 
+                                        <th>Subject:</th><td>' . $object . '</td> 
+                                    </tr> 
+                                    <tr> 
+                                        <th>Message:</th><td>' . $message . '</td> 
+                                    </tr> 
 
-                                </table>
-                            </body>
+                                </table> 
+                            </body> 
                         </html> ', $headers);
                 }
             }
