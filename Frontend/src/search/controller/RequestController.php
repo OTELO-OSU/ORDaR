@@ -1,9 +1,6 @@
 <?php
-
 namespace search\controller;
 ini_set('memory_limit', '-1');
-
-
 class RequestController
 {
     /**
@@ -13,7 +10,6 @@ class RequestController
      */
     function Curlrequest($url, $curlopt)
     {
-        
         $ch      = curl_init();
         $curlopt = array(
             CURLOPT_URL => $url
@@ -35,11 +31,10 @@ class RequestController
         $httpCode = curl_getinfo($handle, CURLINFO_HTTP_CODE);
         curl_close($handle);
         return $httpCode;
-
     }
-
-    function Check_if_DOI_exist(){
-        $config = parse_ini_file($_SERVER['DOCUMENT_ROOT'] . '/../config.ini');        
+    function Check_if_DOI_exist()
+    {
+        $config     = parse_ini_file($_SERVER['DOCUMENT_ROOT'] . '/../config.ini');
         $dbdoi      = new \MongoClient("mongodb://" . $config['host'] . ':' . $config['port'], array(
             'authSource' => $config['DOI_database'],
             'username' => $config['user_doi'],
@@ -59,8 +54,7 @@ class RequestController
                 }
             }
         }
-        
-        $url     = "https://mds.datacite.org/metadata/".$config['DOI_PREFIX'] ."/ORDAR-". $NewDOI;
+        $url     = "https://mds.datacite.org/metadata/" . $config['DOI_PREFIX'] . "/ORDAR-" . $NewDOI;
         $curlopt = array(
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => "",
@@ -79,10 +73,10 @@ class RequestController
         ) + $curlopt;
         curl_setopt_array($ch, $curlopt);
         $DOI_exist = curl_exec($ch);
-        $info    = curl_getinfo($ch);
+        $info      = curl_getinfo($ch);
         curl_close($ch);
-        if ($info['http_code']==200) {
-             foreach ($config["admin"] as $key => $value) {
+        if ($info['http_code'] == 200) {
+            foreach ($config["admin"] as $key => $value) {
                 $array = explode(",", $value);
             }
             foreach ($array as $key => $value) {
@@ -92,18 +86,15 @@ class RequestController
                 $mail = mail($value, 'Error in ORDaR ', '<html>
                 <body>
                     <h2>Error occured in ordar!</h2>
-                    <p>This DOI ORDAR-'. $NewDOI.' is already registred check your database DOI.<p>
+                    <p>This DOI ORDAR-' . $NewDOI . ' is already registred check your database DOI.<p>
                 </body>
                 </html> ', $headers);
             }
             return true;
-        }
-        else{
+        } else {
             return false;
         }
     }
-    
-    
     function Inactivate_doi($doi)
     {
         $config  = parse_ini_file($_SERVER['DOCUMENT_ROOT'] . '/../config.ini');
@@ -120,7 +111,6 @@ class RequestController
                 'Content-Type: text/xml'
             )
         );
-        
         $ch      = curl_init();
         $curlopt = array(
             CURLOPT_URL => $url
@@ -130,9 +120,6 @@ class RequestController
         $info    = curl_getinfo($ch);
         curl_close($ch);
     }
-    
-    
-    
     function requestToAPIAdmin($query)
     {
         $config = parse_ini_file($_SERVER['DOCUMENT_ROOT'] . '/../config.ini');
@@ -214,11 +201,7 @@ class RequestController
         ;
         $responses = json_encode($responses);
         return $responses;
-        
     }
-    
-    
-    
     /**
      * Make a request to elasticsearch API
      * @param query of user
@@ -304,9 +287,7 @@ class RequestController
         ;
         $responses = json_encode($responses);
         return $responses;
-        
     }
-    
     /**
      * Send generated XML to datacite to save DOI
      * @param xml a envoyer,doi concerné
@@ -314,9 +295,7 @@ class RequestController
      */
     function send_XML_to_datacite($XML, $doi)
     {
-        $config = parse_ini_file($_SERVER['DOCUMENT_ROOT'] . '/../config.ini');
-        
-        
+        $config  = parse_ini_file($_SERVER['DOCUMENT_ROOT'] . '/../config.ini');
         $url     = "https://mds.datacite.org/metadata/" . $doi;
         $curlopt = array(
             CURLOPT_RETURNTRANSFER => true,
@@ -331,7 +310,6 @@ class RequestController
                 'Content-Type: text/xml'
             )
         );
-        
         $ch      = curl_init();
         $curlopt = array(
             CURLOPT_URL => $url
@@ -342,7 +320,6 @@ class RequestController
         if ($XMLondatacite == $XML) {
             return "true";
         } else {
-            
             $url     = "https://mds.datacite.org/metadata/";
             $curlopt = array(
                 CURLOPT_RETURNTRANSFER => true,
@@ -357,7 +334,6 @@ class RequestController
                     'Content-Type: text/xml'
                 )
             );
-            
             $ch      = curl_init();
             $curlopt = array(
                 CURLOPT_URL => $url
@@ -369,7 +345,6 @@ class RequestController
             if ($info['http_code'] == "201") {
                 $url_doi = urlencode($config['URL_DOI'] . "/record?id=" . $doi);
                 $curl    = curl_init();
-                
                 curl_setopt_array($curl, array(
                     CURLOPT_URL => "https://mds.datacite.org/doi",
                     CURLOPT_RETURNTRANSFER => true,
@@ -384,18 +359,13 @@ class RequestController
                         "cache-control: no-cache"
                     )
                 ));
-                
                 $response = curl_exec($curl);
                 return "true";
             } else {
                 return "false";
             }
-            
-        }     
-        
+        }
     }
-    
-    
     /**
      * Make a request to elasticsearch API by user
      * @param mail of authors,name of auhtors, query of user
@@ -474,7 +444,6 @@ class RequestController
         $response                   = json_decode($response, TRUE);
         $responses["hits"]["total"] = $response["hits"]["total"];
         $responses['aggregations']  = $response['aggregations'];
-        
         foreach ($response["hits"]["hits"] as $key => $value) {
             $responses["hits"]["hits"][$key]           = $value["_source"]["INTRO"];
             $responses["hits"]["hits"][$key]["_index"] = $value["_index"];
@@ -485,9 +454,6 @@ class RequestController
         $responses = json_encode($responses);
         return $responses;
     }
-    
-    
-    
     /**
      * Make a request to elasticsearch API for a specific dataset
      * @param doi of dataset
@@ -509,11 +475,9 @@ class RequestController
         );
         $response = self::Curlrequest($url, $curlopt);
         $response = json_decode($response, TRUE);
-        
         if ($restricted == "Unrestricted") {
             return $response;
         } else {
-            
             if ($_SESSION['admin'] == "1") {
                 if ($response['found'] == false) {
                     return false;
@@ -521,13 +485,11 @@ class RequestController
                     return $response;
                 }
             } else {
-                
                 if ($response["_source"]["INTRO"]["ACCESS_RIGHT"] == "Open") {
                     return $response;
                 } elseif ($response["_source"]["INTRO"]["ACCESS_RIGHT"] == "Embargoed") {
                     $embargoeddate = $response["_source"]["INTRO"]["PUBLICATION_DATE"];
                     $now           = new \Datetime();
-                    
                     foreach ($response["_source"]["INTRO"]["FILE_CREATOR"] as $key => $value) {
                         if (@$_SESSION["mail"] == $value["MAIL"]) {
                             return $response;
@@ -536,21 +498,18 @@ class RequestController
                         }
                     }
                     if ($notfound = "notfound") {
-                        
                         $responses["_source"]["INTRO"] = $response["_source"]["INTRO"];
                         $responses["_index"]           = $response["_index"];
                         $responses["_id"]              = $response["_id"];
                         $responses["_type"]            = $response["_type"];
                         return $responses;
                     }
-                    
                 } elseif ($response["_source"]["INTRO"]["ACCESS_RIGHT"] == "Closed") {
                     foreach ($response["_source"]["INTRO"]["FILE_CREATOR"] as $key => $value) {
                         if (@$_SESSION["mail"] == $value["MAIL"]) {
                             return $response;
                         } else {
                             $notfound = "notfound";
-                            
                         }
                     }
                     if ($notfound = "notfound") {
@@ -560,30 +519,22 @@ class RequestController
                         $responses["_type"]            = $response["_type"];
                         return $responses;
                     }
-                    
-                    
                 } elseif ($response["_source"]["INTRO"]["ACCESS_RIGHT"] == "Unpublished") {
                     $found = "false";
                     foreach ($response["_source"]["INTRO"]["FILE_CREATOR"] as $key => $value) {
                         if (@$_SESSION["mail"] == $value["MAIL"]) {
                             $found = "true";
                         }
-                        
                     }
                     if ($found == "true") {
                         return $response;
                     } else {
                         return false;
                     }
-                    
-                    
                 }
             }
         }
-        
     }
-    
-    
     /**
      * Send a mail to contact ORDAR owner
      * @param object,message,mail of sender
@@ -591,7 +542,6 @@ class RequestController
      */
     function Send_Contact_Mail($object, $message, $sendermail)
     {
-        
         if (!empty($object) && !empty($message) && filter_var($sendermail, FILTER_VALIDATE_EMAIL)) {
             $headers .= "From:<noreply@ordar.otelo.univ-lorraine.fr>\r\n";
             $headers .= "MIME-Version: 1.0\r\n";
@@ -604,13 +554,13 @@ class RequestController
         <h2>Contact from ordar!</h2>
         <table cellspacing="0" style="border: 2px solid black; width: 400px; height: 200px;">
             <tr>
-                <th>From:</th><td>'.$sendermail.'</td>
+                <th>From:</th><td>' . $sendermail . '</td>
             </tr>
             <tr style="background-color: #e0e0e0;">
-                <th>Subject:</th><td>'.$object.'</td>
+                <th>Subject:</th><td>' . $object . '</td>
             </tr>
             <tr>
-                <th>Message:</th><td>'.$message.'</td>
+                <th>Message:</th><td>' . $message . '</td>
             </tr>
         </table>
     </body>
@@ -624,53 +574,39 @@ class RequestController
         } else {
             return $error = "true";
         }
-        
-        
     }
-
-
-
-
     /**
      * Send a mail when upload successfull
      * @return true if error, else false
      */
     function Send_Mail_To_uploader($title, $doi, $description)
     {
-        
-      
-            $headers .= "From:<noreply@ordar.otelo.univ-lorraine.fr>\r\n";
-            $headers .= "MIME-Version: 1.0\r\n";
-            $headers .= "Content-Type: text/html; charset=utf-8\r\n";
-            $mail = mail($_SESSION['mail'], 'Dataset submit successfully! ' , '<html>
+        $headers .= "From:<noreply@ordar.otelo.univ-lorraine.fr>\r\n";
+        $headers .= "MIME-Version: 1.0\r\n";
+        $headers .= "Content-Type: text/html; charset=utf-8\r\n";
+        $mail = mail($_SESSION['mail'], 'Dataset submit successfully! ', '<html>
     <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     </head>
     <body>
         <h2>Your dataset is now on ORDaR!</h2>
-        <p> Your DOI is : <a href="http://dx.doi.org/'.$doi.'">'.$doi.'</a></p>
+        <p> Your DOI is : <a href="http://dx.doi.org/' . $doi . '">' . $doi . '</a></p>
          <table cellspacing="0" style="border: 2px solid black; width: 500px; height: 200px;">
             <tr>
-                <th>Title : </th><td>'.$title.'</td>
+                <th>Title : </th><td>' . $title . '</td>
             </tr>
              <tr style="background-color: #e0e0e0;">
-                <th>Description : </th><td>'.$description.'</td>
+                <th>Description : </th><td>' . $description . '</td>
             </tr>
         </table>
     </body>
     </html> ', $headers);
-            if ($mail == true) {
-                $error = "false";
-            } else {
-                $error = "true";
-            }
-            return $error;
-      
-        
-        
+        if ($mail == true) {
+            $error = "false";
+        } else {
+            $error = "true";
+        }
+        return $error;
     }
-    
-    
 }
-
 ?>
