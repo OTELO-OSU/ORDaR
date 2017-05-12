@@ -8,7 +8,7 @@ class RequestController
      * @param url to request,option
      * @return data of request
      */
-    function Curlrequest($url, $curlopt)
+    private function Curlrequest($url, $curlopt)
     {
         $ch      = curl_init();
         $curlopt = array(
