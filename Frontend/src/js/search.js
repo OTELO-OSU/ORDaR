@@ -919,7 +919,7 @@
             $(this).parent("div").remove();
           });
           $("#addmeasurement").click(function(e) {
-            $("#measurements").append('<div class="three fields"> <div class="field"><label>Measurement nature</label><input type="text"  name="measurement_nature[]"  placeholder="Nature" ></div> <div class="field"><label>Measurement abbreviation</label><input type="text"  name="measurement_abbreviation[]" data-validate="measurement_abbreviation" placeholder="Abbreviation" ></div> <div class="field"><label>Measurement unit(s)</label><input type="text"  name="measurement_unit[]" data-validate="measurement_unit" placeholder="Unit(s)" ></div> <div class="ui icon delete center"><i class="remove icon"></i></div>  </div>');
+            $("#measurements").append('<div class="three fields"> <div class="field"><label>Measurement nature</label><input type="text"  name="measurement_nature[]"  placeholder="Nature" ></div> <div class="field"><label>Measurement abbreviation</label><input type="text"  name="measurement_abbreviation[]" data-validate="measurement_abbreviation" placeholder="Abbreviation" ></div> <div class="field"><label>Measurement unit(s)</label><input type="text"  name="measurement_unit[]" data-validate="measurement_unit" id="units" placeholder="Unit(s)" ></div> <div class="ui icon delete center"><i class="remove icon"></i></div>            <input type="checkbox" class="checker" /><label for="checker">No units</label>  </div>');
           });
           $("body").on("click", ".delete", function(e) {
             $(this).parent("div").remove();
@@ -936,13 +936,13 @@
           $("body").on("click", ".delete", function(e) {
             $(this).parent("div").remove();
           });
-          $('#checker').on('click', function() {
+          $('body').on('click', ".checker", function() {
             if ($(this).is(':checked')) {
-              $('#units').prop('readonly', true);
-              $('#units').val('No units');
+              $(this).parent("div").children().find("#units").prop('readonly', true);
+              $(this).parent("div").children().find("#units").val('No units');
             } else {
-              $('#units').prop('readonly', false);
-              $('#units').val('');
+              $(this).parent("div").children().find("#units").prop('readonly', false);
+              $(this).parent("div").children().find("#units").val('');
             }
           });
         },
