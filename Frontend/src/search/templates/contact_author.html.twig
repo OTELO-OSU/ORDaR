@@ -1,34 +1,30 @@
-<div class="ui modal contactauthor">
-  <i class="close icon"></i>
-  <div class="header">
-  </div>
-
-
-  <div class="content">
-  <form class="ui form contact " action="contact_author" method="post">
-  <div class="ui error message"></div>
- <div class="required field">
-      <label>Your email</label>
-  <input type="email" name="User-email"  placeholder="Your email" >
-  </div>
-   <div class="required field">
-
-    <label>Subject</label>
-    <input type="text" name="User-object" placeholder="Subject" >
-  </div>
-
-  <div class="required field">
-    <label>Message</label>
-   <textarea name="User-message"></textarea>
-  </div>
-
-  </div>
-  <div class="actions">
-    <div class="ui black deny button">
-      Cancel
+<!DOCTYPE html>
+<html>
+<head>
+  <title></title>
+</head>
+<body>
+  <div class="ui modal contactauthor">
+    <i class="close icon"></i>
+    <div class="header"></div>
+    <div class="content">
+      <form action="contact_author" class="ui form contact" method="post">
+        <div class="ui error message"></div>
+        <div class="required field">
+          <label>Your email</label> <input name="User-email" placeholder="Your email" type="email">
+        </div>
+        <div class="required field">
+          <label>Subject</label> <input name="User-object" placeholder="Subject" type="text">
+        </div>
+        <div class="required field">
+          <label>Message</label> 
+          <textarea name="User-message"></textarea>
+        </div>
+      </form>
     </div>
-    <button class="ui submit button" >Submit</button>
-
+    <div class="actions">
+      <div class="ui black deny button">
+        Cancel
+      </div><button class="ui submit button">Submit</button>
+    </div>
   </div>
-  </form>
-</div>

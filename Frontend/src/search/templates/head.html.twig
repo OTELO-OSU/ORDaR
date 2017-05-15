@@ -1,46 +1,36 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no, maximum-scale=1.0, user-scalable=no">
-  <meta charset="UTF-8" />
-	<title>ORDaR</title>
-	<link rel="stylesheet" type="text/css" href="/css/semantic/dist/semantic.min.css">
-	<link rel="stylesheet" type="text/css" href="/css/style.css">
-	<link rel="stylesheet" type="text/css" href="/css/jquery.range.css">
-	<link rel="stylesheet" type="text/css" href="/css/jquery-ui.css">
-  <script src="/js/jquery.min.js"></script>
-  <script src="/js/jquery-ui.js"></script>
-  <script src="/js/jquery.dataTables.min.js"></script>
-<script src="/js/dataTables.semanticui.min.js"></script>
-	<script src="/js/jquery.range-min.js"></script>
-	<script src="/css/semantic/dist/semantic.min.js"></script>
-	<script src="/js/jquery.easyPaginate.js"></script>
-	<script src="/js/search.js"></script>
-
+  <meta content="width=device-width, initial-scale=1.0, shrink-to-fit=no, maximum-scale=1.0, user-scalable=no" name="viewport">
+  <meta charset="UTF-8">
+  <title>ORDaR</title>
+  <link href="/css/semantic/dist/semantic.min.css" rel="stylesheet" type="text/css">
+  <link href="/css/style.css" rel="stylesheet" type="text/css">
+  <link href="/css/jquery.range.css" rel="stylesheet" type="text/css">
+  <link href="/css/jquery-ui.css" rel="stylesheet" type="text/css">
+  <script src="/js/jquery.min.js">
+  </script>
+  <script src="/js/jquery-ui.js">
+  </script>
+  <script src="/js/jquery.dataTables.min.js">
+  </script>
+  <script src="/js/dataTables.semanticui.min.js">
+  </script>
+  <script src="/js/jquery.range-min.js">
+  </script>
+  <script src="/css/semantic/dist/semantic.min.js">
+  </script>
+  <script src="/js/jquery.easyPaginate.js">
+  </script>
+  <script src="/js/search.js">
+  </script>
 </head>
-
 <body>
-
- {% include 'contact.html.twig' %}
-
+  {% include 'contact.html.twig' %}
   <nav>
-          <div class="navbar ui inverted grey menu ">
-              
-        <a id="logo" href="accueil" class="header left floated item">
-        <img  class="ui tiny image" alt="logo" src="/img/ordar_logo.png">
-      </a>
-      <div id="search"></div>
-      {% if mail %}
-      <a href="logout" id="logout" class="right item">Logout</a>
-      <a href="upload" id="upload" class="item"  >Upload</a>
-      <a href="mypublications" id="dataset" class="item"  >My dataset</a>
-      {% else %}
-       <a href="login" id="login" class="right item">Login</a>
-   {% endif %}
-               
-           
-            </div>
-        </nav>
-
-<div class="content">
-
+    <div class="navbar ui inverted grey menu">
+      <a class="header left floated item" href="accueil" id="logo"><img alt="logo" class="ui tiny image" src="/img/ordar_logo.png"></a>
+      <div id="search"></div>{% if mail %} <a class="right item" href="logout" id="logout">Logout</a> <a class="item" href="upload" id="upload">Upload</a> <a class="item" href="mypublications" id="dataset">My dataset</a> {% else %} <a class="right item" href="login" id="login">Login</a> {% endif %}
+    </div>
+  </nav>
+  <div class="content">
