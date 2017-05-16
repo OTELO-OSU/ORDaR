@@ -951,7 +951,7 @@ class DatasheetController
                             </head> 
                             <body> 
                                 <h2>Contact from :  <img src="https://ordar.otelo.univ-lorraine.fr/img/ordar_logo.png" alt="Logo ordar" height="30" width="120" /> </h2>  
-                                <table cellspacing="0" style="border: 2px solid black; width: 500px; height: 200px;"> 
+                                <table cellspacing="0" style="border: 2px solid black; min-width: 300px; width: auto; height: 200px;  "> 
                                     <tr> 
                                         <th>Title</th><td>' . $title . '</td> 
                                     </tr> 
@@ -967,7 +967,7 @@ class DatasheetController
                                         <th>Subject:</th><td>' . $object . '</td> 
                                     </tr> 
                                     <tr> 
-                                        <th>Message:</th><td>' . $message . '</td> 
+                                        <th>Message:</th><td>' . nl2br($message) . '</td> 
                                     </tr> 
 
                                 </table> 
