@@ -71,6 +71,7 @@ $app->get('/terms', function (Request $req, Response $responseSlim) {
 
 //Route receptionnant les données POST contact
 $app->post('/contact', function (Request $req, Response $responseSlim) {
+	if ($_SERVER['HTTP_REFERER'] != NULL){
     $loader = new Twig_Loader_Filesystem('search/templates');
     $twig = new Twig_Environment($loader);
     $sendermail = $req->getparam('User-email');
@@ -78,7 +79,11 @@ $app->post('/contact', function (Request $req, Response $responseSlim) {
     $object = $req->getparam('User-object');
     $request = new RequestApi();
     $error = $request->Send_Contact_Mail($object, $message, $sendermail);
-    echo $twig->render('contact_request.html.twig', ['name' => $_SESSION['name'], 'firstname' => $_SESSION['firstname'], 'mail' => $_SESSION['mail'], 'error' => $error]);
+    echo $twig->render('contact_request.html.twig', ['name' => $_SESSION['name'], 'firstname' => $_SESSION['firstname'], 'mail' => $_SESSION['mail'], 'error' => $error]);	
+	}
+	else{
+		        return $responseSlim->withStatus(403);
+	}
 });
 
 //Route affichant les resultats
@@ -494,22 +499,27 @@ $app->get('/preview/{doi}/{filename}', function (Request $req, Response $respons
 
 //Route receptionnant les donnees POST du formulaire de contact d'auteurs
 $app->post('/contact_author', function (Request $req, Response $responseSlim) {
-    $loader = new Twig_Loader_Filesystem('search/templates');
-    $twig = new Twig_Environment($loader);
-    $Datasheet = new Datasheet();
-    $request = new RequestApi();
-    $author_name = $req->getparam('author_name');
-    $author_firstname = $req->getparam('author_first_name');
-    $author_name = htmlspecialchars($author_name, ENT_QUOTES);
-    $author_firstname = htmlspecialchars($author_firstname, ENT_QUOTES);
-    $doi = $req->getparam('doi');
-    $doi = htmlspecialchars($doi, ENT_QUOTES);
-    $sendermail = $req->getparam('User-email');
-    $message = $req->getparam('User-message');
-    $object = $req->getparam('User-object');
-    $response = $request->get_info_for_dataset($doi, "Restricted");
-    $error = $Datasheet->Send_Mail_author($doi, $response, $author_name, $author_firstname, $object, $message, $sendermail);
-    echo $twig->render('contact_request.html.twig', ['name' => $_SESSION['name'], 'firstname' => $_SESSION['firstname'], 'mail' => $_SESSION['mail'], 'error' => $error]);
+	if ($_SERVER['HTTP_REFERER'] != NULL){
+	    $loader = new Twig_Loader_Filesystem('search/templates');
+	    $twig = new Twig_Environment($loader);
+	    $Datasheet = new Datasheet();
+	    $request = new RequestApi();
+	    $author_name = $req->getparam('author_name');
+	    $author_firstname = $req->getparam('author_first_name');
+	    $author_name = htmlspecialchars($author_name, ENT_QUOTES);
+	    $author_firstname = htmlspecialchars($author_firstname, ENT_QUOTES);
+	    $doi = $req->getparam('doi');
+	    $doi = htmlspecialchars($doi, ENT_QUOTES);
+	    $sendermail = $req->getparam('User-email');
+	    $message = $req->getparam('User-message');
+	    $object = $req->getparam('User-object');
+	    $response = $request->get_info_for_dataset($doi, "Restricted");
+	    $error = $Datasheet->Send_Mail_author($doi, $response, $author_name, $author_firstname, $object, $message, $sendermail);
+	    echo $twig->render('contact_request.html.twig', ['name' => $_SESSION['name'], 'firstname' => $_SESSION['firstname'], 'mail' => $_SESSION['mail'], 'error' => $error]);
+	}
+	else{
+		return $responseSlim->withStatus(403);
+	}
 
 });
 
