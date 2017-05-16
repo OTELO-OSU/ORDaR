@@ -551,7 +551,7 @@ class RequestController
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     </head>
     <body>
-        <h2>Contact from ordar!</h2>
+         <h2>Contact from :  <img src="https://ordar.otelo.univ-lorraine.fr/img/ordar_logo.png" alt="Logo ordar" height="30" width="120" /> </h2>  
         <table cellspacing="0" style="border: 2px solid black; width: 400px; height: 200px;">
             <tr>
                 <th>From:</th><td>' . $sendermail . '</td>
@@ -589,7 +589,7 @@ class RequestController
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     </head>
     <body>
-        <h2>Your dataset is now on ORDaR!</h2>
+        <h2>Your dataset is now on <img src="https://ordar.otelo.univ-lorraine.fr/img/ordar_logo.png" alt="Logo ordar" height="30" width="120" /></h2>
         <p> Your DOI is : <a href="http://dx.doi.org/' . $doi . '">' . $doi . '</a></p>
          <table cellspacing="0" style="border: 2px solid black; width: 500px; height: 200px;">
             <tr>
