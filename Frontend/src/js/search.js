@@ -945,6 +945,23 @@
               $(this).parent("div").children().find("#units").val('');
             }
           });
+          $('body').on('click', ".empty_measurement", function() {
+            if ($(this).is(':checked')) {
+              $($(this).parent("div").children().find(":input")[0]).prop('readonly', true);
+              $($(this).parent("div").children().find(":input")[0]).val('No nature');
+              $($(this).parent("div").children().find(":input")[1]).prop('readonly', true);
+              $($(this).parent("div").children().find(":input")[1]).val('No abbreviation');
+              $($(this).parent("div").children().find(":input")[2]).prop('readonly', true);
+              $($(this).parent("div").children().find(":input")[2]).val('No units');
+            } else {
+              $($(this).parent("div").children().find(":input")[0]).prop('readonly', false);
+              $($(this).parent("div").children().find(":input")[0]).val('');;
+              $($(this).parent("div").children().find(":input")[1]).prop('readonly', false);
+              $($(this).parent("div").children().find(":input")[1]).val('');
+              $($(this).parent("div").children().find(":input")[2]).prop('readonly', false);
+              $($(this).parent("div").children().find(":input")[2]).val('');
+            }
+          });
         },
         checkformbutton: function() {
           if (document.getElementById('embargoed').checked) {

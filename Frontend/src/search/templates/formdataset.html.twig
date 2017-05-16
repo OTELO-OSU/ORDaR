@@ -351,14 +351,15 @@
 {% if measurements %}
 <div class="ui fluid styled accordion">
    <div class=" title">
-      Measurement
+      Measurements
       <i class="dropdown icon"></i>
    </div>
    <div class=" content">
-      <label>Measurement</label>
       {% for measurement in measurements %}
       <div id="measurements">
+         <input type="checkbox" class="empty_measurement" /><label for="empty_measurement">No measurements</label>
          <div class="three fields">
+
             <div class="field"><label>Measurement nature</label><input type="text" value="{{measurement.NATURE}}" name="measurement_nature[]" data-validate="measurement_nature" placeholder="Nature"  ></div>
             <div class="field"><label>Measurement abbreviation</label><input type="text" value="{{measurement.ABBREVIATION}}" name="measurement_abbreviation[]" data-validate="measurement_abbreviation" placeholder="Abbreviation" ></div>
             <div class="field"><label>Measurement unit(s)</label><input type="text" value="{{measurement.UNIT}}" name="measurement_unit[]" data-validate="measurement_unit" placeholder="Unit(s)" id="units"></div>
@@ -376,8 +377,8 @@
 {% else %}
 <div class="ui segment  sixteen wide column ">
    <div class="required field" >
-      <label>Measurement</label>
       <div id="measurements">
+      <input type="checkbox" class="empty_measurement" /><label for="empty_measurement">No measurements</label>
          <div class="three fields">
             <div class="field"><label>Measurement nature</label><input type="text" value="{{measurement.NATURE}}" name="measurement_nature[]" data-validate="measurement_nature" placeholder="Nature"  ></div>
             <div class="field"><label>Measurement abbreviation</label><input type="text" value="{{measurement.ABBREVIATION}}" name="measurement_abbreviation[]" data-validate="measurement_abbreviation" placeholder="Abbreviation" ></div>
