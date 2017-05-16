@@ -967,7 +967,7 @@ class DatasheetController
                                         <th>Subject:</th><td>' . $object . '</td> 
                                     </tr> 
                                     <tr> 
-                                        <th>Message:</th><td>' . nl2br($message) . '</td> 
+                                        <th valign="top">Message: </th><td>' . nl2br($message) . '</td> 
                                     </tr> 
 
                                 </table> 

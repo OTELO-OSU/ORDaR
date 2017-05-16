@@ -560,7 +560,7 @@ class RequestController
                 <th>Subject:</th><td>' . $object . '</td>
             </tr>
             <tr>
-                <th>Message:</th><td>' . $message . '</td>
+                <th valign="bottom">Message:</th><td>' . $message . '</td>
             </tr>
         </table>
     </body>
