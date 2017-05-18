@@ -85,7 +85,7 @@ Pour ubuntu 16.04(pour d’autre systèmes consulter le manuel de mongodb)
 
         use admin
 
-    Créé un utilisateur avec un role backup:
+    Créé un utilisateur avec un rôle backup:
 
     db.createUser({user: "USER",pwd: "PASSWORD",roles: [ { role: "backup", db: "admin" } ]})
 
@@ -123,10 +123,10 @@ rendez vous dans le dossier précédemment télécharger , dans le dossier bin e
     username = Le username de votre BDD qui contiendra les jeux de données
     password = Le mot de passe de votre BDD qui contiendra les jeux de données
     DOI_PREFIX = Votre prefix DOI datacite
-    URL_DOI = votre url d'enregitrement des DOIs
-    DOI_database = Le nom de votre BDD qui contiendra le numero de DOI
-    user_doi = Le username de votre BDD qui contiendra le numero de DOI
-    password_doi = Le mot de passe de votre BDD qui contiendra le numero de DOI
+    URL_DOI = votre URL d’enregistrement des DOIs
+    DOI_database = Le nom de votre BDD qui contiendra le numéro de DOI
+    user_doi = Le username de votre BDD qui contiendra le numéro de DOI
+    password_doi = Le mot de passe de votre BDD qui contiendra le numéro de DOI
     admin[]= l'adresse mail des administrateur entre double quotes séparé d'une virgule
     Auth_config_datacite = Token d'authentification (Basic https) de datacite
      
@@ -136,12 +136,12 @@ rendez vous dans le dossier précédemment télécharger , dans le dossier bin e
 **Parametrage du fichier de configuration de mongo_connector:**
 
 Il s'agit de l'user qui a les droits de backup.
-Definissez un username, ainsi qu'un password.
+Définissez un username, ainsi qu'un password.
 
 
 **Initialisation du mapping d'elasticsearch:**
 
-Afin d'intialiser le mapping, qui va permettre un bon fonctionnement des facets de recherche, il faut lancer le script Init_elasticsearch_index.php.
+Afin d’initialiser le mapping, qui va permettre un bon fonctionnement des facets de recherche, il faut lancer le script Init_elasticsearch_index.php.
 Si tout s'est bien passé, il doit vous retourné acknowledge:true.
 
 
@@ -149,9 +149,9 @@ Si tout s'est bien passé, il doit vous retourné acknowledge:true.
 
     sudo mongo-connector -m localhost:27017 -c mongo-connector_config.json  --namespace NOMDELABDD.*
 
-    Mongo connector permet de repliquer les données présente dans mongoDB sur un cluster elasticsearch.
+    Mongo connector permet de répliquer les données présente dans mongoDB sur un cluster elasticsearch.
 
-    Ci dessous un schema explicatif de son fonctionnement :
+    Ci dessous un schéma explicatif de son fonctionnement :
 
 ![Alt text](/Img_doc/Mongoconnector.png?raw=true)
 
@@ -164,7 +164,7 @@ Ordar comporte 2 bases de données:
     
  La base Ordar contient plusieurs collections, une constante: Manual_Depot et plusieurs autres en fonction des projets importés avec Otelo-Cloud.
  
- La base DOI contient une seule collection, DOI, elle contient un document avec un ID ORDAR-DOI, un ID et l'etat du document(cet etat permet de gerer des accées concurrents, ainsi des lors qu'il est unlocked on peut utiliser la ressource). 
+ La base DOI contient une seule collection, DOI, elle contient un document avec un ID ORDAR-DOI, un ID et l’état du document(cet état permet de gérer des accès concurrents, ainsi des lors qu'il est unlocked on peut utiliser la ressource). 
 
 
 **Organisation du code:**
@@ -189,14 +189,14 @@ Cette classe va permettre d'effectuer les requêtes,vers l'api ElasticSearch et 
 
 -**DatasheetController**: 
 
-Cette classe permet de gérer les datasets , en creer , éditer, supprimer, generer un doi, envoyer un mail à un auteur.
-Avant tout ajout d'un jeu de données ou modification d'un jeu existant, une verification de disponibilité du service Datacite est effectué.
+Cette classe permet de gérer les datasets , en créer , éditer, supprimer, générer un doi, envoyer un mail à un auteur.
+Avant tout ajout d'un jeu de données ou modification d'un jeu existant, une vérification de disponibilité du service Datacite est effectué.
 
 
 -**FileController**: 
 
-Cette classe permet d'effectuer des actions de telechargement, de preview en ligne de certains fichiers (extension disponible en preview : txt, png, jpg, gif, pdf.
-Elle permet aussi un export des metadonnées en différents format: Datacite, Dublincore, JSON , BibTex.
+Cette classe permet d'effectuer des actions de téléchargement, de preview en ligne de certains fichiers (extension disponible en preview : txt, png, jpg, gif, pdf.
+Elle permet aussi un export des métadonnées en différents format: Datacite, Dublincore, JSON , BibTex.
 
 
 
@@ -204,10 +204,10 @@ Elle permet aussi un export des metadonnées en différents format: Datacite, Du
     
    L'application est composé de six modules JS différents:
         
-        - datatable (Affichage des resultats sous forme de pagination)
+        - datatable (Affichage des résultats sous forme de pagination)
         - search (permet de rechercher un terme , par facets ou non)
         - mypublications (Affichage des publication de l'utilisateur courant sous forme de pagination, permet aussi une recherche par facets)
-        - upload (permet de controller le formulaire upload et edit, rends dynamique le formualire et réalise les check de contenu Frontend)
+        - upload (permet de controller le formulaire upload et edit, rends dynamique le formulaire et réalise les check de contenu Frontend)
         - preview (Affichage d'un modal permettant de visualiser un fichier dans une iframe)
         - send_email (Affichage d'un modal permettant d'envoyer un message a un auteur (contact depuis un jeu de données) ou au administrateur (contact depuis le footer de l'application)
 
@@ -223,20 +223,20 @@ Pour l’aspect, le framework Semantic UI a été choisi pour sa simplicité d�
 
 
 
-**Definition d'un jeu de données:**
+**Définition d'un jeu de données:**
 
-Un jeu de données est un ensemble constitué de metadonnées et de fichiers.
-Les metadonnées contiennent des champs obligatoires ainsi que facultatifs.
-Un jeu de données à un acces défini: il peut etre :
+Un jeu de données est un ensemble constitué de métadonnées et de fichiers.
+Les métadonnées contiennent des champs obligatoires ainsi que facultatifs.
+Un jeu de données à un accès défini: il peut être :
 
     - Open(libre de consultation).
-    - Closed(Seulement les metadonnées sont accessibles).
-    - Embargoed(metadonnées accessibles mais pas les fichiers avant la date donner).
+    - Closed(Seulement les métadonnées sont accessibles).
+    - Embargoed(métadonnées accessibles mais pas les fichiers avant la date donner).
     - Unpublished (fichier importé avec un script d'import que le propriétaire peut publier quand il le souhaite).
 
 
 **Modification du statut Embargoed -> Open:**
-Le script Check_Embargoed_access.php doit etre exécuté une fois par jour afin de changer les statuts des jeux de données arrivé à échéance: des lors que la date du jour est égale à la date de l'embargo, le jeu de données est modifié en statut Open.
+Le script Check_Embargoed_access.php doit être exécuté une fois par jour afin de changer les statuts des jeux de données arrivé à échéance: des lors que la date du jour est égale à la date de l'embargo, le jeu de données est modifié en statut Open.
 
 
 # Utilisation
@@ -255,43 +255,48 @@ A l'issue de cette recherche l'utilisateur peut trier les données à l'aide de 
     -Access right
     -Date
     
-Seul les facets Access right ont l'operateur OR
+Seul les facets Access right ont l’opérateur OR
 
-Lors de la selection de plusieurs facets, l'opérateur de recherche est AND. 
+Lors de la sélection de plusieurs facets, l'opérateur de recherche est AND. 
 
 **Insertion d'un nouveau jeu de données:**
 
-L'utilisateur rempli le formulaire,il rempli les champs marqué d'une étoile rouge qui sont obligatoire, la verification est faite coté client et coté serveur.
+L'utilisateur rempli le formulaire,il rempli les champs marqué d'une étoile rouge qui sont obligatoire, la vérification est faite coté client et coté serveur.
 
-Un numero de DOI perenne sera attribué au jeu de données.
+Un numéro de DOI perenne sera attribué au jeu de données.
 
-Les informations sont ensuite traité et inserer en base de données.
+Les informations sont ensuite traité et insérer en base de données.
 
 Mongo connector se charge ensuite d'indexer ces données.
+
+L'utilisateur recevra un mail avec le DOI qui a été attribué au jeu de données.
 
 **Importation d'un jeu de données via OTELoCloud:**
 
 Un script d'importation se charge d'importer les données présente dans un dossier spécifiques:
-Lors de l'import celui ci importe dans les metadonnées le feuillet INTRO du fichier excel,
+Lors de l'import celui ci importe dans les métadonnées le feuillet INTRO du fichier excel,
 Le feuillet DATA est converti en fichier csv et il est joins à ce jeux de données comme fichier.
 
 Le jeux de données est ajouter avec un statut Unpublished, il est accessible seulement pour son ou ses auteurs.
 L'auteur peut choisir de le publier ou de le supprimer.
 
+L'utilisateur recevra un mail avec le DOI qui a été attribué au jeu de données dès qu'il fera la démarche de le publier, en attendant l'id du fichier sera provisoire.
+
+
 
 **Modification d'un jeu de données existant:**
 
-L'utilisateur se rend sur la données a modifier, il clique sur edit, un formulaire apparait avec les metadonnées deja en base de données, l'utilisateur peut les modifier, il ne peut pas modifier ou ajouter des fichiers.
+L'utilisateur se rend sur la données à modifier, il clique sur edit, un formulaire apparaît avec les métadonnées déjà en base de données, l'utilisateur peut les modifier, il ne peut pas modifier ou ajouter des fichiers.
 
 
 **Suppression d'un jeu de données:**
 
-Un jeu de données peut etre supprimé si il a un statut unpublished, c'est a dire pas de DOI.
-La suppression entraine la suppression TOTALE du jeu de données:
+Un jeu de données peut être supprimé si il a un statut unpublished, c'est à dire pas de DOI.
+La suppression entraîne la suppression TOTALE du jeu de données:
 
 -Le fichier original
 
--Le csv genéré
+-Le csv généré
 
 -l'entrée en base de données
 
@@ -314,10 +319,9 @@ Il existe un mode administrateur qui permet de visualiser tout les jeux de donn�
 L'administrateur peut visualiser, modifier, et supprimer un jeu de données, même si celui ci a été publié.
 Dans le cas ou l'administrateur supprime un jeu de données le DOI est alors désactivé.
 
-L'administrateur peut aussi modifier et ajouter des fichiers, dans la limite qu'il doit avoir obligatoirement un fichier minimum lié aux metadonnées.
+L'administrateur peut aussi modifier et ajouter des fichiers, dans la limite qu'il doit avoir obligatoirement un fichier minimum lié aux métadonnées.
 
  
-
 
 
 
