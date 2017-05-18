@@ -193,6 +193,7 @@ Cette classe permet de gérer les datasets , en créer , éditer, supprimer, gé
 Avant tout ajout d'un jeu de données ou modification d'un jeu existant, une vérification de disponibilité du service Datacite est effectué.
 
 
+
 -**FileController**: 
 
 Cette classe permet d'effectuer des actions de téléchargement, de preview en ligne de certains fichiers (extension disponible en preview : txt, png, jpg, gif, pdf.
@@ -260,6 +261,8 @@ Seul les facets Access right ont l’opérateur OR
 Lors de la sélection de plusieurs facets, l'opérateur de recherche est AND. 
 
 **Insertion d'un nouveau jeu de données:**
+
+Avant tout depot de jeu de données une vérification de disponibilité de l'API datacite est effectué.
 
 L'utilisateur rempli le formulaire,il rempli les champs marqué d'une étoile rouge qui sont obligatoire, la vérification est faite coté client et coté serveur.
 
