@@ -66,7 +66,7 @@
               li.append(authorsname[k]);
               authorsnames.append(li);
             }
-            $('#results').append('<div class="item"> <div class="content">' + access + '<div class="ui blue label" data-tooltip="Creation date" >' + creationdate + '</div><div class="row"></div><a href="record?id=' + id + '" class="header">' + title + '</a><div class="meta"><h4>Description:</h4><span class="data">' + data_description + '</span></div><div class="row"></div><div class="author"><h4><i class="user icon"></i>Authors:</h4>' + authorsnames.innerHTML + '</div><div class="extra"> <a href="record?id=' + id + '"><div class="ui right floated primary button" >View<i class="right chevron icon"></i></div></a></div><p>Uploaded on ' + uploaddate + '</p></div>');
+            $('#results').append('<div class="item"> <div class="content">' + access + '<div class="ui blue label" data-tooltip="Creation date" >' + creationdate + '</div><div class="row"></div><a href="record?id=' + id + '" class="header">' + title + '</a><div class="meta"><h4>Description:</h4><span class="data">' + data_description + '</span></div><div class="row"></div><div class="author"><h4><i class="user icon"></i>Authors:</h4><ul>' + authorsnames.innerHTML + '</ul></div><div class="extra"> <a href="record?id=' + id + '"><div class="ui right floated primary button" >View<i class="right chevron icon"></i></div></a></div><p>Uploaded on ' + uploaddate + '</p></div>');
           }
           $('#info').append(total + ' result(s) found!');
           $('#info').addClass('green');
