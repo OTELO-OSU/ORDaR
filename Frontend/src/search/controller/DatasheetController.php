@@ -205,17 +205,32 @@ class DatasheetController
                         if (count(array_unique($value)) < count($value)) {
                             $error = "Sampling date must be unique";
                             foreach ($value as $key => $value) {
-                                $array["SAMPLING_DATE"][$key] = htmlspecialchars($value, ENT_QUOTES);
+                                if (\DateTime::createFromFormat('Y-m-d', $value) !== FALSE) {
+                                    $array["SAMPLING_DATE"][$key] = htmlspecialchars($value, ENT_QUOTES);
+                                }
+                                else{
+                                    $error="Sampling date invalid";
+                                }
                             }
                         }
                         
                         else {
                             foreach ($value as $key => $value) {
-                                $array["SAMPLING_DATE"][$key] = htmlspecialchars($value, ENT_QUOTES);
+                               if (\DateTime::createFromFormat('Y-m-d', $value) !== FALSE) {
+                                    $array["SAMPLING_DATE"][$key] = htmlspecialchars($value, ENT_QUOTES);
+                                }
+                                else{
+                                    $error="Sampling date invalid";
+                                }
                             }
                         }
                     } else {
-                        $array["SAMPLING_DATE"][0] = htmlspecialchars($value[0], ENT_QUOTES);
+                        if (\DateTime::createFromFormat('Y-m-d', $value[0]) !== FALSE) {
+                                    $array["SAMPLING_DATE"][0] = htmlspecialchars($value[0], ENT_QUOTES);
+                                }
+                                else{
+                                    $error="Sampling date invalid";
+                                }
                     }
                 }
                 

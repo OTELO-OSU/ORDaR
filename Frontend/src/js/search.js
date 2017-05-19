@@ -904,7 +904,7 @@
             $(this).parent("div").remove();
           });
           $("#addsamplingdate").click(function(e) {
-            $("#sampling_date").append('        <div class="ui input"><input type="text"  class="date" name="sampling_date[]" placeholder="Sampling date" ><div class="ui icon delete"><i class="remove icon"></i></div> </div>');
+            $("#sampling_date").append('        <div class="ui input"><input type="date"  class="date" name="sampling_date[]" placeholder="Sampling date" ><div class="ui icon delete"><i class="remove icon"></i></div> </div>');
             $(".date").datepicker({
               dateFormat: "yy-mm-dd"
             });

@@ -421,13 +421,13 @@
          {% if sampling_dates %}
          {% for sampling_date in sampling_dates %}
          <div class="ui input">
-            <input type="text"  class="date" name="sampling_date[]" placeholder="Sampling date" value="{{sampling_date}}">
+            <input type="date"  class="date" name="sampling_date[]" placeholder="Sampling date" value="{{sampling_date}}">
             <div class="ui icon delete"><i class="remove icon"></i></div>
          </div>
          {%endfor%}
          {%else%} 
          <div  class="ui input">
-            <input type="text"  class="date" name="sampling_date[]" placeholder="Sampling date" value="{{sampling_date}}">    
+            <input type="date"  class="date" name="sampling_date[]" placeholder="Sampling date" value="{{sampling_date}}">    
          </div>
          {%endif%}
       </div>
