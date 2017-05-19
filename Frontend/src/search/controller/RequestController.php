@@ -129,7 +129,7 @@ class RequestController
             $query = "*";
         }
         $postcontent                = '{  
-            "sort": { "INTRO.UPLOAD_DATE": { "order": "desc" }} , 
+            "sort": { "INTRO.METADATA_DATE": { "order": "desc" }} , 
              "_source": { 
             "excludes": [ "DATA" ] 
              }, 
@@ -213,7 +213,7 @@ class RequestController
         $query                      = rawurlencode($query);
         $postcontent                = '{ 
 
-            "sort": { "INTRO.UPLOAD_DATE": { "order": "desc" }} , 
+            "sort": { "INTRO.METADATA_DATE": { "order": "desc" }} , 
             "_source": { 
             "excludes": [ "DATA" ] 
              }, 
@@ -375,7 +375,7 @@ class RequestController
     {
         $config      = parse_ini_file($_SERVER['DOCUMENT_ROOT'] . '/../config.ini');
         $postcontent = '{  
-            "sort": { "INTRO.UPLOAD_DATE": { "order": "desc" }} , 
+            "sort": { "INTRO.METADATA_DATE": { "order": "desc" }} , 
             "_source": { 
             "excludes": [ "DATA" ] 
              }, 
