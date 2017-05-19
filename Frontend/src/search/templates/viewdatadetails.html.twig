@@ -128,7 +128,7 @@
                {% elseif accessright == "Unpublished" %}
                <div class="ui grey label" >{{accessright}}</div>
                {% endif %}
-               <div class="ui blue label"  data-tooltip="Creation Date">{{creationdate}}</div>
+               <div class="ui blue label"  data-tooltip="Creation date">{{creationdate}}</div>
                <div class="ui labeled right floated mini button" >
                   <div class="ui grey mini button">
                      <i class="barcode icon"></i> DOI
@@ -142,6 +142,7 @@
                      <h4>Description:</h4>
                      <span class="data">{{datadescription|raw}}</span>
                   </div>
+                  <div class="author">
                   <div class="row"></div>
                   <h4><i class="user icon"></i>Authors:</h4>
                   <ul id="authors">
@@ -149,6 +150,7 @@
                      <li><a onclick="APP.modules.send_email.send_email('{{doi}}','{{author.NAME}}','{{ author.FIRST_NAME}}')">{{author.NAME}} {{ author.FIRST_NAME}}</a></li>
                      {% endfor %}
                   </ul>
+                  </div>
                   {%for author in authors%}
                   {% if (author.MAIL == mail and admin!=1) %}
                   {% if (accessright == "Unpublished") %}
