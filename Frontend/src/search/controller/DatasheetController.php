@@ -150,6 +150,7 @@ class DatasheetController
         
         $error              = null;
         $author_displayname = null;
+        $fields             = null;
         $UPLOAD_FOLDER      = $config["UPLOAD_FOLDER"];
         $required           = array(
             'title',
@@ -164,13 +165,23 @@ class DatasheetController
             'measurement_unit',
             'license',
             'publisher',
-            'institution'
+            'institution',
+            'access_right'
         );
+
         foreach ($required as $field) {
             if (empty($_POST[$field])) {
-                $error = "Warning there are empty fields: " . $field;
+                $fields[]=$field;
             }
         }
+        if (count($fields)!=0) {
+            $txt=null;
+            foreach ($fields as $key => $value) {
+                $txt.="  ".$value;
+            }
+            $error = "Warning there are empty fields: " . $txt;
+        }
+
         foreach ($POST as $key => $value) {
             
             if ($key == "title") {
