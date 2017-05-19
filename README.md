@@ -78,44 +78,44 @@ Pour ubuntu 16.04(pour d’autre systèmes consulter le manuel de mongodb)
     
     sudo mongod --replSet "rs0"
 
-    Démarré shell mongo et exécuter :
+    Démarrer shell mongo et exécuter :
         rs.initiate()
 
     Se connecter sur la base admin:
 
         use admin
 
-    Créé un utilisateur avec un rôle backup:
+    Créer un utilisateur avec un rôle backup:
 
     db.createUser({user: "USER",pwd: "PASSWORD",roles: [ { role: "backup", db: "admin" } ]})
 
-    Ensuite se connecter sur la base ORDaR et crée l'utilisateur qui pourra modifier les données:
+    Ensuite se connecter sur la base ORDaR et créer l'utilisateur qui pourra modifier les données:
 
         use ORDaR
 
         db.createUser({user: "USER",pwd: "PASSWORD",roles: [ { role: "readWrite", db: "ORDaR" } ]})
 
-    Créer aussi une base DOI et crée l'utilisateur qui pourra modifier les données:
+    Créer aussi une base DOI et créer l'utilisateur qui pourra modifier les données:
 
         use DOI
 
         db.createUser({user: "USER",pwd: "PASSWORD",roles: [ { role: "readWrite", db: "DOI" } ]})
 
 Ensuite démarrer elasticsearch,
-rendez vous dans le dossier précédemment télécharger , dans le dossier bin et exécuter :
+rendez vous dans le dossier précédemment téléchargé /bin et exécuter :
 ./elasticsearch
 
 **Récupérer le projet :**
 
     git clone https://github.com/arnouldpy/ORDaR.git
 
-    Rendez vous dans le dossier créer, une fois dans le dossier Ordar, exécuter :
+    Rendez vous dans le dossier créé, une fois dans le dossier Ordar, exécuter :
     php Init_elasticsearch_index.php 
-    Ce fichier permet de définir la template que doit utiliser elasticsearch.
+    Ce fichier permet de définir le template que doit utiliser elasticsearch.
     Rendez vous dans Frontend/config.ini
-    UPLOAD_FOLDER défini ou les Uploads des utilisateurs vont être stocké, 
+    UPLOAD_FOLDER défini ou les Uploads des utilisateurs vont être stockés, 
     choisissez un chemin et vérifier les permissions.
-    Il s'agit de l'user qui a les droits de d'écriture.
+    Il s'agit du user qui a les droits d'écriture.
     Choisissez l’authentification de mongodb 
     host = 127.0.0.1
     port = 27017
@@ -127,7 +127,7 @@ rendez vous dans le dossier précédemment télécharger , dans le dossier bin e
     DOI_database = Le nom de votre BDD qui contiendra le numéro de DOI
     user_doi = Le username de votre BDD qui contiendra le numéro de DOI
     password_doi = Le mot de passe de votre BDD qui contiendra le numéro de DOI
-    admin[]= l'adresse mail des administrateur entre double quotes séparé d'une virgule
+    admin[]= l'adresse mail des administrateurs avec des doubles quotes séparé d'une virgule
     Auth_config_datacite = Token d'authentification (Basic https) de datacite
      
 
@@ -135,21 +135,21 @@ rendez vous dans le dossier précédemment télécharger , dans le dossier bin e
 
 **Parametrage du fichier de configuration de mongo_connector:**
 
-Il s'agit de l'user qui a les droits de backup.
+Il s'agit du user qui a les droits de backup.
 Définissez un username, ainsi qu'un password.
 
 
 **Initialisation du mapping d'elasticsearch:**
 
-Afin d’initialiser le mapping, qui va permettre un bon fonctionnement des facets de recherche, il faut lancer le script Init_elasticsearch_index.php.
-Si tout s'est bien passé, il doit vous retourné acknowledge:true.
+Afin d’initialiser le mapping, qui va permettre un bon fonctionnement des facettes de recherche, il faut lancer le script Init_elasticsearch_index.php.
+il doit vous retourner acknowledge:true.
 
 
 **Lancez Mongo-connector**
 
     sudo mongo-connector -m localhost:27017 -c mongo-connector_config.json  --namespace NOMDELABDD.*
 
-    Mongo connector permet de répliquer les données présente dans mongoDB sur un cluster elasticsearch.
+    Mongo connector permet de répliquer les données présentes dans mongoDB sur un cluster elasticsearch.
 
     Ci dessous un schéma explicatif de son fonctionnement :
 
@@ -162,9 +162,9 @@ Ordar comporte 2 bases de données:
     - ORDAR
     - DOI
     
- La base Ordar contient plusieurs collections, une constante: Manual_Depot et plusieurs autres en fonction des projets importés avec Otelo-Cloud.
+ La base Ordar contient plusieurs collections, une depot manuel : Manual_Depot et plusieurs autres en fonction des projets importés avec OteloCloud.
  
- La base DOI contient une seule collection, DOI, elle contient un document avec un ID ORDAR-DOI, un ID et l’état du document(cet état permet de gérer des accès concurrents, ainsi des lors qu'il est unlocked on peut utiliser la ressource). 
+ La base DOI contient une seule collection, DOI, elle contient un document avec un ID ORDAR-DOI, un ID est l’état du document (cet état permet de gérer des accès concurrents, locked/unlocked est positionné pour utiliser la ressource). 
 
 
 **Organisation du code:**
@@ -184,13 +184,13 @@ Ordar comporte 2 bases de données:
 
 -**RequestController**: 
 
-Cette classe va permettre d'effectuer les requêtes,vers l'api ElasticSearch et récupérer les données nécessaires,vers datacite et l'envoie de mail à un administrateur.
+Cette classe va permettre d'effectuer les requêtes vers l'api ElasticSearch et récupérer les données pour les envoyer vers datacite puis envoi un mail à un administrateur.
 
 
 -**DatasheetController**: 
 
-Cette classe permet de gérer les datasets , en créer , éditer, supprimer, générer un doi, envoyer un mail à un auteur.
-Avant tout ajout d'un jeu de données ou modification d'un jeu existant, une vérification de disponibilité du service Datacite est effectué.
+Cette classe permet de gérer les datasets , créer , éditer, supprimer, générer un doi, envoyer un mail à un auteur.
+Avant un ajout d'un jeu de données ou modification d'un jeu existant, une vérification de disponibilité du service Datacite est effectué.
 
 
 
@@ -203,21 +203,21 @@ Elle permet aussi un export des métadonnées en différents format: Datacite, D
 
 **Détails des différentes module JS:**
     
-   L'application est composé de six modules JS différents:
+   L'application est composée de six modules JS différents:
         
         - datatable (Affichage des résultats sous forme de pagination)
         - search (permet de rechercher un terme , par facets ou non)
-        - mypublications (Affichage des publication de l'utilisateur courant sous forme de pagination, permet aussi une recherche par facets)
+        - mypublications (Affichage des publications de l'utilisateur courant, permet aussi une recherche par facettes)
         - upload (permet de controller le formulaire upload et edit, rends dynamique le formulaire et réalise les check de contenu Frontend)
         - preview (Affichage d'un modal permettant de visualiser un fichier dans une iframe)
-        - send_email (Affichage d'un modal permettant d'envoyer un message a un auteur (contact depuis un jeu de données) ou au administrateur (contact depuis le footer de l'application)
+        - send_email (Affichage d'un modal permettant d'envoyer un message à un auteur (contact depuis un jeu de données) ou aux administrateurs (contact depuis le footer de l'application)
 
 
 
 
 **Aspect de générale de l’application :**
 
-Pour l’aspect, le framework Semantic UI a été choisi pour sa simplicité d’utilisation et sa bonne documentation. Il permet de réaliser des interfaces graphiques responsives légère et rapide.
+Pour l’aspect, le framework Semantic UI a été choisi pour sa simplicité d’utilisation et sa bonne documentation. Il permet de réaliser des interfaces graphiques responsives légères et rapides.
 
 ![Alt text](/Img_doc/Ordar_accueil.png?raw=true)
 
@@ -226,14 +226,14 @@ Pour l’aspect, le framework Semantic UI a été choisi pour sa simplicité d�
 
 **Définition d'un jeu de données:**
 
-Un jeu de données est un ensemble constitué de métadonnées et de fichiers.
-Les métadonnées contiennent des champs obligatoires ainsi que facultatifs.
+Un jeu de données est un ensemble constitué de métadonnées et de fichiers données.
+Les métadonnées contiennent des champs obligatoires et facultatifs.
 Un jeu de données à un accès défini: il peut être :
 
     - Open(libre de consultation).
     - Closed(Seulement les métadonnées sont accessibles).
-    - Embargoed(métadonnées accessibles mais pas les fichiers avant la date donner).
-    - Unpublished (fichier importé avec un script d'import que le propriétaire peut publier quand il le souhaite).
+    - Embargoed(métadonnées uniquement accessibles, les fichiers seront publié et disponible à une date fournie par le publiant).
+    - Unpublished (fichier importé d'OTELoCloud (avec un script d'import) que le propriétaire peut publier quand il le souhaite suivant les trois modes précedent).
 
 
 **Modification du statut Embargoed -> Open:**
@@ -245,7 +245,7 @@ Le script Check_Embargoed_access.php doit être exécuté une fois par jour afin
 
 **Rechercher un jeu de données:**
 L'utilisateur peut effectuer une recherche par mot clé, il peut utiliser des opérateurs logique tels que AND et OR.
-A l'issue de cette recherche l'utilisateur peut trier les données à l'aide de facets:
+A l'issue de cette recherche l'utilisateur peut trier les données à l'aide de facettes:
    
     -Sample kind
     -Authors
@@ -256,19 +256,19 @@ A l'issue de cette recherche l'utilisateur peut trier les données à l'aide de 
     -Access right
     -Date
     
-Seul les facets Access right ont l’opérateur OR
+Seulles les facettes Access right ont l’opérateur OR
 
-Lors de la sélection de plusieurs facets, l'opérateur de recherche est AND. 
+Lors de la sélection de plusieurs facettes, l'opérateur de recherche est AND. 
 
 **Insertion d'un nouveau jeu de données:**
 
-Avant tout depot de jeu de données une vérification de disponibilité de l'API datacite est effectué.
+Avant tout dépot de jeu de données une vérification de disponibilité de l'API datacite est effectuée.
 
-L'utilisateur rempli le formulaire,il rempli les champs marqué d'une étoile rouge qui sont obligatoire, la vérification est faite coté client et coté serveur.
+L'utilisateur rempli le formulaire,il rempli les champs marqués d'une étoile rouge qui sont obligatoires, la vérification est faite coté client et coté serveur.
 
-Un numéro de DOI perenne sera attribué au jeu de données.
+Un numéro de DOI pérenne sera attribué au jeu de données.
 
-Les informations sont ensuite traité et insérer en base de données.
+Les informations sont ensuite traitées et insérées en base de données.
 
 Mongo connector se charge ensuite d'indexer ces données.
 
@@ -276,28 +276,28 @@ L'utilisateur recevra un mail avec le DOI qui a été attribué au jeu de donné
 
 **Importation d'un jeu de données via OTELoCloud:**
 
-Un script d'importation se charge d'importer les données présente dans un dossier spécifiques:
-Lors de l'import celui ci importe dans les métadonnées le feuillet INTRO du fichier excel,
-Le feuillet DATA est converti en fichier csv et il est joins à ce jeux de données comme fichier.
+Un script d'importation se charge d'importer les données présentse dans un dossier spécifiques d'OTELoCloud:
+Les métadonnées issues du feuillet INTRO du fichier excel sont importées dans la base Mongodb,
+Le feuillet DATA est converti en fichier csv et il est joint à ce jeux de données comme fichier.
 
-Le jeux de données est ajouter avec un statut Unpublished, il est accessible seulement pour son ou ses auteurs.
+Le jeux de données est ajouté avec un statut Unpublished, il est accessible uniquement au propriétaire ou ses co-auteurs.
 L'auteur peut choisir de le publier ou de le supprimer.
 
-L'utilisateur recevra un mail avec le DOI qui a été attribué au jeu de données dès qu'il fera la démarche de le publier, en attendant l'id du fichier sera provisoire.
+L'utilisateur recevra un mail avec le DOI qui a été attribué dés la publication du jeu de données. En statut unpublished l'id du fichier est provisoire (aucun DOI n'est attribué).
 
 
 
 **Modification d'un jeu de données existant:**
 
-L'utilisateur se rend sur la données à modifier, il clique sur edit, un formulaire apparaît avec les métadonnées déjà en base de données, l'utilisateur peut les modifier, il ne peut pas modifier ou ajouter des fichiers.
+L'utilisateur se rend sur la donnée à modifier, il clique sur edit, un formulaire apparaît avec les métadonnées présentes en base de données, l'utilisateur peut les modifier, il ne peut pas modifier ou ajouter des fichiers.
 
 
 **Suppression d'un jeu de données:**
 
-Un jeu de données peut être supprimé si il a un statut unpublished, c'est à dire pas de DOI.
+Un jeu de données peut être supprimé si il a un statut unpublished, c'est à dire sans DOI.
 La suppression entraîne la suppression TOTALE du jeu de données:
 
--Le fichier original
+-Le fichier original (dans OTELoCloud)
 
 -Le csv généré
 
@@ -318,11 +318,11 @@ La suppression entraîne la suppression TOTALE du jeu de données:
 
 **Mode Administrateur:**
 
-Il existe un mode administrateur qui permet de visualiser tout les jeux de données de tout le monde, même les données "Unpublished".
+Il existe un mode administrateur qui permet de visualiser tous les jeux de données, même les données "Unpublished".
 L'administrateur peut visualiser, modifier, et supprimer un jeu de données, même si celui ci a été publié.
 Dans le cas ou l'administrateur supprime un jeu de données le DOI est alors désactivé.
 
-L'administrateur peut aussi modifier et ajouter des fichiers, dans la limite qu'il doit avoir obligatoirement un fichier minimum lié aux métadonnées.
+L'administrateur peut aussi modifier et ajouter des fichiers (avec un minimum de 1 fichier par jeux de données)
 
  
 
