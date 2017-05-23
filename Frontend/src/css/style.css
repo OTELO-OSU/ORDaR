@@ -137,5 +137,7 @@ li::before {
   width: 10px;
   display: inline-block;
 }
+#map { height: 380px; }
+
 
 

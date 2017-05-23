@@ -225,7 +225,23 @@
                      <div class="content">
                         <div class="header">Sampling points</div>
                         {% if sampling_points %}
-                        <table class="ui inverted green table">
+                         <div id="map"></div>
+                        <script type="text/javascript">
+                           var map = L.map('map').setView([51.505, -0.09], 2);
+                           L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png').addTo(map);
+                        </script>
+                     {% for sampling_point in sampling_points %}
+                     <script type="text/javascript">
+                     if ('{{sampling_point.COORDINATE_SYSTEM}}'=="lambert93") {
+                        var Lambert93 = "+proj=lcc +lat_1=49 +lat_2=44 +lat_0=46.5 +lon_0=3 +x_0=700000 +y_0=6600000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs "
+                        var gps = "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs";
+                        var test =proj4(Lambert93,gps,[{{sampling_point.LONGITUDE}},{{sampling_point.LATITUDE}}]);
+                        var marker = L.marker([test[1],test[0]]).addTo(map);
+                     }
+
+                     </script>
+                     {% endfor %}
+                      <table class="ui inverted green table">
                            <thead>
                               <tr>
                                  <th>Name</th>
