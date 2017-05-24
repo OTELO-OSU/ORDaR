@@ -268,10 +268,32 @@
                           });
                         markers.push(marker);
                      }
-                     else if ('{{sampling_point.COORDINATE_SYSTEM}}'=="ed50 utm"|| '{{sampling_point.COORDINATE_SYSTEM}}'.includes("ed50") && '{{sampling_point.COORDINATE_SYSTEM}}'.includes("utm")) {
+                     else if ('{{sampling_point.COORDINATE_SYSTEM}}'=="ed50 greenwich"|| '{{sampling_point.COORDINATE_SYSTEM}}'.includes("ed50") && '{{sampling_point.COORDINATE_SYSTEM}}'.includes("greenwich")) {
                         var ED50= "+proj=longlat +ellps=intl +towgs84=-87,-98,-121,0,0,0,0 +no_defs "
                         var gps = "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs";
                         var test =proj4(ED50,gps,[{{sampling_point.LONGITUDE}},{{sampling_point.LATITUDE}}]);
+                        var marker = L.marker([test[1],test[0]]);
+                        marker.bindPopup("Name: {{sampling_point.NAME}} ({{sampling_point.ABBREVIATION}})<br>Longitude: {{sampling_point.LONGITUDE}} <br>                        Latitude: {{sampling_point.LATITUDE}}<br>Elevation: {{sampling_point.ELEVATION}}                           ");
+                        marker.on('mouseover', function (e) {
+                              this.openPopup();
+                          });
+                        markers.push(marker);
+                     }
+                     else if ('{{sampling_point.COORDINATE_SYSTEM}}'=="ed50 utm 32"|| '{{sampling_point.COORDINATE_SYSTEM}}'.includes("ed50") && '{{sampling_point.COORDINATE_SYSTEM}}'.includes("utm")) {
+                        var ED50utm= "+proj=utm +zone=32 +ellps=intl +towgs84=-87,-98,-121,0,0,0,0 +units=m +no_defs "
+                        var gps = "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs";
+                        var test =proj4(ED50utm,gps,[{{sampling_point.LONGITUDE}},{{sampling_point.LATITUDE}}]);
+                        var marker = L.marker([test[1],test[0]]);
+                        marker.bindPopup("Name: {{sampling_point.NAME}} ({{sampling_point.ABBREVIATION}})<br>Longitude: {{sampling_point.LONGITUDE}} <br>                        Latitude: {{sampling_point.LATITUDE}}<br>Elevation: {{sampling_point.ELEVATION}}                           ");
+                        marker.on('mouseover', function (e) {
+                              this.openPopup();
+                          });
+                        markers.push(marker);
+                     }
+                      else if ('{{sampling_point.COORDINATE_SYSTEM}}'=="wgs84 utm 32"|| '{{sampling_point.COORDINATE_SYSTEM}}'.includes("wgs84") && '{{sampling_point.COORDINATE_SYSTEM}}'.includes("utm")) {
+                        var wgs84utm= "+proj=utm +zone=32 +datum=WGS84 +units=m +no_defs  "
+                        var gps = "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs";
+                        var test =proj4(wgs84utm,gps,[{{sampling_point.LONGITUDE}},{{sampling_point.LATITUDE}}]);
                         var marker = L.marker([test[1],test[0]]);
                         marker.bindPopup("Name: {{sampling_point.NAME}} ({{sampling_point.ABBREVIATION}})<br>Longitude: {{sampling_point.LONGITUDE}} <br>                        Latitude: {{sampling_point.LATITUDE}}<br>Elevation: {{sampling_point.ELEVATION}}                           ");
                         marker.on('mouseover', function (e) {
