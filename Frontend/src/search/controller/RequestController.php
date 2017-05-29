@@ -579,12 +579,13 @@ class RequestController
      * Send a mail when upload successfull
      * @return true if error, else false
      */
-    function Send_Mail_To_uploader($title, $doi, $description)
+    function Send_Mail_To_uploader($authors,$title, $doi, $description)
     {
         $headers .= "From:<noreply@ordar.otelo.univ-lorraine.fr>\r\n";
         $headers .= "MIME-Version: 1.0\r\n";
         $headers .= "Content-Type: text/html; charset=utf-8\r\n";
-        $mail = mail($_SESSION['mail'], 'Dataset submit successfully! ', '<html>
+        foreach ($authors as $key => $value) {
+        $mail = mail($value['MAIL'], 'Dataset submit successfully! ', '<html>
     <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     </head>
@@ -600,11 +601,12 @@ class RequestController
             </tr>
         </table>
     </body>
-    </html> ', $headers);
+    </html> ', $headers); 
         if ($mail == true) {
             $error = "false";
         } else {
             $error = "true";
+        }
         }
         return $error;
     }

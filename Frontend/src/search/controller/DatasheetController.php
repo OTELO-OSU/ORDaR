@@ -689,7 +689,7 @@ class DatasheetController
             $request = $Request->send_XML_to_datacite($array['xml']->asXML(), $doi);
             if ($request == "true") {
                 $collectionObject->insert($json);
-                $Request->Send_Mail_To_uploader($array['dataform']['TITLE'], $doi, $array['dataform']['DATA_DESCRIPTION']);
+                $Request->Send_Mail_To_uploader($array['dataform']['FILE_CREATOR'],$array['dataform']['TITLE'], $doi, $array['dataform']['DATA_DESCRIPTION']);
                 return "true";
             } else {
                 $array['error'] = "Unable to send metadata to Datacite";
@@ -880,7 +880,7 @@ class DatasheetController
                         "INTRO" => $INTRO,
                         "DATA" => $DATA
                     ));
-                    $Request->Send_Mail_To_uploader($array['dataform']['TITLE'], $config["DOI_PREFIX"] . "/" . $newdoi, $array['dataform']['DATA_DESCRIPTION']);
+                    $Request->Send_Mail_To_uploader($array['dataform']['FILE_CREATOR'],$array['dataform']['TITLE'], $config["DOI_PREFIX"] . "/" . $newdoi, $array['dataform']['DATA_DESCRIPTION']);
                     
                 } else {
                     $array['error'] = "Unable to send metadata to Datacite";
