@@ -854,6 +854,18 @@
               },
             }
           });
+          $("#sampling_points input[name='sampling_point_longitude[]']").on('keypress', function(e){
+              return e.metaKey || // cmd/ctrl
+                e.which <= 0 || // arrow keys
+                e.which == 8 || // delete key
+                /[0-9,-.]/.test(String.fromCharCode(e.which)); // numbers
+            })
+           $("#sampling_points input[name='sampling_point_latitude[]'] ").on('keypress', function(e){
+              return e.metaKey || // cmd/ctrl
+                e.which <= 0 || // arrow keys
+                e.which == 8 || // delete key
+                /[0-9,-.]/.test(String.fromCharCode(e.which)); // numbers
+            })
           $('#sampling_points input')
             .popup({
               on: 'focus'
@@ -907,8 +919,19 @@
              $('#sampling_points input')
             .popup({
               on: 'focus'
+            });
+            $("#sampling_points input[name='sampling_point_longitude[]']").on('keypress', function(e){
+              return e.metaKey || // cmd/ctrl
+                e.which <= 0 || // arrow keys
+                e.which == 8 || // delete key
+                /[0-9,-.]/.test(String.fromCharCode(e.which)); // numbers
             })
-          ;
+           $("#sampling_points input[name='sampling_point_latitude[]'] ").on('keypress', function(e){
+              return e.metaKey || // cmd/ctrl
+                e.which <= 0 || // arrow keys
+                e.which == 8 || // delete key
+                /[0-9,-.]/.test(String.fromCharCode(e.which)); // numbers
+            })
           });
           $("body").on("click", ".delete", function(e) {
             $(this).parent("div").remove();
