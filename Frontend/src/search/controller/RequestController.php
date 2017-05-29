@@ -591,6 +591,7 @@ class RequestController
     </head>
     <body>
         <h2>Your dataset is now on <img src="https://ordar.otelo.univ-lorraine.fr/img/ordar_logo.png" alt="Logo ordar" height="30" width="120" /></h2>
+        <p> '.$_SESSION['name'].' '.$_SESSION['firstname'].' has published this dataset </p>
         <p> Your DOI is : <a href="http://dx.doi.org/' . $doi . '">' . $doi . '</a></p>
          <table cellspacing="0" style="border: 2px solid black; width: 500px; height: 200px;">
             <tr>
