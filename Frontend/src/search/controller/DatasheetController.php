@@ -121,6 +121,27 @@ class DatasheetController
             }
         }
     }
+
+
+    function Postprocessing($POST, $method, $doi,$db,$collection)
+    {
+
+       if (array_key_exists('save',$POST)) {
+           $array =  self::Postprocessing_publish($POST,$method,$doi,"Draft");
+           return self::Newdraft($db, $array);
+        }
+       if(array_key_exists('publish',$POST)){
+           $array =  self::Postprocessing_publish($POST,$method,$doi,"Publish");
+           if ($method=="Edit") {
+                return self::Editdatasheet($collection, $doi, $db, $array);
+           }
+           elseif($method=="Upload")
+                return self::Newdatasheet($db, $array);
+        }
+
+    }
+
+      
     
     
     /**
@@ -128,7 +149,7 @@ class DatasheetController
      * @param array, post request
      * @return array, parsed data to write
      */
-    function Postprocessing($POST, $method, $doi)
+    function Postprocessing_publish($POST, $method, $doi,$type)
     {
         $config = parse_ini_file($_SERVER['DOCUMENT_ROOT'] . '/../config.ini');
         
@@ -152,22 +173,30 @@ class DatasheetController
         $author_displayname = null;
         $fields             = null;
         $UPLOAD_FOLDER      = $config["UPLOAD_FOLDER"];
-        $required           = array(
+        if ($type=="Draft") {
+            $required           = array(
             'title',
             'language',
-            'authors_name',
-            'authors_firstname',
-            'authors_email',
-            'description',
-            'scientific_field',
-            'measurement_nature',
-            'measurement_abbreviation',
-            'measurement_unit',
-            'license',
-            'publisher',
-            'institution',
-            'access_right'
-        );
+             );
+        }
+        else{     
+             $required           = array(
+                'title',
+                'language',
+                'authors_name',
+                'authors_firstname',
+                'authors_email',
+                'description',
+                'scientific_field',
+                'measurement_nature',
+                'measurement_abbreviation',
+                'measurement_unit',
+                'license',
+                'publisher',
+                'institution',
+                'access_right',
+                );
+         }
 
         foreach ($required as $field) {
             if (empty($_POST[$field])) {
@@ -551,34 +580,45 @@ class DatasheetController
                 $array["LICENSE"] = $licensetype;
             }
             
-            
-            if ($key == "access_right") {
-                $array["ACCESS_RIGHT"] = $value;
-                if ($value == "Closed") {
-                    $publication_date = "9999-12-31";
-                }
-                if ($value == "Open") {
-                    $publication_date = date('Y-m-d');
-                }
-                if ($value == "Embargoed") {
-                    $today         = date('Y-m-d');
-                    $embargoeddate = $_POST["publication_date"];
-                    if ($today < $embargoeddate) {
-                        $publication_date = htmlspecialchars($_POST["publication_date"], ENT_QUOTES);
-                        ;
-                    } else {
-                        $error = "Invalid embargo date!";
+            if ($type=="Publish") {
+                if ($key == "access_right") {
+                    if ($value == "Closed") {
+                        $publication_date = "9999-12-31";
+                        $array["ACCESS_RIGHT"] = 'Closed';
                     }
-                }
-                
-                $array["METADATA_DATE"] = date("Y-m-d");
-                
+                    elseif ($value == "Open") {
+                        $publication_date = date('Y-m-d');
+                        $array["ACCESS_RIGHT"] = 'Open';
+                    }
+                    elseif ($value == "Embargoed") {
+                        $today         = date('Y-m-d');
+                        $array["ACCESS_RIGHT"] = 'Embargoed';
+                        $embargoeddate = $_POST["publication_date"];
+                        if ($today < $embargoeddate) {
+                            $publication_date = htmlspecialchars($_POST["publication_date"], ENT_QUOTES);
+                            ;
+                        } else {
+                            $error = "Invalid embargo date!";
+                        }
+                    }
+                    else{
+                        $error="Select a valid ACCESS RIGHT";
+                    } 
+                                     
+                    
                 $array["PUBLICATION_DATE"] = $publication_date;
-                
-                
-                
-                
+                }
             }
+            elseif ($type=="Draft") {
+                 $array["ACCESS_RIGHT"] = "Draft";
+                 $publication_date =date('Y-m-d');
+                $array["PUBLICATION_DATE"] = @$publication_date;
+            }
+
+            
+                $array["METADATA_DATE"] = date("Y-m-d");
+                    
+
             if ($key == "file_already_uploaded") {
                 if (count($value) > 1) {
                     foreach ($value as $key => $value) {
@@ -609,25 +649,198 @@ class DatasheetController
                 $array['doi'] = $doi;
                 return $array;
             } else {
-                $newdoi = self::generateDOI();
-                if ($newdoi != false) {
-                    $doi        = $config["DOI_PREFIX"] . "/" . "ORDAR-" . $newdoi;
-                    $identifier = $sxe->addChild('identifier', $doi);
-                    $identifier->addAttribute('identifierType', 'DOI');
+                if ($type=="Draft") {
+                    $newdoi= uniqid('Draft-');
                     $array['dataform'] = $array;
-                    $array['xml']      = $sxe;
-                    $array['doi']      = $doi;
+                    $array['doi']      = $newdoi;
+                    return $array;
                     
-                    return $array;
-                } else {
-                    $array['dataform'] = $array;
-                    $array['error']    = "Fail to generate DOI please try again!";
-                    return $array;
+                }
+                elseif ($type=="Publish") {
+                    $newdoi = self::generateDOI();
+                    if ($newdoi != false) {
+                        $doi        = $config["DOI_PREFIX"] . "/" . "ORDAR-" . $newdoi;
+                        $identifier = $sxe->addChild('identifier', $doi);
+                        $identifier->addAttribute('identifierType', 'DOI');
+                        $array['dataform'] = $array;
+                        $array['xml']      = $sxe;
+                        $array['doi']      = $doi;
+
+                        return $array;
+                    } else {
+                        $array['dataform'] = $array;
+                        $array['error']    = "Fail to generate DOI please try again!";
+                        return $array;
+                    }
                 }
             }
             
         }
     }
+
+
+     function Newdraft($db, $array)
+        {
+            if (isset($array['error'])) { //Si une erreur est detecté
+                return $array;
+            } else {
+                $config                             = parse_ini_file($_SERVER['DOCUMENT_ROOT'] . '/../config.ini');
+                $UPLOAD_FOLDER                      = $config["UPLOAD_FOLDER"];
+                $doi                                = $array['doi'];
+                $collection                    = "Manual_Depot";
+
+                   $query    = array(
+                        '_id' => $doi
+                    );
+                    $collectionObject     = $this->db->selectCollection($config["authSource"], $collection);
+                    $cursor   = $collectionObject->find($query);
+                    $tmparray = array();
+                    if ($cursor->count()==1) {
+
+                        foreach ($cursor as $key => $value) {
+                            if ($value['INTRO']["UPLOAD_DATE"]) {
+                                $array['dataform']['UPLOAD_DATE'] = $value['INTRO']['UPLOAD_DATE'];
+                            }
+                            if ($value['INTRO']["CREATION_DATE"]) {
+                                $array['dataform']['CREATION_DATE'] = $value['INTRO']['CREATION_DATE'];
+                            }
+                        }
+                        foreach ($cursor as $key => $value) {
+                            foreach ($value["DATA"]["FILES"] as $key => $value) {
+                                $tmparray[] = $value;
+                            }
+                        }
+                        
+                        $intersect = array();
+                        foreach ($tmparray as $key => $value) {
+                            foreach ($array['file_already_uploaded'] as $key => $value2) {
+                                if ($value['DATA_URL'] == $value2['DATA_URL']) {
+                                    $intersect[] = $value;
+                                }
+                            }
+                        }
+
+                        
+                        for ($i = 0; $i < count($_FILES['file']['name']); $i++) {
+                            $repertoireDestination         = $UPLOAD_FOLDER;
+                            $nomDestination                = str_replace(' ', '_', $_FILES["file"]["name"][$i]);
+                            $data[$i]["DATA_URL"]          = $nomDestination;
+                            $data[$i]["ORIGINAL_DATA_URL"] = $UPLOAD_FOLDER . "/" . $doi . "/" . $nomDestination;
+                            
+                            if (is_uploaded_file($_FILES["file"]["tmp_name"][$i])) {
+                                if (is_dir($repertoireDestination . $config['DOI_PREFIX']) == false) {
+                                    mkdir($repertoireDestination . $config['DOI_PREFIX']);
+                                }
+                                if (!file_exists($repertoireDestination . $doi)) {
+                                    mkdir($repertoireDestination . $doi);
+                                }
+                                if (rename($_FILES["file"]["tmp_name"][$i], $repertoireDestination . $doi . "/" . $nomDestination)) {
+                                    $extension = new \SplFileInfo($repertoireDestination . $doi . "/" . $nomDestination);
+                                    $filetypes = $extension->getExtension();
+                                    if (strlen($filetypes) == 0 OR strlen($filetypes) > 4) {
+                                        $filetypes = 'unknow';
+                                    }
+                                    $data[$i]["FILETYPE"] = $filetypes;
+                                    $collectionObject     = $this->db->selectCollection($config["authSource"], $collection);
+                                } else {
+                                    $returnarray[] = "false";
+                                    $returnarray[] = $array['dataform'];
+                                    return $returnarray;
+                                }
+                            }
+                            
+                        }
+                        
+                        if (count($intersect) != 0 and $data != 0) {
+                            $merge = array_merge($intersect, $data);
+                        } else if (count($intersect) != 0) {
+                            $merge = $intersect;
+                            
+                        } else {
+                            $merge = $data;
+                            
+                        }
+                        
+                        $merge = array_map("unserialize", array_unique(array_map("serialize", $merge)));
+                        mkdir($UPLOAD_FOLDER . "/" . $doi . "/tmp");
+                        foreach ($merge as $key => $value) {
+                            rename($UPLOAD_FOLDER . "/" . $doi . "/" . $value['DATA_URL'], $UPLOAD_FOLDER . "/" . $doi . "/tmp/" . $value['DATA_URL']);
+                        }
+                        $files = glob($UPLOAD_FOLDER . "/" . $doi . "/*"); // get all file names
+                        foreach ($files as $file) { // iterate files
+                            if (is_file($file))
+                                unlink($file); // delete file
+                        }
+                        foreach ($merge as $key => $value) {
+                            rename($UPLOAD_FOLDER . "/" . $doi . "/tmp/" . $value['DATA_URL'], $UPLOAD_FOLDER . "/" . $doi . "/" . $value['DATA_URL']);
+                        }
+                        rmdir($UPLOAD_FOLDER . "/" . $doi . "/tmp/");
+                        
+                        
+                        $json = array(
+                            '$set' => array(
+                                "INTRO" => $array['dataform'],
+                                "DATA.FILES" => $merge
+                            )
+                        );
+                         $collectionObject->update(array(
+                            '_id' => $doi
+                        ), $json);
+                     }
+                     else{
+                    $array['dataform']["UPLOAD_DATE"]   = date('Y-m-d');
+                    $array['dataform']["CREATION_DATE"] = date('Y-m-d');
+                    if ($_FILES['file']['name'][0]!="") {
+                          for ($i = 0; $i < count($_FILES['file']['name']); $i++) {
+                            $repertoireDestination         = $UPLOAD_FOLDER;
+                            $nomDestination                = str_replace(' ', '_', $_FILES["file"]["name"][$i]);
+                            $data['FILES'][$i]["DATA_URL"]          = $nomDestination;
+                            $data['FILES'][$i]["ORIGINAL_DATA_URL"] = $UPLOAD_FOLDER . "/" . $doi . "/" . $nomDestination;
+                            
+                            if (is_uploaded_file($_FILES["file"]["tmp_name"][$i])) {
+                                if (is_dir($repertoireDestination . $config['DOI_PREFIX']) == false) {
+                                    mkdir($repertoireDestination . $config['DOI_PREFIX']);
+                                }
+                                if (!file_exists($repertoireDestination . $doi)) {
+                                    mkdir($repertoireDestination . $doi);
+                                }
+                                if (rename($_FILES["file"]["tmp_name"][$i], $repertoireDestination . $doi . "/" . $nomDestination)) {
+                                    $extension = new \SplFileInfo($repertoireDestination . $doi . "/" . $nomDestination);
+                                    $filetypes = $extension->getExtension();
+                                    if (strlen($filetypes) == 0 OR strlen($filetypes) > 4) {
+                                        $filetypes = 'unknow';
+                                    }
+                                    $data['FILES'][$i]["FILETYPE"] = $filetypes;
+                                    $collectionObject     = $this->db->selectCollection($config["authSource"], $collection);
+                                } else {
+                                    $returnarray[] = "false";
+                                    $returnarray[] = $array['dataform'];
+                                    return $returnarray;
+                                }
+                            }
+                            
+                        }
+                        
+                    }
+                    else{
+                    $data["FILES"]=null;
+                    }
+
+                    $collectionObject              = $this->db->selectCollection($config["authSource"], $collection);
+                
+                    $json                          = array(
+                        '_id' => $doi,
+                        "INTRO" => $array['dataform'],
+                        "DATA" => $data
+                    );
+                    $collectionObject->insert($json);
+              
+                     }
+                
+               
+            }
+        }
+
     
     /**
      * Create new datasheet
@@ -645,6 +858,10 @@ class DatasheetController
             $array['dataform']["CREATION_DATE"] = date('Y-m-d');
             $UPLOAD_FOLDER                      = $config["UPLOAD_FOLDER"];
             $doi                                = $array['doi'];
+            if ($_FILES['file']['error'][0]==4) {
+                $array['error'] = "Fichier manquant!";
+                return $array;
+            }
             for ($i = 0; $i < count($_FILES['file']['name']); $i++) {
                 $repertoireDestination                  = $UPLOAD_FOLDER;
                 $nomDestination                         = str_replace(' ', '_', $_FILES["file"]["name"][$i]);
@@ -686,7 +903,7 @@ class DatasheetController
             }
             
             $Request = new RequestApi();
-            $request = $Request->send_XML_to_datacite($array['xml']->asXML(), $doi);
+            $request =  $Request->send_XML_to_datacite($array['xml']->asXML(), $doi);
             if ($request == "true") {
                 $collectionObject->insert($json);
                 $Request->Send_Mail_To_uploader($array['dataform']['FILE_CREATOR'],$array['dataform']['TITLE'], $doi, $array['dataform']['DATA_DESCRIPTION']);
@@ -729,7 +946,7 @@ class DatasheetController
             return $array;
         } else {
             $collectionObject = $db->selectCollection($config["authSource"], $collection);
-            if (strstr($doi, 'ORDAR') !== FALSE) { //Si un DOI perrene est assigné
+            if (strstr($doi, 'ORDAR') !== FALSE) { //Edition Si un DOI perrene est assigné
                 
                 if ($_SESSION['admin'] == 1) {
                     $query    = array(
@@ -836,9 +1053,151 @@ class DatasheetController
                     $array['error'] = "Unable to send metadata to Datacite";
                     return $array;
                 }
-            } else {
+            }elseif (strstr($doi, 'Draft') !== FALSE) { /// publication d'un draft
+                 $newdoi = "ORDAR-" . self::generateDOI();
+               
+                $Request    = new RequestApi();
+                $xml        = $array['xml'];
+                $identifier = $xml->addChild('identifier', $config["DOI_PREFIX"] . "/" . $newdoi);
+                $identifier->addAttribute('identifierType', 'DOI');
+                $request = $Request->send_XML_to_datacite($xml->asXML(), $config["DOI_PREFIX"] . "/" . $newdoi);
+                if ($request == "true") {
+                    $collection                    = "Manual_Depot";
+                   $query    = array(
+                        '_id' => $doi
+                    );
+                   $doi=$array['doi'];
+                    $collectionObject     = $this->db->selectCollection($config["authSource"], $collection);
+                    $cursor   = $collectionObject->find($query);
+                        for ($i = 0; $i < count($_FILES['file']['name']); $i++) {
+                            $repertoireDestination         = $UPLOAD_FOLDER;
+                            $nomDestination                = str_replace(' ', '_', $_FILES["file"]["name"][$i]);
+                            $data[$i]["DATA_URL"]          = $nomDestination;
+                            $data[$i]["ORIGINAL_DATA_URL"] = $UPLOAD_FOLDER . "/" . $doi . "/" . $nomDestination;
+                            
+                            if (is_uploaded_file($_FILES["file"]["tmp_name"][$i])) {
+                                if (is_dir($repertoireDestination . $config['DOI_PREFIX']) == false) {
+                                    mkdir($repertoireDestination . $config['DOI_PREFIX']);
+                                }
+                                if (!file_exists($repertoireDestination . $doi)) {
+                                    mkdir($repertoireDestination . $doi);
+                                }
+                                if (rename($_FILES["file"]["tmp_name"][$i], $repertoireDestination . $doi . "/" . $nomDestination)) {
+                                    $extension = new \SplFileInfo($repertoireDestination . $doi . "/" . $nomDestination);
+                                    $filetypes = $extension->getExtension();
+                                    if (strlen($filetypes) == 0 OR strlen($filetypes) > 4) {
+                                        $filetypes = 'unknow';
+                                    }
+                                    $data[$i]["FILETYPE"] = $filetypes;
+                                    $collectionObject     = $this->db->selectCollection($config["authSource"], $collection);
+                                } else {
+                                    $returnarray[] = "false";
+                                    $returnarray[] = $array['dataform'];
+                                    return $returnarray;
+                                }
+                            }
+                            
+                        }
+                        foreach ($cursor as $key => $value) {
+                            if ($value['INTRO']["UPLOAD_DATE"]) {
+                                $array['dataform']['UPLOAD_DATE'] = $value['INTRO']['UPLOAD_DATE'];
+                            }
+                            if ($value['INTRO']["CREATION_DATE"]) {
+                                $array['dataform']['CREATION_DATE'] = $value['INTRO']['CREATION_DATE'];
+                            }
+                        }
+                        foreach ($cursor as $key => $value) {
+                            foreach ($value["DATA"]["FILES"] as $key => $value) {
+                                $tmparray[] = $value;
+                            }
+                        }
+                        
+                        $intersect = array();
+                        foreach ($tmparray as $key => $value) {
+                            foreach ($array['file_already_uploaded'] as $key => $value2) {
+                                if ($value['DATA_URL'] == $value2['DATA_URL']) {
+                                    $intersect[] = $value;
+                                }
+                            }
+                        }
+
+                        
+                        
+                        if (count($intersect) != 0 and $data != 0) {
+                            $merge = array_merge($intersect, $data);
+                        } else if (count($intersect) != 0) {
+                            $merge = $intersect;
+                            
+                        } else {
+                            $merge = $data;
+                            
+                        }
+                        
+                        $merge = array_map("unserialize", array_unique(array_map("serialize", $merge)));
+                        mkdir($UPLOAD_FOLDER . "/" . $doi . "/tmp");
+                        foreach ($merge as $key => $value) {
+                            rename($UPLOAD_FOLDER . "/" . $doi . "/" . $value['DATA_URL'], $UPLOAD_FOLDER . "/" . $doi . "/tmp/" . $value['DATA_URL']);
+                        }
+                        $files = glob($UPLOAD_FOLDER . "/" . $doi . "/*"); // get all file names
+                        foreach ($files as $file) { // iterate files
+                            if (is_file($file))
+                                unlink($file); // delete file
+                        }
+                        foreach ($merge as $key => $value) {
+                            rename($UPLOAD_FOLDER . "/" . $doi . "/tmp/" . $value['DATA_URL'], $UPLOAD_FOLDER . "/" . $doi . "/" . $value['DATA_URL']);
+                        }
+                        rmdir($UPLOAD_FOLDER . "/" . $doi . "/tmp/");
+                        
+                        
+                        mkdir($UPLOAD_FOLDER . "/" . $config["DOI_PREFIX"] . "/" . $newdoi, 0777, true);
+                    $query  = array(
+                        '_id' => $doi
+                    );
+                    $cursor = $collectionObject->find($query);
+                    foreach ($cursor as $key => $value) {
+                        $ORIGINAL_DATA_URL = $value["DATA"]["FILES"][0]["ORIGINAL_DATA_URL"];
+                    }
+                    foreach ($merge as $key => $value) {
+                    rename($UPLOAD_FOLDER . $doi . '/'. $value['DATA_URL'], $UPLOAD_FOLDER . "/" . $config["DOI_PREFIX"] . "/" . $newdoi . "/" .  $value['DATA_URL']);
+                    }
+                    rmdir($UPLOAD_FOLDER . $doi);
+                    $collectionObject->update(array(
+                        '_id' => $doi
+                    ), array(
+                        '$set' => array(
+                            "INTRO" => $array['dataform']
+                        )
+                    ));
+                    $olddata = $collectionObject->find(array(
+                        '_id' => $doi
+                    ));
+                    foreach ($olddata as $key => $value) {
+                        $INTRO                                          = $value["INTRO"];
+                        $value["DATA"]["FILES"][0]["ORIGINAL_DATA_URL"] = $UPLOAD_FOLDER . "/" . $config["DOI_PREFIX"] . "/" . $newdoi . "/" . $value["DATA"]["FILES"][0]["DATA_URL"];
+                        $DATA                                           = $value["DATA"];
+                    }
+                    $collectionObject->remove(array(
+                        '_id' => $doi
+                    ));
+                    $newfiles['FILES']=$merge;
+                    $collectionObject->insert(array(
+                        '_id' => $config["DOI_PREFIX"] . "/" . $newdoi,
+                        "INTRO" => $INTRO,
+                        "DATA" => $newfiles
+                    ));
+                    $Request->Send_Mail_To_uploader($array['dataform']['FILE_CREATOR'],$array['dataform']['TITLE'], $config["DOI_PREFIX"] . "/" . $newdoi, $array['dataform']['DATA_DESCRIPTION']);
+                    
+                     }
+                     else {
+                    $array['error'] = "Unable to send metadata to Datacite";
+                    return $array;
+                }
+
+            }
+            
+             else {//Publication d'un unpublished
                 $newdoi = "ORDAR-" . self::generateDOI();
-                
+               
                 $Request    = new RequestApi();
                 $xml        = $array['xml'];
                 $identifier = $xml->addChild('identifier', $config["DOI_PREFIX"] . "/" . $newdoi);

@@ -106,9 +106,13 @@ $app->get('/login', function (Request $req, Response $responseSlim) {
     $twig = new Twig_Environment($loader);
     echo $twig->render('login.html.twig');
     $config = parse_ini_file($_SERVER['DOCUMENT_ROOT'] . '/../config.ini');
-    $_SESSION['name'] = $_SERVER['HTTP_SN'];
-    $_SESSION['firstname'] = $_SERVER['HTTP_GIVENNAME'];
-    $_SESSION['mail'] = $_SERVER['HTTP_MAIL'];
+   // $_SESSION['name'] = $_SERVER['HTTP_SN'];
+   // $_SESSION['firstname'] = $_SERVER['HTTP_GIVENNAME'];
+   // $_SESSION['mail'] = $_SERVER['HTTP_MAIL'];
+    $_SESSION['name'] = "t";
+    $_SESSION['firstname'] = "t";
+    $_SESSION['mail'] = "emmanuelle.montarges@univ-lorraine.fr";
+   
    
     foreach ($config["admin"] as $key => $value) {
         $array = explode(",", $value);
@@ -199,9 +203,8 @@ $app->post('/upload', function (Request $req, Response $responseSlim) {
     $valuecsrf = $req->getAttribute($valueKey);
     $Datasheet = new Datasheet();
     $db = $Datasheet->connect_tomongo();
-    $array = $Datasheet->Postprocessing($_POST, "Upload", "0");
-    $response = $Datasheet->Newdatasheet($db, $array);
-
+    $response = $Datasheet->Postprocessing($_POST, "Upload", "0",$db,null);
+    
     if (isset($response['error'])) {
         $value = $response['dataform']['LICENSE'];
         if ($value == "Creative commons Attribution alone") {
@@ -391,9 +394,8 @@ $app->post('/editrecord', function (Request $req, Response $responseSlim) {
     $collection = $response['_type'];
     $doi = $response['_id'];
     $db = $Datasheet->connect_tomongo();
-    $array = $Datasheet->Postprocessing($_POST, "Edit", $doi);
-    $return = $Datasheet->Editdatasheet($collection, $doi, $db, $array);
-    if (array_key_exists('error', $return)) {
+    $array = $Datasheet->Postprocessing($_POST, "Edit", $doi,$db,$collection);
+    if (array_key_exists('error', $array)) {
         $value = $response['_source']['INTRO']['LICENSE'];
         if ($value == "Creative commons Attribution alone") {
             $license = 1;
@@ -413,7 +415,7 @@ $app->post('/editrecord', function (Request $req, Response $responseSlim) {
         elseif ($value == "Creative commons Attribution + Noncommercial + NoDerivatives") {
             $license = 6;
         }
-        return @$twig->render('edit_dataset.html.twig', ['error' => $return['error'], 'name' => $_SESSION['name'], 'firstname' => $_SESSION['firstname'], 'mail' => $_SESSION['mail'],'admin' => $_SESSION['admin'], 'doi' => $doi, 'title' => $response['_source']['INTRO']['TITLE'], 'description' => $response['_source']['INTRO']['DATA_DESCRIPTION'], 'creation_date' => $response['_source']['INTRO']['CREATION_DATE'], 'sampling_dates' => $response['_source']['INTRO']['SAMPLING_DATE'], 'authors' => $response['_source']['INTRO']['FILE_CREATOR'], 'keywords' => $response['_source']['INTRO']['KEYWORDS'], 'sample_kinds' => $response['_source']['INTRO']['SAMPLE_KIND'], 'scientific_fields' => $response['_source']['INTRO']['SCIENTIFIC_FIELD'], 'institutions' => $response['_source']['INTRO']['INSTITUTION'], 'language' => $response['_source']['INTRO']['LANGUAGE'], 'sampling_points' => $response['_source']['INTRO']['SAMPLING_POINT'], 'measurements' => $response['_source']['INTRO']['MEASUREMENT'], 'license' => $license, 'publisher' => $response['_source']['INTRO']['PUBLISHER'], 'fundings' => $response['_source']['INTRO']['FUNDINGS'], 'accessright' => $response['_source']['INTRO']['ACCESS_RIGHT'], 'embargoed_date' => $response['_source']['INTRO']['PUBLICATION_DATE'], 'files' => $response['_source']['DATA']['FILES'], 'name_CSRF' => $namecsrf, 'value_CSRF' => $valuecsrf]);
+        return @$twig->render('edit_dataset.html.twig', ['error' => $array['error'], 'name' => $_SESSION['name'], 'firstname' => $_SESSION['firstname'], 'mail' => $_SESSION['mail'],'admin' => $_SESSION['admin'], 'doi' => $doi, 'title' => $response['_source']['INTRO']['TITLE'], 'description' => $response['_source']['INTRO']['DATA_DESCRIPTION'], 'creation_date' => $response['_source']['INTRO']['CREATION_DATE'], 'sampling_dates' => $response['_source']['INTRO']['SAMPLING_DATE'], 'authors' => $response['_source']['INTRO']['FILE_CREATOR'], 'keywords' => $response['_source']['INTRO']['KEYWORDS'], 'sample_kinds' => $response['_source']['INTRO']['SAMPLE_KIND'], 'scientific_fields' => $response['_source']['INTRO']['SCIENTIFIC_FIELD'], 'institutions' => $response['_source']['INTRO']['INSTITUTION'], 'language' => $response['_source']['INTRO']['LANGUAGE'], 'sampling_points' => $response['_source']['INTRO']['SAMPLING_POINT'], 'measurements' => $response['_source']['INTRO']['MEASUREMENT'], 'license' => $license, 'publisher' => $response['_source']['INTRO']['PUBLISHER'], 'fundings' => $response['_source']['INTRO']['FUNDINGS'], 'accessright' => $response['_source']['INTRO']['ACCESS_RIGHT'], 'embargoed_date' => $response['_source']['INTRO']['PUBLICATION_DATE'], 'files' => $response['_source']['DATA']['FILES'], 'name_CSRF' => $namecsrf, 'value_CSRF' => $valuecsrf]);
     }
     else {
 

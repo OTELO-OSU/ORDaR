@@ -30,7 +30,7 @@
          <div class="ui grid">
             <div class="required field" id="files">
                <div class="ui input ">
-                  <input id="file" data-validate="file" type="file" name="file[]" required="">
+                  <input id="file" data-validate="file" type="file" name="file[]" >
                </div>
             </div>
             <div class="row"></div>
@@ -43,8 +43,9 @@
             <div class="ui sixteen wide column ">
             <div class="ui error message"></div>
             <div class="row"></div>
-            <a href="javascript:history.back();" class="ui red button" >Cancel</a>
-            <button class="ui submit right floated  button" >Submit</button>
+            <a href="javascript:history.back();" class="ui red button" ><i class="cancel icon"></i>Cancel</a>
+            <button type="submit" class="ui submit right floated blue publish button" name="publish" value="publish"><i class="checkmark icon"></i>Publish</button>
+            <button type="submit" class="ui submit right floated save button" name="save" value="save"> <i class="save icon"></i>Save</button>
             </div>
             <div class="row"></div>
          </div>

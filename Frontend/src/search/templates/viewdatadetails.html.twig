@@ -126,6 +126,8 @@
                {% elseif accessright == "Open" %}
                <div class="ui green label" >{{accessright}}</div>
                {% elseif accessright == "Unpublished" %}
+               <div class="ui yellow label" >{{accessright}}</div>
+                {% elseif accessright == "Draft" %}
                <div class="ui grey label" >{{accessright}}</div>
                {% endif %}
                <div class="ui blue label"  data-tooltip="Creation date">{{creationdate}}</div>
@@ -153,7 +155,7 @@
                   </div>
                   {%for author in authors%}
                   {% if (author.MAIL == mail and admin!=1) %}
-                  {% if (accessright == "Unpublished") %}
+                  {% if (accessright == "Unpublished" or accessright == "Draft" ) %}
                   <a onclick=" $('.ui.modal.remove').modal('show');">
                      <div class="ui right floated red button" >Remove  <i class="remove icon"></i></div>
                   </a>
@@ -177,7 +179,7 @@
                   <div class="ui fluid card">
                      <div class="content files">
                         <div class="header "> <i class="file icon"></i>Files</div>
-                        {% if accessright == "Closed" or accessright == "Unpublished" %}
+                        {% if accessright == "Closed" or accessright == "Unpublished" or accessright == "Draft" %}
                         {% if files == NULL %}
                         <div class="ui red message">Data are not available</div>
                         {% else %}

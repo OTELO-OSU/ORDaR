@@ -14,7 +14,7 @@
       </div>
       {%endif%}
       <form class="ui form dataset" action="editrecord?id={{doi}}" method="post" enctype="multipart/form-data" >
-      {% if admin and accessright != "Unpublished" %}
+      {% if (admin and accessright != "Unpublished") or (accessright=="Draft")  %}
       <div class="ui message">
          <div class="header">
             Instructions:
@@ -35,6 +35,12 @@
                      <input id="text" type="text" name="file_already_uploaded[]" value={{file.DATA_URL}} readonly><div class="ui icon delete"><i class="remove icon"></i></div>
                </div>
             {%endfor%}
+            {%else%}
+             <div class="field" id="files">
+               <div class="ui input ">
+                  <input id="file" data-validate="file" type="file" name="file[]" >
+               </div>
+            </div>
             {%endif%}
             </div>
             <div class="row"></div>
@@ -48,8 +54,11 @@
             <div class="ui sixteen wide column ">
             <div class="ui error message"></div>
             <div class="row"></div>
-            <a href="javascript:history.back();" class="ui red button" >Cancel</a>
-            <button class="ui submit right floated  button" >Submit</button>
+            <a href="javascript:history.back();" class="ui red button" ><i class="cancel icon"></i>Cancel</a>
+            <button type="submit" class="ui submit right floated blue publish button" name="publish" value="publish"><i class="checkmark icon"></i>Publish</button>
+             {% if accessright == "Draft" %}
+            <button  type="submit" class="ui submit right floated save button" name="save" value="save"> <i class="save icon"></i>Save</button>
+            {%endif%}
             </div>
             <div class="row"></div>
          </div>

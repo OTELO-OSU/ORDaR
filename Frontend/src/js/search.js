@@ -41,6 +41,9 @@
             } else if (accessright == "Closed") {
               access = '<div class="ui red label">' + accessright + '</div>';
             } else if (accessright == "Unpublished") {
+              access = '<div class="ui yellow label">' + accessright + '</div>';
+            }
+            else if (accessright == "Draft") {
               access = '<div class="ui grey label">' + accessright + '</div>';
             }
             file_creator = data[k]['FILE_CREATOR'];
@@ -543,11 +546,14 @@
               if (type == "Closed") {
                 color = "red";
               }
+              if (type == "Draft") {
+                color = "grey";
+              }
               if (type == "Embargoed") {
                 color = "orange";
               }
               if (type == "Unpublished") {
-                color = "grey";
+                color = "yellow";
               }
               if (type.length >= 25) {
                 type = type.substring(0, 20) + "...";
@@ -746,11 +752,7 @@
     // Module upload, permet de controller le formulaire upload et edit
   APP.modules.upload = (function() {
       return {
-        init: function() {
-          $('form ').on('keypress', function(e) {
-            return e.which !== 13;
-          });
-          $('.ui.accordion').accordion();
+        checkform:function(){
           $('.ui .form.dataset').form({
             keyboardShortcuts: false,
             fields: {
@@ -852,8 +854,34 @@
                   prompt: 'Please select a file'
                               }]
               },
+             
             }
           });
+
+        },
+        init: function() {
+          $('form ').on('keypress', function(e) {
+            return e.which !== 13;
+          });
+          $( ".save" ).click(function() {
+          $('.ui .form.dataset').form({
+            keyboardShortcuts: false,
+            fields: {
+              title: {
+                identifier: 'title',
+                rules: [{
+                  type: 'empty',
+                  prompt: 'Please enter title'
+                              }]
+                }
+            }
+          });
+        });
+          $( ".publish" ).click(function() {
+          APP.modules.upload.checkform();
+          });
+          $('.ui.accordion').accordion();
+          APP.modules.upload.checkform();
           $("#sampling_points input[name='sampling_point_longitude[]']").on('keypress', function(e){
               return e.metaKey || // cmd/ctrl
                 e.which <= 0 || // arrow keys

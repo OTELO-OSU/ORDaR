@@ -263,7 +263,7 @@ class RequestController
 
         }';
         $bdd                        = strtolower($config['authSource']);
-        $url                        = 'http://localhost/' . $bdd . '/_search?q=' . $query . '%20AND%20NOT%20INTRO.ACCESS_RIGHT:Unpublished&size=10000';
+        $url                        = 'http://localhost/' . $bdd . '/_search?q=' . $query . '%20AND%20NOT%20INTRO.ACCESS_RIGHT:Unpublished%20AND%20NOT%20INTRO.ACCESS_RIGHT:Draft&size=10000';
         $curlopt                    = array(
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_PORT => 9200,
@@ -532,6 +532,19 @@ class RequestController
                         return false;
                     }
                 }
+                elseif ($response["_source"]["INTRO"]["ACCESS_RIGHT"] == "Draft") {
+                    $found = "false";
+                    foreach ($response["_source"]["INTRO"]["FILE_CREATOR"] as $key => $value) {
+                        if (@$_SESSION["mail"] == $value["MAIL"]) {
+                            $found = "true";
+                        }
+                    }
+                    if ($found == "true") {
+                        return $response;
+                    } else {
+                        return false;
+                    }
+                }
             }
         }
     }
@@ -581,7 +594,7 @@ class RequestController
      */
     function Send_Mail_To_uploader($authors,$title, $doi, $description)
     {
-        $headers .= "From:<noreply@ordar.otelo.univ-lorraine.fr>\r\n";
+        $headers = "From:<noreply@ordar.otelo.univ-lorraine.fr>\r\n";
         $headers .= "MIME-Version: 1.0\r\n";
         $headers .= "Content-Type: text/html; charset=utf-8\r\n";
         foreach ($authors as $key => $value) {
