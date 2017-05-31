@@ -125,11 +125,25 @@ class DatasheetController
 
     function Postprocessing($POST, $method, $doi,$db,$collection)
     {
-
-       if (array_key_exists('save',$POST)) {
-           $array =  self::Postprocessing_publish($POST,$method,$doi,"Draft");
-           return self::Newdraft($db, $array);
-        }
+        
+           if (array_key_exists('save',$POST)) {
+               $array =  self::Postprocessing_publish($POST,$method,$doi,"Draft");
+                $config = parse_ini_file($_SERVER['DOCUMENT_ROOT'] . '/../config.ini');
+               $query    = array(
+                    '_id' => $doi
+                );
+                $collectionObject     = $this->db->selectCollection($config["authSource"], $collection);
+                $cursor   = $collectionObject->find($query);
+                foreach ($cursor as $key => $value) {
+                    $access_right=$value['INTRO']['ACCESS_RIGHT'];
+                }
+               if ($access_right=="Draft") {
+                 return self::Newdraft($db, $array);
+               }
+               elseif ($cursor->count()==0) {
+                    return self::Newdraft($db, $array);
+               }
+            }
        if(array_key_exists('publish',$POST)){
            $array =  self::Postprocessing_publish($POST,$method,$doi,"Publish");
            if ($method=="Edit") {
