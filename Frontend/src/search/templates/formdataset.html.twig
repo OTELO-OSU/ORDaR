@@ -136,7 +136,7 @@
             <label>Scientific field</label>
                <p>You can select a scientific field in list or type one.</p>
             <div class=" field" id="scientificfields">
-               {% if scientific_fields %}
+               {% if scientific_fields[0].NAME!="" %}
                {% for scientific_field in scientific_fields %}
                <div class="ui input">
                   <select class="ui fluid search dropdown scientific_field" data-validate="scientific_field" name="scientific_field[]"  >
@@ -251,7 +251,7 @@
                <div  class="ui input">
                   <div class="ui dropdown fluid search selection  optgroup institution" >
                      <input value="{{institution.NAME}}" data-validate="institution" type="hidden" name="institution[]">
-                     <div  class="text">Select a field or type one</div>
+                     <div  class="default text">Select a field or type one</div>
                      <i class="dropdown icon"></i>
                      <div class="menu">
                         <div class="item">ADIT Agency for the dissemination of technological information</div>
@@ -297,7 +297,7 @@
                <div class="ui input">
                   <div class="ui dropdown fluid search selection  optgroup institution">
                      <input value="{{institution.NAME}}" data-validate="institution" type="hidden" name="institution[]">
-                     <div  class="text">Select a field or type one</div>
+                     <div  class="default text">Select a field or type one</div>
                      <i class="dropdown icon"></i>
                      <div class="menu">
                         <div class="item">ADIT Agency for the dissemination of technological information</div>
@@ -455,7 +455,7 @@
                <div class="ui input">
                   <div class="ui dropdown fluid search selection optgroup coordinate">
                      <input value="{{sampling_point.COORDINATE_SYSTEM}}"  type="hidden" name="sampling_point_coordinate_system[]">
-                     <div  class="text">Select a coordinate system or type one</div>
+                     <div  class="default text">Select a coordinate system or type one</div>
                      <i class="dropdown icon"></i>
                      <div class="menu">
                      <div class="item">NTF meridian of Paris</div>
@@ -486,7 +486,7 @@
                <div class="ui input">
                   <div class="ui dropdown fluid search selection optgroup coordinate">
                      <input value="{{sampling_point.COORDINATE_SYSTEM}}"  type="hidden" name="sampling_point_coordinate_system[]">
-                     <div  class="text">Select a coordinate system or type one</div>
+                     <div  class="default text">Select a coordinate system or type one</div>
                      <i class="dropdown icon"></i>
                      <div class="menu">
                        <div class="item">NTF meridian of Paris</div>
