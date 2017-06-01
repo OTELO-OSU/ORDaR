@@ -732,7 +732,6 @@ class DatasheetController
                     $repertoireDestination         = $UPLOAD_FOLDER;
                     $nomDestination                = str_replace(' ', '_', $_FILES["file"]["name"][$i]);
                     $data[$i]["DATA_URL"]          = $nomDestination;
-                    $data[$i]["ORIGINAL_DATA_URL"] = $UPLOAD_FOLDER . "/" . $doi . "/" . $nomDestination;
                     
                     if (is_uploaded_file($_FILES["file"]["tmp_name"][$i])) {
                         if (is_dir($repertoireDestination . $config['DOI_PREFIX']) == false) {
@@ -793,6 +792,7 @@ class DatasheetController
                 $collectionObject->update(array(
                     '_id' => $doi
                 ), $json);
+                return $array['message'] = '   <div class="ui message grey"  style="display: block;">Draft edited! </div>';
             } else {
                 $array['dataform']["UPLOAD_DATE"]   = date('Y-m-d');
                 $array['dataform']["CREATION_DATE"] = date('Y-m-d');
@@ -801,7 +801,6 @@ class DatasheetController
                         $repertoireDestination                  = $UPLOAD_FOLDER;
                         $nomDestination                         = str_replace(' ', '_', $_FILES["file"]["name"][$i]);
                         $data['FILES'][$i]["DATA_URL"]          = $nomDestination;
-                        $data['FILES'][$i]["ORIGINAL_DATA_URL"] = $UPLOAD_FOLDER . "/" . $doi . "/" . $nomDestination;
                         
                         if (is_uploaded_file($_FILES["file"]["tmp_name"][$i])) {
                             if (is_dir($repertoireDestination . $config['DOI_PREFIX']) == false) {
@@ -872,7 +871,6 @@ class DatasheetController
                 $repertoireDestination                  = $UPLOAD_FOLDER;
                 $nomDestination                         = str_replace(' ', '_', $_FILES["file"]["name"][$i]);
                 $data["FILES"][$i]["DATA_URL"]          = $nomDestination;
-                $data["FILES"][$i]["ORIGINAL_DATA_URL"] = $UPLOAD_FOLDER . "/" . $doi . "/" . $nomDestination;
                 if (file_exists($repertoireDestination . $_FILES["file"]["name"][$i])) {
                     $returnarray[] = "false";
                     $returnarray[] = $array['dataform'];
@@ -979,7 +977,6 @@ class DatasheetController
                         $repertoireDestination         = $UPLOAD_FOLDER;
                         $nomDestination                = str_replace(' ', '_', $_FILES["file"]["name"][$i]);
                         $data[$i]["DATA_URL"]          = $nomDestination;
-                        $data[$i]["ORIGINAL_DATA_URL"] = $UPLOAD_FOLDER . "/" . $doi . "/" . $nomDestination;
                         
                         if (is_uploaded_file($_FILES["file"]["tmp_name"][$i])) {
                             if (is_dir($repertoireDestination . $config['DOI_PREFIX']) == false) {
@@ -1079,7 +1076,6 @@ class DatasheetController
                         $repertoireDestination         = $UPLOAD_FOLDER;
                         $nomDestination                = str_replace(' ', '_', $_FILES["file"]["name"][$i]);
                         $data[$i]["DATA_URL"]          = $nomDestination;
-                        $data[$i]["ORIGINAL_DATA_URL"] = $UPLOAD_FOLDER . "/" . $doi . "/" . $nomDestination;
                         
                         if (is_uploaded_file($_FILES["file"]["tmp_name"][$i])) {
                             if (is_dir($repertoireDestination . $config['DOI_PREFIX']) == false) {
@@ -1111,13 +1107,11 @@ class DatasheetController
                         if ($value['INTRO']["CREATION_DATE"]) {
                             $array['dataform']['CREATION_DATE'] = $value['INTRO']['CREATION_DATE'];
                         }
-                    }
-                    foreach ($cursor as $key => $value) {
                         foreach ($value["DATA"]["FILES"] as $key => $value) {
                             $tmparray[] = $value;
                         }
                     }
-                    
+                                       
                     $intersect = array();
                     foreach ($tmparray as $key => $value) {
                         foreach ($array['file_already_uploaded'] as $key => $value2) {
@@ -1126,9 +1120,7 @@ class DatasheetController
                             }
                         }
                     }
-                    
-                    
-                    
+                                        
                     if (count($intersect) != 0 and $data != 0) {
                         $merge = array_merge($intersect, $data);
                     } else if (count($intersect) != 0) {
@@ -1152,17 +1144,12 @@ class DatasheetController
                     foreach ($merge as $key => $value) {
                         rename($UPLOAD_FOLDER . "/" . $doi . "/tmp/" . $value['DATA_URL'], $UPLOAD_FOLDER . "/" . $doi . "/" . $value['DATA_URL']);
                     }
-                    rmdir($UPLOAD_FOLDER . "/" . $doi . "/tmp/");
-                    
-                    
+                    rmdir($UPLOAD_FOLDER . "/" . $doi . "/tmp/");                 
                     mkdir($UPLOAD_FOLDER . "/" . $config["DOI_PREFIX"] . "/" . $newdoi, 0777, true);
                     $query  = array(
                         '_id' => $doi
                     );
                     $cursor = $collectionObject->find($query);
-                    foreach ($cursor as $key => $value) {
-                        $ORIGINAL_DATA_URL = $value["DATA"]["FILES"][0]["ORIGINAL_DATA_URL"];
-                    }
                     foreach ($merge as $key => $value) {
                         rename($UPLOAD_FOLDER . $doi . '/' . $value['DATA_URL'], $UPLOAD_FOLDER . "/" . $config["DOI_PREFIX"] . "/" . $newdoi . "/" . $value['DATA_URL']);
                     }
@@ -1179,16 +1166,13 @@ class DatasheetController
                     ));
                     foreach ($olddata as $key => $value) {
                         $INTRO                                          = $value["INTRO"];
-                        $value["DATA"]["FILES"][0]["ORIGINAL_DATA_URL"] = $UPLOAD_FOLDER . "/" . $config["DOI_PREFIX"] . "/" . $newdoi . "/" . $value["DATA"]["FILES"][0]["DATA_URL"];
                         $DATA                                           = $value["DATA"];
                     }
                     $collectionObject->remove(array(
                         '_id' => $doi
                     ));
                     $newfiles['FILES'] = $merge;
-                    foreach ($merge as $key => $value) {
-                        $newfiles["FILES"][$key]["ORIGINAL_DATA_URL"] = $UPLOAD_FOLDER . "/" . $config["DOI_PREFIX"] . "/" . $newdoi . "/" . $value["DATA_URL"];
-                    }
+                    
                     $collectionObject->insert(array(
                         '_id' => $config["DOI_PREFIX"] . "/" . $newdoi,
                         "INTRO" => $INTRO,
@@ -1236,7 +1220,6 @@ class DatasheetController
                     ));
                     foreach ($olddata as $key => $value) {
                         $INTRO                                          = $value["INTRO"];
-                        $value["DATA"]["FILES"][0]["ORIGINAL_DATA_URL"] = $UPLOAD_FOLDER . "/" . $config["DOI_PREFIX"] . "/" . $newdoi . "/" . $value["DATA"]["FILES"][0]["DATA_URL"];
                         $DATA                                           = $value["DATA"];
                     }
                     $collectionObject->remove(array(
@@ -1281,16 +1264,15 @@ class DatasheetController
         if (strstr($doi, 'ORDAR') !== FALSE) {//si jeu de données publié
             if ($_SESSION['admin'] == 1) {//check admin
                 $cursor           = $collectionObject->find($query);
-                foreach ($cursor as $key => $value) {
-                    foreach ($value["DATA"]["FILES"] as $key => $value) {
-                        $ORIGINAL_DATA_URL = $value["ORIGINAL_DATA_URL"];
-                        unlink($ORIGINAL_DATA_URL);
-                    }
+               foreach ($cursor as $key => $value) {
+                foreach ($value["DATA"]["FILES"] as $key => $value) {
+                    $data_url=$value["DATA_URL"];
+                    unlink($UPLOAD_FOLDER . $doi . '/'. $data_url);//remove datafile
                 }
+            }
                 $collectionObject->remove(array(
                     '_id' => $doi
                 ));
-                unlink($UPLOAD_FOLDER . $doi . '/' . $doi . '_DATA.csv');
                 rmdir($UPLOAD_FOLDER . $doi);
                 $request = new RequestApi();
                 $request->Inactivate_doi($doi);
@@ -1308,14 +1290,19 @@ class DatasheetController
             );
             $cursor           = $collectionObject->find($query);
             foreach ($cursor as $key => $value) {
-                $ORIGINAL_DATA_URL = $value["DATA"]["FILES"][0]["ORIGINAL_DATA_URL"];
+                foreach ($value["DATA"]["FILES"] as $key => $value) {
+                    $ORIGINAL_DATA_URL = $value["ORIGINAL_DATA_URL"];
+                    $data_url=$value["DATA_URL"];
+                    unlink($UPLOAD_FOLDER . $doi . '/'. $data_url);//remove datafile
+                    if (strstr($doi, 'Draft') == FALSE) {  //Remove xls if unpublished from otelocloud
+                        unlink($ORIGINAL_DATA_URL);
+                     }
+                }
             }
-            unlink($ORIGINAL_DATA_URL);
             $collectionObject->remove(array(
                 '_id' => $doi
             ));
-            unlink($UPLOAD_FOLDER . $doi . '/' . $doi . '_DATA.csv');
-            rmdir($UPLOAD_FOLDER . $doi);
+            rmdir($UPLOAD_FOLDER . $doi);//remove empty folder
             return true;
         }
         
