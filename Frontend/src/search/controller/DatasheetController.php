@@ -43,7 +43,7 @@ class DatasheetController
             'password' => $config['password_doi']
         ));
         $collection = $dbdoi->selectCollection($config['DOI_database'], "DOI");
-        if ($collection->count() == 1) {
+        if ($collection->count() == 1) {//Verification du statut de la variable DOI (si UNLOCKED on peut y acceder)
             $query  = array(
                 'STATE' => 'UNLOCKED'
             );
@@ -126,7 +126,7 @@ class DatasheetController
     function Postprocessing($POST, $method, $doi, $db, $collection)
     {
         
-        if (array_key_exists('save', $POST)) {
+        if (array_key_exists('save', $POST)) {//si c'est une creation de draft
             $access_right     = null;
             $array            = self::Postprocessing_publish($POST, $method, $doi, "Draft");
             $config           = parse_ini_file($_SERVER['DOCUMENT_ROOT'] . '/../config.ini');
@@ -138,18 +138,20 @@ class DatasheetController
             foreach ($cursor as $key => $value) {
                 $access_right = $value['INTRO']['ACCESS_RIGHT'];
             }
-            if ($access_right == "Draft") {
-                return self::Newdraft($db, $array);
-            } elseif ($cursor->count() == 0) {
-                return self::Newdraft($db, $array);
+            if ($access_right == "Draft") {//verification que c'est un draft si créé
+                return self::ManageDraft($db, $array);
+            } elseif ($cursor->count() == 0) {//Creation d'un nouveau draft
+                return self::ManageDraft($db, $array);
             }
         }
-        if (array_key_exists('publish', $POST)) {
+        if (array_key_exists('publish', $POST)) {//Si on publie le jeu de données
             $array = self::Postprocessing_publish($POST, $method, $doi, "Publish");
-            if ($method == "Edit") {
+            if ($method == "Edit") {//Si c'est une edition
                 return self::Editdatasheet($collection, $doi, $db, $array);
-            } elseif ($method == "Upload")
+            }
+             elseif ($method == "Upload"){//Si c'est un nouveau jeu de données
                 return self::Newdatasheet($db, $array);
+            }
         }
         
     }
@@ -165,9 +167,8 @@ class DatasheetController
     function Postprocessing_publish($POST, $method, $doi, $type)
     {
         $config = parse_ini_file($_SERVER['DOCUMENT_ROOT'] . '/../config.ini');
-        
-        $sxe = new \SimpleXMLElement("<resource/>");
-        $sxe->addAttribute('xmlns:xmlns:xsi', 'http://www.w3.org/2001/XMLSchema-instance');
+        $sxe = new \SimpleXMLElement("<resource/>");//Intitalisation object XML
+        $sxe->addAttribute('xmlns:xmlns:xsi', 'http://www.w3.org/2001/XMLSchema-instance');//Ajout attribut XML
         $sxe->addAttribute('xmlns', 'http://datacite.org/schema/kernel-4');
         $sxe->addAttribute('xsi:xsi:schemaLocation', 'http://datacite.org/schema/kernel-4 http://schema.datacite.org/meta/kernel-4/metadata.xsd');
         
@@ -180,13 +181,12 @@ class DatasheetController
         $Version      = $sxe->addChild('version', '1');
         $descriptions = $sxe->addChild('descriptions');
         
-        
-        
-        $error              = null;
+        $error              = null;//Declaration
         $author_displayname = null;
         $fields             = null;
         $UPLOAD_FOLDER      = $config["UPLOAD_FOLDER"];
-        if ($type == "Draft") {
+
+        if ($type == "Draft") {// Champs obligatoire Si c'est un Draft qui est traité
             $required = array(
                 'title',
                 'language',
@@ -194,7 +194,7 @@ class DatasheetController
                 'authors_firstname',
                 'authors_email'
             );
-        } else {
+        } else { //  Champs obligatoire Si on publie
             $required = array(
                 'title',
                 'language',
@@ -213,12 +213,12 @@ class DatasheetController
             );
         }
         
-        foreach ($required as $field) {
+        foreach ($required as $field) { //Verif des champs à traiter
             if (empty($_POST[$field])) {
                 $fields[] = $field;
             }
         }
-        if (count($fields) != 0) {
+        if (count($fields) != 0) {//Affichage des champs manquants 
             $txt = null;
             foreach ($fields as $key => $value) {
                 $txt .= "  " . $value;
@@ -226,13 +226,13 @@ class DatasheetController
             $error = "Warning there are empty fields: " . $txt;
         }
         
-        foreach ($POST as $key => $value) {
-            
-            if ($key == "title") {
+        foreach ($POST as $key => $value) {//On parcourt le tableau POST de données
+            //HTML specialchars permet de sécuriser les inputs de l'utilisateur pour se proteger des failles XSS
+            if ($key == "title") {//Traitement du titre
                 $array["TITLE"] = htmlspecialchars($value, ENT_QUOTES);
                 $title          = $titles->addChild('title', htmlspecialchars($value, ENT_QUOTES));
             }
-            if ($key == "language") {
+            if ($key == "language") {//Traitement de la langue
                 if ($value == '2') {
                     $language = "FRENCH";
                 }
@@ -242,7 +242,7 @@ class DatasheetController
                 $array["LANGUAGE"] = $language;
                 $sxe->addChild('language', $language);
             }
-            if ($key == "sampling_date") {
+            if ($key == "sampling_date") {//Traitement sampling date
                 if ($value[0] == "") {
                 } else {
                     if (count($value) > 1) {
@@ -276,14 +276,14 @@ class DatasheetController
                 }
                 
             }
-            if ($key == "description") {
+            if ($key == "description") {//Traitement de la description
                 $array["DATA_DESCRIPTION"] = htmlspecialchars($value, ENT_QUOTES);
                 $description               = $descriptions->addChild('description', htmlspecialchars($value, ENT_QUOTES));
                 $description->addAttribute('descriptionType', 'Abstract');
                 
                 
             }
-            if ($key == "scientific_field") {
+            if ($key == "scientific_field") {//Traitement des scientific fields
                 if (count($value) > 1) {
                     $x = 0;
                     foreach ($value as $key => $value) {
@@ -300,7 +300,7 @@ class DatasheetController
                     $subjects->addChild('subject', htmlspecialchars($value[0], ENT_QUOTES));
                 }
             }
-            if ($key == "sampling_point_name") {
+            if ($key == "sampling_point_name") {//Traitement des samplingpoint
                 if (count($value) > 1) {
                     if (count(array_unique($value)) < count($value)) {
                         $error = "Sample name must be unique";
@@ -409,7 +409,7 @@ class DatasheetController
                 
             }
             
-            if ($key == "measurement_nature") {
+            if ($key == "measurement_nature") {//Traitement measurement
                 if (count($value) > 1) {
                     foreach ($value as $key => $value) {
                         $array["MEASUREMENT"][$key]["NATURE"] = htmlspecialchars($value, ENT_QUOTES);
@@ -592,7 +592,7 @@ class DatasheetController
                 $array["LICENSE"] = $licensetype;
             }
             
-            if ($type == "Publish") {
+            if ($type == "Publish") {//Definition des droit d'acces si on publie
                 if ($key == "access_right") {
                     if ($value == "Closed") {
                         $publication_date      = "9999-12-31";
@@ -617,7 +617,7 @@ class DatasheetController
                     
                     $array["PUBLICATION_DATE"] = $publication_date;
                 }
-            } elseif ($type == "Draft") {
+            } elseif ($type == "Draft") { // Si c'est un brouillon on force le droit en Draft
                 $array["ACCESS_RIGHT"]     = "Draft";
                 $publication_date          = date('Y-m-d');
                 $array["PUBLICATION_DATE"] = @$publication_date;
@@ -627,7 +627,7 @@ class DatasheetController
             $array["METADATA_DATE"] = date("Y-m-d");
             
             
-            if ($key == "file_already_uploaded") {
+            if ($key == "file_already_uploaded") {//On check si l'admin ou si il s'agit d'un draft, les fichiers deja associé
                 if (count($value) > 1) {
                     foreach ($value as $key => $value) {
                         $file_already_uploaded[$key]['DATA_URL'] = $value;
@@ -640,12 +640,12 @@ class DatasheetController
         }
         
         
-        if (!$error == NULL) {
+        if (!$error == NULL) {//si on rencontre une erreur on retourne le tableau et on l'affiche
             $array['dataform'] = $array;
             $array['error']    = $error;
             return $array;
-        } else {
-            if ($method == "Edit") {
+        } else {//sinon on continue 
+            if ($method == "Edit") { //Si on edit un fichier deja existant (Publié , ou draft)
                 $doi               = $doi;
                 $array['dataform'] = $array;
                 if (empty($file_already_uploaded)) {
@@ -656,7 +656,7 @@ class DatasheetController
                 $array['xml'] = $sxe;
                 $array['doi'] = $doi;
                 return $array;
-            } else {
+            } else {//Nouveau fichier
                 if ($type == "Draft") {
                     $newdoi            = uniqid('Draft-');
                     $array['dataform'] = $array;
@@ -686,7 +686,7 @@ class DatasheetController
     }
     
     
-    function Newdraft($db, $array)
+    function ManageDraft($db, $array)
     {
         if (isset($array['error'])) { //Si une erreur est detecté
             return $array;
@@ -702,25 +702,24 @@ class DatasheetController
             $collectionObject = $this->db->selectCollection($config["authSource"], $collection);
             $cursor           = $collectionObject->find($query);
             $tmparray         = array();
-            if ($cursor->count() == 1) {
-                
+            if ($cursor->count() == 1) {//Verification si le draft existe deja
                 foreach ($cursor as $key => $value) {
                     if ($value['INTRO']["UPLOAD_DATE"]) {
-                        $array['dataform']['UPLOAD_DATE'] = $value['INTRO']['UPLOAD_DATE'];
+                        $array['dataform']['UPLOAD_DATE'] = $value['INTRO']['UPLOAD_DATE'];//Mise a jour de la date d'upload
                     }
                     if ($value['INTRO']["CREATION_DATE"]) {
-                        $array['dataform']['CREATION_DATE'] = $value['INTRO']['CREATION_DATE'];
+                        $array['dataform']['CREATION_DATE'] = $value['INTRO']['CREATION_DATE'];//Mise a jour de la date de creation
                     }
                 }
-                foreach ($cursor as $key => $value) {
+                foreach ($cursor as $key => $value) {//Recuperation des fichies de données dans la base
                     foreach ($value["DATA"]["FILES"] as $key => $value) {
                         $tmparray[] = $value;
                     }
                 }
                 
                 $intersect = array();
-                foreach ($tmparray as $key => $value) {
-                    foreach ($array['file_already_uploaded'] as $key => $value2) {
+                foreach ($tmparray as $key => $value) {//On parcourt les fichiers de la base
+                    foreach ($array['file_already_uploaded'] as $key => $value2) {//On parcout ceux du formulaire pour voir les suppression eventuels
                         if ($value['DATA_URL'] == $value2['DATA_URL']) {
                             $intersect[] = $value;
                         }
@@ -728,7 +727,7 @@ class DatasheetController
                 }
                 
                 
-                for ($i = 0; $i < count($_FILES['file']['name']); $i++) {
+                for ($i = 0; $i < count($_FILES['file']['name']); $i++) {//On parcout les nouveau fichiers uploader
                     $repertoireDestination         = $UPLOAD_FOLDER;
                     $nomDestination                = str_replace(' ', '_', $_FILES["file"]["name"][$i]);
                     $data[$i]["DATA_URL"]          = $nomDestination;
@@ -757,18 +756,18 @@ class DatasheetController
                     
                 }
                 
-                if (count($intersect) != 0 and $data != 0) {
-                    $merge = array_merge($intersect, $data);
-                } else if (count($intersect) != 0) {
+                if (count($intersect) != 0 and $data != 0) { //si il y a eu des suppressions et des ajouts
+                    $merge = array_merge($intersect, $data); // on merge les tableaux 
+                } else if (count($intersect) != 0) {// si il y a eu seulement des suppressions
                     $merge = $intersect;
                     
-                } else {
+                } else {    //si il y a eu seuelement des ajouts
                     $merge = $data;
                     
                 }
                 
-                $merge = array_map("unserialize", array_unique(array_map("serialize", $merge)));
-                mkdir($UPLOAD_FOLDER . "/" . $doi . "/tmp");
+                $merge = array_map("unserialize", array_unique(array_map("serialize", $merge)));// on dedoublonne les tableaux
+                mkdir($UPLOAD_FOLDER . "/" . $doi . "/tmp");//Creation d'un dossier temporaire de tri
                 foreach ($merge as $key => $value) {
                     rename($UPLOAD_FOLDER . "/" . $doi . "/" . $value['DATA_URL'], $UPLOAD_FOLDER . "/" . $doi . "/tmp/" . $value['DATA_URL']);
                 }
@@ -782,21 +781,20 @@ class DatasheetController
                 }
                 rmdir($UPLOAD_FOLDER . "/" . $doi . "/tmp/");
                 
-                
                 $json = array(
                     '$set' => array(
                         "INTRO" => $array['dataform'],
                         "DATA.FILES" => $merge
                     )
-                );
+                );//Json a envoyer a mongo
                 $collectionObject->update(array(
                     '_id' => $doi
-                ), $json);
+                ), $json);//Mise a jour de la base
                 return $array['message'] = '   <div class="ui message grey"  style="display: block;">Draft edited! </div>';
-            } else {
+            } else {// Si c'est un nouveau draft
                 $array['dataform']["UPLOAD_DATE"]   = date('Y-m-d');
                 $array['dataform']["CREATION_DATE"] = date('Y-m-d');
-                if ($_FILES['file']['name'][0] != "") {
+                if ($_FILES['file']['name'][0] != "") {//Check des fichier uploader 
                     for ($i = 0; $i < count($_FILES['file']['name']); $i++) {
                         $repertoireDestination                  = $UPLOAD_FOLDER;
                         $nomDestination                         = str_replace(' ', '_', $_FILES["file"]["name"][$i]);
@@ -837,7 +835,7 @@ class DatasheetController
                     "INTRO" => $array['dataform'],
                     "DATA" => $data
                 );
-                $collectionObject->insert($json);
+                $collectionObject->insert($json);// on insert le nouveau Draft
                 return $array['message'] = '   <div class="ui message grey"  style="display: block;">Draft created! </div>';
                 
             }
@@ -863,11 +861,11 @@ class DatasheetController
             $array['dataform']["CREATION_DATE"] = date('Y-m-d');
             $UPLOAD_FOLDER                      = $config["UPLOAD_FOLDER"];
             $doi                                = $array['doi'];
-            if ($_FILES['file']['error'][0] == 4) {
+            if ($_FILES['file']['error'][0] == 4) { // on verifie qu'il y a au moins un fichier de donné lié
                 $array['error'] = "Fichier manquant!";
                 return $array;
             }
-            for ($i = 0; $i < count($_FILES['file']['name']); $i++) {
+            for ($i = 0; $i < count($_FILES['file']['name']); $i++) { // on parcourt les fichiers uploader
                 $repertoireDestination                  = $UPLOAD_FOLDER;
                 $nomDestination                         = str_replace(' ', '_', $_FILES["file"]["name"][$i]);
                 $data["FILES"][$i]["DATA_URL"]          = $nomDestination;
@@ -907,13 +905,13 @@ class DatasheetController
             }
             
             $Request = new RequestApi();
-            $request = $Request->send_XML_to_datacite($array['xml']->asXML(), $doi);
-            if ($request == "true") {
-                $collectionObject->insert($json);
-                $Request->Send_Mail_To_uploader($array['dataform']['FILE_CREATOR'], $array['dataform']['TITLE'], $doi, $array['dataform']['DATA_DESCRIPTION']);
+            $request = $Request->send_XML_to_datacite($array['xml']->asXML(), $doi); // on enovie les donné à datacite
+            if ($request == "true") { // si datacite reponds et enregistre les données
+                $collectionObject->insert($json); // on insert dans la base
+                $Request->Send_Mail_To_uploader($array['dataform']['FILE_CREATOR'], $array['dataform']['TITLE'], $doi, $array['dataform']['DATA_DESCRIPTION']); // Envoie d'un mail au auteurs du jeu de données
                 return $array['message'] = '   <div class="ui message green"  style="display: block;">Dataset created!</div>';
             } else {
-                $array['error'] = "Unable to send metadata to Datacite";
+                $array['error'] = "Unable to send metadata to Datacite"; // Si datacite est indisponible on afficher une erreur
                 return $array;
             }
         }
@@ -952,7 +950,7 @@ class DatasheetController
             $collectionObject = $db->selectCollection($config["authSource"], $collection);
             if (strstr($doi, 'ORDAR') !== FALSE) { //Edition Si un DOI perrene est assigné
                 
-                if ($_SESSION['admin'] == 1) {
+                if ($_SESSION['admin'] == 1) {//Si c'est un admin (On peut modiifer les fichiers)
                     $query    = array(
                         '_id' => $doi
                     );
@@ -1034,14 +1032,13 @@ class DatasheetController
                             "DATA.FILES" => $merge
                         )
                     );
-                } else {
+                } else {//Si c'est l'utilisateur propriétaire on modifie juste les metadonnées
                     $json = array(
                         '$set' => array(
                             "INTRO" => $array['dataform']
                         )
                     );
                 }
-                $doi        = $doi;
                 $Request    = new RequestApi();
                 $xml        = $array['xml'];
                 $identifier = $xml->addChild('identifier', $doi);
@@ -1057,8 +1054,7 @@ class DatasheetController
                     return $array;
                 }
             } elseif (strstr($doi, 'Draft') !== FALSE) { /// publication d'un draft
-                $newdoi = "ORDAR-" . self::generateDOI();
-                
+                $newdoi = "ORDAR-" . self::generateDOI();//Generation d'un DOI
                 $Request    = new RequestApi();
                 $xml        = $array['xml'];
                 $identifier = $xml->addChild('identifier', $config["DOI_PREFIX"] . "/" . $newdoi);
@@ -1188,8 +1184,7 @@ class DatasheetController
             }
             
             else { //Publication d'un unpublished
-                $newdoi = "ORDAR-" . self::generateDOI();
-                
+                $newdoi = "ORDAR-" . self::generateDOI();//Genreation d'un DOI
                 $Request    = new RequestApi();
                 $xml        = $array['xml'];
                 $identifier = $xml->addChild('identifier', $config["DOI_PREFIX"] . "/" . $newdoi);
@@ -1251,7 +1246,6 @@ class DatasheetController
     function removeUnpublishedDatasheet($collection, $doi)
     {
         $config = parse_ini_file($_SERVER['DOCUMENT_ROOT'] . '/../config.ini');
-        
         $UPLOAD_FOLDER = $config["UPLOAD_FOLDER"];
         if ($collection == null) {
             return false;
@@ -1272,10 +1266,10 @@ class DatasheetController
             }
                 $collectionObject->remove(array(
                     '_id' => $doi
-                ));
-                rmdir($UPLOAD_FOLDER . $doi);
+                ));//Suppresion dans la base mongo
+                rmdir($UPLOAD_FOLDER . $doi);//Suppresion du dossier
                 $request = new RequestApi();
-                $request->Inactivate_doi($doi);
+                $request->Inactivate_doi($doi);//Désactivation du DOi aupres de datacite
                 
                 return true;
             } 
@@ -1301,7 +1295,7 @@ class DatasheetController
             }
             $collectionObject->remove(array(
                 '_id' => $doi
-            ));
+            ));//Suppresion de la base mongo
             rmdir($UPLOAD_FOLDER . $doi);//remove empty folder
             return true;
         }

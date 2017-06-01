@@ -43,7 +43,7 @@ Class FileController
      */
     function export_to_datacite_xml($response)
     {
-        if (isset($response['_source']['DATA'])) {
+        if (isset($response['_source']['INTRO'])) {
             $sxe = new \SimpleXMLElement("<resource/>");
             $sxe->addAttribute('xmlns:xmlns:xsi', 'http://www.w3.org/2001/XMLSchema-instance');
             $sxe->addAttribute('xmlns', 'http://datacite.org/schema/kernel-4');
@@ -88,7 +88,7 @@ Class FileController
      */
     function export_to_dublincore_xml($response)
     {
-        if (isset($response['_source']['DATA'])) {
+        if (isset($response['_source']['INTRO'])) {
             $sxe = new \SimpleXMLElement("<oai_dc:dc/>");
             $sxe->addAttribute('xmlns:xmlns:dc', 'http://purl.org/dc/elements/1.1/');
             $sxe->addAttribute('xmlns:xmlns:oai_dc', 'http://www.openarchives.org/OAI/2.0/oai_dc/');
@@ -126,7 +126,7 @@ Class FileController
      */
     function export_to_Bibtex($response)
     {
-        if (isset($response['_source']['DATA'])) {
+        if (isset($response['_source']['INTRO'])) {
             foreach ($response['_source']['INTRO']['FILE_CREATOR'] as $key => $value) {
                 $authors .= $value['DISPLAY_NAME'] . ",";
             }

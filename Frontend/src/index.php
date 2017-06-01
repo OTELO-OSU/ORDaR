@@ -107,9 +107,9 @@ $app->get('/login', function (Request $req, Response $responseSlim) {
     $twig = new Twig_Environment($loader);
     echo $twig->render('login.html.twig');
     $config = parse_ini_file($_SERVER['DOCUMENT_ROOT'] . '/../config.ini');
-    $_SESSION['name'] = $_SERVER['HTTP_SN'];
-    $_SESSION['firstname'] = $_SERVER['HTTP_GIVENNAME'];
-    $_SESSION['mail'] = $_SERVER['HTTP_MAIL'];
+    $_SESSION['name'] = "t";
+    $_SESSION['firstname'] = "t";
+    $_SESSION['mail'] ="admin@admin.fr";
    
     
    
@@ -281,7 +281,7 @@ $app->get('/record', function (Request $req, Response $responseSlim) {
         ->getTokenValueKey();
     $name = $req->getAttribute($nameKey);
     $value = $req->getAttribute($valueKey);
-    $response = $request->get_info_for_dataset($id, "Restricted");
+    $response = $request->get_info_for_dataset($id);
     if (isset($response['_source']['DATA'])) {
         $files = $response['_source']['DATA']['FILES'];
     }
@@ -390,7 +390,7 @@ $app->post('/editrecord', function (Request $req, Response $responseSlim) {
         ->getTokenValueKey();
     $namecsrf = $req->getAttribute($nameKey);
     $valuecsrf = $req->getAttribute($valueKey);
-    $response = $request->get_info_for_dataset($doi, "Restricted");
+    $response = $request->get_info_for_dataset($doi);
     $collection = $response['_type'];
     $doi = $response['_id'];
     $db = $Datasheet->connect_tomongo();
@@ -437,7 +437,7 @@ $app->post('/remove', function (Request $req, Response $responseSlim, $args) {
     $Datasheet = new Datasheet();
     $request = new RequestApi();
     $doi = $req->getparam('id');
-    $response = $request->get_info_for_dataset($doi, "Restricted");
+    $response = $request->get_info_for_dataset($doi);
     $collection = $response['_type'];
     $doi = $response['_id'];
     $state = $Datasheet->removeUnpublishedDatasheet($collection, $doi);
@@ -462,10 +462,10 @@ $app->get('/files/{doi}/{filename}', function (Request $req, Response $responseS
     $filename = $args['filename'];
     if (strstr($doi, 'ORDAR') !== false) {
         $config = parse_ini_file($_SERVER['DOCUMENT_ROOT'] . '/../config.ini');
-        $response = $request->get_info_for_dataset($config["DOI_PREFIX"] . '/' . $doi, "Restricted");
+        $response = $request->get_info_for_dataset($config["DOI_PREFIX"] . '/' . $doi);
     }
     else {
-        $response = $request->get_info_for_dataset($doi, "Restricted");
+        $response = $request->get_info_for_dataset($doi);
     }
     $File = new File();
     $download = $File->download($doi, $filename, $response);
@@ -484,10 +484,10 @@ $app->get('/preview/{doi}/{filename}', function (Request $req, Response $respons
     $fulldoi = $config["DOI_PREFIX"] . "/" . $args['doi'];
     $filename = $args['filename'];
     if (strstr($doi, 'ORDAR') !== false) {
-        $response = $request->get_info_for_dataset($fulldoi, "Restricted");
+        $response = $request->get_info_for_dataset($fulldoi);
     }
     else {
-        $response = $request->get_info_for_dataset($doi, "Restricted");
+        $response = $request->get_info_for_dataset($doi);
     }
     $File = new File();
     $download = $File->preview($doi, $filename, $response);
@@ -514,7 +514,7 @@ $app->post('/contact_author', function (Request $req, Response $responseSlim) {
 	    $sendermail = $req->getparam('User-email');
 	    $message = $req->getparam('User-message');
 	    $object = $req->getparam('User-object');
-	    $response = $request->get_info_for_dataset($doi, "Restricted");
+	    $response = $request->get_info_for_dataset($doi);
 	    $error = $Datasheet->Send_Mail_author($doi, $response, $author_name, $author_firstname, $object, $message, $sendermail);
 	    echo $twig->render('contact_request.html.twig', ['name' => $_SESSION['name'], 'firstname' => $_SESSION['firstname'], 'mail' => $_SESSION['mail'], 'error' => $error]);
 	}
@@ -529,7 +529,7 @@ $app->get('/export/{format}', function (Request $req, Response $responseSlim, $a
     $id = $req->getparam('id');
     $format = $args['format'];
     $request = new RequestApi();
-    $response = $request->get_info_for_dataset($id, "Unrestricted");
+    $response = $request->get_info_for_dataset($id);
     $file = new File();
     if ($format == "datacite") {
         $file = $file->export_to_datacite_xml($response);

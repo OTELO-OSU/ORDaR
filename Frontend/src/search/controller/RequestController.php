@@ -32,6 +32,10 @@ class RequestController
         curl_close($handle);
         return $httpCode;
     }
+    /**
+     * Check if DOI already exist
+     * @return false for not exist , true of exist and send mail to admin
+     */
     function Check_if_DOI_exist()
     {
         $config     = parse_ini_file($_SERVER['DOCUMENT_ROOT'] . '/../config.ini');
@@ -95,6 +99,10 @@ class RequestController
             return false;
         }
     }
+    /**
+     * Desactivate DOI in Datacite
+     * @return Code of request
+     */
     function Inactivate_doi($doi)
     {
         $config  = parse_ini_file($_SERVER['DOCUMENT_ROOT'] . '/../config.ini');
@@ -120,11 +128,15 @@ class RequestController
         $info    = curl_getinfo($ch);
         curl_close($ch);
     }
+    /**
+     * Make a request to elasticsearch API in admin MODE (View ALL)
+     * @return data of request
+     */
     function requestToAPIAdmin($query)
     {
         $config = parse_ini_file($_SERVER['DOCUMENT_ROOT'] . '/../config.ini');
-        if (!empty($query)) {
-            $query = rawurlencode($query);
+        if (!empty($query)) {//Si des facets sont coché
+            $query = rawurlencode($query);// on encode au format URL
         } else {
             $query = "*";
         }
@@ -424,9 +436,9 @@ class RequestController
             }  
         }';
         $bdd         = strtolower($config['authSource']);
-        if ($query == "null") {
+        if ($query == "null") { // SI pas de facets 
             $url = 'http://localhost/' . $bdd . '/_search?q=INTRO.FILE_CREATOR.MAIL:' . $author_mail . '%20AND%20(INTRO.FILE_CREATOR.NAME:' . $authors_name . ')&size=10000';
-        } else {
+        } else { // Sinon on recher avec les facets
             $query = rawurlencode($query);
             $url   = 'http://localhost/' . $bdd . '/_search?q=' . $query . '%20AND%20(INTRO.FILE_CREATOR.MAIL:' . $author_mail . ')%20AND%20(INTRO.FILE_CREATOR.NAME:' . $authors_name . ')&size=10000';
         }
@@ -444,7 +456,7 @@ class RequestController
         $response                   = json_decode($response, TRUE);
         $responses["hits"]["total"] = $response["hits"]["total"];
         $responses['aggregations']  = $response['aggregations'];
-        foreach ($response["hits"]["hits"] as $key => $value) {
+        foreach ($response["hits"]["hits"] as $key => $value) {//Reformatage de la reponse
             $responses["hits"]["hits"][$key]           = $value["_source"]["INTRO"];
             $responses["hits"]["hits"][$key]["_index"] = $value["_index"];
             $responses["hits"]["hits"][$key]["_id"]    = $value["_id"];
@@ -459,7 +471,7 @@ class RequestController
      * @param doi of dataset
      * @return data of request if find, else false
      */
-    function get_info_for_dataset($id, $restricted)
+    function get_info_for_dataset($id)
     {
         $config   = parse_ini_file($_SERVER['DOCUMENT_ROOT'] . '/../config.ini');
         $bdd      = strtolower($config['authSource']);
@@ -475,9 +487,6 @@ class RequestController
         );
         $response = self::Curlrequest($url, $curlopt);
         $response = json_decode($response, TRUE);
-        if ($restricted == "Unrestricted") {
-            return $response;
-        } else {
             if ($_SESSION['admin'] == "1") {
                 if ($response['found'] == false) {
                     return false;
@@ -487,42 +496,38 @@ class RequestController
             } else {
                 if ($response["_source"]["INTRO"]["ACCESS_RIGHT"] == "Open") {
                     return $response;
-                } elseif ($response["_source"]["INTRO"]["ACCESS_RIGHT"] == "Embargoed") {
-                    $embargoeddate = $response["_source"]["INTRO"]["PUBLICATION_DATE"];
-                    $now           = new \Datetime();
+                } 
+                elseif ($response["_source"]["INTRO"]["ACCESS_RIGHT"] == "Embargoed") {
                     foreach ($response["_source"]["INTRO"]["FILE_CREATOR"] as $key => $value) {
-                        if (@$_SESSION["mail"] == $value["MAIL"]) {
+                        if (@$_SESSION["mail"] == $value["MAIL"]) {// on cherche si le mail de l'utilisateur courant est autorisé
                             return $response;
                         } else {
                             $notfound = "notfound";
                         }
                     }
-                    if ($notfound = "notfound") {
-                        $responses["_source"]["INTRO"] = $response["_source"]["INTRO"];
-                        $responses["_index"]           = $response["_index"];
-                        $responses["_id"]              = $response["_id"];
-                        $responses["_type"]            = $response["_type"];
-                        return $responses;
+                    if ($notfound = "notfound") {//Si non autorisé on ne lui donne pas accés aux fichiers
+                         unset($response['_source']['DATA']);
+                        return $response;
                     }
-                } elseif ($response["_source"]["INTRO"]["ACCESS_RIGHT"] == "Closed") {
+
+                }
+                 elseif ($response["_source"]["INTRO"]["ACCESS_RIGHT"] == "Closed") {
                     foreach ($response["_source"]["INTRO"]["FILE_CREATOR"] as $key => $value) {
-                        if (@$_SESSION["mail"] == $value["MAIL"]) {
+                        if (@$_SESSION["mail"] == $value["MAIL"]) {// on cherche si le mail de l'utilisateur courant est autorisé
                             return $response;
                         } else {
                             $notfound = "notfound";
                         }
                     }
-                    if ($notfound = "notfound") {
-                        $responses["_source"]["INTRO"] = $response["_source"]["INTRO"];
-                        $responses["_index"]           = $response["_index"];
-                        $responses["_id"]              = $response["_id"];
-                        $responses["_type"]            = $response["_type"];
-                        return $responses;
+                    if ($notfound = "notfound") {//Si non autorisé on ne lui donne pas accés aux fichiers
+                        unset($response['_source']['DATA']);
+                        return $response;
                     }
-                } elseif ($response["_source"]["INTRO"]["ACCESS_RIGHT"] == "Unpublished") {
+                } 
+                elseif ($response["_source"]["INTRO"]["ACCESS_RIGHT"] == "Unpublished") {
                     $found = "false";
                     foreach ($response["_source"]["INTRO"]["FILE_CREATOR"] as $key => $value) {
-                        if (@$_SESSION["mail"] == $value["MAIL"]) {
+                        if (@$_SESSION["mail"] == $value["MAIL"]) {// on cherche si le mail de l'utilisateur courant est autorisé
                             $found = "true";
                         }
                     }
@@ -535,7 +540,7 @@ class RequestController
                 elseif ($response["_source"]["INTRO"]["ACCESS_RIGHT"] == "Draft") {
                     $found = "false";
                     foreach ($response["_source"]["INTRO"]["FILE_CREATOR"] as $key => $value) {
-                        if (@$_SESSION["mail"] == $value["MAIL"]) {
+                        if (@$_SESSION["mail"] == $value["MAIL"]) {// on cherche si le mail de l'utilisateur courant est autorisé
                             $found = "true";
                         }
                     }
@@ -546,10 +551,10 @@ class RequestController
                     }
                 }
             }
-        }
+        
     }
     /**
-     * Send a mail to contact ORDAR owner
+     * Send a mail to contact ORDAR owner admin
      * @param object,message,mail of sender
      * @return true if error, else false
      */
