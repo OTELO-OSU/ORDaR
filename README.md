@@ -285,7 +285,9 @@ L'auteur peut choisir de le publier ou de le supprimer.
 
 L'utilisateur recevra un mail avec le DOI qui a été attribué dés la publication du jeu de données. En statut unpublished l'id du fichier est provisoire (aucun DOI n'est attribué).
 
-
+**Création d'un fichier brouillons dit "Draft":**
+L'utilisateur peut créer un fichier brouillons , il doit renseigner au minimum le titre ainsi que le langage.
+Une fois créer le fichier apparait dans la section "my dataset" uniquement pour l'utilisateur qui a créé ce jeu de données, il peut l'editer puis le publier ou le supprimer à tout moment.
 
 **Modification d'un jeu de données existant:**
 
