@@ -1,7 +1,7 @@
 {
 "authentication": {
 "adminUsername":"test",
-"password": "test"},
+"password": "est"},
 "docManagers": [
   {
     "docManager": "elastic2_doc_manager",
