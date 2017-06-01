@@ -194,7 +194,7 @@ class DatasheetController
                 'authors_firstname',
                 'authors_email'
             );
-        } else { //  Champs obligatoire Si on publie
+        } elseif($type == "Publish") { //  Champs obligatoire Si on publie
             $required = array(
                 'title',
                 'language',
@@ -214,9 +214,10 @@ class DatasheetController
         }
         
         foreach ($required as $field) { //Verif des champs à traiter
-            if (empty($_POST[$field])) {
+            if (empty($_POST[$field])or$_POST[$field][0]=""or$_POST[$field][0][0]=="") {
                 $fields[] = $field;
             }
+            
         }
         if (count($fields) != 0) {//Affichage des champs manquants 
             $txt = null;
