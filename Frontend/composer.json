@@ -1,8 +1,8 @@
 {
     "require": {
-        "slim/slim": "^3.5",
-	"twig/twig": "^1.18",
-	"slim/csrf": "*"
+        "twig/twig": "^1.18",
+	"slim/csrf": "*",
+        "slim/slim": "^3.8"
     },
   "autoload": {
 

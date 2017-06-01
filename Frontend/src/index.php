@@ -40,6 +40,7 @@ $app->get('/', function (Request $req, Response $responseSlim) {
         echo $twig->render('accueil.html.twig', ['name' => $_SESSION['name'], 'firstname' => $_SESSION['firstname'], 'mail' => $_SESSION['mail']]);
     }
     else {
+
         echo $twig->render('accueil.html.twig');
     }
 });
@@ -109,6 +110,7 @@ $app->get('/login', function (Request $req, Response $responseSlim) {
     $_SESSION['name'] = $_SERVER['HTTP_SN'];
     $_SESSION['firstname'] = $_SERVER['HTTP_GIVENNAME'];
     $_SESSION['mail'] = $_SERVER['HTTP_MAIL'];
+   
     
    
    
@@ -202,7 +204,7 @@ $app->post('/upload', function (Request $req, Response $responseSlim) {
     $Datasheet = new Datasheet();
     $db = $Datasheet->connect_tomongo();
     $response = $Datasheet->Postprocessing($_POST, "Upload", "0",$db,'Manual_Depot');
-    
+
     if (isset($response['error'])) {
         $value = $response['dataform']['LICENSE'];
         if ($value == "Creative commons Attribution alone") {
@@ -228,7 +230,7 @@ $app->post('/upload', function (Request $req, Response $responseSlim) {
     else {
         $loader = new Twig_Loader_Filesystem('search/templates');
         $twig = new Twig_Environment($loader);
-        echo $twig->render('uploadsuccess.html.twig', ['name' => $_SESSION['name'], 'firstname' => $_SESSION['firstname'], 'mail' => $_SESSION['mail']]);
+        echo $twig->render('display_actions.html.twig', ['name' => $_SESSION['name'], 'firstname' => $_SESSION['firstname'], 'mail' => $_SESSION['mail'],'message'=>$response]);
 
     }
     //return $response;
@@ -417,7 +419,8 @@ $app->post('/editrecord', function (Request $req, Response $responseSlim) {
     }
     else {
 
-        return @$twig->render('editsuccess.html.twig', ['name' => $_SESSION['name'], 'firstname' => $_SESSION['firstname'], 'mail' => $_SESSION['mail']]);;
+        return @$twig->render('display_actions.html.twig', ['name' => $_SESSION['name'], 'firstname' => $_SESSION['firstname'], 'mail' => $_SESSION['mail'],'message'=>$array]);
+
     }
 })->add($container->get('csrf'));
 
@@ -441,7 +444,7 @@ $app->post('/remove', function (Request $req, Response $responseSlim, $args) {
     if ($state == true) {
         $loader = new Twig_Loader_Filesystem('search/templates');
         $twig = new Twig_Environment($loader);
-        echo $twig->render('removesucess.html.twig', ['name' => $_SESSION['name'], 'firstname' => $_SESSION['firstname'], 'mail' => $_SESSION['mail']]);;
+        echo $twig->render('display_actions.html.twig', ['name' => $_SESSION['name'], 'firstname' => $_SESSION['firstname'], 'mail' => $_SESSION['mail'],'message'=>'   <div class="ui message green"  style="display: block;">Datasheet removed!</div>']);;
 
     }
     else {

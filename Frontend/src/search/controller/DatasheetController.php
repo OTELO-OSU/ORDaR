@@ -127,6 +127,7 @@ class DatasheetController
     {
         
            if (array_key_exists('save',$POST)) {
+            $access_right=null;
                $array =  self::Postprocessing_publish($POST,$method,$doi,"Draft");
                 $config = parse_ini_file($_SERVER['DOCUMENT_ROOT'] . '/../config.ini');
                $query    = array(
@@ -848,6 +849,7 @@ class DatasheetController
                         "DATA" => $data
                     );
                     $collectionObject->insert($json);
+                    return $array['message']  = '   <div class="ui message grey"  style="display: block;">Draft created! </div>';
               
                      }
                 
@@ -921,7 +923,7 @@ class DatasheetController
             if ($request == "true") {
                 $collectionObject->insert($json);
                 $Request->Send_Mail_To_uploader($array['dataform']['FILE_CREATOR'],$array['dataform']['TITLE'], $doi, $array['dataform']['DATA_DESCRIPTION']);
-                return "true";
+                return $array['message']  = '   <div class="ui message green"  style="display: block;">Dataset created!</div>';
             } else {
                 $array['error'] = "Unable to send metadata to Datacite";
                 return $array;
@@ -1062,7 +1064,7 @@ class DatasheetController
                     $collectionObject->update(array(
                         '_id' => $doi
                     ), $json);
-                    return "true";
+                     return $array['message']  = '   <div class="ui message green"  style="display: block;">Dataset edited!</div>';
                 } else {
                     $array['error'] = "Unable to send metadata to Datacite";
                     return $array;
@@ -1194,13 +1196,16 @@ class DatasheetController
                         '_id' => $doi
                     ));
                     $newfiles['FILES']=$merge;
+                    foreach ($merge as $key => $value) {
+                        $newfiles["FILES"][$key]["ORIGINAL_DATA_URL"] = $UPLOAD_FOLDER . "/" . $config["DOI_PREFIX"] . "/" . $newdoi . "/" . $value["DATA_URL"];
+                    }
                     $collectionObject->insert(array(
                         '_id' => $config["DOI_PREFIX"] . "/" . $newdoi,
                         "INTRO" => $INTRO,
                         "DATA" => $newfiles
                     ));
                     $Request->Send_Mail_To_uploader($array['dataform']['FILE_CREATOR'],$array['dataform']['TITLE'], $config["DOI_PREFIX"] . "/" . $newdoi, $array['dataform']['DATA_DESCRIPTION']);
-                    
+                    return $array['message']  = '   <div class="ui message green"  style="display: block;">Draft published!</div>';
                      }
                      else {
                     $array['error'] = "Unable to send metadata to Datacite";
@@ -1254,7 +1259,7 @@ class DatasheetController
                         "DATA" => $DATA
                     ));
                     $Request->Send_Mail_To_uploader($array['dataform']['FILE_CREATOR'],$array['dataform']['TITLE'], $config["DOI_PREFIX"] . "/" . $newdoi, $array['dataform']['DATA_DESCRIPTION']);
-                    
+                     return $array['message']  = '   <div class="ui message green"  style="display: block;">Dataset published!</div>';
                 } else {
                     $array['error'] = "Unable to send metadata to Datacite";
                     return $array;
