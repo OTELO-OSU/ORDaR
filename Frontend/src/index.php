@@ -93,6 +93,7 @@ $app->get('/searchresult', function (Request $req, Response $responseSlim) {
     $loader = new Twig_Loader_Filesystem('search/templates');
     $twig = new Twig_Environment($loader);
     $query = $req->getparam('query');
+
     if ($_SESSION['name']) {
         echo $twig->render('accueil.html.twig', ['name' => $_SESSION['name'], 'firstname' => $_SESSION['firstname'], 'mail' => $_SESSION['mail'], 'query' => $query]);
     }
@@ -107,9 +108,9 @@ $app->get('/login', function (Request $req, Response $responseSlim) {
     $twig = new Twig_Environment($loader);
     echo $twig->render('login.html.twig');
     $config = parse_ini_file($_SERVER['DOCUMENT_ROOT'] . '/../config.ini');
-   $_SESSION['name'] = $_SERVER['HTTP_SN'];
-   $_SESSION['firstname'] = $_SERVER['HTTP_GIVENNAME'];
-   $_SESSION['mail'] = $_SERVER['HTTP_MAIL'];
+    $_SESSION['name'] = "t";
+    $_SESSION['firstname'] = "t";
+    $_SESSION['mail'] ="admin@admi.fr";
    
     
    

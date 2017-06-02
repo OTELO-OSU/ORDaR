@@ -351,8 +351,10 @@
 {% if measurements %}
 <div class="ui fluid styled accordion">
    <div class=" title">
-      Measurements
-      <i class="dropdown icon"></i>
+      <div class=" required field">
+      <label>Measurements   <i class="dropdown icon"></i></label>
+    
+      </div>
    </div>
    <div class=" content">
       {% for measurement in measurements %}
@@ -376,8 +378,10 @@
 </div>
 {% else %}
 <div class="ui segment  sixteen wide column ">
-   <div class="required field" >
       <div id="measurements">
+   <div class="required field" >
+         <label>Measurements</label>
+      </div>
       <input type="checkbox" class="empty_measurement" /><label for="empty_measurement">No measurements</label>
          <div class="three fields">
             <div class="field"><label>Measurement nature</label><input type="text" value="{{measurement.NATURE}}" name="measurement_nature[]" data-validate="measurement_nature" placeholder="Nature"  ></div>
@@ -385,7 +389,6 @@
             <div class="field"><label>Measurement unit(s)</label><input type="text" value="{{measurement.UNIT}}" name="measurement_unit[]" data-validate="measurement_unit" placeholder="Unit(s)" id="units"></div>
             <input type="checkbox" class="checker" /><label for="checker">No units</label>
          </div>
-      </div>
       <div class="ui primary right floated button"  id="addmeasurement">
          <i class="plus icon"></i> Add a new measurement
       </div>
