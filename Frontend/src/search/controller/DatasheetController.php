@@ -214,7 +214,7 @@ class DatasheetController
         }
         
         foreach ($required as $field) { //Verif des champs à traiter
-            if (empty($_POST[$field])or$_POST[$field][0]=""or$_POST[$field][0][0]=="") {
+            if (empty($_POST[$field])or empty($_POST[$field][0])or empty($_POST[$field][0][0])) {
                 $fields[] = $field;
             }
             
