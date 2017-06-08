@@ -222,22 +222,8 @@ class RequestController
     function requestToAPI($query)
     {
         $config                     = parse_ini_file($_SERVER['DOCUMENT_ROOT'] . '/../config.ini');
-        //$query                      = rawurldecode($query);
-        //$arrayquery                      = explode(':', $query);
-        //$substr = ['INTRO.'=>['TITLE','LANGUAGE','PUBLISHER','LICENSE','ACCESS_RIGHT','PUBLICATION_DATE','UPLOAD_DATE','CREATION_DATE','METADATA_DATE'],'INTRO.DATA_'=>'DESCRIPTION','INTRO.FILE_CREATOR.'=>'MAIL'];
-        /*foreach ($substr as $key => $value) {
-            if (is_array($value)) {
-                foreach ($value as $key2 => $value2) {
-                    $query = str_replace($value2, $key.$value2, $query);
-                }
-            }else{
-                $query = str_replace($value, $key.$value, $query);
-            }
-        }*/
-
         $query                      = str_replace('+', '%20', $query);
         $query                      = str_replace(' ', '%20', $query);
-       //var_dump($query);
         $postcontent                = '{ 
 
             "sort": { "INTRO.METADATA_DATE": { "order": "desc" }} , 
