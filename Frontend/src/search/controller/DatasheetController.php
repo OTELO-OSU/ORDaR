@@ -81,7 +81,7 @@ class DatasheetController
             }
         } else {
             $cursor = $collection->insert(array(
-                '_id' => "ORDAR-DOI",
+                '_id' => $config['REPOSITORY_NAME']."-DOI",
                 'ID' => 0,
                 'STATE' => "UNLOCKED"
             ));
@@ -667,7 +667,7 @@ class DatasheetController
                 } elseif ($type == "Publish") {
                     $newdoi = self::generateDOI();
                     if ($newdoi != false) {
-                        $doi        = $config["DOI_PREFIX"] . "/" . "ORDAR-" . $newdoi;
+                        $doi        = $config["DOI_PREFIX"] . "/" . $config['REPOSITORY_NAME']."-" . $newdoi;
                         $identifier = $sxe->addChild('identifier', $doi);
                         $identifier->addAttribute('identifierType', 'DOI');
                         $array['dataform'] = $array;
@@ -949,7 +949,7 @@ class DatasheetController
             return $array;
         } else {
             $collectionObject = $db->selectCollection($config["authSource"], $collection);
-            if (strstr($doi, 'ORDAR') !== FALSE) { //Edition Si un DOI perrene est assigné
+            if (strstr($doi, $config['REPOSITORY_NAME']) !== FALSE) { //Edition Si un DOI perrene est assigné
                 
                 if ($_SESSION['admin'] == 1) {//Si c'est un admin (On peut modiifer les fichiers)
                     $query    = array(
@@ -1055,7 +1055,7 @@ class DatasheetController
                     return $array;
                 }
             } elseif (strstr($doi, 'Draft') !== FALSE) { /// publication d'un draft
-                $newdoi = "ORDAR-" . self::generateDOI();//Generation d'un DOI
+                $newdoi = $config['REPOSITORY_NAME']."-" . self::generateDOI();//Generation d'un DOI
                 $Request    = new RequestApi();
                 $xml        = $array['xml'];
                 $identifier = $xml->addChild('identifier', $config["DOI_PREFIX"] . "/" . $newdoi);
@@ -1185,7 +1185,7 @@ class DatasheetController
             }
             
             else { //Publication d'un unpublished
-                $newdoi = "ORDAR-" . self::generateDOI();//Genreation d'un DOI
+                $newdoi = $config['REPOSITORY_NAME']."-" . self::generateDOI();//Genreation d'un DOI
                 $Request    = new RequestApi();
                 $xml        = $array['xml'];
                 $identifier = $xml->addChild('identifier', $config["DOI_PREFIX"] . "/" . $newdoi);
@@ -1257,7 +1257,7 @@ class DatasheetController
         $query            = array(
             '_id' => $doi
         );
-        if (strstr($doi, 'ORDAR') !== FALSE) {//si jeu de données publié
+        if (strstr($doi, $config['REPOSITORY_NAME']) !== FALSE) {//si jeu de données publié
             if ($_SESSION['admin'] == 1) {//check admin
                 $cursor           = $collectionObject->find($query);
                foreach ($cursor as $key => $value) {
@@ -1315,20 +1315,21 @@ class DatasheetController
     
     function Send_Mail_author($doi, $response, $author_name, $author_firstname, $object, $message, $sendermail)
     {
+        $config = parse_ini_file($_SERVER['DOCUMENT_ROOT'] . '/../config.ini');
         if (!empty($object) && !empty($message) && filter_var($sendermail, FILTER_VALIDATE_EMAIL)) {
             $title = $response['_source']['INTRO']['TITLE'];
-            $headers .= "From:<noreply@ordar.otelo.univ-lorraine.fr>\r\n";
+            $headers .= "From:<".$config['NO_REPLY_MAIL'].">\r\n";
             $headers .= "MIME-Version: 1.0\r\n";
             $headers .= "Content-Type: text/html; charset=utf-8\r\n";
             foreach ($response['_source']['INTRO']['FILE_CREATOR'] as $key => $value) {
                 if ($author_name == $value["NAME"] && $author_firstname == $value["FIRST_NAME"]) {
                     $mail = $value["MAIL"];
-                    mail("<" . $mail . ">", 'Contact from ORDaR : ' . $object, '<html> 
+                    mail("<" . $mail . ">", 'Contact from '.$config['REPOSITORY_NAME'].': ' . $object, '<html> 
                             <head> 
                             <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
                             </head> 
                             <body> 
-                                <h2>Contact from :  <img src="https://ordar.otelo.univ-lorraine.fr/img/ordar_logo.png" alt="Logo ordar" height="30" width="120" /> </h2>  
+                                <h2>Contact from :  <img src="'.$config['REPOSITORY_URL'].'/img/logo.png" alt="Logo " height="30" width="120" /> </h2>  
                                 <table cellspacing="0" style="border: 2px solid black; min-width: 300px; width: auto; height: 200px;  "> 
                                     <tr> 
                                         <th>Title</th><td>' . $title . '</td> 

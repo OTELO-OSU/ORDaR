@@ -109,9 +109,9 @@ $app->get('/login', function (Request $req, Response $responseSlim) {
     echo $twig->render('login.html.twig');
     $config = parse_ini_file($_SERVER['DOCUMENT_ROOT'] . '/../config.ini');
   
-   $_SESSION['name'] = $_SERVER['HTTP_SN'];
-   $_SESSION['firstname'] = $_SERVER['HTTP_GIVENNAME'];
-   $_SESSION['mail'] = $_SERVER['HTTP_MAIL'];
+   $_SESSION['name'] = "t";
+   $_SESSION['firstname'] = "t";
+   $_SESSION['mail'] = "t@t.fr";
       
 
     
@@ -142,7 +142,7 @@ $app->get('/logout', function (Request $req, Response $responseSlim) {
     $twig = new Twig_Environment($loader);
     session_destroy();
     $config = parse_ini_file($_SERVER['DOCUMENT_ROOT'] . '/../config.ini');
-    return $responseSlim->withRedirect($config['URL_DOI'].'/Shibboleth.sso/Logout?return='.$config['URL_DOI']);
+    return $responseSlim->withRedirect($config['REPOSITORY_URL'].'/Shibboleth.sso/Logout?return='.$config['REPOSITORY_URL']);
 
 });
 
@@ -298,7 +298,7 @@ $app->get('/record', function (Request $req, Response $responseSlim) {
     }
     else {
 
-        if (strstr($id, 'ORDAR') !== false) {
+        if (strstr($id, $config['REPOSITORY_NAME']) !== false) {
             $id = split("/", $response['_id']);
             $id = $id[1];
         }
@@ -462,7 +462,7 @@ $app->get('/files/{doi}/{filename}', function (Request $req, Response $responseS
     $request = new RequestApi();
     $doi = $args['doi'];
     $filename = $args['filename'];
-    if (strstr($doi, 'ORDAR') !== false) {
+    if (strstr($doi, $config['REPOSITORY_NAME']) !== false) {
         $config = parse_ini_file($_SERVER['DOCUMENT_ROOT'] . '/../config.ini');
         $response = $request->get_info_for_dataset($config["DOI_PREFIX"] . '/' . $doi);
     }
@@ -485,7 +485,7 @@ $app->get('/preview/{doi}/{filename}', function (Request $req, Response $respons
     $doi = $args['doi'];
     $fulldoi = $config["DOI_PREFIX"] . "/" . $args['doi'];
     $filename = $args['filename'];
-    if (strstr($doi, 'ORDAR') !== false) {
+    if (strstr($doi, $config['REPOSITORY_NAME']) !== false) {
         $response = $request->get_info_for_dataset($fulldoi);
     }
     else {

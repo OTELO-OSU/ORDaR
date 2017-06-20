@@ -17,7 +17,7 @@ Class FileController
         $DOI_PREFIX    = $config["DOI_PREFIX"];
         $doi           = str_replace($config["UPLOAD_FOLDER"], "", $doi);
         if (isset($response['_source']['DATA'])) {
-            if (strstr($doi, 'ORDAR') !== FALSE) {
+            if (strstr($doi, $config['REPOSITORY_NAME']) !== FALSE) {
                 $file = $UPLOAD_FOLDER . $DOI_PREFIX . "/" . $doi . "/" . $filename;
             } else {
                 $file = $UPLOAD_FOLDER . $doi . "/" . $filename;
@@ -162,7 +162,7 @@ Class FileController
         
         $doi = str_replace($config["UPLOAD_FOLDER"], "", $doi);
         if (isset($response['_source']['DATA'])) {
-            if (strstr($doi, 'ORDAR') !== FALSE) {
+            if (strstr($doi, $config['REPOSITORY_NAME']) !== FALSE) {
                 $file = $UPLOAD_FOLDER . $DOI_PREFIX . "/" . $doi . "/" . $filename;
             } else {
                 $file = $UPLOAD_FOLDER . $doi . "/" . $filename;

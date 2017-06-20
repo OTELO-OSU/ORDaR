@@ -58,7 +58,7 @@ class RequestController
                 }
             }
         }
-        $url     = "https://mds.datacite.org/metadata/" . $config['DOI_PREFIX'] . "/ORDAR-" . $NewDOI;
+        $url     = "https://mds.datacite.org/metadata/" . $config['DOI_PREFIX'] . "/".$config['REPOSITORY_NAME']."-" . $NewDOI;
         $curlopt = array(
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => "",
@@ -84,13 +84,13 @@ class RequestController
                 $array = explode(",", $value);
             }
             foreach ($array as $key => $value) {
-                $headers .= "From:<noreply@ordar.otelo.univ-lorraine.fr>\r\n";
+                $headers .= "From:<".$config['NO_REPLY_MAIL'].">\r\n";
                 $headers .= "MIME-Version: 1.0\r\n";
                 $headers .= "Content-Type: text/html; charset=utf-8\r\n";
-                $mail = mail($value, 'Error in ORDaR ', '<html>
+                $mail = mail($value, 'Error in '.$config['REPOSITORY_NAME'], '<html>
                 <body>
-                    <h2>Error occured in ordar!</h2>
-                    <p>This DOI ORDAR-' . $NewDOI . ' is already registred check your database DOI.<p>
+                    <h2>Error occured in '.$config['REPOSITORY_NAME'].'!</h2>
+                    <p>This DOI '.$config['REPOSITORY_NAME'].'-' . $NewDOI . ' is already registered check your database DOI.<p>
                 </body>
                 </html> ', $headers);
             }
@@ -357,7 +357,7 @@ class RequestController
             $info    = curl_getinfo($ch);
             curl_close($ch);
             if ($info['http_code'] == "201") {
-                $url_doi = urlencode($config['URL_DOI'] . "/record?id=" . $doi);
+                $url_doi = urlencode($config['REPOSITORY_URL'] . "/record?id=" . $doi);
                 $curl    = curl_init();
                 curl_setopt_array($curl, array(
                     CURLOPT_URL => "https://mds.datacite.org/doi",
@@ -562,16 +562,17 @@ class RequestController
      */
     function Send_Contact_Mail($object, $message, $sendermail)
     {
+        $config   = parse_ini_file($_SERVER['DOCUMENT_ROOT'] . '/../config.ini');
         if (!empty($object) && !empty($message) && filter_var($sendermail, FILTER_VALIDATE_EMAIL)) {
-            $headers .= "From:<noreply@ordar.otelo.univ-lorraine.fr>\r\n";
+            $headers .= "From:<".$config['NO_REPLY_MAIL'].">\r\n";
             $headers .= "MIME-Version: 1.0\r\n";
             $headers .= "Content-Type: text/html; charset=utf-8\r\n";
-            $mail = mail("<otelo-si@univ-lorraine.fr>", 'Contact from ORDaR : ' . $object, '<html>
+            $mail = mail("<otelo-si@univ-lorraine.fr>", 'Contact from '.$config['REPOSITORY_NAME'].': ' . $object, '<html>
     <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     </head>
     <body>
-         <h2>Contact from :  <img src="https://ordar.otelo.univ-lorraine.fr/img/ordar_logo.png" alt="Logo ordar" height="30" width="120" /> </h2>  
+         <h2>Contact from :  <img src="'.$config['REPOSITORY_URL'].'/img/logo.png" alt="Logo" height="30" width="120" /> </h2>  
         <table cellspacing="0" style="border: 2px solid black; width: 400px; height: 200px;">
             <tr>
                 <th>From:</th><td>' . $sendermail . '</td>
@@ -600,8 +601,9 @@ class RequestController
      * @return true if error, else false
      */
     function Send_Mail_To_uploader($authors,$title, $doi, $description)
-    {
-        $headers = "From:<noreply@ordar.otelo.univ-lorraine.fr>\r\n";
+    {        
+        $config   = parse_ini_file($_SERVER['DOCUMENT_ROOT'] . '/../config.ini');
+        $headers .= "From:<".$config['NO_REPLY_MAIL'].">\r\n";
         $headers .= "MIME-Version: 1.0\r\n";
         $headers .= "Content-Type: text/html; charset=utf-8\r\n";
         foreach ($authors as $key => $value) {
@@ -610,7 +612,7 @@ class RequestController
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     </head>
     <body>
-        <h2>Your dataset is now on <img src="https://ordar.otelo.univ-lorraine.fr/img/ordar_logo.png" alt="Logo ordar" height="30" width="120" /></h2>
+        <h2>Your dataset is now on <img src="'.$config['REPOSITORY_URL'].'/img/logo.png" alt="Logo " height="30" width="120" /></h2>
         <p> '.$_SESSION['name'].' '.$_SESSION['firstname'].' has published this dataset </p>
         <p> Your DOI is : <a href="http://dx.doi.org/' . $doi . '">' . $doi . '</a></p>
          <table cellspacing="0" style="border: 2px solid black; width: 500px; height: 200px;">
