@@ -113,8 +113,8 @@ $app->get('/login', function (Request $req, Response $responseSlim) {
    $_SESSION['firstname'] = $_SERVER['HTTP_GIVENNAME'];
    $_SESSION['mail'] = $_SERVER['HTTP_MAIL'];
       
+
     
-   
    
     foreach ($config["admin"] as $key => $value) {
         $array = explode(",", $value);

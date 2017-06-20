@@ -1202,7 +1202,7 @@ class DatasheetController
                         $ORIGINAL_DATA_URL = $value["DATA"]["FILES"][0]["ORIGINAL_DATA_URL"];
                     }
                     //unlink($ORIGINAL_DATA_URL);
-                    exec("sudo -u owncloud rm ".$ORIGINAL_DATA_URL);
+                    exec("sudo -u ".$config["DATAFILE_UNIXUSER"]." rm ".$ORIGINAL_DATA_URL);
                     rename($UPLOAD_FOLDER . $doi . '/' . $doi . '_DATA.csv', $UPLOAD_FOLDER . "/" . $config["DOI_PREFIX"] . "/" . $newdoi . "/" . $doi . '_DATA.csv');
                     rmdir($UPLOAD_FOLDER . $doi);
                     $collectionObject->update(array(
@@ -1292,7 +1292,7 @@ class DatasheetController
                     unlink($UPLOAD_FOLDER . $doi . '/'. $data_url);//remove datafile
                     if (strstr($doi, 'Draft') == FALSE) {  //Remove xls if unpublished from otelocloud
                         //unlink($ORIGINAL_DATA_URL);
-                        exec("sudo -u owncloud rm ".$ORIGINAL_DATA_URL);
+                        exec("sudo -u ".$config["DATAFILE_UNIXUSER"]." rm ".$ORIGINAL_DATA_URL);
 
                      }
                 }
