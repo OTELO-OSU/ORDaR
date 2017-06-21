@@ -29,6 +29,26 @@ $c['notAllowedHandler'] = function ($c) {
     };
 };
 
+$app->add(function ($request, $response, $next) {
+      $file=file_exists($_SERVER['DOCUMENT_ROOT'] . '/../config.ini');
+    if ($file==false) {
+        $loader = new Twig_Loader_Filesystem('search/templates');
+        $twig = new Twig_Environment($loader);
+        echo $twig->render('notfound.html.twig');
+        }   
+    else{
+        $config = parse_ini_file($_SERVER['DOCUMENT_ROOT'] . '/../config.ini');
+        if (strlen($config['REPOSITORY_NAME'])==0 OR strlen($config['host'])==0 OR strlen($config['authSource'])==0 OR strlen($config['DOI_PREFIX'])==0) {
+        $loader = new Twig_Loader_Filesystem('search/templates');
+        $twig = new Twig_Environment($loader);
+        echo $twig->render('notfound.html.twig');
+        }
+    } 
+
+    $response = $next($request, $response);
+    return $response;
+});
+
 session_start();
 
 //Route permettant d'acceder a l'accueil
@@ -109,9 +129,9 @@ $app->get('/login', function (Request $req, Response $responseSlim) {
     echo $twig->render('login.html.twig');
     $config = parse_ini_file($_SERVER['DOCUMENT_ROOT'] . '/../config.ini');
   
-   $_SESSION['name'] = $_SERVER['HTTP_SN'];
-   $_SESSION['firstname'] = $_SERVER['HTTP_GIVENNAME'];
-   $_SESSION['mail'] = $_SERVER['HTTP_MAIL'];
+   $_SESSION['name'] = "LORGEOUX";
+   $_SESSION['firstname'] = "t";
+   $_SESSION['mail'] = "laurence.huault@univ-lorraine.fr";
       
 
     

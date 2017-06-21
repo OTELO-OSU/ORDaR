@@ -44,41 +44,37 @@ class DatasheetController
         ));
         $collection = $dbdoi->selectCollection($config['DOI_database'], "DOI");
         if ($collection->count() == 1) {//Verification du statut de la variable DOI (si UNLOCKED on peut y acceder)
-            $query  = array(
-                'STATE' => 'UNLOCKED'
-            );
-            $cursor = $collection->find($query);
-            $count  = $cursor->count();
-            if ($count == 1) {
-                foreach ($cursor as $key => $value) {
-                    $update = $collection->update(array(
-                        "_id" => $value['_id']
-                    ), array(
-                        '$set' => array(
-                            "STATE" => "LOCKED"
-                        )
-                    ));
-                    $DOI    = $value['ID'];
-                    $NewDOI = ++$DOI;
-                    $update = $collection->update(array(
-                        "_id" => $value['_id']
-                    ), array(
-                        '$set' => array(
-                            "ID" => $NewDOI
-                        )
-                    ));
-                    $update = $collection->update(array(
-                        "_id" => $value['_id']
-                    ), array(
-                        '$set' => array(
-                            "STATE" => "UNLOCKED"
-                        )
-                    ));
+
+                
+            $maxTries = 3;
+            for ($try=1; $try<=$maxTries; $try++) {
+                $query  = array(
+                    'STATE' => 'UNLOCKED'
+                );
+                
+                    $cursor = $collection->find($query);
+                    $count  = $cursor->count();
+                if ($count == 1) {
+                    foreach ($cursor as $key => $value) {
+                        $update = $collection->update(array(
+                            "_id" => $value['_id']
+                        ), array(
+                            '$set' => array(
+                                "STATE" => "LOCKED"
+                            )
+                        ));
+                        $DOI    = $value['ID'];
+                        $NewDOI = ++$DOI;
+                    }
+                    $result=$NewDOI;
+                    break;
+                } else {
+                    $result=false;
                 }
-                return $NewDOI;
-            } else {
-                return false;
+                sleep(3);
+                
             }
+            return $result;
         } else {
             $cursor = $collection->insert(array(
                 '_id' => $config['REPOSITORY_NAME']."-DOI",
@@ -102,26 +98,68 @@ class DatasheetController
                     ));
                     $DOI    = $value['ID'];
                     $NewDOI = ++$DOI;
-                    $update = $collection->update(array(
-                        "_id" => $value['_id']
-                    ), array(
-                        '$set' => array(
-                            "ID" => $NewDOI
-                        )
-                    ));
-                    $update = $collection->update(array(
-                        "_id" => $value['_id']
-                    ), array(
-                        '$set' => array(
-                            "STATE" => "UNLOCKED"
-                        )
-                    ));
                 }
                 return $NewDOI;
             }
         }
     }
     
+
+    function Increment_DOI(){
+        $config = parse_ini_file($_SERVER['DOCUMENT_ROOT'] . '/../config.ini');
+    
+        $dbdoi      = new MongoClient("mongodb://" . $config['host'] . ':' . $config['port'], array(
+            'authSource' => $config['DOI_database'],
+            'username' => $config['user_doi'],
+            'password' => $config['password_doi']
+        ));
+        $collection = $dbdoi->selectCollection($config['DOI_database'], "DOI");
+        $query  = array(
+                'STATE' => 'LOCKED'
+            );
+            $cursor = $collection->find($query);
+            $count  = $cursor->count();
+            if ($count == 1) {
+                foreach ($cursor as $key => $value) {
+                    $update = $collection->update(array(
+                        "_id" => $value['_id']
+                    ), array(
+                        '$set' => array(
+                            "STATE" => "LOCKED"
+                        )
+                    ));
+                    $DOI    = ++$value['ID'];
+                   
+                }
+            }
+            $update = $collection->update(array(
+                    "_id" => $config['REPOSITORY_NAME']."-DOI"
+                ), array(
+                    '$set' => array(
+                        "ID" => $DOI
+                    )
+                ));
+            self::UnlockDOI();
+            
+    }
+
+    function UnlockDOI(){
+        $config = parse_ini_file($_SERVER['DOCUMENT_ROOT'] . '/../config.ini');
+    
+        $dbdoi      = new MongoClient("mongodb://" . $config['host'] . ':' . $config['port'], array(
+            'authSource' => $config['DOI_database'],
+            'username' => $config['user_doi'],
+            'password' => $config['password_doi']
+        ));
+        $collection = $dbdoi->selectCollection($config['DOI_database'], "DOI");
+        $update = $collection->update(array(
+                    "_id" => $config['REPOSITORY_NAME']."-DOI"
+                ), array(
+                    '$set' => array(
+                        "STATE" => "UNLOCKED"
+                    )
+                ));
+    }
     
     function Postprocessing($POST, $method, $doi, $db, $collection)
     {
@@ -908,10 +946,12 @@ class DatasheetController
             $Request = new RequestApi();
             $request = $Request->send_XML_to_datacite($array['xml']->asXML(), $doi); // on enovie les donné à datacite
             if ($request == "true") { // si datacite reponds et enregistre les données
+                self::Increment_DOI($doi);
                 $collectionObject->insert($json); // on insert dans la base
                 $Request->Send_Mail_To_uploader($array['dataform']['FILE_CREATOR'], $array['dataform']['TITLE'], $doi, $array['dataform']['DATA_DESCRIPTION']); // Envoie d'un mail au auteurs du jeu de données
                 return $array['message'] = '   <div class="ui message green"  style="display: block;">Dataset created!</div>';
             } else {
+                self::UnlockDOI();
                 $array['error'] = "Unable to send metadata to Datacite"; // Si datacite est indisponible on afficher une erreur
                 return $array;
             }
@@ -1175,6 +1215,7 @@ class DatasheetController
                         "INTRO" => $INTRO,
                         "DATA" => $newfiles
                     ));
+                    self::Increment_DOI($doi);
                     $Request->Send_Mail_To_uploader($array['dataform']['FILE_CREATOR'], $array['dataform']['TITLE'], $config["DOI_PREFIX"] . "/" . $newdoi, $array['dataform']['DATA_DESCRIPTION']);
                     return $array['message'] = '   <div class="ui message green"  style="display: block;">Draft published!</div>';
                 } else {
@@ -1227,6 +1268,7 @@ class DatasheetController
                         "INTRO" => $INTRO,
                         "DATA" => $DATA
                     ));
+                    self::Increment_DOI($doi);
                     $Request->Send_Mail_To_uploader($array['dataform']['FILE_CREATOR'], $array['dataform']['TITLE'], $config["DOI_PREFIX"] . "/" . $newdoi, $array['dataform']['DATA_DESCRIPTION']);
                     return $array['message'] = '   <div class="ui message green"  style="display: block;">Dataset published!</div>';
                 } else {

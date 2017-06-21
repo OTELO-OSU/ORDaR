@@ -44,6 +44,7 @@
 	echo "NO_REPLY_MAIL="'"'$NO_REPLY_MAIL'"' >> config.ini	&&
 	echo "#REPOSITORY BDD CONFIG" >> config.ini	&&
 	echo "host="$host >> config.ini	&&
+	echo "port="$port >> config.ini	&&
 	echo "password="$password >> config.ini	&&
 	echo "authSource="$authSource >> config.ini	&&
 	echo "username="$username >> config.ini	&&

@@ -63,7 +63,7 @@ class RequestController
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => "",
             CURLOPT_MAXREDIRS => 10,
-            CURLOPT_TIMEOUT => 10,
+            CURLOPT_TIMEOUT => 5,
             CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
             CURLOPT_CUSTOMREQUEST => "GET",
             CURLOPT_HTTPHEADER => array(
@@ -79,7 +79,28 @@ class RequestController
         $DOI_exist = curl_exec($ch);
         $info      = curl_getinfo($ch);
         curl_close($ch);
-        if ($info['http_code'] == 200) {
+        $url     = "https://mds.datacite.org/doi/" . $config['DOI_PREFIX'] . "/".$config['REPOSITORY_NAME']."-" . $NewDOI;
+        $curlopt = array(
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => "",
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 5,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => "GET",
+            CURLOPT_HTTPHEADER => array(
+                "authorization: " . $config['Auth_config_datacite'],
+                'Content-Type: text/xml'
+            )
+        );
+        $ch2      = curl_init();
+        $curlopt = array(
+            CURLOPT_URL => $url
+        ) + $curlopt;
+        curl_setopt_array($ch, $curlopt);
+        $URLisgenerated = curl_exec($ch);
+        $URLisgeneratedinfo      = curl_getinfo($ch);
+        curl_close($ch);
+        if ($info['http_code'] == 200 &&  $URLisgeneratedinfo['http_code']== 200) {
             foreach ($config["admin"] as $key => $value) {
                 $array = explode(",", $value);
             }
@@ -330,8 +351,38 @@ class RequestController
         ) + $curlopt;
         curl_setopt_array($ch, $curlopt);
         $XMLondatacite = curl_exec($ch);
+        curl_close($ch); 
+
+        $ch      = curl_init();
+        $curlopt = array(
+            CURLOPT_URL => $url
+        ) + $curlopt;
+        curl_setopt_array($ch, $curlopt);
+        $DOI_exist = curl_exec($ch);
+        $info      = curl_getinfo($ch);
         curl_close($ch);
-        if ($XMLondatacite == $XML) {
+        $url     = "https://mds.datacite.org/doi/" . $doi;
+        $curlopt = array(
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => "",
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 5,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => "GET",
+            CURLOPT_HTTPHEADER => array(
+                "authorization: " . $config['Auth_config_datacite'],
+                'Content-Type: text/xml'
+            )
+        );
+        $ch2      = curl_init();
+        $curlopt = array(
+            CURLOPT_URL => $url
+        ) + $curlopt;
+        curl_setopt_array($ch2, $curlopt);
+        $URLisgenerated = curl_exec($ch2);
+        $URLisgeneratedinfo      = curl_getinfo($ch2);
+        curl_close($ch2);
+        if ($XMLondatacite == $XML && $URLisgeneratedinfo['http_code'] == 200) {
             return "true";
         } else {
             $url     = "https://mds.datacite.org/metadata/";
@@ -364,7 +415,7 @@ class RequestController
                     CURLOPT_RETURNTRANSFER => true,
                     CURLOPT_ENCODING => "",
                     CURLOPT_MAXREDIRS => 10,
-                    CURLOPT_TIMEOUT => 30,
+                    CURLOPT_TIMEOUT => 10,
                     CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
                     CURLOPT_CUSTOMREQUEST => "POST",
                     CURLOPT_POSTFIELDS => "doi=" . $doi . "&url=" . $url_doi,
@@ -374,7 +425,14 @@ class RequestController
                     )
                 ));
                 $response = curl_exec($curl);
-                return "true";
+                $info    = curl_getinfo($curl);
+                curl_close($curl);
+                if ($info['http_code'] == "201") {
+                    return "true";  
+                }
+                else{
+                    return "false";
+                }
             } else {
                 return "false";
             }
