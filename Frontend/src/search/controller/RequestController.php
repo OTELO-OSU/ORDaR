@@ -96,9 +96,9 @@ class RequestController
         $curlopt = array(
             CURLOPT_URL => $url
         ) + $curlopt;
-        curl_setopt_array($ch, $curlopt);
-        $URLisgenerated = curl_exec($ch);
-        $URLisgeneratedinfo      = curl_getinfo($ch);
+        curl_setopt_array($ch2, $curlopt);
+        $URLisgenerated = curl_exec($ch2);
+        $URLisgeneratedinfo      = curl_getinfo($ch2);
         curl_close($ch);
         if ($info['http_code'] == 200 &&  $URLisgeneratedinfo['http_code']== 200) {
             foreach ($config["admin"] as $key => $value) {

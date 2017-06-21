@@ -43,9 +43,7 @@ class DatasheetController
             'password' => $config['password_doi']
         ));
         $collection = $dbdoi->selectCollection($config['DOI_database'], "DOI");
-        if ($collection->count() == 1) {//Verification du statut de la variable DOI (si UNLOCKED on peut y acceder)
-
-                
+        if ($collection->count() == 1) {//Verification du statut de la variable DOI (si UNLOCKED on peut y acceder)                
             $maxTries = 3;
             for ($try=1; $try<=$maxTries; $try++) {
                 $query  = array(
@@ -1095,7 +1093,12 @@ class DatasheetController
                     return $array;
                 }
             } elseif (strstr($doi, 'Draft') !== FALSE) { /// publication d'un draft
-                $newdoi = $config['REPOSITORY_NAME']."-" . self::generateDOI();//Generation d'un DOI
+             $generatedoi=self::generateDOI();
+                if ($generatedoi==false) {
+                    $array['error'] = "Unable to send metadata to Datacite";
+                    return $array;
+                }
+                $newdoi = $config['REPOSITORY_NAME']."-" . $generatedoi;//Generation d'un DOI
                 $Request    = new RequestApi();
                 $xml        = $array['xml'];
                 $identifier = $xml->addChild('identifier', $config["DOI_PREFIX"] . "/" . $newdoi);
@@ -1226,7 +1229,13 @@ class DatasheetController
             }
             
             else { //Publication d'un unpublished
-                $newdoi = $config['REPOSITORY_NAME']."-" . self::generateDOI();//Genreation d'un DOI
+                $generatedoi=self::generateDOI();
+                if ($generatedoi==false) {
+                    $array['error'] = "Unable to send metadata to Datacite";
+                    return $array;
+                }
+                $newdoi = $config['REPOSITORY_NAME']."-" .$generatedoi;//Genreation d'un DOI
+
                 $Request    = new RequestApi();
                 $xml        = $array['xml'];
                 $identifier = $xml->addChild('identifier', $config["DOI_PREFIX"] . "/" . $newdoi);

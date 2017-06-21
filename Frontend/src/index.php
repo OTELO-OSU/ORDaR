@@ -290,6 +290,7 @@ $app->post('/getmypublications', function (Request $req, Response $responseSlim)
 
 //Route affichant les details d'un dataset
 $app->get('/record', function (Request $req, Response $responseSlim) {
+    $config = parse_ini_file($_SERVER['DOCUMENT_ROOT'] . '/../config.ini');
     $_SESSION['HTTP_REFERER'] = $_SERVER['REQUEST_URI'];
     $loader = new Twig_Loader_Filesystem('search/templates');
     $twig = new Twig_Environment($loader);
@@ -479,11 +480,12 @@ $app->post('/remove', function (Request $req, Response $responseSlim, $args) {
 
 //Route permettant le telechargement
 $app->get('/files/{doi}/{filename}', function (Request $req, Response $responseSlim, $args) {
+    $config = parse_ini_file($_SERVER['DOCUMENT_ROOT'] . '/../config.ini');
+    var_dump($config);
     $request = new RequestApi();
     $doi = $args['doi'];
     $filename = $args['filename'];
     if (strstr($doi, $config['REPOSITORY_NAME']) !== false) {
-        $config = parse_ini_file($_SERVER['DOCUMENT_ROOT'] . '/../config.ini');
         $response = $request->get_info_for_dataset($config["DOI_PREFIX"] . '/' . $doi);
     }
     else {
