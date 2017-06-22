@@ -417,6 +417,12 @@ $app->post('/editrecord', function (Request $req, Response $responseSlim) {
     $collection = $response['_type'];
     $doi = $response['_id'];
     $db = $Datasheet->connect_tomongo();
+    $exist = $Datasheet->Check_Document($collection,$db,$doi);
+    if ($exist==false) {
+         $loader = new Twig_Loader_Filesystem('search/templates');
+        $twig = new Twig_Environment($loader);
+        return $twig->render('notfound.html.twig');
+    }
     $array = $Datasheet->Postprocessing($_POST, "Edit", $doi,$db,$collection);
     if (array_key_exists('error', $array)) {
         $value = $response['_source']['INTRO']['LICENSE'];

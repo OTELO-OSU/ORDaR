@@ -102,6 +102,19 @@ class DatasheetController
         }
     }
     
+    function Check_Document($collection,$db,$doi){
+        $error=true;
+        $config = parse_ini_file($_SERVER['DOCUMENT_ROOT'] . '/../config.ini');
+        $collectionObject = $this->db->selectCollection($config["authSource"], $collection);
+        $query            = array(
+                '_id' => $doi
+            );
+        $cursor           = $collectionObject->find($query);
+        if ($cursor->count()==0) {
+            $error= false;
+        }
+        return $error;
+    }    
 
     function Increment_DOI(){
         $config = parse_ini_file($_SERVER['DOCUMENT_ROOT'] . '/../config.ini');
@@ -1190,6 +1203,7 @@ class DatasheetController
                         '_id' => $doi
                     );
                     $cursor = $collectionObject->find($query);
+                   
                     foreach ($merge as $key => $value) {
                         rename($UPLOAD_FOLDER . $doi . '/' . $value['DATA_URL'], $UPLOAD_FOLDER . "/" . $config["DOI_PREFIX"] . "/" . $newdoi . "/" . $value['DATA_URL']);
                     }
