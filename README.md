@@ -1,4 +1,4 @@
-![Alt text](/Frontend/src/img/ordar.png?raw=true)
+![Alt text](/Frontend/src/img/logo.png?raw=true)
 
 
 # Installation ORDaR Beta 1
@@ -112,10 +112,17 @@ rendez vous dans le dossier précédemment téléchargé /bin et exécuter :
     Rendez vous dans le dossier créé, une fois dans le dossier Ordar, exécuter :
     php Init_elasticsearch_index.php 
     Ce fichier permet de définir le template que doit utiliser elasticsearch.
+    
+    Vous pouvez créer le fichier config manuellement ou utiliser le script configure.sh qui permet de créer un fichier de config facilement et rapidement
+    
     Rendez vous dans Frontend/config.ini
-    UPLOAD_FOLDER défini ou les Uploads des utilisateurs vont être stockés, 
+    REPOSITORY_NAME = Defini le nom du repository ainsi que le nom utilisé pour la generation des DOIs
+    REPOSITORY_URL = Indiquer ici l'url sur lequel le projet sera hebergé
+    UPLOAD_FOLDER = défini ou les Uploads des utilisateurs vont être stockés, 
     choisissez un chemin et vérifier les permissions.
-    Il s'agit du user qui a les droits d'écriture.
+    DATAFILE_UNIXUSER=Il s'agit du user a qui appartient les fichiers uploader ( niveau system de fichier).
+    admin[]= l'adresse mail des administrateurs avec des doubles quotes séparé d'une virgule
+    NO_REPLY_MAIL= Indiquez un mail noreply
     Choisissez l’authentification de mongodb 
     host = 127.0.0.1
     port = 27017
@@ -123,11 +130,9 @@ rendez vous dans le dossier précédemment téléchargé /bin et exécuter :
     username = Le username de votre BDD qui contiendra les jeux de données
     password = Le mot de passe de votre BDD qui contiendra les jeux de données
     DOI_PREFIX = Votre prefix DOI datacite
-    URL_DOI = votre URL d’enregistrement des DOIs
     DOI_database = Le nom de votre BDD qui contiendra le numéro de DOI
     user_doi = Le username de votre BDD qui contiendra le numéro de DOI
     password_doi = Le mot de passe de votre BDD qui contiendra le numéro de DOI
-    admin[]= l'adresse mail des administrateurs avec des doubles quotes séparé d'une virgule
     Auth_config_datacite = Token d'authentification (Basic https) de datacite
      
 
@@ -276,7 +281,9 @@ L'utilisateur recevra un mail avec le DOI qui a été attribué au jeu de donné
 
 **Importation d'un jeu de données via OTELoCloud:**
 
-Un script d'importation se charge d'importer les données présentse dans un dossier spécifiques d'OTELoCloud:
+OTELO utilise des canevas afin que les chercheurs puissent créés des fichiers de données interroperable.
+
+Un script d'importation se charge d'importer les données présente dans un dossier spécifiques d'OTELoCloud:
 Les métadonnées issues du feuillet INTRO du fichier excel sont importées dans la base Mongodb,
 Le feuillet DATA est converti en fichier csv et il est joint à ce jeux de données comme fichier.
 
