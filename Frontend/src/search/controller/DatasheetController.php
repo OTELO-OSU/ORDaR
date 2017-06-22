@@ -980,6 +980,11 @@ class DatasheetController
     
     function Editdatasheet($collection, $doi, $db, $array)
     {
+        if (empty($collection)) {
+                    $array['error']    = "Dont exist";
+                    self::UnlockDOI();
+                    return $array;
+            }
         $config           = parse_ini_file($_SERVER['DOCUMENT_ROOT'] . '/../config.ini');
         $UPLOAD_FOLDER    = $config["UPLOAD_FOLDER"];
         $collectionObject = $db->selectCollection($config["authSource"], $collection);
@@ -1107,6 +1112,13 @@ class DatasheetController
                 }
             } elseif (strstr($doi, 'Draft') !== FALSE) { /// publication d'un draft
              $generatedoi=self::generateDOI();
+                $collection       = "Manual_Depot";
+                $exist = self::Check_Document($collection,$db,$doi);
+                if ($exist==false) {
+                    $array['error']    = "Dont exist";
+                    self::UnlockDOI();
+                    return $array;
+                }
                 if ($generatedoi==false) {
                     $array['error'] = "Unable to send metadata to Datacite";
                     return $array;
@@ -1236,6 +1248,7 @@ class DatasheetController
                     $Request->Send_Mail_To_uploader($array['dataform']['FILE_CREATOR'], $array['dataform']['TITLE'], $config["DOI_PREFIX"] . "/" . $newdoi, $array['dataform']['DATA_DESCRIPTION']);
                     return $array['message'] = '   <div class="ui message green"  style="display: block;">Draft published!</div>';
                 } else {
+                    self::UnlockDOI();
                     $array['error'] = "Unable to send metadata to Datacite";
                     return $array;
                 }
@@ -1244,6 +1257,16 @@ class DatasheetController
             
             else { //Publication d'un unpublished
                 $generatedoi=self::generateDOI();
+                $request = new RequestApi();
+                $response = $request->get_info_for_dataset($doi);
+                $collection = $response['_type'];
+                $doi = $response['_id'];
+                $exist = self::Check_Document($collection,$db,$doi);
+                if ($exist==false) {
+                    $array['error']    = "Dont exist";
+                    self::UnlockDOI();
+                    return $array;
+                }
                 if ($generatedoi==false) {
                     $array['error'] = "Unable to send metadata to Datacite";
                     return $array;
@@ -1295,6 +1318,7 @@ class DatasheetController
                     $Request->Send_Mail_To_uploader($array['dataform']['FILE_CREATOR'], $array['dataform']['TITLE'], $config["DOI_PREFIX"] . "/" . $newdoi, $array['dataform']['DATA_DESCRIPTION']);
                     return $array['message'] = '   <div class="ui message green"  style="display: block;">Dataset published!</div>';
                 } else {
+                    self::UnlockDOI();
                     $array['error'] = "Unable to send metadata to Datacite";
                     return $array;
                 }
