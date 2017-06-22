@@ -287,6 +287,9 @@ Un script d'importation se charge d'importer les données présente dans un doss
 Les métadonnées issues du feuillet INTRO du fichier excel sont importées dans la base Mongodb,
 Le feuillet DATA est converti en fichier csv et il est joint à ce jeux de données comme fichier.
 
+Vous trouverer le script d'importation ici : https://bitbucket.org/arnouldpy/ordar_scripts/
+Le repository est privée, il sera necessaire de nous envoyer un message afin de répondre à votre demande.
+
 Le jeux de données est ajouté avec un statut Unpublished, il est accessible uniquement au propriétaire ou ses co-auteurs.
 L'auteur peut choisir de le publier ou de le supprimer.
 
