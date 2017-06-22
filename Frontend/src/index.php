@@ -318,7 +318,6 @@ $app->get('/record', function (Request $req, Response $responseSlim) {
 
     }
     else {
-
         if (strstr($id, $config['REPOSITORY_NAME']) !== false) {
             $id = split("/", $response['_id']);
             $id = $id[1];
@@ -486,7 +485,6 @@ $app->post('/remove', function (Request $req, Response $responseSlim, $args) {
 //Route permettant le telechargement
 $app->get('/files/{doi}/{filename}', function (Request $req, Response $responseSlim, $args) {
     $config = parse_ini_file($_SERVER['DOCUMENT_ROOT'] . '/../config.ini');
-    var_dump($config);
     $request = new RequestApi();
     $doi = $args['doi'];
     $filename = $args['filename'];
