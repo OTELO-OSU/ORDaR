@@ -42,6 +42,9 @@ font-size:18px
 }
 
 @media screen and (min-width: 200px) and (max-width: 640px) {
+    #about{
+        order: 2;
+    }
     #login {
 font-size:11px
 }
