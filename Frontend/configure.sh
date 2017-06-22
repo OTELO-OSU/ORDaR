@@ -5,7 +5,7 @@
 	read REPOSITORY_NAME
 	echo "Please type repository URL: "
 	read REPOSITORY_URL
-	echo "Please type upload folder: "
+	echo "Please type upload folder: (with a slash at the end) "
 	read UPLOAD_FOLDER
 	echo "Please type one or more admin mail (between double quotes separated by a comma): "
 	read ADMIN
