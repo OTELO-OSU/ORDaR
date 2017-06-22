@@ -37,13 +37,36 @@ font-size:18px
 font-size:18px
 }
 
+#upload {
+font-size:18px
+}
+
+@media screen and (min-width: 200px) and (max-width: 640px) {
+    #login {
+font-size:11px
+}
+
+#logout {
+font-size:11px
+}
+
+#upload {
+font-size:11px
+}
+#dataset {
+font-size:11px
+}
+.ui.form .field .ui.input input, .ui.form .fields .field .ui.input input {
+     width: 30%!important; 
+}
+
+}
+
+
 #results .label {
 margin-bottom:10px!important
 }
 
-#upload {
-font-size:18px
-}
 
 .accordion .button {
 margin-bottom:10px!important
@@ -142,5 +165,5 @@ li::before {
 
 
 #DataTables_Table_0_wrapper{
- display:none;   
+/ display:none;   
 }

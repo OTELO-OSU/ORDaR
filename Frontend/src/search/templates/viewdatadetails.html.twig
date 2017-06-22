@@ -1,5 +1,5 @@
 {% include 'head.html.twig' %}
-<div class="ui internally celled grid">
+<div class="ui stackable celled grid">
    <div class="row">
     <div class="ui six wide column ">
          <div class="row">
@@ -103,12 +103,12 @@
             <div class="ui fluid card">
                <div class="content">
                   <div class="header">Export</div>
-                  <div class="ui grid">
+                  <div class="ui four column  stackable grid container">
                      <div class="row"></div>
-                     <a href="export/datacite?id={{doi}}" target="_blank"  ><div class="ui button">DataCite</div></a>
-                      <a href="export/json?id={{doi}}" target="_blank"  ><div class="ui button">JSON</div></a>
-                      <a href="export/dublincore?id={{doi}}" target="_blank"  ><div class="ui button">DublinCore</div></a>
-                      <a href="export/bibtex?id={{doi}}" target="_blank"  ><div class="ui button">BibTeX</div></a>
+                     <a class="column" href="export/datacite?id={{doi}}" target="_blank"  ><div class="ui button">DataCite</div></a>
+                      <a class="column" href="export/json?id={{doi}}" target="_blank"  ><div class="ui button">JSON</div></a>
+                      <a class="column" href="export/dublincore?id={{doi}}" target="_blank"  ><div class="ui button">DublinCore</div></a>
+                      <a class="column" href="export/bibtex?id={{doi}}" target="_blank"  ><div class="ui button">BibTeX</div></a>
                       <div class="row"></div>
                   </div>
                </div>
@@ -118,7 +118,7 @@
       <div class="ui ten wide column ">
          <div>
             <h1>{{title|raw}}</h1>
-            <div class="content">
+            <div class="ui stackable container">
                {% if accessright == "Closed" %}
                <div class="ui red label" >{{accessright}}</div>
                {% elseif accessright == "Embargoed" %}
@@ -181,7 +181,7 @@
                   {%endif%}
                   <p>Uploaded on {{uploaddate}}</p>
                </div>
-               <div class="ui container cards">
+               <div id="cards">
                   <div class="ui fluid card">
                      <div class="content files">
                         <div class="header "> <i class="file icon"></i>Files</div>
@@ -337,7 +337,7 @@
                         map.invalidateSize();  //Resize de la map hidden div
                         map.fitBounds(bounds); 
                      </script>
-                      <table class="ui inverted green table">
+                      <table class="ui inverted unstackable green table">
                            <thead>
                               <tr>
                                  <th>Name</th>
@@ -373,7 +373,7 @@
                      <div class="content">
                         <div class="header">Measurements</div>
                         {% if measurements[0].NATURE != "No nature" %}
-                        <table class="ui inverted blue table">
+                        <table class="ui inverted unstackable blue table">
                            <thead>
                               <tr>
                                  <th>Nature</th>
