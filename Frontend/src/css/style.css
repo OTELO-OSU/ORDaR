@@ -62,6 +62,9 @@ font-size:11px
 .ui.form .field .ui.input input, .ui.form .fields .field .ui.input input {
      width: 30%!important; 
 }
+.dataTables_filter .ui input{
+  margin-top: 10px;
+}
 
 }
 
