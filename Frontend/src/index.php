@@ -14,7 +14,6 @@ $container['csrf'] = function ($c) {
      $guard=new \Slim\Csrf\Guard;
       $guard->setFailureCallable(function ($request, $response, $next) {
         $request = $request->withAttribute("csrf_status", false);
-
        $loader = new Twig_Loader_Filesystem('search/templates');
         $twig = new Twig_Environment($loader);
         echo $twig->render('forbidden.html.twig');

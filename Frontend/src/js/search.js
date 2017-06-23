@@ -920,14 +920,14 @@
               $("#addacronym").click(function(e) {
                   i = $('#acronym .fields').length;
                   if (i <= 9) {
-                      $("#acronym").append('<div class=" fields"> <div class="field"><label>Acronym abbreviation</label><input type="text" name="acronym_abbreviation[]" placeholder="Abbreviation" ></div> <div class="field"><label>Acronym description</label><input type="text" name="acronym_description[]" placeholder="Description" ></div> <div class="ui icon delete center"><i class="remove icon"></i></div> </div>');
+                      $("#acronym").append('<div class=" fields"> <div class="field"><label>Acronym</label><input type="text" name="acronym_abbreviation[]" placeholder="Abbreviation" ></div> <div class="field"><label>Acronym description</label><input type="text" name="acronym_description[]" placeholder="Description" ></div> <div class="ui icon delete center"><i class="remove icon"></i></div> </div>');
                   }
               });
               var i = 0;
               $("#addmethodology").click(function(e) {
                   i = $('#methodology .fields').length;
                   if (i <= 9) {
-                      $("#methodology").append('<div class=" fields"> <div class="field"><label>Methodology</label><input type="text"  name="methodology_name[]" ></div> <div class="field"><label>Methodology description</label><input type="text" name="methodology_description[]" placeholder="Description" ></div> <div class="ui icon delete center"><i class="remove icon"></i></div> </div>');
+                      $("#methodology").append('<div class=" fields"> <div class="field"><input type="text"   placeholder="Name" name="methodology_name[]" ></div> <div class="field"><input type="text" name="methodology_description[]" placeholder="Description" ></div> <div class="ui icon delete "><i class="remove icon"></i></div> </div>');
                   }
               });
               $("body").on("click", ".delete", function(e) {
