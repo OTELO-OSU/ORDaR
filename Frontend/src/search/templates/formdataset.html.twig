@@ -350,10 +350,7 @@
 {% if methodology  %}
 <div class="ui fluid styled accordion">
    <div class=" title">
-      <div class=" field">
       <label>Methodology   <i class="dropdown icon"></i></label>
-    
-      </div>
    </div>
    <div class=" content">
     <div id="methodology">
@@ -369,13 +366,19 @@
       </div>
    </div>
       <div id="acronym">
+
       {% for item in acronym %}
          <div class=" fields">
-            <div class="field"><label>Acronym</label><input type="text" value="{{item.ABBREVIATION}}" name="acronym_abbreviation[]"  placeholder="Abbreviation"  ></div>
+            <div class="field"><label>Acronym</label><input type="text" value="{{item.ABBREVIATION}}" name="acronym_abbreviation[]"  placeholder="Acronym"  ></div>
             <div class="field"><label>Acronym description</label><input type="text" value="{{item.DESCRIPTION}}" name="acronym_description[]" placeholder="Description" ></div>
             <div class="ui icon delete "><i class="remove icon"></i></div>
          </div>
       {% endfor %}
+       <div class=" fields">
+            <div class="field"><label>Acronym</label><input type="text"  name="acronym_abbreviation[]"  placeholder="Acronym"  ></div>
+            <div class="field"><label>Acronym description</label><input type="text"  name="acronym_description[]" placeholder="Description" ></div>
+            <div class="ui icon delete center "><i class="remove icon"></i></div>
+         </div>
       </div>
       <div class="ui primary right floated button"  id="addacronym">
          <i class="plus icon"></i> Add a new accronym
@@ -390,8 +393,8 @@
    <div class=" content">
    <div id="methodology">
     <div class=" fields">
-    <div class="field"><input type="text" value="Sampling method" name="methodology_name[]"   ></div>
-    <div class="field"><input type="text" name="methodology_description[]" placeholder="Description" ></div>
+    <div class="field"><label>Keywords</label><input type="text" value="Sampling method" name="methodology_name[]"   ></div>
+    <div class="field"><label>Description</label><input type="text" name="methodology_description[]" placeholder="Description" ></div>
     <div class="ui icon delete "><i class="remove icon"></i></div>
     </div>
       <div class=" fields">
@@ -430,7 +433,7 @@
    </div>
       <div id="acronym">
          <div class=" fields">
-            <div class="field"><label>Acronym</label><input type="text"  name="acronym_abbreviation[]"  placeholder="Abbreviation"  ></div>
+            <div class="field"><label>Acronym</label><input type="text"  name="acronym_abbreviation[]"  placeholder="Acronym"  ></div>
             <div class="field"><label>Acronym description</label><input type="text"  name="acronym_description[]" placeholder="Description" ></div>
                <div class="ui icon delete center"><i class="remove icon"></i></div>
 
