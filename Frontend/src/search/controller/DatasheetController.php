@@ -458,6 +458,54 @@ class DatasheetController
                 }
                 
             }
+            if ($key == "acronym_abbreviation") {
+                if (count($value) > 1) {
+                    foreach ($value as $key => $value) {
+                        $array["ACRONYM"][$key]["ABBREVIATION"] = htmlspecialchars($value, ENT_QUOTES);
+                    }
+                } else {
+                    if (!empty($value[0])) {
+                    $array["ACRONYM"][0]["ABBREVIATION"] = htmlspecialchars($value[0], ENT_QUOTES);
+                    }
+                }
+            }
+              if ($key == "acronym_description") {
+                if (count($value) > 1) {
+                    foreach ($value as $key => $value) {
+                        $array["ACRONYM"][$key]["DESCRIPTION"] = htmlspecialchars($value, ENT_QUOTES);
+                    }
+                } else {
+                    if (!empty($value[0])) {
+                    $array["ACRONYM"][0]["DESCRIPTION"] = htmlspecialchars($value[0], ENT_QUOTES);
+                    }
+                }
+            }
+
+              if ($key == "methodology_name") {
+                if (count($value) > 1) {
+                    foreach ($value as $key => $value) {
+                        $array["METHODOLOGY"][$key]["NAME"] = htmlspecialchars($value, ENT_QUOTES);
+                    }
+                } else {
+                     if (!empty($value[0])) {
+                    $array["METHODOLOGY"][0]["NAME"]= htmlspecialchars($value[0], ENT_QUOTES);
+                  }
+                }
+            }
+              if ($key == "methodology_description") {
+                if (count($value) > 1) {
+                    foreach ($value as $key => $value) {
+                        $array["METHODOLOGY"][$key]["DESCRIPTION"] = htmlspecialchars($value, ENT_QUOTES);
+                    }
+                } else {
+                     if (!empty($value[0])) {
+                    $array["METHODOLOGY"][0]["DESCRIPTION"] = htmlspecialchars($value[0], ENT_QUOTES);
+                }
+                }
+            }
+
+
+
             
             if ($key == "measurement_nature") {//Traitement measurement
                 if (count($value) > 1) {

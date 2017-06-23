@@ -229,6 +229,44 @@
                         {% endif %}
                      </div>
                   </div>
+                  {% if methodology or acronym %}
+                   <div class="ui fluid styled accordion">
+                     <div class=" title">Methodology<i class="dropdown icon"></i></div>
+                     <div class=" content ">
+                     {% if methodology %}
+                     {%for item in methodology %}
+                        {%if item.DESCRIPTION is not empty  %}
+                        <h4> - {{item.NAME}}:</h4> <p>{{item.DESCRIPTION}}</p>
+                        {%endif%}
+                     {%endfor%}
+                     {%endif%}
+                     {% if acronym %}
+                     <table class="ui collapsing table">
+                    <thead>
+                      <tr>
+                        <th>Abbreviation</th>
+                        <th>Description</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                     {%for item in acronym %}
+                      <tr>
+                        <td>{{item.ABBREVIATION}}</td>
+                        <td>{{item.DESCRIPTION}}</td>
+                      </tr>
+                       
+                     {%endfor%}
+                    </tbody>
+                  </table>
+                  {%endif%}
+                     </div>
+                  
+                  <script type="text/javascript">
+                                   $('.ui.accordion').accordion();
+
+                  </script>
+                  </div>
+                  {%endif%}
                   <div class="ui fluid card">
                      <div class="content">
                         <div class="header">Sampling points</div>

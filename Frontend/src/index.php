@@ -11,8 +11,18 @@ $c = new \Slim\Container();
 $app = new \Slim\App($c);
 $container = $app->getContainer();
 $container['csrf'] = function ($c) {
-    return new \Slim\Csrf\Guard;
+     $guard=new \Slim\Csrf\Guard;
+      $guard->setFailureCallable(function ($request, $response, $next) {
+        $request = $request->withAttribute("csrf_status", false);
+
+       $loader = new Twig_Loader_Filesystem('search/templates');
+        $twig = new Twig_Environment($loader);
+        echo $twig->render('forbidden.html.twig');
+        return $next($request, $response);
+    });
+    return $guard;
 };
+
 $c['notFoundHandler'] = function ($c) {
     return function ($request, $response) use ($c) {
         $loader = new Twig_Loader_Filesystem('search/templates');
@@ -51,6 +61,13 @@ $app->add(function ($request, $response, $next) {
 
 session_start();
 
+$app->get('/ordar-401', function (Request $req, Response $responseSlim) {
+     $loader = new Twig_Loader_Filesystem('search/templates');
+     $twig = new Twig_Environment($loader);
+     echo $twig->render('unauthorised.html.twig');
+     return $responseSlim->withStatus(401);
+});
+
 //Route permettant d'acceder a l'accueil
 $app->get('/', function (Request $req, Response $responseSlim) {
     $_SESSION['HTTP_REFERER'] = $_SERVER['REQUEST_URI'];
@@ -64,6 +81,7 @@ $app->get('/', function (Request $req, Response $responseSlim) {
         echo $twig->render('accueil.html.twig');
     }
 });
+
 //Route permettant d'acceder à l'accueil
 $app->get('/accueil', function (Request $req, Response $responseSlim) {
     $_SESSION['HTTP_REFERER'] = $_SERVER['REQUEST_URI'];
@@ -74,6 +92,7 @@ $app->get('/accueil', function (Request $req, Response $responseSlim) {
     }
     else {
         echo $twig->render('accueil.html.twig');
+
     }
 });
 
@@ -326,7 +345,7 @@ $app->get('/record', function (Request $req, Response $responseSlim) {
             $id = $id;
         }
 
-        return @$twig->render('viewdatadetails.html.twig', ['name' => $_SESSION['name'], 'firstname' => $_SESSION['firstname'], 'mail' => $_SESSION['mail'], 'doi' => $response['_id'], 'admin' => $_SESSION['admin'], 'id' => $id, 'title' => $response['_source']['INTRO']['TITLE'], 'datadescription' => nl2br($response['_source']['INTRO']['DATA_DESCRIPTION']), 'accessright' => $response['_source']['INTRO']['ACCESS_RIGHT'], 'publicationdate' => $response['_source']['INTRO']['PUBLICATION_DATE'], 'uploaddate' => $response['_source']['INTRO']['UPLOAD_DATE'],'metadatadate' => $response['_source']['INTRO']['METADATA_DATE'], 'creationdate' => $response['_source']['INTRO']['CREATION_DATE'], 'authors' => $response['_source']['INTRO']['FILE_CREATOR'], 'files' => $files, 'mail' => $_SESSION['mail'], 'sampling_points' => $response['_source']['INTRO']['SAMPLING_POINT'], 'measurements' => $response['_source']['INTRO']['MEASUREMENT'], 'language' => $response['_source']['INTRO']['LANGUAGE'], 'fundings' => $response['_source']['INTRO']['FUNDINGS'], 'institutions' => $response['_source']['INTRO']['INSTITUTION'], 'scientific_field' => $response['_source']['INTRO']['SCIENTIFIC_FIELD'], 'sampling_date' => $response['_source']['INTRO']['SAMPLING_DATE'], 'sample_kinds' => $response['_source']['INTRO']['SAMPLE_KIND'], 'keywords' => $response['_source']['INTRO']['KEYWORDS'], 'license' => $response['_source']['INTRO']['LICENSE'], 'name_CSRF' => $name, 'value_CSRF' => $value]);
+        return @$twig->render('viewdatadetails.html.twig', ['name' => $_SESSION['name'], 'firstname' => $_SESSION['firstname'], 'mail' => $_SESSION['mail'], 'doi' => $response['_id'], 'admin' => $_SESSION['admin'], 'id' => $id, 'title' => $response['_source']['INTRO']['TITLE'], 'datadescription' => nl2br($response['_source']['INTRO']['DATA_DESCRIPTION']), 'accessright' => $response['_source']['INTRO']['ACCESS_RIGHT'], 'publicationdate' => $response['_source']['INTRO']['PUBLICATION_DATE'], 'uploaddate' => $response['_source']['INTRO']['UPLOAD_DATE'],'metadatadate' => $response['_source']['INTRO']['METADATA_DATE'], 'creationdate' => $response['_source']['INTRO']['CREATION_DATE'], 'authors' => $response['_source']['INTRO']['FILE_CREATOR'], 'files' => $files, 'mail' => $_SESSION['mail'], 'sampling_points' => $response['_source']['INTRO']['SAMPLING_POINT'], 'measurements' => $response['_source']['INTRO']['MEASUREMENT'],'methodology' => $response['_source']['INTRO']['METHODOLOGY'], 'acronym' => $response['_source']['INTRO']['ACRONYM'],'language' => $response['_source']['INTRO']['LANGUAGE'], 'fundings' => $response['_source']['INTRO']['FUNDINGS'], 'institutions' => $response['_source']['INTRO']['INSTITUTION'], 'scientific_field' => $response['_source']['INTRO']['SCIENTIFIC_FIELD'], 'sampling_date' => $response['_source']['INTRO']['SAMPLING_DATE'], 'sample_kinds' => $response['_source']['INTRO']['SAMPLE_KIND'], 'keywords' => $response['_source']['INTRO']['KEYWORDS'], 'license' => $response['_source']['INTRO']['LICENSE'], 'name_CSRF' => $name, 'value_CSRF' => $value]);
     }
 })->setName('record')
     ->add($container->get('csrf'));
@@ -384,7 +403,7 @@ $app->get('/editrecord', function (Request $req, Response $responseSlim) {
                     $license = 6;
                 }
 
-                return @$twig->render('edit_dataset.html.twig', ['name' => $_SESSION['name'], 'firstname' => $_SESSION['firstname'], 'mail' => $_SESSION['mail'], 'admin' => $_SESSION['admin'], 'doi' => $id, 'title' => $response['_source']['INTRO']['TITLE'], 'description' => $response['_source']['INTRO']['DATA_DESCRIPTION'], 'creation_date' => $response['_source']['INTRO']['CREATION_DATE'], 'sampling_dates' => $response['_source']['INTRO']['SAMPLING_DATE'], 'authors' => $response['_source']['INTRO']['FILE_CREATOR'], 'keywords' => $response['_source']['INTRO']['KEYWORDS'], 'sample_kinds' => $response['_source']['INTRO']['SAMPLE_KIND'], 'scientific_fields' => $response['_source']['INTRO']['SCIENTIFIC_FIELD'], 'institutions' => $response['_source']['INTRO']['INSTITUTION'], 'language' => $response['_source']['INTRO']['LANGUAGE'], 'sampling_points' => $response['_source']['INTRO']['SAMPLING_POINT'], 'measurements' => $response['_source']['INTRO']['MEASUREMENT'], 'license' => $license, 'publisher' => $response['_source']['INTRO']['PUBLISHER'], 'fundings' => $response['_source']['INTRO']['FUNDINGS'], 'accessright' => $response['_source']['INTRO']['ACCESS_RIGHT'], 'embargoed_date' => $response['_source']['INTRO']['PUBLICATION_DATE'], 'files' => $response['_source']['DATA']['FILES'], 'name_CSRF' => $namecsrf, 'value_CSRF' => $valuecsrf]);
+                return @$twig->render('edit_dataset.html.twig', ['name' => $_SESSION['name'], 'firstname' => $_SESSION['firstname'], 'mail' => $_SESSION['mail'], 'admin' => $_SESSION['admin'], 'doi' => $id, 'title' => $response['_source']['INTRO']['TITLE'], 'description' => $response['_source']['INTRO']['DATA_DESCRIPTION'], 'creation_date' => $response['_source']['INTRO']['CREATION_DATE'], 'sampling_dates' => $response['_source']['INTRO']['SAMPLING_DATE'], 'authors' => $response['_source']['INTRO']['FILE_CREATOR'], 'keywords' => $response['_source']['INTRO']['KEYWORDS'], 'sample_kinds' => $response['_source']['INTRO']['SAMPLE_KIND'], 'scientific_fields' => $response['_source']['INTRO']['SCIENTIFIC_FIELD'], 'institutions' => $response['_source']['INTRO']['INSTITUTION'], 'language' => $response['_source']['INTRO']['LANGUAGE'],'methodology' => $response['_source']['INTRO']['METHODOLOGY'], 'acronym' => $response['_source']['INTRO']['ACRONYM'] ,'sampling_points' => $response['_source']['INTRO']['SAMPLING_POINT'], 'measurements' => $response['_source']['INTRO']['MEASUREMENT'], 'license' => $license, 'publisher' => $response['_source']['INTRO']['PUBLISHER'], 'fundings' => $response['_source']['INTRO']['FUNDINGS'], 'accessright' => $response['_source']['INTRO']['ACCESS_RIGHT'], 'embargoed_date' => $response['_source']['INTRO']['PUBLICATION_DATE'], 'files' => $response['_source']['DATA']['FILES'], 'name_CSRF' => $namecsrf, 'value_CSRF' => $valuecsrf]);
             }
 
             else {
@@ -416,6 +435,7 @@ $app->post('/editrecord', function (Request $req, Response $responseSlim) {
     $collection = $response['_type'];
     $doi = $response['_id'];
     $db = $Datasheet->connect_tomongo();  
+    var_dump($_POST);
     $array = $Datasheet->Postprocessing($_POST, "Edit", $doi,$db,$collection);
     if (array_key_exists('error', $array)) {
         if ($array['error']=="Dont exist") {
@@ -442,7 +462,7 @@ $app->post('/editrecord', function (Request $req, Response $responseSlim) {
         elseif ($value == "Creative commons Attribution + Noncommercial + NoDerivatives") {
             $license = 6;
         }
-        return @$twig->render('edit_dataset.html.twig', ['error' => $array['error'], 'name' => $_SESSION['name'], 'firstname' => $_SESSION['firstname'], 'mail' => $_SESSION['mail'],'admin' => $_SESSION['admin'], 'doi' => $doi, 'title' => $response['_source']['INTRO']['TITLE'], 'description' => $response['_source']['INTRO']['DATA_DESCRIPTION'], 'creation_date' => $response['_source']['INTRO']['CREATION_DATE'], 'sampling_dates' => $response['_source']['INTRO']['SAMPLING_DATE'], 'authors' => $response['_source']['INTRO']['FILE_CREATOR'], 'keywords' => $response['_source']['INTRO']['KEYWORDS'], 'sample_kinds' => $response['_source']['INTRO']['SAMPLE_KIND'], 'scientific_fields' => $response['_source']['INTRO']['SCIENTIFIC_FIELD'], 'institutions' => $response['_source']['INTRO']['INSTITUTION'], 'language' => $response['_source']['INTRO']['LANGUAGE'], 'sampling_points' => $response['_source']['INTRO']['SAMPLING_POINT'], 'measurements' => $response['_source']['INTRO']['MEASUREMENT'], 'license' => $license, 'publisher' => $response['_source']['INTRO']['PUBLISHER'], 'fundings' => $response['_source']['INTRO']['FUNDINGS'], 'accessright' => $response['_source']['INTRO']['ACCESS_RIGHT'], 'embargoed_date' => $response['_source']['INTRO']['PUBLICATION_DATE'], 'files' => $response['_source']['DATA']['FILES'], 'name_CSRF' => $namecsrf, 'value_CSRF' => $valuecsrf]);
+        return @$twig->render('edit_dataset.html.twig', ['error' => $array['error'], 'name' => $_SESSION['name'], 'firstname' => $_SESSION['firstname'], 'mail' => $_SESSION['mail'],'admin' => $_SESSION['admin'], 'doi' => $doi, 'title' => $response['_source']['INTRO']['TITLE'], 'description' => $response['_source']['INTRO']['DATA_DESCRIPTION'], 'creation_date' => $response['_source']['INTRO']['CREATION_DATE'], 'sampling_dates' => $response['_source']['INTRO']['SAMPLING_DATE'], 'authors' => $response['_source']['INTRO']['FILE_CREATOR'], 'keywords' => $response['_source']['INTRO']['KEYWORDS'], 'sample_kinds' => $response['_source']['INTRO']['SAMPLE_KIND'], 'scientific_fields' => $response['_source']['INTRO']['SCIENTIFIC_FIELD'], 'institutions' => $response['_source']['INTRO']['INSTITUTION'], 'language' => $response['_source']['INTRO']['LANGUAGE'], 'sampling_points' => $response['_source']['INTRO']['SAMPLING_POINT'],'methodology' => $response['_source']['INTRO']['METHODOLOGY'], 'acronym' => $response['_source']['INTRO']['ACRONYM'] , 'measurements' => $response['_source']['INTRO']['MEASUREMENT'], 'license' => $license, 'publisher' => $response['_source']['INTRO']['PUBLISHER'], 'fundings' => $response['_source']['INTRO']['FUNDINGS'], 'accessright' => $response['_source']['INTRO']['ACCESS_RIGHT'], 'embargoed_date' => $response['_source']['INTRO']['PUBLICATION_DATE'], 'files' => $response['_source']['DATA']['FILES'], 'name_CSRF' => $namecsrf, 'value_CSRF' => $valuecsrf]);
     }
     else {
 
@@ -475,6 +495,7 @@ $app->post('/remove', function (Request $req, Response $responseSlim, $args) {
 
     }
     else {
+
         return $responseSlim->withStatus(403);
 
     }

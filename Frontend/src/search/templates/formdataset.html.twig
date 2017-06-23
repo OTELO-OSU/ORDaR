@@ -347,6 +347,101 @@
       </div>
    </div>
 <div class="row"></div>
+{% if methodology  %}
+<div class="ui fluid styled accordion">
+   <div class=" title">
+      <div class=" field">
+      <label>Methodology   <i class="dropdown icon"></i></label>
+    
+      </div>
+   </div>
+   <div class=" content">
+    <div class="methodology">
+          {% for item in methodology %}
+      <div class=" fields">
+       <div class="field"><label>Methodology</label><input type="text"  value="{{item.NAME}}" name="methodology_name[]"   ></div>
+       <div class="field"><label>Methodology description</label><input type="text" name="methodology_description[]" value="{{item.DESCRIPTION}}" placeholder="Description" ></div>
+         <div class="ui icon delete "><i class="remove icon"></i></div>
+         </div>
+      {% endfor%}
+   </div>
+      <div id="acronym">
+      {% for item in acronym %}
+         <div class=" fields">
+            <div class="field"><label>Acronym abbreviation</label><input type="text" value="{{item.ABBREVIATION}}" name="acronym_abbreviation[]"  placeholder="Abbreviation"  ></div>
+            <div class="field"><label>Acronym description</label><input type="text" value="{{item.DESCRIPTION}}" name="acronym_description[]" placeholder="Description" ></div>
+            <div class="ui icon delete center"><i class="remove icon"></i></div>
+         </div>
+      {% endfor %}
+      </div>
+      <div class="ui primary right floated button"  id="addacronym">
+         <i class="plus icon"></i> Add a new accronym
+      </div>
+   </div>
+</div>
+{% else %}
+<div class="ui fluid styled accordion">
+   <div class=" title">
+      <label>Methodology   <i class="dropdown icon"></i></label>
+   </div>
+   <div class=" content">
+   <div id="methodology">
+    <div class=" fields">
+    <div class="field"><label>Methodology</label><input type="text" value="Sampling method" name="methodology_name[]"   ></div>
+    <div class="field"><label>Methodology description</label><input type="text" name="methodology_description[]" placeholder="Description" ></div>
+    <div class="ui icon delete center"><i class="remove icon"></i></div>
+    </div>
+      <div class=" fields">
+     <div class="field"><label>Methodology</label><input type="text" value="Conditionning" name="methodology_name[]"   ></div>
+    <div class="field"><label>Methodology description</label><input type="text" name="methodology_description[]" placeholder="Description" ></div>
+    <div class="ui icon delete center"><i class="remove icon"></i></div>
+    </div>
+   <div class=" fields">
+     <div class="field"><label>Methodology</label><input type="text" value="Analysis methods" name="methodology_name[]"   ></div>
+    <div class="field"><label>Methodology description</label><input type="text"  name="methodology_description[]" placeholder="Description" ></div>
+   <div class="ui icon delete center"><i class="remove icon"></i></div>
+</div>
+         <div class=" fields">
+
+     <div class="field"><label>Methodology</label><input type="text" value="Field campaign report" name="methodology_name[]"   ></div>
+    <div class="field"><label>Methodology description</label><input type="text"  name="methodology_description[]" placeholder="Description" ></div>
+    <div class="ui icon delete center"><i class="remove icon"></i></div>
+</div>
+         <div class=" fields">
+
+     <div class="field"><label>Methodology</label><input type="text" value="Sample storage" name="methodology_name[]"   ></div>
+    <div class="field"><label>Methodology description</label><input type="text" name="methodology_description[]" placeholder="Description" ></div>
+    <div class="ui icon delete center"><i class="remove icon"></i></div>
+</div>
+         <div class=" fields">
+
+     <div class="field"><label>Methodology</label><input type="text" value="Comment" name="methodology_name[]"   ></div>
+    <div class="field"><label>Methodology description</label><input type="text" name="methodology_description[]" placeholder="Description" ></div>
+   <div class="ui icon delete center"><i class="remove icon"></i></div>
+      
+   </div>
+     <div class="ui primary right floated button"  id="addmethodology">
+         <i class="plus icon"></i> Add a new methodology
+      </div>
+
+   </div>
+      <div id="acronym">
+         <div class=" fields">
+            <div class="field"><label>Acronym abbreviation</label><input type="text"  name="acronym_abbreviation[]"  placeholder="Abbreviation"  ></div>
+            <div class="field"><label>Acronym description</label><input type="text"  name="acronym_description[]" placeholder="Description" ></div>
+         </div>
+      </div>
+      <div class="ui primary right floated button"  id="addacronym">
+         <i class="plus icon"></i> Add a new accronym
+      </div>
+</div>
+</div>
+
+
+
+{%endif%}
+<div class="row"></div>
+
 
 {% if measurements %}
 <div class="ui fluid styled accordion">
