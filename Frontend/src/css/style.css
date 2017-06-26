@@ -62,7 +62,9 @@ font-size:11px
 .ui.form .field .ui.input input, .ui.form .fields .field .ui.input input {
      width: 30%!important; 
 }
-
+#doi{
+  margin:5%;
+}
 
 }
 
@@ -172,4 +174,12 @@ li::before {
 
 #DataTables_Table_0_wrapper{
  display:none;   
+}
+
+.files .list {
+  overflow: auto;
+}
+
+.card {
+  overflow: auto;
 }
