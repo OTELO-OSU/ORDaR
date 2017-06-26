@@ -41,7 +41,7 @@ font-size:18px
 font-size:18px
 }
 
-@media screen and (min-width: 200px) and (max-width: 640px) {
+@media screen and (min-width: 200px) and (max-width: 960px) {
     #about{
         order: 2;
     }
@@ -67,6 +67,7 @@ font-size:11px
 }
 #Displayfacets{
   margin:10%; 
+
 }
 
 
