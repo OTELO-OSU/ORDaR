@@ -1,4 +1,5 @@
 <?php
+
 use \Psr\Http\Message\ServerRequestInterface as Request;
 use \Psr\Http\Message\ResponseInterface as Response;
 use \search\controller\RequestController as RequestApi;
@@ -38,7 +39,7 @@ $c['notAllowedHandler'] = function ($c) {
     };
 };
 
-$app->add(function ($request, $response, $next) {
+$app->add(function ($request, $responseSlim, $next) {
       $file=file_exists($_SERVER['DOCUMENT_ROOT'] . '/../config.ini');
     if ($file==false) {
         $loader = new Twig_Loader_Filesystem('search/templates');
@@ -55,8 +56,8 @@ $app->add(function ($request, $response, $next) {
         }
     } 
 
-    $response = $next($request, $response);
-    return $response;
+    $response = $next($request, $responseSlim);
+    return $responseSlim;
 });
 
 session_start();

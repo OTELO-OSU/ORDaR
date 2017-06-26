@@ -1476,7 +1476,7 @@ class DatasheetController
 
         if (!empty($object) && !empty($message) && filter_var($sendermail, FILTER_VALIDATE_EMAIL)) {
             $title = $response['_source']['INTRO']['TITLE'];
-            $headers .= "From:<".$config['NO_REPLY_MAIL'].">\r\n";
+            $headers = "From:<".$config['NO_REPLY_MAIL'].">\r\n";
             $headers .= "MIME-Version: 1.0\r\n";
             $headers .= "Content-Type: text/html; charset=utf-8\r\n";
             foreach ($response['_source']['INTRO']['FILE_CREATOR'] as $key => $value) {

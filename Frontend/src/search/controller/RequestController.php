@@ -102,13 +102,13 @@ class RequestController
         curl_setopt_array($ch2, $curlopt);
         $URLisgenerated = curl_exec($ch2);
         $URLisgeneratedinfo      = curl_getinfo($ch2);
-        curl_close($ch);
+        curl_close($ch2);
         if ($info['http_code'] == 200 &&  $URLisgeneratedinfo['http_code']== 200) {
             foreach ($config["admin"] as $key => $value) {
                 $array = explode(",", $value);
             }
             foreach ($array as $key => $value) {
-                $headers .= "From:<".$config['NO_REPLY_MAIL'].">\r\n";
+                $headers = "From:<".$config['NO_REPLY_MAIL'].">\r\n";
                 $headers .= "MIME-Version: 1.0\r\n";
                 $headers .= "Content-Type: text/html; charset=utf-8\r\n";
                 $mail = mail($value, 'Error in '.$config['REPOSITORY_NAME'], '<html>
@@ -633,7 +633,7 @@ class RequestController
         $file = new File();
         $config=$file->ConfigFile();
         if (!empty($object) && !empty($message) && filter_var($sendermail, FILTER_VALIDATE_EMAIL)) {
-            $headers .= "From:<".$config['NO_REPLY_MAIL'].">\r\n";
+            $headers = "From:<".$config['NO_REPLY_MAIL'].">\r\n";
             $headers .= "MIME-Version: 1.0\r\n";
             $headers .= "Content-Type: text/html; charset=utf-8\r\n";
             $mail = mail("<otelo-si@univ-lorraine.fr>", 'Contact from '.$config['REPOSITORY_NAME'].': ' . $object, '<html>
@@ -673,7 +673,7 @@ class RequestController
     {        
         $file = new File();
         $config=$file->ConfigFile();
-        $headers .= "From:<".$config['NO_REPLY_MAIL'].">\r\n";
+        $headers = "From:<".$config['NO_REPLY_MAIL'].">\r\n";
         $headers .= "MIME-Version: 1.0\r\n";
         $headers .= "Content-Type: text/html; charset=utf-8\r\n";
         foreach ($authors as $key => $value) {

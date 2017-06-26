@@ -182,6 +182,7 @@ Class FileController
                 header('Content-Type:  ' . $mime);
 
             } elseif ($mime == 'csv') {
+                $readfile=false;
                 $file            = fopen($file, "r");
                 $firstTimeHeader = true;
                 $firstTimeBody   = true;
