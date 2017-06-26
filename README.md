@@ -250,6 +250,12 @@ Le script Check_Embargoed_access.php doit être exécuté une fois par jour afin
 
 **Rechercher un jeu de données:**
 L'utilisateur peut effectuer une recherche par mot clé, il peut utiliser des opérateurs logique tels que AND et OR.
+Une recherche peut etre effectue uniquement sur un champs spécifique, voici une liste des champs interogeable et comment effectué cette recherche:
+    - TITLE : INTRO.TITLE:"mot clé à chercher"
+    - DESCRIPTION : INTRO.DATA_DESCRIPTION:"mot clé à chercher"
+    - AUTEURS : INTRO.FILE_CREATOR.DISPLAY_NAME:"mot clé à chercher"
+    - LANGAGE : INTRO.LANGUAGE:"mot clé à chercher"
+    
 A l'issue de cette recherche l'utilisateur peut trier les données à l'aide de facettes:
    
     -Sample kind
