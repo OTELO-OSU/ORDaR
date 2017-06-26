@@ -119,20 +119,6 @@
          <div>
             <h1>{{title|raw}}</h1>
             <div class="ui stackable container">
-               {% if accessright == "Closed" %}
-               <div class="ui red label" >{{accessright}}</div>
-               {% elseif accessright == "Embargoed" %}
-               <div class="ui orange label" data-tooltip="Available as Open Access after {{publicationdate}}">{{accessright}}</div>
-               {% elseif accessright == "Open" %}
-               <div class="ui green label" >{{accessright}}</div>
-               {% elseif accessright == "Unpublished" %}
-               <div class="ui yellow label" >{{accessright}}</div>
-                {% elseif accessright == "Draft" %}
-               <div class="ui grey label" >{{accessright}}</div>
-               {% endif %}
-                  
-               <div class="ui blue label"  data-tooltip="Creation date">{{creationdate}}</div>
-
                <div id='doi' class="ui labeled right floated mini button" >
                   <div class="ui grey mini button">
                      <i class="barcode icon"></i> DOI
@@ -147,9 +133,22 @@
                   </a>
                   {%endif%}
                </div>
+               {% if accessright == "Closed" %}
+               <div class="ui red label" >{{accessright}}</div>
+               {% elseif accessright == "Embargoed" %}
+               <div class="ui orange label" data-tooltip="Available as Open Access after {{publicationdate}}">{{accessright}}</div>
+               {% elseif accessright == "Open" %}
+               <div class="ui green label" >{{accessright}}</div>
+               {% elseif accessright == "Unpublished" %}
+               <div class="ui yellow label" >{{accessright}}</div>
+                {% elseif accessright == "Draft" %}
+               <div class="ui grey label" >{{accessright}}</div>
+               {% endif %}
+                  
+               <div class="ui blue label"  data-tooltip="Creation date">{{creationdate}}</div>
                   <div class="row"></div>
                <div class="row">
-                  <div class="meta">
+                  <div id="description" class="meta">
                      <h4>Description:</h4>
                      <span class="data">{{datadescription|raw}}</span>
                   </div>
@@ -182,7 +181,7 @@
                      <div class="ui right floated primary button" >Edit<i class="right chevron icon"></i></div>
                   </a>
                   {%endif%}
-                  <p>Uploaded on {{uploaddate}}</p>
+                  <p id="uploadeddate">Uploaded on {{uploaddate}}</p>
                </div>
                <div id="cards">
                   <div class="ui fluid card">

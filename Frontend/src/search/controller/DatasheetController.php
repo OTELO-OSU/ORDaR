@@ -803,7 +803,8 @@ class DatasheetController
         if (isset($array['error'])) { //Si une erreur est detecté
             return $array;
         } else {
-            $config        = parse_ini_file($_SERVER['DOCUMENT_ROOT'] . '/../config.ini');
+             $file = new File();
+            $config=$file->ConfigFile();
             $UPLOAD_FOLDER = $config["UPLOAD_FOLDER"];
             $doi           = $array['doi'];
             $collection    = "Manual_Depot";
@@ -968,7 +969,8 @@ class DatasheetController
         if (isset($array['error'])) { //Si une erreur est detecté
             return $array;
         } else {
-            $config                             = parse_ini_file($_SERVER['DOCUMENT_ROOT'] . '/../config.ini');
+             $file = new File();
+            $config=$file->ConfigFile();
             $array['dataform']["UPLOAD_DATE"]   = date('Y-m-d');
             $array['dataform']["CREATION_DATE"] = date('Y-m-d');
             $UPLOAD_FOLDER                      = $config["UPLOAD_FOLDER"];
@@ -1047,7 +1049,8 @@ class DatasheetController
                     self::UnlockDOI();
                     return $array;
             }
-        $config           = parse_ini_file($_SERVER['DOCUMENT_ROOT'] . '/../config.ini');
+        $file = new File();
+        $config=$file->ConfigFile();
         $UPLOAD_FOLDER    = $config["UPLOAD_FOLDER"];
         $collectionObject = $db->selectCollection($config["authSource"], $collection);
         $query            = array(

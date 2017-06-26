@@ -63,11 +63,28 @@ font-size:11px
      width: 30%!important; 
 }
 #doi{
-  margin:5%;
+  margin:2em;
+
 }
 #Displayfacets{
   margin:10%; 
 
+}
+#uploadeddate{
+  margin-top: 4em;
+}
+#description{
+  margin-top: 5%;
+}
+#DataTables_Table_0_length{
+  margin-right: 100%!important;
+}
+#DataTables_Table_0_wrapper{
+  margin-right: 100%!important;
+}
+
+.content a{
+  margin-right: 10%;
 }
 
 

@@ -442,7 +442,6 @@ $app->post('/editrecord', function (Request $req, Response $responseSlim) {
     $collection = $response['_type'];
     $doi = $response['_id'];
     $db = $Datasheet->connect_tomongo();  
-    var_dump($_POST);
     $array = $Datasheet->Postprocessing($_POST, "Edit", $doi,$db,$collection);
     if (array_key_exists('error', $array)) {
         if ($array['error']=="Dont exist") {

@@ -40,8 +40,9 @@ class RequestController
      */
     function Check_if_DOI_exist()
     {
-        $config     = parse_ini_file($_SERVER['DOCUMENT_ROOT'] . '/../config.ini');
-        $dbdoi      = new \MongoClient("mongodb://" . $config['host'] . ':' . $config['port'], array(
+            $file = new File();
+            $config=$file->ConfigFile();
+            $dbdoi      = new \MongoClient("mongodb://" . $config['host'] . ':' . $config['port'], array(
             'authSource' => $config['DOI_database'],
             'username' => $config['user_doi'],
             'password' => $config['password_doi']
@@ -128,7 +129,8 @@ class RequestController
      */
     function Inactivate_doi($doi)
     {
-        $config  = parse_ini_file($_SERVER['DOCUMENT_ROOT'] . '/../config.ini');
+        $file = new File();
+        $config=$file->ConfigFile();
         $url     = "https://mds.datacite.org/metadata/" . $doi;
         $curlopt = array(
             CURLOPT_RETURNTRANSFER => true,
@@ -246,7 +248,8 @@ class RequestController
      */
     function requestToAPI($query)
     {
-        $config                     = parse_ini_file($_SERVER['DOCUMENT_ROOT'] . '/../config.ini');
+        $file = new File();
+        $config=$file->ConfigFile();
         $query                      = str_replace('+', '%20', $query);
         $query                      = str_replace(' ', '%20', $query);
         $postcontent                = '{ 
@@ -334,7 +337,8 @@ class RequestController
      */
     function send_XML_to_datacite($XML, $doi)
     {
-        $config  = parse_ini_file($_SERVER['DOCUMENT_ROOT'] . '/../config.ini');
+        $file = new File();
+        $config=$file->ConfigFile();
         $url     = "https://mds.datacite.org/metadata/" . $doi;
         $curlopt = array(
             CURLOPT_RETURNTRANSFER => true,
@@ -449,7 +453,8 @@ class RequestController
      */
     function getPublicationsofUser($author_mail, $authors_name, $query)
     {
-        $config      = parse_ini_file($_SERVER['DOCUMENT_ROOT'] . '/../config.ini');
+        $file = new File();
+        $config=$file->ConfigFile();
         $postcontent = '{  
             "sort": { "INTRO.METADATA_DATE": { "order": "desc" }} , 
             "_source": { 
@@ -537,7 +542,8 @@ class RequestController
      */
     function get_info_for_dataset($id)
     {
-        $config   = parse_ini_file($_SERVER['DOCUMENT_ROOT'] . '/../config.ini');
+        $file = new File();
+        $config=$file->ConfigFile();
         $bdd      = strtolower($config['authSource']);
         $url      = 'http://localhost/' . $bdd . '/_all/' . urlencode($id);
         $curlopt  = array(
@@ -624,7 +630,8 @@ class RequestController
      */
     function Send_Contact_Mail($object, $message, $sendermail)
     {
-        $config   = parse_ini_file($_SERVER['DOCUMENT_ROOT'] . '/../config.ini');
+        $file = new File();
+        $config=$file->ConfigFile();
         if (!empty($object) && !empty($message) && filter_var($sendermail, FILTER_VALIDATE_EMAIL)) {
             $headers .= "From:<".$config['NO_REPLY_MAIL'].">\r\n";
             $headers .= "MIME-Version: 1.0\r\n";
@@ -664,7 +671,8 @@ class RequestController
      */
     function Send_Mail_To_uploader($authors,$title, $doi, $description)
     {        
-        $config   = parse_ini_file($_SERVER['DOCUMENT_ROOT'] . '/../config.ini');
+        $file = new File();
+        $config=$file->ConfigFile();
         $headers .= "From:<".$config['NO_REPLY_MAIL'].">\r\n";
         $headers .= "MIME-Version: 1.0\r\n";
         $headers .= "Content-Type: text/html; charset=utf-8\r\n";
