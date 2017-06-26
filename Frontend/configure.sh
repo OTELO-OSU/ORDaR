@@ -43,17 +43,16 @@
 	echo "DATAFILE_UNIXUSER="'"'$DATAFILE_UNIXUSER'"' >> config.ini	&&
 	echo "NO_REPLY_MAIL="'"'$NO_REPLY_MAIL'"' >> config.ini	&&
 	echo "#REPOSITORY BDD CONFIG" >> config.ini	&&
-	echo "host="$host >> config.ini	&&
+	echo "host="'"'$host'"' >> config.ini	&&
 	echo "port="$port >> config.ini	&&
-	echo "password="$password >> config.ini	&&
 	echo "authSource="$authSource >> config.ini	&&
-	echo "username="$username >> config.ini	&&
-	echo "password="$password >> config.ini	&&
+	echo "username="'"'$username'"' >> config.ini	&&
+	echo "password="'"'$password'"' >> config.ini	&&
 	echo "#DOI CONFIG" >> config.ini	&&
 	echo "DOI_PREFIX="$DOI_PREFIX >> config.ini	&&
 	echo "DOI_database="$DOI_database >> config.ini	&&
-	echo "user_doi="$user_doi >> config.ini	&&
-	echo "password_doi="$password_doi >> config.ini	&&
+	echo "user_doi="'"'$user_doi'"' >> config.ini	&&
+	echo "password_doi="'"'$password_doi'"' >> config.ini	&&
 	echo "#DATACITE CREDENTIALS" >> config.ini	&&
 	echo "Auth_config_datacite="'"'$Auth_config_datacite'"' >> config.ini
 

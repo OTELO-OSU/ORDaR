@@ -46,7 +46,8 @@ $app->add(function ($request, $response, $next) {
         echo $twig->render('notfound.html.twig');
         }   
     else{
-        $config = parse_ini_file($_SERVER['DOCUMENT_ROOT'] . '/../config.ini');
+        $file = new File();
+        $config=$file->ConfigFile();
         if (strlen($config['REPOSITORY_NAME'])==0 OR strlen($config['host'])==0 OR strlen($config['authSource'])==0 OR strlen($config['DOI_PREFIX'])==0) {
         $loader = new Twig_Loader_Filesystem('search/templates');
         $twig = new Twig_Environment($loader);
@@ -60,12 +61,14 @@ $app->add(function ($request, $response, $next) {
 
 session_start();
 
-$app->get('/ordar-401', function (Request $req, Response $responseSlim) {
+$app->get('/error-401', function (Request $req, Response $responseSlim) {
      $loader = new Twig_Loader_Filesystem('search/templates');
      $twig = new Twig_Environment($loader);
      echo $twig->render('unauthorised.html.twig');
      return $responseSlim->withStatus(401);
 });
+
+
 
 //Route permettant d'acceder a l'accueil
 $app->get('/', function (Request $req, Response $responseSlim) {
@@ -145,7 +148,8 @@ $app->get('/login', function (Request $req, Response $responseSlim) {
     $loader = new Twig_Loader_Filesystem('search/templates');
     $twig = new Twig_Environment($loader);
     echo $twig->render('login.html.twig');
-    $config = parse_ini_file($_SERVER['DOCUMENT_ROOT'] . '/../config.ini');
+    $file = new File();
+    $config=$file->ConfigFile();
   
     $_SESSION['name'] = $_SERVER['HTTP_SN'];
     $_SESSION['firstname'] = $_SERVER['HTTP_GIVENNAME'];
@@ -179,7 +183,9 @@ $app->get('/logout', function (Request $req, Response $responseSlim) {
     $loader = new Twig_Loader_Filesystem('search/templates');
     $twig = new Twig_Environment($loader);
     session_destroy();
-    $config = parse_ini_file($_SERVER['DOCUMENT_ROOT'] . '/../config.ini');
+        $file = new File();
+    $config=$file->ConfigFile();
+
     return $responseSlim->withRedirect($config['REPOSITORY_URL'].'/Shibboleth.sso/Logout?return='.$config['REPOSITORY_URL']);
 
 });
@@ -308,7 +314,9 @@ $app->post('/getmypublications', function (Request $req, Response $responseSlim)
 
 //Route affichant les details d'un dataset
 $app->get('/record', function (Request $req, Response $responseSlim) {
-    $config = parse_ini_file($_SERVER['DOCUMENT_ROOT'] . '/../config.ini');
+        $file = new File();
+    $config=$file->ConfigFile();
+
     $_SESSION['HTTP_REFERER'] = $_SERVER['REQUEST_URI'];
     $loader = new Twig_Loader_Filesystem('search/templates');
     $twig = new Twig_Environment($loader);
@@ -504,7 +512,9 @@ $app->post('/remove', function (Request $req, Response $responseSlim, $args) {
 
 //Route permettant le telechargement
 $app->get('/files/{doi}/{filename}', function (Request $req, Response $responseSlim, $args) {
-    $config = parse_ini_file($_SERVER['DOCUMENT_ROOT'] . '/../config.ini');
+        $file = new File();
+    $config=$file->ConfigFile();
+
     $request = new RequestApi();
     $doi = $args['doi'];
     $filename = $args['filename'];
@@ -525,7 +535,9 @@ $app->get('/files/{doi}/{filename}', function (Request $req, Response $responseS
 //Route permettant d'effectuer une preview
 $app->get('/preview/{doi}/{filename}', function (Request $req, Response $responseSlim, $args) {
 
-    $config = parse_ini_file($_SERVER['DOCUMENT_ROOT'] . '/../config.ini');
+        $file = new File();
+    $config=$file->ConfigFile();
+
     $request = new RequestApi();
     $doi = $args['doi'];
     $fulldoi = $config["DOI_PREFIX"] . "/" . $args['doi'];

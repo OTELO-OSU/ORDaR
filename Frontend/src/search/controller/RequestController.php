@@ -1,5 +1,7 @@
 <?php
 namespace search\controller;
+use \search\controller\FileController as File;
+
 ini_set('memory_limit', '-1');
 class RequestController
 {
@@ -155,7 +157,9 @@ class RequestController
      */
     function requestToAPIAdmin($query)
     {
-        $config = parse_ini_file($_SERVER['DOCUMENT_ROOT'] . '/../config.ini');
+            $file = new File();
+    $config=$file->ConfigFile();
+
         if (!empty($query)) {//Si des facets sont coché
             $query = rawurlencode($query);// on encode au format URL
         } else {

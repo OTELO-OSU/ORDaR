@@ -2,7 +2,9 @@
 
 namespace search\controller;
 use \search\controller\RequestController as RequestApi;
+use \search\controller\FileController as File;
 use MongoClient;
+
 
 class DatasheetController
 {
@@ -13,7 +15,9 @@ class DatasheetController
      */
     function connect_tomongo()
     {
-        $config = parse_ini_file($_SERVER['DOCUMENT_ROOT'] . '/../config.ini');
+            $file = new File();
+    $config=$file->ConfigFile();
+
         
         
         if (empty($config['username']) && empty($config['password'])) {
@@ -35,7 +39,9 @@ class DatasheetController
     
     function generateDOI()
     {
-        $config = parse_ini_file($_SERVER['DOCUMENT_ROOT'] . '/../config.ini');
+            $file = new File();
+    $config=$file->ConfigFile();
+
         
         $dbdoi      = new MongoClient("mongodb://" . $config['host'] . ':' . $config['port'], array(
             'authSource' => $config['DOI_database'],
@@ -104,7 +110,9 @@ class DatasheetController
     
     function Check_Document($collection,$db,$doi){
         $error=true;
-        $config = parse_ini_file($_SERVER['DOCUMENT_ROOT'] . '/../config.ini');
+            $file = new File();
+    $config=$file->ConfigFile();
+
         $collectionObject = $this->db->selectCollection($config["authSource"], $collection);
         $query            = array(
                 '_id' => $doi
@@ -117,7 +125,9 @@ class DatasheetController
     }    
 
     function Increment_DOI(){
-        $config = parse_ini_file($_SERVER['DOCUMENT_ROOT'] . '/../config.ini');
+            $file = new File();
+    $config=$file->ConfigFile();
+
     
         $dbdoi      = new MongoClient("mongodb://" . $config['host'] . ':' . $config['port'], array(
             'authSource' => $config['DOI_database'],
@@ -155,7 +165,9 @@ class DatasheetController
     }
 
     function UnlockDOI(){
-        $config = parse_ini_file($_SERVER['DOCUMENT_ROOT'] . '/../config.ini');
+            $file = new File();
+    $config=$file->ConfigFile();
+
     
         $dbdoi      = new MongoClient("mongodb://" . $config['host'] . ':' . $config['port'], array(
             'authSource' => $config['DOI_database'],
@@ -215,7 +227,9 @@ class DatasheetController
      */
     function Postprocessing_publish($POST, $method, $doi, $type)
     {
-        $config = parse_ini_file($_SERVER['DOCUMENT_ROOT'] . '/../config.ini');
+            $file = new File();
+    $config=$file->ConfigFile();
+
         $sxe = new \SimpleXMLElement("<resource/>");//Intitalisation object XML
         $sxe->addAttribute('xmlns:xmlns:xsi', 'http://www.w3.org/2001/XMLSchema-instance');//Ajout attribut XML
         $sxe->addAttribute('xmlns', 'http://datacite.org/schema/kernel-4');
@@ -1384,7 +1398,9 @@ class DatasheetController
      */
     function removeUnpublishedDatasheet($collection, $doi)
     {
-        $config = parse_ini_file($_SERVER['DOCUMENT_ROOT'] . '/../config.ini');
+            $file = new File();
+    $config=$file->ConfigFile();
+
         $UPLOAD_FOLDER = $config["UPLOAD_FOLDER"];
         if ($collection == null) {
             return false;
@@ -1452,7 +1468,9 @@ class DatasheetController
     
     function Send_Mail_author($doi, $response, $author_name, $author_firstname, $object, $message, $sendermail)
     {
-        $config = parse_ini_file($_SERVER['DOCUMENT_ROOT'] . '/../config.ini');
+            $file = new File();
+    $config=$file->ConfigFile();
+
         if (!empty($object) && !empty($message) && filter_var($sendermail, FILTER_VALIDATE_EMAIL)) {
             $title = $response['_source']['INTRO']['TITLE'];
             $headers .= "From:<".$config['NO_REPLY_MAIL'].">\r\n";

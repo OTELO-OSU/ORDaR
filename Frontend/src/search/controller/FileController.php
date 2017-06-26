@@ -2,6 +2,7 @@
 namespace search\controller;
 
 
+
 Class FileController
 {
     
@@ -12,8 +13,7 @@ Class FileController
      */
     function download($doi, $filename, $response)
     {
-        $config        = parse_ini_file($_SERVER['DOCUMENT_ROOT'] . '/../config.ini');
-        $UPLOAD_FOLDER = $config["UPLOAD_FOLDER"];
+        $config=self::ConfigFile();        $UPLOAD_FOLDER = $config["UPLOAD_FOLDER"];
         $DOI_PREFIX    = $config["DOI_PREFIX"];
         $doi           = str_replace($config["UPLOAD_FOLDER"], "", $doi);
         if (isset($response['_source']['DATA'])) {
@@ -156,7 +156,7 @@ Class FileController
      */
     function preview($doi, $filename, $response)
     {
-        $config        = parse_ini_file($_SERVER['DOCUMENT_ROOT'] . '/../config.ini');
+        $config=self::ConfigFile();        
         $UPLOAD_FOLDER = $config["UPLOAD_FOLDER"];
         $DOI_PREFIX    = $config["DOI_PREFIX"];
         
@@ -249,6 +249,14 @@ Class FileController
             exit;
         }
         
+    }
+
+    function ConfigFile(){
+            $config = parse_ini_file($_SERVER['DOCUMENT_ROOT'] . '/../config.ini');
+            $config['REPOSITORY_NAME']=strtoupper($config["REPOSITORY_NAME"]);
+            if(preg_match("/^[A-Z0-9-._+:\/]+$/", $config['REPOSITORY_NAME']) == 1) {
+                return $config;
+            }
     }
     
 }
