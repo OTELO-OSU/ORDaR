@@ -76,11 +76,13 @@ font-size:11px
 #description{
   margin-top: 5%;
 }
-#DataTables_Table_0_length{
-  margin-right: 100%!important;
+#DataTables_Table_1_filter{
+  margin-left: -123%;
+  margin-top:59%;
 }
-#DataTables_Table_0_wrapper{
-  margin-right: 100%!important;
+#DataTables_Table_0_filter{
+  margin-left: -123%;
+  margin-top:59%;
 }
 
 .content a{

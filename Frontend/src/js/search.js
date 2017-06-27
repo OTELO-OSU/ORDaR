@@ -1066,7 +1066,7 @@
       return {
           previewdocument: function(link) {
               $("#preview").empty();
-              $("#preview").append('<iframe src="' + link + '" style="width:900px; height:550px;" frameborder="0"></iframe>');
+              $("#preview").append('<iframe src="' + link + '" style="width:100%; height:550px;" frameborder="0"></iframe>');
               $('.ui.modal.preview').modal('show');
           }
       }
