@@ -8,7 +8,6 @@ use MongoClient;
 
 class DatasheetController
 {
-    
     /**
      * Create a mongo connection instance
      * @return Mongo_instance

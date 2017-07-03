@@ -13,7 +13,8 @@ Class FileController
      */
     function download($doi, $filename, $response)
     {
-        $config=self::ConfigFile();        $UPLOAD_FOLDER = $config["UPLOAD_FOLDER"];
+        $config=self::ConfigFile();        
+        $UPLOAD_FOLDER = $config["UPLOAD_FOLDER"];
         $DOI_PREFIX    = $config["DOI_PREFIX"];
         $doi           = str_replace($config["UPLOAD_FOLDER"], "", $doi);
             if (isset($response['_source']['DATA'])) {
