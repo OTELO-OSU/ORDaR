@@ -55,7 +55,7 @@ $mw=function ($request, $response, $next) {
         $render= $twig->render('notfound.html.twig');
         }
     } 
-    if ($render) {
+    if (!empty($render)) {
     $response->write($render);
     return $response;
     }
@@ -90,7 +90,7 @@ $app->get('/', function (Request $req, Response $responseSlim) {
 
         echo $twig->render('accueil.html.twig');
     }
-});
+})->add($mw);
 
 //Route permettant d'acceder à l'accueil
 $app->get('/accueil', function (Request $req, Response $responseSlim) {
@@ -172,6 +172,9 @@ $app->get('/login', function (Request $req, Response $responseSlim) {
     foreach ($array as $key => $value) {
         if ($value == $_SESSION['mail']) {
             $_SESSION['admin'] = "1";
+        }
+        else{
+            $_SESSION['admin'] = "0";
         }
     }
 

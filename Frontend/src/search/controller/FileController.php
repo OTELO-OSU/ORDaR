@@ -16,22 +16,24 @@ Class FileController
         $config=self::ConfigFile();        $UPLOAD_FOLDER = $config["UPLOAD_FOLDER"];
         $DOI_PREFIX    = $config["DOI_PREFIX"];
         $doi           = str_replace($config["UPLOAD_FOLDER"], "", $doi);
-        if (isset($response['_source']['DATA'])) {
-            if (strstr($doi, $config['REPOSITORY_NAME']) !== FALSE) {
-                $file = $UPLOAD_FOLDER . $DOI_PREFIX . "/" . $doi . "/" . $filename;
-            } else {
-                $file = $UPLOAD_FOLDER . $doi . "/" . $filename;
+            if (isset($response['_source']['DATA'])) {
+                if (strstr($doi, $config['REPOSITORY_NAME']) !== FALSE) {
+                    $file = $UPLOAD_FOLDER . $DOI_PREFIX . "/" . $doi . "/" . $filename;
+                } else {
+                    $file = $UPLOAD_FOLDER . $doi . "/" . $filename;
+                }
+        if (file_exists($file)) {
+                header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
+                header("Content-Disposition: attachment; filename=" . $filename);
+                $readfile = file_get_contents($file);
+                print $readfile;
             }
-            header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
-            header("Content-Disposition: attachment; filename=" . $filename);
-            $readfile = file_get_contents($file);
-            print $readfile;
-            if ($readfile == false) {
-                return false;
-            } else {
-                return true;
-            }
-            exit;
+                if ($readfile == false) {
+                    return false;
+                } else {
+                    return true;
+                }
+                exit;
         }
         
     }
@@ -127,6 +129,7 @@ Class FileController
     function export_to_Bibtex($response)
     {
         if (isset($response['_source']['INTRO'])) {
+            $authors=null;
             foreach ($response['_source']['INTRO']['FILE_CREATOR'] as $key => $value) {
                 $authors .= $value['DISPLAY_NAME'] . ",";
             }
@@ -175,7 +178,8 @@ Class FileController
                 }
                 
             }
-            
+            if (file_exists($file)) {
+                
             if ($mime == "pdf") {
                 $readfile = readfile($file);
                 $mime     = "application/pdf";
@@ -236,6 +240,7 @@ Class FileController
                 header('Content-Type:  ' . $mime);
             }
             
+            }
             else {
                 echo "<h1>Cannot preview file</h1> <p>Sorry, we are unfortunately not able to preview this file.<p>";
                 $readfile = false;

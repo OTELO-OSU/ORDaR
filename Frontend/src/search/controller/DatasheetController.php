@@ -1050,6 +1050,7 @@ class DatasheetController
                     return $array;
             }
         $file = new File();
+        $data=null;
         $config=$file->ConfigFile();
         $UPLOAD_FOLDER    = $config["UPLOAD_FOLDER"];
         $collectionObject = $db->selectCollection($config["authSource"], $collection);
