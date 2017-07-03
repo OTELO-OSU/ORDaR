@@ -39,12 +39,12 @@ $c['notAllowedHandler'] = function ($c) {
     };
 };
 
-$app->add(function ($request, $responseSlim, $next) {
+$mw=function ($request, $response, $next) {
       $file=file_exists($_SERVER['DOCUMENT_ROOT'] . '/../config.ini');
     if ($file==false) {
         $loader = new Twig_Loader_Filesystem('search/templates');
         $twig = new Twig_Environment($loader);
-        echo $twig->render('notfound.html.twig');
+        $render= $twig->render('notfound.html.twig');
         }   
     else{
         $file = new File();
@@ -52,13 +52,20 @@ $app->add(function ($request, $responseSlim, $next) {
         if (strlen($config['REPOSITORY_NAME'])==0 OR strlen($config['host'])==0 OR strlen($config['authSource'])==0 OR strlen($config['DOI_PREFIX'])==0) {
         $loader = new Twig_Loader_Filesystem('search/templates');
         $twig = new Twig_Environment($loader);
-        echo $twig->render('notfound.html.twig');
+        $render= $twig->render('notfound.html.twig');
         }
     } 
+    if ($render) {
+    $response->write($render);
+    return $response;
+    }
+    else{
+                $response = $next($request, $response);
+                return $response;
+    }
 
-    $response = $next($request, $responseSlim);
-    return $responseSlim;
-});
+
+};
 
 session_start();
 
@@ -97,7 +104,7 @@ $app->get('/accueil', function (Request $req, Response $responseSlim) {
         echo $twig->render('accueil.html.twig');
 
     }
-});
+})->add($mw);
 
 //Route permettant d'acceder a la page about
 $app->get('/about', function (Request $req, Response $responseSlim) {
@@ -142,7 +149,7 @@ $app->get('/searchresult', function (Request $req, Response $responseSlim) {
     else {
         echo $twig->render('accueil.html.twig', ['query' => $query]);
     }
-});
+})->add($mw);
 
 //Route permettant la connexion d'un utilisateur
 $app->get('/login', function (Request $req, Response $responseSlim) {
@@ -177,7 +184,7 @@ $app->get('/login', function (Request $req, Response $responseSlim) {
         return $responseSlim->withRedirect('accueil');
     }
 
-});
+})->add($mw);
 
 //Route permettant la deconnexion d'un utilisateur
 $app->get('/logout', function (Request $req, Response $responseSlim) {
@@ -189,7 +196,7 @@ $app->get('/logout', function (Request $req, Response $responseSlim) {
 
     return $responseSlim->withRedirect($config['REPOSITORY_URL'].'/Shibboleth.sso/Logout?return='.$config['REPOSITORY_URL']);
 
-});
+})->add($mw);
 
 //Route affichant les publication de l'utilisateur connecté
 $app->get('/mypublications', function (Request $req, Response $responseSlim) {
@@ -202,7 +209,7 @@ $app->get('/mypublications', function (Request $req, Response $responseSlim) {
         return $responseSlim->withRedirect('accueil');
     }
 
-});
+})->add($mw);
 
 //Route affichant le formulaire d'upload
 $app->get('/upload', function (Request $req, Response $responseSlim) {
@@ -233,7 +240,7 @@ $app->get('/upload', function (Request $req, Response $responseSlim) {
         return $responseSlim->withRedirect('accueil');
     }
 })
-    ->setName('upload')
+    ->setName('upload')->add($mw)
     ->add($container->get('csrf'));
 
 //Route receptionnant les données POST de l'upload
