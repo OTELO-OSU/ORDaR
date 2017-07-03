@@ -298,6 +298,7 @@ Le repository est privée, il sera necessaire de nous envoyer un message afin de
 
 Le jeux de données est ajouté avec un statut Unpublished, il est accessible uniquement au propriétaire ou ses co-auteurs.
 L'auteur peut choisir de le publier ou de le supprimer.
+Si le jeu de données est supprimé ou publié, le fichier xlsx est automatiquement supprimé du repertoire source.
 
 L'utilisateur recevra un mail avec le DOI qui a été attribué dés la publication du jeu de données. En statut unpublished l'id du fichier est provisoire (aucun DOI n'est attribué).
 
