@@ -123,6 +123,25 @@ class DatasheetController
         return $error;
     }    
 
+
+
+    function Create_published_file($olddoi,$newdoi,$datafile){
+    $file = new File();
+    $config=$file->ConfigFile();
+    $url=$config['REPOSITORY_URL']."/".$newdoi;
+    $filename=$datafile.".html";
+    $fp = fopen($filename, 'w');
+
+    $html='<!DOCTYPE html>
+    <html>
+        <head>
+            <meta http-equiv="refresh" content="0; url='.$url.'" />
+        </head>
+    </html>';
+
+    fwrite($fp, $html);
+    }
+
     function Increment_DOI(){
             $file = new File();
     $config=$file->ConfigFile();
@@ -1355,6 +1374,7 @@ class DatasheetController
                     }
                     //unlink($ORIGINAL_DATA_URL);
                     exec("sudo -u ".$config["DATAFILE_UNIXUSER"]." rm ".$ORIGINAL_DATA_URL);
+                     self::Create_published_file($doi,$newdoi,$ORIGINAL_DATA_URL);
                     rename($UPLOAD_FOLDER . $doi . '/' . $doi . '_DATA.csv', $UPLOAD_FOLDER . "/" . $config["DOI_PREFIX"] . "/" . $newdoi . "/" . $doi . '_DATA.csv');
                     rmdir($UPLOAD_FOLDER . $doi);
                     $collectionObject->update(array(
