@@ -162,6 +162,7 @@ $app->get('/login', function (Request $req, Response $responseSlim) {
     $_SESSION['name'] = $_SERVER['HTTP_SN'];
     $_SESSION['firstname'] = $_SERVER['HTTP_GIVENNAME'];
     $_SESSION['mail'] = $_SERVER['HTTP_MAIL'];
+    $_SESSION['admin'] = "0";
       
 
     
@@ -173,9 +174,7 @@ $app->get('/login', function (Request $req, Response $responseSlim) {
         if ($value == $_SESSION['mail']) {
             $_SESSION['admin'] = "1";
         }
-        else{
-            $_SESSION['admin'] = "0";
-        }
+       
     }
 
     session_regenerate_id();
