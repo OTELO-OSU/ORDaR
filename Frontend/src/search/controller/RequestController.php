@@ -506,10 +506,10 @@ class RequestController
         }';
         $bdd         = strtolower($config['authSource']);
         if ($query == "null") { // SI pas de facets 
-            $url = 'http://localhost/' . $bdd . '/_search?q=INTRO.FILE_CREATOR.MAIL:' . $author_mail . '%20AND%20(INTRO.FILE_CREATOR.NAME:' . $authors_name . ')&size=10000';
+            $url = 'http://localhost/' . $bdd . '/_search?q=INTRO.FILE_CREATOR.MAIL:' . $author_mail . '&size=10000';
         } else { // Sinon on recher avec les facets
             $query = rawurlencode($query);
-            $url   = 'http://localhost/' . $bdd . '/_search?q=' . $query . '%20AND%20(INTRO.FILE_CREATOR.MAIL:' . $author_mail . ')%20AND%20(INTRO.FILE_CREATOR.NAME:' . $authors_name . ')&size=10000';
+            $url   = 'http://localhost/' . $bdd . '/_search?q=' . $query . '%20AND%20(INTRO.FILE_CREATOR.MAIL:' . $author_mail . '))&size=10000';
         }
         $curlopt                    = array(
             CURLOPT_RETURNTRANSFER => true,
