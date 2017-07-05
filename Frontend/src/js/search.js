@@ -282,19 +282,34 @@
                       }
                   });
                   $('#facets').show();
-                   if ($(window).width()<=1046) {
-      $('.facets').hide();
-      $('form .ui.grid#gridresults').prepend('<div id="Displayfacets" class="ui button primary">Display/Hide facets</div>');
-      $('form .ui.grid .button').on("click",function(){
-         $(".facets").toggle();
-      })
-    }
-      if ($(window).width()<=420) {
-        $('#accueil').removeClass();
+                  $('form .ui.grid#gridresults').prepend('<div id="Displayfacets" class="ui button primary">Display/Hide facets</div>');
+                 APP.modules.search.checksize();
+                $('form .ui.grid .button').on("click",function(){
+                   $(".facets").toggle();
+                })
+                 $( window ).resize(function() {
+                   APP.modules.search.checksize();
 
-       }
+                  });
+                  }
+                    },
+
+          checksize:function(){
+               if ($(window).width()<=1046) {
+                $('.facets').hide();
               }
+              else{
+                  $('.facets').show();
+                  $('#accueil').addClass("eleven wide centered column");
+              }
+
+                if ($(window).width()<=420) {
+                  $('#accueil').removeClass();
+
+                 }
+              
           },
+
           //Methode de trap des events sur les facets
           checkCheckbox: function() {
               checked = $("#facets input:checked");
@@ -612,18 +627,16 @@
                           APP.modules.mypublications.search(query + date, "facets");
                       }
                   });
-                  $('#facets').show();
-      if ($(window).width()<=1046) {
-      $('.facets').hide();
-      $('form .ui.grid').prepend('<div id="Displayfacets" class="ui button primary">Display/Hide facets</div>');
-      $('form .ui.grid .button').on("click",function(){
-         $(".facets").toggle();
-      })
-      } 
-       if ($(window).width()<=420) {
-        $('#accueil').removeClass();
+                $('#facets').show();
+                $('form .ui.grid').prepend('<div id="Displayfacets" class="ui button primary">Display/Hide facets</div>');
+                APP.modules.search.checksize();
+                $('form .ui.grid .button').on("click",function(){
+                   $(".facets").toggle();
+                })
+                 $( window ).resize(function() {
+                   APP.modules.search.checksize();
 
-       }
+                  });
 
               }
           },

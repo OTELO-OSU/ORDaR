@@ -41,6 +41,10 @@ font-size:18px
 font-size:18px
 }
 
+#Displayfacets{
+  display: none;
+}
+
 @media screen and (min-width: 200px) and (max-width: 1119px) {
     #about{
         order: 2;
@@ -48,6 +52,10 @@ font-size:18px
     #login {
 font-size:11px
 }
+#Displayfacets{
+  display: block;
+}
+
 
 #logout {
 font-size:11px
