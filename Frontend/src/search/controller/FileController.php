@@ -137,12 +137,14 @@ Class FileController
             $title       = $response['_source']['INTRO']['TITLE'];
             $description = $response['_source']['INTRO']['DATA_DESCRIPTION'];
             $year        = $response['_source']['INTRO']['PUBLICATION_DATE'];
+            $publisher        = $response['_source']['INTRO']['PUBLISHER'];
             $doi         = $response['_id'];
             $bibtex      = " 
              @data{ 
               author       = {" . $authors . "}, 
               title        = {{" . $title . "}}, 
               description  = {{" . $description . "}}, 
+              publisher    = {{".$publisher."}},
               year         = " . $year . ", 
               doi          = {" . $doi . "}, 
 

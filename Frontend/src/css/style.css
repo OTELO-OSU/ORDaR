@@ -45,13 +45,18 @@ font-size:18px
   display: none;
 }
 
-@media screen and (min-width: 200px) and (max-width: 1119px) {
+@media screen and (min-width: 200px) and (max-width: 1118px) {
+  .mb-pagination{
+    padding-bottom:20%!important;
+
+  }
     #about{
         order: 2;
     }
     #login {
 font-size:11px
 }
+
 #Displayfacets{
   display: block;
 }
@@ -76,6 +81,7 @@ font-size:11px
 }
 #Displayfacets{
   margin:10%; 
+  margin-top:20PX;
 
 }
 #uploadeddate{
@@ -94,7 +100,7 @@ font-size:11px
 }
 
 .content a{
-  margin-right: 10%;
+  margin-right: 0%;
 }
 
 
@@ -126,22 +132,50 @@ position:relative;
 top:30px
 }
 
-.easyPaginateNav {
-display:inline-block;
-width:auto
+.mb-pagination{
+  font-size: 14px;
+  font-family: sans-serif;
 }
-
-.easyPaginateNav a {
-border:1px solid #ddd;
-color:#000;
-float:left;
-padding:8px 16px;
-text-decoration:none
+.mb-pagination{
+  padding-left: 0;
+  margin:10px 0;
 }
+.mb-pagination li {
+  display: inline-block;
+}
+.mb-pagination li:not(:last-child) {
+    border-right: 0;
+}
+.mb-pagination li > *{
+  padding:3px 10px;
+    display: block; 
+  color: #333;
+}
+.mb-pagination span,
+.mb-pagination a{
+      border: 1px solid #eee;
 
-.easyPaginateNav a.current {
-background-color:#4CAF50;
-color:#fff
+    position: relative;
+    padding: 4px 12px;
+    line-height: 1.43;
+    color: #000000;
+    text-decoration: none;
+    background-color: #fff;
+}
+.mb-pagination a:hover{
+  background: #eee;
+}
+.mb-pagination li.active{
+  border-color: #333;
+}
+.mb-pagination .active a{
+  background: #21BA45;
+  color: #fff;
+  pointer-events: none;
+}
+.non-number-li.disabled a {
+    background: #f7f7f7;
+    pointer-events: none;
 }
 
 .field .dropdown {

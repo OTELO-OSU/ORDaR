@@ -18,9 +18,9 @@
                   $('#info-noresult').show();
                   $('#info').hide();
                   $('#gridlogo').show();
-                  $('.easyPaginateNav').remove();
+                  $('.mb-pagination').remove();
               } else {
-                  $('.easyPaginateNav').remove();
+                  $('.mb-pagination').remove();
                   $('#info-noresult').empty();
                   $('#info').empty();
                   total = data['hits']['total'];
@@ -76,12 +76,10 @@
                   $('#info-noresult').hide();
                   $('#logosearch').hide();
                   $('#gridlogo .row').remove();
-                  $('#results').easyPaginate({
-                      paginateElement: '.item',
-                      elementsPerPage: 10,
-                      prevButton: false,
-                      nextButton: false,
-                  });
+                  $('#results').mbPagination({
+                  showFirstLast: true,
+                  perPage: 10,
+                });
               }
           }
       }
@@ -109,7 +107,7 @@
               $('#info').removeClass('green');
               $('#info').empty();
               $('#results').empty();
-              $('.easyPaginateNav').remove();
+              $('.mb-pagination').remove();
               $('#facets_type').empty();
               var query = APP.modules.search.$_GET('query');
               if (query != null) {
@@ -295,7 +293,7 @@
                     },
 
           checksize:function(){
-               if ($(window).width()<=1046) {
+               if ($(window).width()<=1119) {
                 $('.facets').hide();
               }
               else{
@@ -458,7 +456,7 @@
                   $('#info').hide();
                   $('#facets').hide();
                   $('#results').empty();
-                  $('.easyPaginateNav').remove();
+                  $('.mb-pagination').remove();
                   $('#facets_type').empty();
                   sample_kind = data['aggregations']['sample_kind']['buckets'];
                   if (sample_kind.length == 0) {
