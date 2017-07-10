@@ -80,6 +80,14 @@
                   showFirstLast: true,
                   perPage: 10,
                 });
+                  $(".number-li").click(function(){
+                    $('html,body').scrollTop(0);
+
+                  })
+                   $(".non-number-li").click(function(){
+                    $('html,body').scrollTop(0);
+
+                  })
               }
           }
       }
