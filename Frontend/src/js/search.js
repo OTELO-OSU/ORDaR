@@ -77,7 +77,7 @@
                   $('#logosearch').hide();
                   $('#gridlogo .row').remove();
                   $('#results').mbPagination({
-                  showFirstLast: true,
+                  showFirstLast: false,
                   perPage: 10,
                 });
                   $(".number-li").click(function(){
