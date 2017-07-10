@@ -1,6 +1,11 @@
 #authors li a {
 cursor:pointer
 }
+.mb-pagination{
+  margin-left: 30%!important;
+  font-size: 14px;
+  font-family: sans-serif;
+}
 
 #dataset {
 font-size:18px
@@ -47,6 +52,7 @@ font-size:18px
 
 @media screen and (min-width: 200px) and (max-width: 1118px) {
   .mb-pagination{
+    margin-left: 11em!important;
     padding-bottom:20%!important;
 
   }
@@ -73,7 +79,7 @@ font-size:11px
 font-size:11px
 }
 .ui.form .field .ui.input input, .ui.form .fields .field .ui.input input {
-     width: 30%!important; 
+     width: 20%!important; 
 }
 #doi{
   margin:2em;
@@ -107,6 +113,12 @@ font-size:11px
 }
 
 
+@media screen  and (orientation: portrait) {
+ .mb-pagination{
+    margin-left: 1em!important;
+  }
+
+}
 #results .label {
 margin-bottom:10px!important
 }
@@ -132,10 +144,7 @@ position:relative;
 top:30px
 }
 
-.mb-pagination{
-  font-size: 14px;
-  font-family: sans-serif;
-}
+
 .mb-pagination{
   padding-left: 0;
   margin:10px 0;
