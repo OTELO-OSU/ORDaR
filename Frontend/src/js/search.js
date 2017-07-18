@@ -57,14 +57,11 @@
                                   author = file_creator[k]["NAME"] + " " + file_creator[k]["FIRST_NAME"];
                                   authorsname.push(author);
                               }
-                          } else {
-                              author = file_creator[k]["NAME"] + " " + file_creator[k]["FIRST_sNAME"];
-                              authorsname.push(author);
-                          }
+                          } 
                       }
-                      var authorsnames = document.createElement("ul");
+                      var authorsnames = jQuery("<ul></ul>");
                       for (k in authorsname) {
-                          var li = document.createElement("li");
+                          var li = jQuery("<li></li>");
                           li.append(authorsname[k]);
                           authorsnames.append(li);
                       }
