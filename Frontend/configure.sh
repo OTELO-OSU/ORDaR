@@ -13,6 +13,8 @@
 	read DATAFILE_UNIXUSER
 	echo "Please type noreply mail: "
 	read NO_REPLY_MAIL
+	echo "Do you want to enable social network sharing? (true or false): "
+	read SOCIAL_SHARING
 	echo "Please type a bdd repository host: (IP OR DNS NAME)"
 	read host
 	echo "Please type port of bdd repository host: "
@@ -42,6 +44,7 @@
 	echo "admin[]="$ADMIN >> config.ini	&&
 	echo "DATAFILE_UNIXUSER="'"'$DATAFILE_UNIXUSER'"' >> config.ini	&&
 	echo "NO_REPLY_MAIL="'"'$NO_REPLY_MAIL'"' >> config.ini	&&
+	echo "SOCIAL_SHARING="'"'$SOCIAL_SHARING'"' >> config.ini	&&
 	echo "#REPOSITORY BDD CONFIG" >> config.ini	&&
 	echo "host="'"'$host'"' >> config.ini	&&
 	echo "port="$port >> config.ini	&&
