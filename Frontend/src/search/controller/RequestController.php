@@ -157,7 +157,7 @@ class RequestController
      * Make a request to elasticsearch API in admin MODE (View ALL)
      * @return data of request
      */
-    function requestToAPIAdmin($query)
+    function requestToAPIAdmin($query,$from)
     {
             $file = new File();
     $config=$file->ConfigFile();
@@ -216,7 +216,7 @@ class RequestController
             }  
         }';
         $bdd                        = strtolower($config['authSource']);
-        $url                        = 'http://localhost/' . $bdd . '/_search?q=' . $query . '&size=10000';
+        $url                        = 'http://localhost/' . $bdd . '/_search?q=' . $query . '&size=10&from='.$from;
         $curlopt                    = array(
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_PORT => 9200,
@@ -246,7 +246,7 @@ class RequestController
      * @param query of user
      * @return data of request
      */
-    function requestToAPI($query)
+    function requestToAPI($query,$from)
     {
         $file = new File();
         $config=$file->ConfigFile();
@@ -304,7 +304,7 @@ class RequestController
 
         }';
         $bdd                        = strtolower($config['authSource']);
-        $url                        = 'http://localhost/' . $bdd . '/_search?q=' . $query . '%20AND%20NOT%20INTRO.ACCESS_RIGHT:Unpublished%20AND%20NOT%20INTRO.ACCESS_RIGHT:Draft&size=10000';
+        $url                        = 'http://localhost/' . $bdd . '/_search?q=' . $query . '%20AND%20NOT%20INTRO.ACCESS_RIGHT:Unpublished%20AND%20NOT%20INTRO.ACCESS_RIGHT:Draft&size=10&from='.$from;
 
         $curlopt                    = array(
             CURLOPT_RETURNTRANSFER => true,
@@ -451,7 +451,7 @@ class RequestController
      * @param mail of authors,name of auhtors, query of user
      * @return data of request
      */
-    function getPublicationsofUser($author_mail, $authors_name, $query)
+    function getPublicationsofUser($author_mail, $authors_name, $query,$from)
     {
         $file = new File();
         $config=$file->ConfigFile();
@@ -506,10 +506,10 @@ class RequestController
         }';
         $bdd         = strtolower($config['authSource']);
         if ($query == "null") { // SI pas de facets 
-            $url = 'http://localhost/' . $bdd . '/_search?q=INTRO.FILE_CREATOR.MAIL:' . $author_mail . '&size=10000';
+            $url = 'http://localhost/' . $bdd . '/_search?q=INTRO.FILE_CREATOR.MAIL:' . $author_mail . '&size=10&from='.$from;
         } else { // Sinon on recher avec les facets
             $query = rawurlencode($query);
-            $url   = 'http://localhost/' . $bdd . '/_search?q=' . $query . '%20AND%20(INTRO.FILE_CREATOR.MAIL:' . $author_mail . '))&size=10000';
+            $url   = 'http://localhost/' . $bdd . '/_search?q=' . $query . '%20AND%20(INTRO.FILE_CREATOR.MAIL:' . $author_mail . ')&size=10&from='.$from;
         }
         $curlopt                    = array(
             CURLOPT_RETURNTRANSFER => true,

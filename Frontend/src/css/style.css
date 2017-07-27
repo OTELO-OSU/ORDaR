@@ -1,11 +1,7 @@
 #authors li a {
 cursor:pointer
 }
-.mb-pagination{
-  margin-left: 30%!important;
-  font-size: 14px;
-  font-family: sans-serif;
-}
+
 
 #dataset {
 font-size:18px
@@ -51,11 +47,6 @@ font-size:18px
 }
 
 @media screen and (min-width: 200px) and (max-width: 1118px) {
-  .mb-pagination{
-    margin-left: 11em!important;
-    padding-bottom:20%!important;
-
-  }
     #about{
         order: 2;
     }
@@ -112,13 +103,6 @@ font-size:11px
 
 }
 
-
-@media screen  and (orientation: portrait) {
- .mb-pagination{
-    margin-left: 1em!important;
-  }
-
-}
 #results .label {
 margin-bottom:10px!important
 }
@@ -142,49 +126,6 @@ top:10px
 .delete.center {
 position:relative;
 top:30px
-}
-
-
-.mb-pagination{
-  padding-left: 0;
-  margin:10px 0;
-}
-.mb-pagination li {
-  display: inline-block;
-}
-.mb-pagination li:not(:last-child) {
-    border-right: 0;
-}
-.mb-pagination li > *{
-  padding:3px 10px;
-    display: block; 
-  color: #333;
-}
-.mb-pagination span,
-.mb-pagination a{
-      border: 1px solid #eee;
-
-    position: relative;
-    padding: 4px 12px;
-    line-height: 1.43;
-    color: #000000;
-    text-decoration: none;
-    background-color: #fff;
-}
-.mb-pagination a:hover{
-  background: #eee;
-}
-.mb-pagination li.active{
-  border-color: #333;
-}
-.mb-pagination .active a{
-  background: #21BA45;
-  color: #fff;
-  pointer-events: none;
-}
-.non-number-li.disabled a {
-    background: #f7f7f7;
-    pointer-events: none;
 }
 
 .field .dropdown {

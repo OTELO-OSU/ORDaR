@@ -186,6 +186,23 @@
                   </a>
                   {%endif%}
                   <p id="uploadeddate">Uploaded on {{uploaddate}}</p>
+                  {% if (SOCIAL_SHARING == true) %}
+                  <div class="ui grid">
+                  <div class="four column row">
+                   <div id="social" class="right floated column">
+                   <h4><i class="share alternate icon"></i>Share this dataset</h4>
+                     <a target="_blank" href="https://twitter.com/intent/tweet/?url={{REPOSITORY_URL}}/record?id={{doi}}&text=I found this dataset on &button_hashtag={{REPOSITORY_NAME}}">
+                     <button class="ui circular twitter icon button">
+                       <i class="twitter icon"></i>
+                     </button></a>
+                     <a target="_blank" href="https://www.linkedin.com/shareArticle?mini=true&url={{REPOSITORY_URL}}/record?id={{doi}}&title={{title|raw}}&summary=i found this dataset&source={{REPOSITORY_NAME}}">
+                     <button class="ui circular linkedin icon button">
+                       <i class="linkedin icon"></i>
+                     </button></a>
+                  </div>
+                  </div>
+                  </div>
+                  {%endif%}
                </div>
                <div id="cards">
                   <div class="ui fluid card">
