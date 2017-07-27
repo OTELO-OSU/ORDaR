@@ -90,7 +90,7 @@
                   }
                   else{
                   $(".pagination").append('<a class="item page-1" href="javascript:void(0);">1</a>');
-                  if (current!=1) {
+                  if ((current!=1 )&& (current!=2)) {
                   $(".pagination").append('<div class="disabled item"> ... </div>');
                   }
                   for (var i = parseInt(current)-1; i < parseInt(current); i++) {
@@ -103,7 +103,9 @@
                     $(".pagination").append('<a class="item page-'+i+'" href="javascript:void(0);">'+i+'</a>');
                     }
                   }
+                 
                   $(".pagination").append('<div class="disabled item"> ... </div>');
+                  
                   $(".pagination").append('<a class="item page-'+nbpages+'" href="javascript:void(0);">'+nbpages+'</a>');
                   if (module=="mypublications") {
                       $('.pagination a').on('click',function(e){
