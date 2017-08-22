@@ -7,8 +7,27 @@
                <div class="row"></div>
                <div class=" ui horizontal divider header"> <i class="tag icon"></i>About this dataset</div>
                <div class="content">
-               <div class="ui grey label right floated "  data-tooltip="Last modification of metadata">{{metadatadate}}</div>
+                   <div class=" ui four column grid">
+                  <div class="column">
+                 {% if (SOCIAL_SHARING == true) %}
+                   <div id="social" class="left floated column">
+                   <h4><i class="share alternate icon"></i>Share</h4>
+                     <a target="_blank" href="https://twitter.com/intent/tweet/?url={{REPOSITORY_URL}}/record?id={{doi}}&text=I found this dataset on &button_hashtag={{REPOSITORY_NAME}}">
+                     <button class="ui circular twitter icon button">
+                       <i class="twitter icon"></i>
+                     </button></a>
+                     <a target="_blank" href="https://www.linkedin.com/shareArticle?mini=true&url={{REPOSITORY_URL}}/record?id={{doi}}&title={{title|raw}}&summary=i found this dataset&source={{REPOSITORY_NAME}}">
+                     <button class="ui circular linkedin icon button">
+                       <i class="linkedin icon"></i>
+                     </button></a>
+                  </div>
+                  {%endif%}
 
+                  </div>
+               <div class="column  right floated ">
+               <div class="ui grey label "  data-tooltip="Last modification of metadata">{{metadatadate}}</div>
+               </div>
+                  </div>
                   {%if institutions %}
                   <h3 class="ui  header">Institutions:</h3>
                   <ul>
@@ -136,6 +155,7 @@
                   {{doi}}
                   </a>
                   {%endif%}
+
                </div>
                {% if accessright == "Closed" %}
                <div class="ui red label" >{{accessright}}</div>
@@ -148,13 +168,21 @@
                 {% elseif accessright == "Draft" %}
                <div class="ui grey label" >{{accessright}}</div>
                {% endif %}
-                  
                <div class="ui blue label"  data-tooltip="Creation date">{{creationdate}}</div>
                   <div class="row"></div>
+
                <div class="row">
+               <div class="ui grid">
+               <div class="row"></div>
+               </div>
+                  <div class="ui grid container">
+                  <div class="six column row">
                   <div id="description" class="meta">
                      <h4>Description:</h4>
                      <span class="data">{{datadescription|raw}}</span>
+                  </div>
+              
+                  </div>
                   </div>
                   <div class="author">
                   <div class="row"></div>
@@ -186,23 +214,7 @@
                   </a>
                   {%endif%}
                   <p id="uploadeddate">Uploaded on {{uploaddate}}</p>
-                  {% if (SOCIAL_SHARING == true) %}
-                  <div class="ui grid">
-                  <div class="four column row">
-                   <div id="social" class="right floated column">
-                   <h4><i class="share alternate icon"></i>Share this dataset</h4>
-                     <a target="_blank" href="https://twitter.com/intent/tweet/?url={{REPOSITORY_URL}}/record?id={{doi}}&text=I found this dataset on &button_hashtag={{REPOSITORY_NAME}}">
-                     <button class="ui circular twitter icon button">
-                       <i class="twitter icon"></i>
-                     </button></a>
-                     <a target="_blank" href="https://www.linkedin.com/shareArticle?mini=true&url={{REPOSITORY_URL}}/record?id={{doi}}&title={{title|raw}}&summary=i found this dataset&source={{REPOSITORY_NAME}}">
-                     <button class="ui circular linkedin icon button">
-                       <i class="linkedin icon"></i>
-                     </button></a>
-                  </div>
-                  </div>
-                  </div>
-                  {%endif%}
+                 
                </div>
                <div id="cards">
                   <div class="ui fluid card">

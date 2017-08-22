@@ -725,7 +725,7 @@ class DatasheetController
             if ($type == "Publish") {//Definition des droit d'acces si on publie
                 if ($key == "access_right") {
                     if ($value == "Closed") {
-                        $publication_date      = "9999-12-31";
+                        $publication_date      = date('Y-m-d');
                         $array["ACCESS_RIGHT"] = 'Closed';
                     } elseif ($value == "Open") {
                         $publication_date      = date('Y-m-d');
