@@ -344,11 +344,39 @@ Dans le cas ou l'administrateur supprime un jeu de données le DOI est alors dé
 
 L'administrateur peut aussi modifier et ajouter des fichiers (avec un minimum de 1 fichier par jeux de données)
 
+ **Détails des clés mongo:**
  
-
-
-
-
+_id: DOI
+INTRO:
+        TITLE: Titre
+        LANGUAGE: Langage
+        FILE_CREATOR:   
+                    FIRST_NAME: Prénom
+                    NAME: Nom
+                    DISPLAY_NAME: Prénom et nom
+                    MAIL: Mail du créateur
+        DATA_DESCRIPTION: Description des données
+        PUBLISHER: Editeur
+        SCIENTIFIC_FIELD: Champs scientifiques
+        INSTITUTION: Institutions
+        METHODOLOGY:
+                    NAME:Nom
+                    DESCRIPTION:Description
+        MEASUREMENT:
+                    NATURE
+                    ABBREVIATION
+                    UNIT
+       LICENSE:Licence
+       ACCESS_RIGHT:Droits d'accés
+       METADATA_DATE:Date de dernieres modifications des metadonnées
+       CREATION_DATE:Date de création initiale du jeu de données 
+       UPLOAD_DATE:Date d'ajout dans l'entrepot
+       PUBLICATION_DATE:Date dde publication des données
+DATA:
+      FILES:
+            DATA_URL:Denomination du fichier
+            FILETYPE:Extension du fichier
+        
 
 
 
