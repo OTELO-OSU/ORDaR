@@ -173,6 +173,8 @@ class RequestController
             "excludes": [ "DATA" ] 
              }, 
             "aggs" : {   
+                "max_date" : { "max" : { "field" : "INTRO.CREATION_DATE" } },
+                "min_date" : { "min" : { "field" : "INTRO.CREATION_DATE" } },
                 "sample_kind" : {   
                     "terms" : {   
                       "field" : "INTRO.SAMPLE_KIND.NAME"  
@@ -260,6 +262,8 @@ class RequestController
              }, 
              
             "aggs" : {   
+                 "max_date" : { "max" : { "field" : "INTRO.CREATION_DATE" } },
+                "min_date" : { "min" : { "field" : "INTRO.CREATION_DATE" } },
                 "sample_kind" : {   
                     "terms" : {   
                       "field" : "INTRO.SAMPLE_KIND.NAME"  
@@ -461,6 +465,9 @@ class RequestController
             "excludes": [ "DATA" ] 
              }, 
             "aggs" : {   
+
+                "max_date" : { "max" : { "field" : "INTRO.CREATION_DATE" } },
+                "min_date" : { "min" : { "field" : "INTRO.CREATION_DATE" } },    
                 "sample_kind" : {   
                     "terms" : {   
                       "field" : "INTRO.SAMPLE_KIND.NAME"  

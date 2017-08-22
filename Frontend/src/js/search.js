@@ -293,17 +293,13 @@
                       }
                   }
                   var creationdatearray = [];
+                  aggs= data['aggregations'];
                   data = data['hits']['hits'];
                   $("#date").append('<div class="header" >Creation date</div>');
-                  for (var k in data) {
-                      creationdate = data[k]['CREATION_DATE'].split("-", 2);
-                      creationdatearray.push(creationdate[0])
-                  }
-                  minyear = Math.min.apply(null, creationdatearray);
-                  maxyear = Math.max.apply(null, creationdatearray);
-                  if (minyear == maxyear) {
-                      minyear = maxyear - 1;
-                  }
+                  minyear=aggs['min_date']['value_as_string'].split("-", 2);
+                  maxyear=aggs['max_date']['value_as_string'].split("-", 2);
+                  minyear=minyear[0];
+                  maxyear=maxyear[0];
                   $('#date').append('<input class="range-slider" value="' + minyear + ',' + maxyear + '" type="hidden">');
                   $('.range-slider').jRange({
                       from: minyear,
@@ -650,17 +646,13 @@
                       }
                   }
                   var creationdatearray = [];
+                  aggs=data['aggregations'];
                   data = data['hits']['hits'];
                   $("#date").append('<div class="header" > Creation date</div>');
-                  for (var k in data) {
-                      creationdate = data[k]['CREATION_DATE'].split("-", 2);
-                      creationdatearray.push(creationdate[0])
-                  }
-                  minyear = Math.min.apply(null, creationdatearray);
-                  maxyear = Math.max.apply(null, creationdatearray);
-                  if (minyear == maxyear) {
-                      minyear = maxyear - 1;
-                  }
+                  minyear=aggs['min_date']['value_as_string'].split("-", 2);
+                  maxyear=aggs['max_date']['value_as_string'].split("-", 2);
+                  minyear=minyear[0];
+                  maxyear=maxyear[0];
                   $('#date').append('<input class="range-slider" value="' + minyear + ',' + maxyear + '" type="hidden">');
                   $('.range-slider').jRange({
                       from: minyear,

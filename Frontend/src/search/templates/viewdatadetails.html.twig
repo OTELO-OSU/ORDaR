@@ -7,11 +7,15 @@
                <div class="row"></div>
                <div class=" ui horizontal divider header"> <i class="tag icon"></i>About this dataset</div>
                <div class="content">
-                   <div class=" ui four column grid">
+                   <div class=" ui two column grid">
                   <div class="column">
                  {% if (SOCIAL_SHARING == true) %}
                    <div id="social" class="left floated column">
                    <h4><i class="share alternate icon"></i>Share</h4>
+                   <a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u={{REPOSITORY_URL}}/record?id={{doi}}&amp;src=sdkpreparse">
+                   <button class="ui circular facebook icon button">
+                    <i class="facebook icon"></i>
+                  </button></a>
                      <a target="_blank" href="https://twitter.com/intent/tweet/?url={{REPOSITORY_URL}}/record?id={{doi}}&text=I found this dataset on &button_hashtag={{REPOSITORY_NAME}}">
                      <button class="ui circular twitter icon button">
                        <i class="twitter icon"></i>
@@ -24,8 +28,8 @@
                   {%endif%}
 
                   </div>
-               <div class="column  right floated ">
-               <div class="ui grey label "  data-tooltip="Last modification of metadata">{{metadatadate}}</div>
+               <div class="column   ">
+               <div class="ui grey label right floated "  data-tooltip="Last modification of metadata">{{metadatadate}}</div>
                </div>
                   </div>
                   {%if institutions %}
