@@ -10,13 +10,14 @@
                    <div class=" ui two column grid">
                   <div class="column">
                  {% if (SOCIAL_SHARING == true) %}
+                 {% if accessright == "Closed" or accessright == "Open" or accessright == "Embargoed" %}
                    <div id="social" class="left floated column">
                    <h4><i class="share alternate icon"></i>Share</h4>
-                   <a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u={{REPOSITORY_URL}}/record?id={{doi}}&amp;src=sdkpreparse">
+                   <a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u={{REPOSITORY_URL}}/record?id={{doi}}&amp;src=sdkpreparse&quote={{title|raw}}">
                    <button class="ui circular facebook icon button">
                     <i class="facebook icon"></i>
                   </button></a>
-                     <a target="_blank" href="https://twitter.com/intent/tweet/?url={{REPOSITORY_URL}}/record?id={{doi}}&text=I found this dataset on &button_hashtag={{REPOSITORY_NAME}}">
+                     <a target="_blank" href="https://twitter.com/intent/tweet/?url={{REPOSITORY_URL}}/record?id={{doi}}&text={{title|raw}} on &button_hashtag={{REPOSITORY_NAME}}">
                      <button class="ui circular twitter icon button">
                        <i class="twitter icon"></i>
                      </button></a>
@@ -25,6 +26,7 @@
                        <i class="linkedin icon"></i>
                      </button></a>
                   </div>
+                  {%endif%}
                   {%endif%}
 
                   </div>
