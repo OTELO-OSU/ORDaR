@@ -300,6 +300,9 @@
                   maxyear=aggs['max_date']['value_as_string'].split("-", 2);
                   minyear=minyear[0];
                   maxyear=maxyear[0];
+                  if (minyear == maxyear) {
+                      minyear = maxyear - 1;
+                  }
                   $('#date').append('<input class="range-slider" value="' + minyear + ',' + maxyear + '" type="hidden">');
                   $('.range-slider').jRange({
                       from: minyear,
@@ -653,6 +656,9 @@
                   maxyear=aggs['max_date']['value_as_string'].split("-", 2);
                   minyear=minyear[0];
                   maxyear=maxyear[0];
+                  if (minyear == maxyear) {
+                      minyear = maxyear - 1;
+                  }
                   $('#date').append('<input class="range-slider" value="' + minyear + ',' + maxyear + '" type="hidden">');
                   $('.range-slider').jRange({
                       from: minyear,
