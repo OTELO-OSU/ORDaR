@@ -218,10 +218,10 @@ class RequestController
             }  
         }';
         $bdd                        = strtolower($config['authSource']);
-        $url                        = 'http://localhost/' . $bdd . '/_search?q=' . $query . '&size=10&from='.$from;
+        $url                        = 'http://'.$config['ESHOST'].'/'. $bdd . '/_search?q=' . $query . '&size=10&from='.$from;
         $curlopt                    = array(
             CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_PORT => 9200,
+            CURLOPT_PORT => $config['ESPORT'],
             CURLOPT_ENCODING => "",
             CURLOPT_MAXREDIRS => 10,
             CURLOPT_TIMEOUT => 40,
@@ -308,11 +308,11 @@ class RequestController
 
         }';
         $bdd                        = strtolower($config['authSource']);
-        $url                        = 'http://localhost/' . $bdd . '/_search?q=' . $query . '%20AND%20NOT%20INTRO.ACCESS_RIGHT:Unpublished%20AND%20NOT%20INTRO.ACCESS_RIGHT:Draft&size=10&from='.$from;
+        $url                        = 'http://'.$config['ESHOST'].'/'. $bdd . '/_search?q=' . $query . '%20AND%20NOT%20INTRO.ACCESS_RIGHT:Unpublished%20AND%20NOT%20INTRO.ACCESS_RIGHT:Draft&size=10&from='.$from;
 
         $curlopt                    = array(
             CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_PORT => 9200,
+            CURLOPT_PORT => $config['ESPORT'],
             CURLOPT_ENCODING => "",
             CURLOPT_MAXREDIRS => 10,
             CURLOPT_TIMEOUT => 40,
@@ -513,14 +513,14 @@ class RequestController
         }';
         $bdd         = strtolower($config['authSource']);
         if ($query == "null") { // SI pas de facets 
-            $url = 'http://localhost/' . $bdd . '/_search?q=INTRO.FILE_CREATOR.MAIL:' . $author_mail . '&size=10&from='.$from;
+            $url = 'http://'.$config['ESHOST'].'/'. $bdd . '/_search?q=INTRO.FILE_CREATOR.MAIL:' . $author_mail . '&size=10&from='.$from;
         } else { // Sinon on recher avec les facets
             $query = rawurlencode($query);
-            $url   = 'http://localhost/' . $bdd . '/_search?q=' . $query . '%20AND%20(INTRO.FILE_CREATOR.MAIL:' . $author_mail . ')&size=10&from='.$from;
+            $url   = 'http://'.$config['ESHOST'].'/'. $bdd . '/_search?q=' . $query . '%20AND%20(INTRO.FILE_CREATOR.MAIL:' . $author_mail . ')&size=10&from='.$from;
         }
         $curlopt                    = array(
             CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_PORT => 9200,
+            CURLOPT_PORT => $config['ESPORT'],
             CURLOPT_ENCODING => "",
             CURLOPT_MAXREDIRS => 10,
             CURLOPT_TIMEOUT => 40,
@@ -552,10 +552,10 @@ class RequestController
         $file = new File();
         $config=$file->ConfigFile();
         $bdd      = strtolower($config['authSource']);
-        $url      = 'http://localhost/' . $bdd . '/_all/' . urlencode($id);
+        $url      = 'http://'.$config['ESHOST'].'/'. $bdd . '/_all/' . urlencode($id);
         $curlopt  = array(
             CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_PORT => 9200,
+            CURLOPT_PORT => $config['ESPORT'],
             CURLOPT_ENCODING => "",
             CURLOPT_MAXREDIRS => 10,
             CURLOPT_TIMEOUT => 40,

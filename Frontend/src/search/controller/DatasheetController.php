@@ -30,6 +30,26 @@ class DatasheetController
         }
         return $this->db;
     }
+
+
+    function Warning_mail($filename){
+        $file = new File();
+        $config=$file->ConfigFile();
+          foreach ($config["admin"] as $key => $value) {
+                $array = explode(",", $value);
+            }
+            foreach ($array as $key => $value) {
+        $headers = "From:<".$config['NO_REPLY_MAIL'].">\r\n";
+        $headers .= "MIME-Version: 1.0\r\n";
+        $headers .= "Content-Type: text/html; charset=utf-8\r\n";
+        $mail = mail($value, 'Error in '.$config['REPOSITORY_NAME'], '<html>
+        <body>
+            <h2>Error occured in '.$config['REPOSITORY_NAME'].'!</h2>
+            <p>This file is published, but unpublished data '.$filename.' is not removed, please remove it and create an html file<p>
+        </body>
+        </html> ', $headers);
+        }
+    }
     
     /**
      * Generate a new DOI
@@ -126,20 +146,19 @@ class DatasheetController
 
 
     function Create_published_file($olddoi,$newdoi,$datafile){
-    $file = new File();
-    $config=$file->ConfigFile();
-    $url=$config['REPOSITORY_URL']."/".$newdoi;
-    $filename=$datafile.".html";
-    $fp = fopen($filename, 'w');
+        $file = new File();
+        $config=$file->ConfigFile();
+        $url=$config['REPOSITORY_URL']."/".$newdoi;
+        $filename=$datafile.".html";
 
-    $html='<!DOCTYPE html>
-    <html>
-        <head>
-            <meta http-equiv="refresh" content="0; url='.$url.'" />
-        </head>
-    </html>';
-
-    fwrite($fp, $html);
+        $ip = $config["SSH_HOST"];
+        $connection = \ssh2_connect($ip);                     
+        $user = $config["SSH_UNIXUSER"];
+        $pass = $config["SSH_UNIXPASSWD"];
+        $auth=\ssh2_auth_password($connection,$user,$pass);
+        $write="<!doctype html><html><head><meta http-equiv='refresh' content='0; url=".$url."' /></head></html>";
+        $stream = \ssh2_exec($connection,'sudo -u '.$config["DATAFILE_UNIXUSER"].' echo "'.$write.'" >> '.$filename,false);                        
+        
     }
 
     function Increment_DOI(){
@@ -1051,8 +1070,9 @@ class DatasheetController
         }
     }
     
-    
-    
+ function WriteChangelog(){
+
+ }
     
     /**
      * Edit datasheet
@@ -1186,6 +1206,41 @@ class DatasheetController
                 $identifier->addAttribute('identifierType', 'DOI');
                 $request = $Request->send_XML_to_datacite($xml->asXML(), $doi);
                 if ($request == "true") { //Si les donnnées ont bien été receptionné par datacite
+                    $query            = array(
+                        '_id' => $doi
+                    );
+                    $cursor           = $collectionObject->find($query);
+                   foreach ($cursor as $key => $value) {
+                    $json2=$value['INTRO'];
+                   }
+                    $difference = array();
+                    foreach($json['$set']['INTRO'] as $key => $value)
+                    {
+                        if(is_array($value))
+                        {
+                            if(!isset($json2[$key]))
+                            {
+                                $difference[$key] = $value;
+                            }
+                            elseif(!is_array($json2[$key]))
+                            {
+                                $difference[$key] = $value;
+                            }
+                            else
+                            {
+                                $new_diff = array_diff($value, $json2[$key]);
+                                if($new_diff != FALSE)
+                                {
+                                    $difference[$key] = $new_diff;
+                                }
+                            }
+                        }
+                        elseif(!isset($json2[$key]) || $json2[$key] != $value)
+                        {
+                            $difference[$key] = $value;
+                        }
+                    }
+                
                     $collectionObject->update(array(
                         '_id' => $doi
                     ), $json);
@@ -1373,8 +1428,36 @@ class DatasheetController
                         $ORIGINAL_DATA_URL = $value["DATA"]["FILES"][0]["ORIGINAL_DATA_URL"];
                     }
                     //unlink($ORIGINAL_DATA_URL);
-                    exec("sudo -u ".$config["DATAFILE_UNIXUSER"]." rm ".$ORIGINAL_DATA_URL);
-                     self::Create_published_file($doi,$newdoi,$ORIGINAL_DATA_URL);
+                    //exec("sudo -u ".$config["DATAFILE_UNIXUSER"]." rm ".$ORIGINAL_DATA_URL);
+                    $ip = $config["SSH_HOST"];
+                        $connection = \ssh2_connect($ip);
+                        if ($connection==false) {
+                              self::Warning_mail($ORIGINAL_DATA_URL);
+                        }
+                        else{                            
+                            $user = $config["SSH_UNIXUSER"];
+                            $pass = $config["SSH_UNIXPASSWD"];
+                            $auth=\ssh2_auth_password($connection,$user,$pass);
+                            if ($auth==false) {
+                                self::Warning_mail($ORIGINAL_DATA_URL);
+                            }
+                            $stream = \ssh2_exec($connection,'sudo -u '.$config["DATAFILE_UNIXUSER"].' rm '.$ORIGINAL_DATA_URL ,false);     
+                            stream_set_blocking($stream, true);
+                            // read the output into a variable
+                            $data = '';
+                            while($buffer = fread($stream, 4096)) {
+                                $data .= $buffer;
+                            }
+                            // close the stream
+                            fclose($stream);
+                            // print the response
+                              if ($data!='') {
+                                    self::Warning_mail($ORIGINAL_DATA_URL);
+                                }else{
+                                self::Create_published_file($doi,$newdoi,$ORIGINAL_DATA_URL);
+                                }
+                                          
+                        }
                     rename($UPLOAD_FOLDER . $doi . '/' . $doi . '_DATA.csv', $UPLOAD_FOLDER . "/" . $config["DOI_PREFIX"] . "/" . $newdoi . "/" . $doi . '_DATA.csv');
                     rmdir($UPLOAD_FOLDER . $doi);
                     $collectionObject->update(array(
@@ -1426,7 +1509,7 @@ class DatasheetController
 
         $UPLOAD_FOLDER = $config["UPLOAD_FOLDER"];
         if ($collection == null) {
-            return false;
+            return "false";
         }
         $db               = self::connect_tomongo();
         $collectionObject = $this->db->selectCollection($config["authSource"], $collection);
@@ -1449,10 +1532,10 @@ class DatasheetController
                 $request = new RequestApi();
                 $request->Inactivate_doi($doi);//Désactivation du DOi aupres de datacite
                 
-                return true;
+                return "true";
             } 
             else { //sinon erreur
-                    return false;
+                    return "false";
             }
         } else {// si draft ou unpublished
             $db               = self::connect_tomongo();
@@ -1461,6 +1544,7 @@ class DatasheetController
                 '_id' => $doi
             );
             $cursor           = $collectionObject->find($query);
+            $state="true";
             foreach ($cursor as $key => $value) {
                 foreach ($value["DATA"]["FILES"] as $key => $value) {
                     $ORIGINAL_DATA_URL = $value["ORIGINAL_DATA_URL"];
@@ -1468,16 +1552,45 @@ class DatasheetController
                     unlink($UPLOAD_FOLDER . $doi . '/'. $data_url);//remove datafile
                     if (strstr($doi, 'Draft') == FALSE) {  //Remove xls if unpublished from otelocloud
                         //unlink($ORIGINAL_DATA_URL);
-                        exec("sudo -u ".$config["DATAFILE_UNIXUSER"]." rm ".$ORIGINAL_DATA_URL);
+                        //exec("sudo -u ".$config["DATAFILE_UNIXUSER"]." rm ".$ORIGINAL_DATA_URL);
+                         $ip = $config["SSH_HOST"];
+                        $connection = \ssh2_connect($ip);
+                        if ($connection==false) {
+                            $state="fail_ssh";
+                        }
+                        else{                            
+                            $user = $config["SSH_UNIXUSER"];
+                            $pass = $config["SSH_UNIXPASSWD"];
+                            $auth=\ssh2_auth_password($connection,$user,$pass);
+                            if ($auth==false) {
+                                $state="fail_ssh";
+                            }
+                            $stream = \ssh2_exec($connection,'sudo -u '.$config["DATAFILE_UNIXUSER"].' rm '.$ORIGINAL_DATA_URL ,false);     
+                            stream_set_blocking($stream, true);
+                            // read the output into a variable
+                            $data = '';
+                            while($buffer = fread($stream, 4096)) {
+                                $data .= $buffer;
+                            }
+                            // close the stream
+                            fclose($stream);
+                            // print the response
+                              if ($data!='') {
+                                    $state="fail_ssh";
+                                }
+                                          
+                        }
 
                      }
                 }
             }
-            $collectionObject->remove(array(
-                '_id' => $doi
-            ));//Suppresion de la base mongo
-            rmdir($UPLOAD_FOLDER . $doi);//remove empty folder
-            return true;
+            if ($state=="true") {
+                $collectionObject->remove(array(
+                    '_id' => $doi
+                ));//Suppresion de la base mongo
+                rmdir($UPLOAD_FOLDER . $doi);//remove empty folder
+            }
+            return $state;
         }
         
     }

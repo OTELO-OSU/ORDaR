@@ -319,8 +319,12 @@
                           maxdate = range[1];
                           date = " AND INTRO.CREATION_DATE:[" + mindate + "-01-01 TO " + maxdate + "-12-31]"
                           $('#results').empty();
-                          APP.modules.search.search(query + date, "facets","0");
-                      },
+                          if (typeof(globalfacets)!='undefined') {
+                            APP.modules.search.search(query +globalfacets+ date, "facets","0");
+                          }
+                          else{
+                            APP.modules.search.search(query + date, "facets","0");
+                          }                       },
                       onbarclicked: function(val) {
                           var query = APP.modules.search.$_GET('query');
                           range = val.split(",", 2);
@@ -328,7 +332,12 @@
                           maxdate = range[1];
                           date = " AND INTRO.CREATION_DATE:[" + mindate + "-01-01 TO " + maxdate + "-12-31]"
                           $('#results').empty();
-                          APP.modules.search.search(query + date, "facets","0");
+                           if (typeof(globalfacets)!='undefined') {
+                            APP.modules.search.search(query +globalfacets+ date, "facets","0");
+                          }
+                          else{
+                            APP.modules.search.search(query + date, "facets","0");
+                          } 
                       }
                   });
                   $('#facets').show();
@@ -480,6 +489,7 @@
               }
               var query = APP.modules.search.$_GET('query');
               $('#results').empty();
+              globalfacets=facets;
               APP.modules.search.search(query + facets, "facets","0");
           },
           //Methode recherche 
@@ -675,7 +685,12 @@
                           maxdate = range[1];
                           date = " AND INTRO.CREATION_DATE:[" + mindate + "-01-01 TO " + maxdate + "-12-31]"
                           $('#results').empty();
-                          APP.modules.mypublications.search(query + date, "facets","0");
+                          if (typeof(globalfacets)!='undefined') {
+                            APP.modules.mypublications.search(query +globalfacets+ date, "facets","0");
+                          }
+                          else{
+                            APP.modules.mypublications.search(query + date, "facets","0");
+                          }
                       },
                       onbarclicked: function(val) {
                           var query = "*";
@@ -684,8 +699,12 @@
                           maxdate = range[1];
                           date = " AND INTRO.CREATION_DATE:[" + mindate + "-01-01 TO " + maxdate + "-12-31]"
                           $('#results').empty();
-                          APP.modules.mypublications.search(query + date, "facets","0");
-                      }
+                          if (typeof(globalfacets)!='undefined') {
+                            APP.modules.mypublications.search(query +globalfacets+ date, "facets","0");
+                          }
+                          else{
+                            APP.modules.mypublications.search(query + date, "facets","0");
+                          }                      }
                   });
                 $('#facets').show();
                 $('form .ui.grid#gridmypublications').prepend('<div id="Displayfacets" class="ui button primary">Display/Hide facets</div>');
@@ -818,6 +837,7 @@
                   facets = facets
               }
               $('#results').empty();
+              globalfacets=facets;
               APP.modules.mypublications.search("*" + facets, 'facets',"0");
           },
           $_GET: function(param) {

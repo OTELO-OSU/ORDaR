@@ -5,6 +5,8 @@ use \Psr\Http\Message\ResponseInterface as Response;
 use \search\controller\RequestController as RequestApi;
 use \search\controller\DatasheetController as Datasheet;
 use \search\controller\FileController as File;
+ini_set('display_errors',0);
+date_default_timezone_set('Europe/Paris');
 
 require '../vendor/autoload.php';
 
@@ -507,13 +509,18 @@ $app->post('/remove', function (Request $req, Response $responseSlim, $args) {
     $collection = $response['_type'];
     $doi = $response['_id'];
     $state = $Datasheet->removeUnpublishedDatasheet($collection, $doi);
-    if ($state == true) {
+    if ($state=="fail_ssh") {
+         $loader = new Twig_Loader_Filesystem('search/templates');
+        $twig = new Twig_Environment($loader);
+        echo $twig->render('display_actions.html.twig', ['name' => $_SESSION['name'], 'firstname' => $_SESSION['firstname'], 'mail' => $_SESSION['mail'],'message'=>'   <div class="ui message red"  style="display: block;">Removing is not available, please try again later!</div>']);;
+    }
+    elseif ($state == "true") {
         $loader = new Twig_Loader_Filesystem('search/templates');
         $twig = new Twig_Environment($loader);
         echo $twig->render('display_actions.html.twig', ['name' => $_SESSION['name'], 'firstname' => $_SESSION['firstname'], 'mail' => $_SESSION['mail'],'message'=>'   <div class="ui message green"  style="display: block;">Datasheet removed!</div>']);;
 
     }
-    else {
+    elseif ($state=="false") {
 
         return $responseSlim->withStatus(403);
 

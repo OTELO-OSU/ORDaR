@@ -121,8 +121,15 @@ rendez vous dans le dossier précédemment téléchargé /bin et exécuter :
     UPLOAD_FOLDER = défini ou les Uploads des utilisateurs vont être stockés, 
     choisissez un chemin et vérifier les permissions.
     DATAFILE_UNIXUSER=Il s'agit du user a qui appartient les fichiers uploader ( niveau system de fichier).
+    NO_REPLY_MAIL=Mail de No-reply
+    SOCIAL_SHARING=Activer l'option de partage sur les reseaux sociaux
+    SSH_HOST=Host ssh ou sont presente les données OTELO-CLOUD
+    SSH_UNIXUSER=USER ssh
+    SSH_UNIXPASSWD=password
     admin[]= l'adresse mail des administrateurs avec des doubles quotes séparé d'une virgule
     NO_REPLY_MAIL= Indiquez un mail noreply
+    ESHOST=Host d'elasticsearch
+    ESPORT=Port d'elasticsearch
     Choisissez l’authentification de mongodb 
     host = 127.0.0.1
     port = 27017
@@ -376,6 +383,127 @@ L'administrateur peut aussi modifier et ajouter des fichiers (avec un minimum de
           FILES:
                 DATA_URL:Denomination du fichier
                 FILETYPE:Extension du fichier
+
+
+
+**Docker:** 
+
+
+Pour utiliser Docker vous devez configurer le fichier Configure.env qui contient toutes les variable de configuration des différents services:
+Voici uen configuration de test, à vous de la modifier.
+
+#SPECIFIC ORDARUI
+REPOSITORY_NAME=DOCKER-ORDAR
+REPOSITORY_URL=http://example.fr
+UPLOAD_FOLDER=/data/applis/ORDaR/Uploads/
+Le chemin Upload_folder est aussi à modifier dans le dockerfile du service ordar_ui, qui est a la racine du projet
+
+ADMIN=admin@admin.fr
+DATAFILE_UNIXUSER="owncloud"
+NO_REPLY_MAIL="Noreply@ordar.fr"
+SOCIAL_SHARING=true
+
+#DOI CONFIG
+DOI_PREFIX=10.5072
+DOI_database=DOI
+user_doi=test4
+password_doi=test4
+SSH_HOST=IPofservice
+SSH_UNIXUSER=user
+SSH_UNIXPASSWD=pass
+#DATACITE CREDENTIALS
+
+AUTH_CONFIG_DATACITE="YOUR SECRETS CREDENTIALS HERE"
+
+#MONGO CONFIG
+HOST_MONGO=mongo
+PORT_MONGO=27017
+BDDNAME=ORDaR
+SUPER_USER_NAME=test
+SUPER_USER_PASSWORD=test
+USER_READWRITE=test2
+PASSWORD_READWRITE=test2
+USER_BACKUP=test3
+PASSWORD_BACKUP=test3
+
+
+#ELASTICSEARCH
+ESHOST=elasticsearch
+ESPORT=9200
+
+
+#SPECIFIC OAI PMH
+REPOSITORY_URL_OAI=test
+PROTOCOL_VERSION=3.0
+ADMINMAIL=test@test.fr
+GRANULARITY=YYYY-MM-DD
+TOKENKEY="test"
+SpecialSet="openaire"
+
+
+Note: Les utilisateurs mongo sont créés automatiquement.
+
+Le service Ordar_script permet de mettre en place l'upload automatic des jeux de données d'un projet,
+pour cela configurer le fichier Docker/Ordar_script/config.ini avec les valeurs prédemment rentré.
+
+ATTENTION: Un projet = un service d'upload automatique!
+
+ATTENTION: Dans les services OrdarUI et  Ordar_scripts_mobised ( ou pour tout autre projet), il faut configurer les volumes afin de monter les fichiers Uploader et les jeux de donné présent sur OTELO-CLOUD.
+Pour cela rendez-vous dans le fichier docker-compose.yml :
+
+Exemple pour le service Ordar_script_mobised
+ volumes:
+     - /data/applis/ORDaR/Uploads/:/data/applis/ORDaR/Uploads/  (Chemin machine hôte : Chemin du docker interne NE PAS MOFIFIER LE CHEMIN INTERNE)
+     - /data/applis/ORDaR/excel/:/data/applis/ORDaR/excel/ (Chemin machine hôte : Chemin du docker interne NE PAS MOFIFIER LE CHEMIN INTERNE)
+
+Exemple pour le service OrdarUI
+ volumes:
+     - /data/applis/ORDaR/Uploads/:/data/applis/ORDaR/Uploads/  (Chemin machine hôte : Chemin du docker interne NE PAS MOFIFIER LE CHEMIN INTERNE)
+
+
+Un fois cela effectué, lancé docker-compose:
+
+docker-compose up
+
+Patientez  pendant les installations et les initialisations.
+
+Executez cette commande afin d'initialiser le mapping ElasticSearch: 
+
+docker exec ordar_ui php ORDaR/Init_elasticsearch_index.php
+
+
+L'installation est terminé!
+
+
+POur stopper les containers:
+
+docker-compose stop
+
+
+Pour les lancer :
+
+docker-compose start
+
+
+
+Il y a 2 volumes présent sur ce projet afin de garantir la persistance des données:
+
+	- mongodb, pour la base de données
+	- elasticsearch, pour les données indexé par ES
+
+Les fichiers de données sont stocké sur le systeme hôte et ensuite monté dans les différents container qui les utilisent.
+
+
+
+ATTENTION: Mongo-connector indexe 2 minutes apres le lancement des conteneurs, ceci est du au demmarrage des différents services (mongo, elasticsearch)
+
+
+
+
+
+
+
+
 
 
 

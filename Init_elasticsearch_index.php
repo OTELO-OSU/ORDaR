@@ -5,8 +5,8 @@ $config = parse_ini_file('Frontend/config.ini');
 $bdd      = strtolower($config['authSource']);
 
 curl_setopt_array($curl, array(
-  CURLOPT_PORT => "9200",
-  CURLOPT_URL => "http://localhost:9200/".$bdd,
+  CURLOPT_PORT => $config['ESPORT'],
+  CURLOPT_URL => 'http://'.$config['ESHOST'].'/'.$bdd,
   CURLOPT_RETURNTRANSFER => true,
   CURLOPT_ENCODING => "",
   CURLOPT_MAXREDIRS => 10,

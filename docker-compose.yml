@@ -1,0 +1,104 @@
+version: '3.3'
+services:
+  mongo:
+    image: mongodb_ordar_img
+    build: ./Docker/MongoDB
+    container_name: mongodb_ordar
+    env_file:
+     - Configure.env
+    command: ./initmongo.sh
+    volumes:
+     - mongodb:/data/db
+    ports: 
+     - "127.0.0.1:27018:27017"
+    restart: unless-stopped
+  
+  elasticsearch:
+    image: elasticsearch_ordar_img
+    build: ./Docker/ElasticSearch
+    container_name: elasticsearch_ordar
+    environment: 
+     - cluster.name=Ordar
+     - xpack.security.enabled=false
+     - number_of_replicas=0
+    volumes:
+     - elasticsearch:/usr/share/elasticsearch/data
+
+  mongo-connector:
+    image: mongo-connector_ordar_img
+    build: ./Docker/MongoConnector
+    container_name: mongo-connector_ordar
+    env_file:
+     - Configure.env
+    depends_on:
+     - OrdarUI
+     - elasticsearch
+     - mongo
+    links:
+     - elasticsearch
+     - mongo
+    restart: always
+
+  OrdarUI:
+    image: ordar_ui_img
+    build: .
+    container_name: ordar_ui
+    env_file:
+     - Configure.env
+    depends_on:
+     - elasticsearch
+     - mongo
+    links:
+     - elasticsearch
+     - mongo
+    ports: 
+     - "127.0.0.1:8084:80"
+    volumes:
+     - /data/applis/ORDaR/Uploads/:/data/applis/ORDaR/Uploads/
+
+
+  OrdarOAIPMH:
+    image: ordar_oaipmh_img
+    build: ./Docker/OAI-PMH
+    container_name: ordar_oaipmh
+    env_file:
+     - Configure.env
+    depends_on:
+     - elasticsearch
+    links:
+     - elasticsearch
+    ports: 
+     - "127.0.0.1:8083:80"
+
+  CheckEmbargoedDate:
+    image: checkembargoeddate_img
+    build: ./Docker/CheckEmbargoedDate
+    container_name: checkembargoeddate
+    env_file:
+     - Configure.env
+    depends_on:
+     - mongo
+    links:
+     - mongo
+
+  Ordar_script_mobised:
+    image: ordar_script_img
+    build: ./Docker/Ordar_script
+    container_name: ordar_script
+    env_file:
+     - Configure.env
+    depends_on:
+     - mongo
+    links:
+     - mongo
+    volumes:
+     - /data/applis/ORDaR/Uploads/:/data/applis/ORDaR/Uploads/
+     - /data/applis/ORDaR/excel/:/data/applis/ORDaR/excel/
+
+
+
+volumes:
+  mongodb: {}
+  elasticsearch : {}
+  datafiles : {}
+ 

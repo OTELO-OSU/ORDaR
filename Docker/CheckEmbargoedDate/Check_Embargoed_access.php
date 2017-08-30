@@ -1,6 +1,6 @@
 <?php
 date_default_timezone_set('Europe/Paris');
-$config = parse_ini_file('Frontend/config.ini');
+$config = parse_ini_file('/root/config.ini');
 $db     = new MongoClient("mongodb://" . $config['host'] . ':' . $config['port'], array(
     'authSource' => $config['authSource'],
     'username' => $config['username'],
