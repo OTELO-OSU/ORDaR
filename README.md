@@ -438,51 +438,53 @@ Voici uen configuration de test, à vous de la modifier.
 	ADMINMAIL=test@test.fr
 	GRANULARITY=YYYY-MM-DD
 	TOKENKEY="test"
-SpecialSet="openaire"
+	SpecialSet="openaire"
 
 
-	Note: Les utilisateurs mongo sont créés automatiquement.
+Note: Les utilisateurs mongo sont créés automatiquement.
 
-	Le service Ordar_script permet de mettre en place l'upload automatic des jeux de données d'un projet,
-	pour cela configurer le fichier Docker/Ordar_script/config.ini avec les valeurs prédemment rentré.
+Le service Ordar_script permet de mettre en place l'upload automatic des jeux de données d'un projet,
+pour cela configurer le fichier Docker/Ordar_script/config.ini avec les valeurs prédemment rentré.
 
-	ATTENTION: Un projet = un service d'upload automatique!
+ATTENTION: Un projet = un service d'upload automatique!
 
-	ATTENTION: Dans les services OrdarUI et  Ordar_scripts_mobised ( ou pour tout autre projet), il faut configurer les volumes afin de monter les fichiers Uploader et les jeux de donné présent sur OTELO-CLOUD.
-	Pour cela rendez-vous dans le fichier docker-compose.yml :
+ATTENTION: Dans les services OrdarUI et  Ordar_scripts_mobised ( ou pour tout autre projet), il faut configurer les volumes afin de monter les fichiers Uploader et les jeux de donné présent sur OTELO-CLOUD.
+Pour cela rendez-vous dans le fichier docker-compose.yml :
 
-	Exemple pour le service Ordar_script_mobised
+Exemple pour le service Ordar_script_mobised
+
 	 volumes:
 	     - /data/applis/ORDaR/Uploads/:/data/applis/ORDaR/Uploads/  (Chemin machine hôte : Chemin du docker interne NE PAS MOFIFIER LE CHEMIN INTERNE)
-	     - /data/applis/ORDaR/excel/:/data/applis/ORDaR/excel/ (Chemin machine hôte : Chemin du docker interne NE PAS MOFIFIER LE CHEMIN INTERNE)
+     - /data/applis/ORDaR/excel/:/data/applis/ORDaR/excel/ (Chemin machine hôte : Chemin du docker interne NE PAS MOFIFIER LE CHEMIN INTERNE)
 
-	Exemple pour le service OrdarUI
+Exemple pour le service OrdarUI
+	 
 	 volumes:
 	     - /data/applis/ORDaR/Uploads/:/data/applis/ORDaR/Uploads/  (Chemin machine hôte : Chemin du docker interne NE PAS MOFIFIER LE CHEMIN INTERNE)
 
 
 Un fois cela effectué, lancé docker-compose:
 
-docker-compose up
+	docker-compose up
 
 Patientez  pendant les installations et les initialisations.
 
 Executez cette commande afin d'initialiser le mapping ElasticSearch: 
 
-docker exec ordar_ui php ORDaR/Init_elasticsearch_index.php
+	docker exec ordar_ui php ORDaR/Init_elasticsearch_index.php
 
 
 L'installation est terminé!
 
 
-POur stopper les containers:
+Pour stopper les containers:
 
-docker-compose stop
+	docker-compose stop
 
 
 Pour les lancer :
 
-docker-compose start
+	docker-compose start
 
 
 
