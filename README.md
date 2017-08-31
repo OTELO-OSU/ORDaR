@@ -140,15 +140,16 @@ rendez vous dans le dossier précédemment téléchargé /bin et exécuter :
     SSH_UNIXUSER=USER ssh
     SSH_UNIXPASSWD=password
     admin[]= l'adresse mail des administrateurs avec des doubles quotes séparé d'une virgule
-    NO_REPLY_MAIL= Indiquez un mail noreply
+    #ELASTICSEARCH CONFIG
     ESHOST=Host d'elasticsearch
     ESPORT=Port d'elasticsearch
-    Choisissez l’authentification de mongodb 
+    #Choisissez l’authentification de mongodb 
     host = 127.0.0.1
     port = 27017
     authSource= Le nom de votre BDD qui contiendra les jeux de données
     username = Le username de votre BDD qui contiendra les jeux de données
     password = Le mot de passe de votre BDD qui contiendra les jeux de données
+    #DOI BDD
     DOI_PREFIX = Votre prefix DOI datacite
     DOI_database = Le nom de votre BDD qui contiendra le numéro de DOI
     user_doi = Le username de votre BDD qui contiendra le numéro de DOI
