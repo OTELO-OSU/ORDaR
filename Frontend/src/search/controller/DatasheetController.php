@@ -158,7 +158,7 @@ class DatasheetController
         $auth=\ssh2_auth_password($connection,$user,$pass);
     
         $write="<html><head><meta http-equiv='refresh' content='0; url=".$url."' /></head></html>";
-        $command='sudo -u guiot1 sh -c " echo \"'.$write.'\" > '.$filename.'"';
+        $command='sudo -u '.$config['DATAFILE_UNIXUSER'].' sh -c " echo \"'.$write.'\" > '.$filename.'"';
         $stream = \ssh2_exec($connection,$command,false);
                            
         
