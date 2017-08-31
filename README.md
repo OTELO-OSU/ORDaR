@@ -16,6 +16,8 @@
     -PHP 5.6
 
     -PHP-curl
+    
+    -PHP libssh2
 
     -Mongo php driver
 
@@ -55,9 +57,20 @@ Pour ubuntu 16.04(pour d’autre systèmes consulter le manuel de mongodb)
 
     sudo apt-get install php5.6-curl
     
-    et php-mongo
+    et php-mongo et phplibssh2
 
     sudo apt-get install php-mongo
+
+    sudo apt-get install libssh2-1-dev 
+   
+    pecl install ssh2
+
+    On active les extensions en ajoutant les lignes suivantes au php.ini
+
+	extension=mongo.so
+	extension=ssh2.so
+
+    
 
 **Configuration apache2**
 

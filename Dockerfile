@@ -1,6 +1,6 @@
 FROM php:5.6.30-apache
 RUN apt-get update
-RUN apt-get install  php5-curl libssl-dev libssh2-1-dev  -y
+RUN apt-get install  php5-curl libssl-dev libssh2-1-dev sendmail -y
 RUN pecl install mongo
 RUN pecl install ssh2
 RUN a2enmod rewrite 

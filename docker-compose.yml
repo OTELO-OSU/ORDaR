@@ -100,5 +100,4 @@ services:
 volumes:
   mongodb: {}
   elasticsearch : {}
-  datafiles : {}
  
