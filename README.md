@@ -70,6 +70,8 @@ Pour ubuntu 16.04(pour d’autre systèmes consulter le manuel de mongodb)
 	extension=mongo.so
 	extension=ssh2.so
 
+Afin d'envoyer des mails, vous devez configurer un SMTP sur votre serveur.
+
     
 
 **Configuration apache2**
@@ -475,6 +477,11 @@ Exemple pour le service OrdarUI
 	 
 	 volumes:
 	     - /data/applis/ORDaR/Uploads/:/data/applis/ORDaR/Uploads/  (Chemin machine hôte : Chemin du docker interne NE PAS MOFIFIER LE CHEMIN INTERNE)
+
+
+Modifier le fichier Docker/Apache_PHP/ssmtp.conf:
+
+mailhub= ADRESSE DE VOTRE SMTP
 
 
 Un fois cela effectué, lancé docker-compose:
