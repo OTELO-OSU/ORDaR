@@ -1445,6 +1445,7 @@ class DatasheetController
                                 self::Warning_mail($ORIGINAL_DATA_URL);
                             }
                             $stream = \ssh2_exec($connection,'sudo -u '.$config["DATAFILE_UNIXUSER"].' rm '.$ORIGINAL_DATA_URL ,false);     
+                            stream_set_timeout($stream,3);
                             stream_set_blocking($stream, true);
                             // read the output into a variable
                             $data = '';
@@ -1526,6 +1527,15 @@ class DatasheetController
                 foreach ($value["DATA"]["FILES"] as $key => $value) {
                     $data_url=$value["DATA_URL"];
                     unlink($UPLOAD_FOLDER . $doi . '/'. $data_url);//remove datafile
+                    if ($value["ORIGINAL_DATA_URL"]) {
+                        $ip = $config["SSH_HOST"];
+                        $connection = \ssh2_connect($ip);                    
+                        $user = $config["SSH_UNIXUSER"];
+                        $pass = $config["SSH_UNIXPASSWD"];
+                        $auth=\ssh2_auth_password($connection,$user,$pass);
+                        $stream = \ssh2_exec($connection,'sudo -u '.$config["DATAFILE_UNIXUSER"].' rm '.$value["ORIGINAL_DATA_URL"].'.html' ,false);                                               
+                        
+                    }
                 }
             }
                 $collectionObject->remove(array(
@@ -1569,6 +1579,7 @@ class DatasheetController
                                 $state="fail_ssh";
                             }
                             $stream = \ssh2_exec($connection,'sudo -u '.$config["DATAFILE_UNIXUSER"].' rm '.$ORIGINAL_DATA_URL ,false);     
+                            stream_set_timeout($stream,3);
                             stream_set_blocking($stream, true);
                             // read the output into a variable
                             $data = '';

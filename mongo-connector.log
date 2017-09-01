@@ -1,0 +1,8 @@
+2017-09-01 09:13:17,339 [ALWAYS] mongo_connector.connector:51 - Starting mongo-connector version: 2.5.1
+2017-09-01 09:13:17,339 [ALWAYS] mongo_connector.connector:51 - Python version: 2.7.12 (default, Nov 19 2016, 06:48:10) 
+[GCC 5.4.0 20160609]
+2017-09-01 09:13:17,340 [ALWAYS] mongo_connector.connector:51 - Platform: Linux-4.4.0-92-generic-x86_64-with-Ubuntu-16.04-xenial
+2017-09-01 09:13:17,340 [ALWAYS] mongo_connector.connector:51 - pymongo version: 3.4.0
+2017-09-01 09:13:17,340 [WARNING] mongo_connector.connector:167 - MongoConnector: Can't find /var/www/html/ORDaR/oplog.timestamp, attempting to create an empty progress log
+2017-09-01 09:13:17,356 [ALWAYS] mongo_connector.connector:51 - Source MongoDB version: 3.4.3
+2017-09-01 09:13:17,356 [ALWAYS] mongo_connector.connector:51 - Target DocManager: mongo_connector.doc_managers.elastic2_doc_manager version: 0.3.0
