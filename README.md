@@ -141,6 +141,7 @@ rendez vous dans le dossier précédemment téléchargé /bin et exécuter :
     SSH_HOST=Host ssh ou sont presente les données OTELO-CLOUD
     SSH_UNIXUSER=USER ssh
     SSH_UNIXPASSWD=password
+    SMTP=votre smtp
     admin[]= l'adresse mail des administrateurs avec des doubles quotes séparé d'une virgule
     #ELASTICSEARCH CONFIG
     ESHOST=Host d'elasticsearch
@@ -427,6 +428,7 @@ Voici uen configuration de test, à vous de la modifier.
 	SSH_HOST=IPofservice
 	SSH_UNIXUSER=user
 	SSH_UNIXPASSWD=pass
+	SMTP=votre SMTP
 	#DATACITE CREDENTIALS
 
 	AUTH_CONFIG_DATACITE="YOUR SECRETS CREDENTIALS HERE"
