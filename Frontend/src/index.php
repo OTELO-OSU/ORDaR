@@ -3,6 +3,7 @@
 use \Psr\Http\Message\ServerRequestInterface as Request;
 use \Psr\Http\Message\ResponseInterface as Response;
 use \search\controller\RequestController as RequestApi;
+use \search\controller\MailerController as Mailer;
 use \search\controller\DatasheetController as Datasheet;
 use \search\controller\FileController as File;
 ini_set('display_errors',0);
@@ -130,7 +131,8 @@ $app->post('/contact', function (Request $req, Response $responseSlim) {
     $message = $req->getparam('User-message');
     $object = $req->getparam('User-object');
     $request = new RequestApi();
-    $error = $request->Send_Contact_Mail($object, $message, $sendermail);
+    $Mail = new Mailer();
+    $error = $Mail->Send_Contact_Mail($object, $message, $sendermail);
     echo $twig->render('contact_request.html.twig', ['name' => $_SESSION['name'], 'firstname' => $_SESSION['firstname'], 'mail' => $_SESSION['mail'], 'error' => $error]);	
 	}
 	else{
@@ -160,7 +162,7 @@ $app->get('/login', function (Request $req, Response $responseSlim) {
     echo $twig->render('login.html.twig');
     $file = new File();
     $config=$file->ConfigFile();
-  
+    
     $_SESSION['name'] = $_SERVER['HTTP_SN'];
     $_SESSION['firstname'] = $_SERVER['HTTP_GIVENNAME'];
     $_SESSION['mail'] = $_SERVER['HTTP_MAIL'];
@@ -576,6 +578,22 @@ $app->get('/preview/{doi}/{filename}', function (Request $req, Response $respons
     
 });
 
+
+//Route permettant d'effectuer une preview du changelog
+$app->get('/changelog', function (Request $req, Response $responseSlim, $args) {
+     $File = new File();
+    $request = new RequestApi();
+
+    $config=$File->ConfigFile();
+    $doi = $req->getparam('id');
+    $response = $request->get_info_for_dataset($doi);
+    if (isset($response['_source']['DATA'])) {
+    $changelog = $File->changelog($doi);
+    print_r( $changelog);  
+    }
+});
+
+
 //Route receptionnant les donnees POST du formulaire de contact d'auteurs
 $app->post('/contact_author', function (Request $req, Response $responseSlim) {
 	if ($_SERVER['HTTP_REFERER'] != NULL){
@@ -583,6 +601,7 @@ $app->post('/contact_author', function (Request $req, Response $responseSlim) {
 	    $twig = new Twig_Environment($loader);
 	    $Datasheet = new Datasheet();
 	    $request = new RequestApi();
+        $Mail = new Mailer();
 	    $author_name = $req->getparam('author_name');
 	    $author_firstname = $req->getparam('author_first_name');
 	    $author_name = htmlspecialchars($author_name, ENT_QUOTES);
@@ -593,7 +612,7 @@ $app->post('/contact_author', function (Request $req, Response $responseSlim) {
 	    $message = $req->getparam('User-message');
 	    $object = $req->getparam('User-object');
 	    $response = $request->get_info_for_dataset($doi);
-	    $error = $Datasheet->Send_Mail_author($doi, $response, $author_name, $author_firstname, $object, $message, $sendermail);
+	    $error = $Mail->Send_Mail_author($doi, $response, $author_name, $author_firstname, $object, $message, $sendermail);
 	    echo $twig->render('contact_request.html.twig', ['name' => $_SESSION['name'], 'firstname' => $_SESSION['firstname'], 'mail' => $_SESSION['mail'], 'error' => $error]);
 	}
 	else{

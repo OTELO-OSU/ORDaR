@@ -38,7 +38,7 @@
                   <h3 class="ui  header">Institutions:</h3>
                   <ul>
                      {%for field in institutions%}
-                     <li>{{field.NAME}}</li>
+                     <li>{{field.NAME|raw}}</li>
                      {%endfor%}
                   </ul>
                   {%endif%}
@@ -46,7 +46,7 @@
                   <h3 class="ui  header">Fundings:</h3>
                   <ul>
                      {%for field in fundings%}
-                     <li>{{field.NAME}}</li>
+                     <li>{{field.NAME|raw}}</li>
                      {%endfor%}
                   </ul>
                   {%endif%}
@@ -54,7 +54,7 @@
                   <h3 class="ui header">Scientific fields:</h3>
                   <ul>
                      {%for field in scientific_field%}
-                     <li>{{field.NAME}}</li>
+                     <li>{{field.NAME|raw}}</li>
                      {%endfor%}
                   </ul>
                   {%endif%}
@@ -62,7 +62,7 @@
                   <h3 class="ui header">Keywords:</h3>
                   <ul>
                      {%for keyword in keywords%}
-                     <li>{{keyword.NAME}}</li>
+                     <li>{{keyword.NAME|raw}}</li>
                      {%endfor%}
                   </ul>
                   {%endif%}
@@ -74,7 +74,7 @@
                   <h3 class="ui header">Sample kind:</h3>
                   <ul>
                      {%for sample_kind in sample_kinds%}
-                     <li>{{sample_kind.NAME}}</li>
+                     <li>{{sample_kind.NAME|raw}}</li>
                      {%endfor%}
                   </ul>
                   {%endif%}
@@ -82,7 +82,7 @@
                   <h3 class="ui header">Sampling date:</h3>
                   <ul>
                      {%for sample in sampling_date%}
-                     <li>{{sample}}</li>
+                     <li>{{sample|raw}}</li>
                      {%endfor%}
                   </ul>
                   {%endif%}
@@ -122,6 +122,22 @@
                   Preview
                </div>
                <div id="preview" >
+               </div>
+               <div class="actions">
+                  <div class="ui black deny button">
+                     Close
+                  </div>
+               </div>
+            </div>
+             <div class="ui modal changelog">
+               <i class="close icon"></i>
+               <div class="header">
+                  Changelog
+               </div>
+               <div class="content" id="changelog" >
+                  <div class="ui grid ten column centered "  style='overflow-x:auto;height:500px'>
+                     <div class="ui ten wide column " ></div>
+                  </div>
                </div>
                <div class="actions">
                   <div class="ui black deny button">
@@ -206,12 +222,16 @@
                      <div class="ui right floated red button" >Remove  <i class="remove icon"></i></div>
                   </a>
                   {% endif %}
+                  <input value="Changelog" onclick="APP.modules.changelog.previewchangelog('changelog?id={{doi}}')" type="button" class="ui right floated button" >
+                              </div>
                   <a href="editrecord?id={{doi}}">
                      <div class="ui right floated primary button" >Edit<i class="right chevron icon"></i></div>
                   </a>
                   {%endif%}
                   {%endfor%}
                   {% if (admin==1) %}
+                  <input value="Changelog" onclick="APP.modules.changelog.previewchangelog('changelog?id={{doi}}')" type="button" class="ui right floated button" >
+                              </div>
                   <a onclick=" $('.ui.modal.remove').modal('show');">
                      <div class="ui right floated red button" >Remove  <i class="remove icon"></i></div>
                   </a>
@@ -220,6 +240,7 @@
                   </a>
                   {%endif%}
                   <p id="uploadeddate">Uploaded on {{uploaddate}}</p>
+                  
                  
                </div>
                <div id="cards">
@@ -277,7 +298,7 @@
                      {% if methodology %}
                      {%for item in methodology %}
                         {%if item.DESCRIPTION is not empty  %}
-                        <h4> - {{item.NAME}}:</h4> <p>{{item.DESCRIPTION}}</p>
+                        <h4> - {{item.NAME|raw}}:</h4> <p>{{item.DESCRIPTION|raw}}</p>
                         {%endif%}
                      {%endfor%}
                      {%endif%}
@@ -292,8 +313,8 @@
                     <tbody>
                      {%for item in acronym %}
                       <tr>
-                        <td>{{item.ABBREVIATION}}</td>
-                        <td>{{item.DESCRIPTION}}</td>
+                        <td>{{item.ABBREVIATION|raw}}</td>
+                        <td>{{item.DESCRIPTION|raw}}</td>
                       </tr>
                        
                      {%endfor%}
@@ -431,13 +452,13 @@
                            <tbody>
                               {% for sampling_point in sampling_points %}
                               <tr>
-                                 <td>{{sampling_point.NAME}}</td>
-                                 <td>{{sampling_point.COORDINATE_SYSTEM}}
-                                 <td>{{sampling_point.ABBREVIATION}}</td>
-                                 <td>{{sampling_point.LONGITUDE}}</td>
-                                 <td>{{sampling_point.LATITUDE}}</td>
-                                 <td>{{sampling_point.ELEVATION}}</td>
-                                 <td>{{sampling_point.DESCRIPTION}}</td>
+                                 <td>{{sampling_point.NAME|raw}}</td>
+                                 <td>{{sampling_point.COORDINATE_SYSTEM|raw}}
+                                 <td>{{sampling_point.ABBREVIATION|raw}}</td>
+                                 <td>{{sampling_point.LONGITUDE|raw}}</td>
+                                 <td>{{sampling_point.LATITUDE|raw}}</td>
+                                 <td>{{sampling_point.ELEVATION|raw}}</td>
+                                 <td>{{sampling_point.DESCRIPTION|raw}}</td>
                               </tr>
                               {% endfor %}
                            </tbody>
@@ -463,9 +484,9 @@
                            <tbody>
                               {% for measurement in measurements %}
                               <tr>
-                                 <td>{{measurement.NATURE}}</td>
-                                 <td>{{measurement.ABBREVIATION}}</td>
-                                 <td>{{measurement.UNIT}}</td>
+                                 <td>{{measurement.NATURE|raw}}</td>
+                                 <td>{{measurement.ABBREVIATION|raw}}</td>
+                                 <td>{{measurement.UNIT|raw}}</td>
                               </tr>
                               {% endfor %}
                            </tbody>

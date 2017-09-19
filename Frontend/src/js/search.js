@@ -6,7 +6,7 @@
   // Module datatable, Affichage des resultats sous forme de pagination
   APP.modules.datatable = (function() {
       return {
-          AppendTable: function(data, facets,query,current,module) {
+          AppendTable: function(data, facets, query, current, module) {
               if (data['hits']['total'] == 0 || data['hits']['total'] == null) {
                   $('#facets').hide();
                   if (facets) {
@@ -61,7 +61,7 @@
                                   author = file_creator[k]["NAME"] + " " + file_creator[k]["FIRST_NAME"];
                                   authorsname.push(author);
                               }
-                          } 
+                          }
                       }
                       var authorsnames = jQuery("<ul></ul>");
                       for (k in authorsname) {
@@ -77,61 +77,57 @@
                   $('#info-noresult').hide();
                   $('#logosearch').hide();
                   $('#gridlogo .row').remove();
-                  nbpages=(total/10);
-                  nbpages= Math.ceil(nbpages);
-                  if (current!=0) {
-                    current=current.text;
+                  nbpages = (total / 10);
+                  nbpages = Math.ceil(nbpages);
+                  if (current != 0) {
+                      current = current.text;
+                  } else {
+                      current = 1;
                   }
-                  else{
-                    current=1;
-                  }
-                  if (nbpages==1) {
-                    $(".pagination").append('<a class="item page-1" href="javascript:void(0);">1</a>');
-                  }
-                  else{
-                  $(".pagination").append('<a class="item page-1" href="javascript:void(0);">1</a>');
-                  if ((current!=1 )&& (current!=2)) {
-                  $(".pagination").append('<div class="disabled item"> ... </div>');
-                  }
-                  for (var i = parseInt(current)-1; i < parseInt(current); i++) {
-                    if (i>1) {
-                    $(".pagination").append('<a class="item page-'+i+'"  href="javascript:void(0);">'+i+'</a>');
-                    }
-                  }
-                  for (var i = parseInt(current); i < parseInt(current)+2; i++) {
-                    if ((i<nbpages) &&( i>1)) {
-                    $(".pagination").append('<a class="item page-'+i+'" href="javascript:void(0);">'+i+'</a>');
-                    }
-                  }
-                 
-                  $(".pagination").append('<div class="disabled item"> ... </div>');
-                  
-                  $(".pagination").append('<a class="item page-'+nbpages+'" href="javascript:void(0);">'+nbpages+'</a>');
-                  if (module=="mypublications") {
-                      $('.pagination a').on('click',function(e){
-                         APP.modules.mypublications.search(query, 'facets',this);
-                        $('html,body').scrollTop(0);
+                  if (nbpages == 1) {
+                      $(".pagination").append('<a class="item page-1" href="javascript:void(0);">1</a>');
+                  } else {
+                      $(".pagination").append('<a class="item page-1" href="javascript:void(0);">1</a>');
+                      if ((current != 1) && (current != 2)) {
+                          $(".pagination").append('<div class="disabled item"> ... </div>');
+                      }
+                      for (var i = parseInt(current) - 1; i < parseInt(current); i++) {
+                          if (i > 1) {
+                              $(".pagination").append('<a class="item page-' + i + '"  href="javascript:void(0);">' + i + '</a>');
+                          }
+                      }
+                      for (var i = parseInt(current); i < parseInt(current) + 2; i++) {
+                          if ((i < nbpages) && (i > 1)) {
+                              $(".pagination").append('<a class="item page-' + i + '" href="javascript:void(0);">' + i + '</a>');
+                          }
+                      }
 
-                    });
-                  }
-                  else{
-                     $('.pagination a').on('click',function(e){
-                         APP.modules.search.search(query, 'facets',this);
-                        $('html,body').scrollTop(0);
+                      $(".pagination").append('<div class="disabled item"> ... </div>');
 
-                    });
-                  }
-                }
+                      $(".pagination").append('<a class="item page-' + nbpages + '" href="javascript:void(0);">' + nbpages + '</a>');
+                      if (module == "mypublications") {
+                          $('.pagination a').on('click', function(e) {
+                              APP.modules.mypublications.search(query, 'facets', this);
+                              $('html,body').scrollTop(0);
 
-                  if (current!=0) {
-                  $('.page-'+current).addClass("active");
-                    
+                          });
+                      } else {
+                          $('.pagination a').on('click', function(e) {
+                              APP.modules.search.search(query, 'facets', this);
+                              $('html,body').scrollTop(0);
+
+                          });
+                      }
                   }
-                  else{
+
+                  if (current != 0) {
+                      $('.page-' + current).addClass("active");
+
+                  } else {
                       $('.page-1').addClass("active");
                   }
 
-                
+
 
               }
           }
@@ -164,7 +160,7 @@
               $('#facets_type').empty();
               var query = APP.modules.search.$_GET('query');
               if (query != null) {
-                  APP.modules.search.search(query,null,"0");
+                  APP.modules.search.search(query, null, "0");
               }
           },
           //Methode d'affichage des facets de la recherche
@@ -293,13 +289,13 @@
                       }
                   }
                   var creationdatearray = [];
-                  aggs= data['aggregations'];
+                  aggs = data['aggregations'];
                   data = data['hits']['hits'];
                   $("#date").append('<div class="header" >Creation date</div>');
-                  minyear=aggs['min_date']['value_as_string'].split("-", 2);
-                  maxyear=aggs['max_date']['value_as_string'].split("-", 2);
-                  minyear=minyear[0];
-                  maxyear=maxyear[0];
+                  minyear = aggs['min_date']['value_as_string'].split("-", 2);
+                  maxyear = aggs['max_date']['value_as_string'].split("-", 2);
+                  minyear = minyear[0];
+                  maxyear = maxyear[0];
                   if (minyear == maxyear) {
                       minyear = maxyear - 1;
                   }
@@ -319,12 +315,12 @@
                           maxdate = range[1];
                           date = " AND INTRO.CREATION_DATE:[" + mindate + "-01-01 TO " + maxdate + "-12-31]"
                           $('#results').empty();
-                          if (typeof(globalfacets)!='undefined') {
-                            APP.modules.search.search(query +globalfacets+ date, "facets","0");
+                          if (typeof(globalfacets) != 'undefined') {
+                              APP.modules.search.search(query + globalfacets + date, "facets", "0");
+                          } else {
+                              APP.modules.search.search(query + date, "facets", "0");
                           }
-                          else{
-                            APP.modules.search.search(query + date, "facets","0");
-                          }                       },
+                      },
                       onbarclicked: function(val) {
                           var query = APP.modules.search.$_GET('query');
                           range = val.split(",", 2);
@@ -332,41 +328,39 @@
                           maxdate = range[1];
                           date = " AND INTRO.CREATION_DATE:[" + mindate + "-01-01 TO " + maxdate + "-12-31]"
                           $('#results').empty();
-                           if (typeof(globalfacets)!='undefined') {
-                            APP.modules.search.search(query +globalfacets+ date, "facets","0");
+                          if (typeof(globalfacets) != 'undefined') {
+                              APP.modules.search.search(query + globalfacets + date, "facets", "0");
+                          } else {
+                              APP.modules.search.search(query + date, "facets", "0");
                           }
-                          else{
-                            APP.modules.search.search(query + date, "facets","0");
-                          } 
                       }
                   });
                   $('#facets').show();
                   $('form .ui.grid#gridresults').prepend('<div id="Displayfacets" class="ui button primary">Display/Hide facets</div>');
-                 APP.modules.search.checksize();
-                $('form .ui.grid .button').on("click",function(){
-                   $(".facets").toggle();
-                })
-                 $( window ).resize(function() {
-                   APP.modules.search.checksize();
+                  APP.modules.search.checksize();
+                  $('form .ui.grid .button').on("click", function() {
+                      $(".facets").toggle();
+                  })
+                  $(window).resize(function() {
+                      APP.modules.search.checksize();
 
                   });
-                  }
-                    },
-
-          checksize:function(){
-               if ($(window).width()<=1119) {
-                $('.facets').hide();
               }
-              else{
+          },
+
+          checksize: function() {
+              if ($(window).width() <= 1119) {
+                  $('.facets').hide();
+              } else {
                   $('.facets').show();
                   $('#accueil').addClass("eleven wide centered column");
               }
 
-                if ($(window).width()<=420) {
+              if ($(window).width() <= 420) {
                   $('#accueil').removeClass();
 
-                 }
-              
+              }
+
           },
 
           //Methode de trap des events sur les facets
@@ -489,31 +483,30 @@
               }
               var query = APP.modules.search.$_GET('query');
               $('#results').empty();
-              globalfacets=facets;
-              APP.modules.search.search(query + facets, "facets","0");
+              globalfacets = facets;
+              APP.modules.search.search(query + facets, "facets", "0");
           },
           //Methode recherche 
-          search: function(query, facets ,current) {
-             if (current!=0) {
-              if (current.text==1) {
-                from=0;
-              }else{
+          search: function(query, facets, current) {
+              if (current != 0) {
+                  if (current.text == 1) {
+                      from = 0;
+                  } else {
 
-              from=(current.text*10)-10;
+                      from = (current.text * 10) - 10;
+                  }
+              } else {
+                  from = 0;
               }
-            }
-            else{
-              from=0;
-            }
               $.post("index.php/getinfo", {
                   query: query,
-                  from:from
+                  from: from
               }, function(data) {
                   data = JSON.parse(data)
                   if (!facets) {
                       APP.modules.search.AppendFacets(data);
                   }
-                  APP.modules.datatable.AppendTable(data, facets,query,current,"search");
+                  APP.modules.datatable.AppendTable(data, facets, query, current, "search");
               })
           }
       }
@@ -523,7 +516,7 @@
       return {
           init: function() {
               var query = APP.modules.mypublications.$_GET('query');
-              APP.modules.mypublications.search(query,null,"0");
+              APP.modules.mypublications.search(query, null, "0");
           },
           AppendFacets: function(data) {
               if (data['aggregations'] == null) {} else {
@@ -659,13 +652,13 @@
                       }
                   }
                   var creationdatearray = [];
-                  aggs=data['aggregations'];
+                  aggs = data['aggregations'];
                   data = data['hits']['hits'];
                   $("#date").append('<div class="header" > Creation date</div>');
-                  minyear=aggs['min_date']['value_as_string'].split("-", 2);
-                  maxyear=aggs['max_date']['value_as_string'].split("-", 2);
-                  minyear=minyear[0];
-                  maxyear=maxyear[0];
+                  minyear = aggs['min_date']['value_as_string'].split("-", 2);
+                  maxyear = aggs['max_date']['value_as_string'].split("-", 2);
+                  minyear = minyear[0];
+                  maxyear = maxyear[0];
                   if (minyear == maxyear) {
                       minyear = maxyear - 1;
                   }
@@ -685,11 +678,10 @@
                           maxdate = range[1];
                           date = " AND INTRO.CREATION_DATE:[" + mindate + "-01-01 TO " + maxdate + "-12-31]"
                           $('#results').empty();
-                          if (typeof(globalfacets)!='undefined') {
-                            APP.modules.mypublications.search(query +globalfacets+ date, "facets","0");
-                          }
-                          else{
-                            APP.modules.mypublications.search(query + date, "facets","0");
+                          if (typeof(globalfacets) != 'undefined') {
+                              APP.modules.mypublications.search(query + globalfacets + date, "facets", "0");
+                          } else {
+                              APP.modules.mypublications.search(query + date, "facets", "0");
                           }
                       },
                       onbarclicked: function(val) {
@@ -699,21 +691,21 @@
                           maxdate = range[1];
                           date = " AND INTRO.CREATION_DATE:[" + mindate + "-01-01 TO " + maxdate + "-12-31]"
                           $('#results').empty();
-                          if (typeof(globalfacets)!='undefined') {
-                            APP.modules.mypublications.search(query +globalfacets+ date, "facets","0");
+                          if (typeof(globalfacets) != 'undefined') {
+                              APP.modules.mypublications.search(query + globalfacets + date, "facets", "0");
+                          } else {
+                              APP.modules.mypublications.search(query + date, "facets", "0");
                           }
-                          else{
-                            APP.modules.mypublications.search(query + date, "facets","0");
-                          }                      }
+                      }
                   });
-                $('#facets').show();
-                $('form .ui.grid#gridmypublications').prepend('<div id="Displayfacets" class="ui button primary">Display/Hide facets</div>');
-                APP.modules.search.checksize();
-                $('form .ui.grid .button').on("click",function(){
-                   $(".facets").toggle();
-                })
-                 $( window ).resize(function() {
-                   APP.modules.search.checksize();
+                  $('#facets').show();
+                  $('form .ui.grid#gridmypublications').prepend('<div id="Displayfacets" class="ui button primary">Display/Hide facets</div>');
+                  APP.modules.search.checksize();
+                  $('form .ui.grid .button').on("click", function() {
+                      $(".facets").toggle();
+                  })
+                  $(window).resize(function() {
+                      APP.modules.search.checksize();
 
                   });
 
@@ -837,8 +829,8 @@
                   facets = facets
               }
               $('#results').empty();
-              globalfacets=facets;
-              APP.modules.mypublications.search("*" + facets, 'facets',"0");
+              globalfacets = facets;
+              APP.modules.mypublications.search("*" + facets, 'facets', "0");
           },
           $_GET: function(param) {
               var vars = {};
@@ -851,27 +843,26 @@
               }
               return vars;
           },
-          search: function(query, facets,current) {
-            if (current!=0) {
-              if (current.text==1) {
-                from=0;
-              }else{
+          search: function(query, facets, current) {
+              if (current != 0) {
+                  if (current.text == 1) {
+                      from = 0;
+                  } else {
 
-              from=(current.text*10)-10;
+                      from = (current.text * 10) - 10;
+                  }
+              } else {
+                  from = 0;
               }
-            }
-            else{
-              from=0;
-            }
-            $.post("index.php/getmypublications", {
+              $.post("index.php/getmypublications", {
                   query: query,
-                  from:from
+                  from: from
               }, function(data) {
                   data = JSON.parse(data);
                   if (!facets) {
                       APP.modules.mypublications.AppendFacets(data);
                   }
-                  APP.modules.datatable.AppendTable(data, facets,query,current,"mypublications");
+                  APP.modules.datatable.AppendTable(data, facets, query, current, "mypublications");
               })
           }
       }
@@ -1182,6 +1173,79 @@
           }
       }
   })()
+
+
+  APP.modules.changelog = (function() {
+      return {
+          previewchangelog: function(link) {
+              $("#changelog .grid .column").empty();
+              $.getJSON(link, function(data) {
+                  if (data[0] == 'Empty changelog file') {
+                      $("#changelog .grid .column ").append('Metadata version is the first one!');
+
+                  }
+                  append=''
+                  html = ''
+                  $.each(data, function(index, value) {
+                      version = '<div class=" title">Version '+value['version']+'</div><div class="content"><div class="ui green label right floated "  data-tooltip="Date of metadata">' + value['date'] + '</div><div class="ui green label right floated "   data-tooltip="User who submit modification">' + value['mailuser'] +"</div><div class='row'></div><div class='row'></div>";
+                      $.each(value, function(name, value) {
+                    text=""
+                                             // console.log(value)
+                      if (value['Type']=='modified') {
+                        text += '<div class="ui raised segment"> <a class="ui red ribbon label">Old data</a> <span>' + value['OldValue'] + '</span> <p></p> <a class="ui blue ribbon label">New data</a> '+ value['NewValue'] + ' <p></p> </div>';
+                        html += '<div class=" ui horizontal divider header"></div><div class="row"></div><a class="ui  label">' + name +'</a> <div class="ui raised segment"> ' + text + '</div>';
+                      }
+                      else if (value['Type']=='added') {
+                       text += "<p>"+ value['NewValue'] + "</p>"
+                       html += '<div class=" ui horizontal divider header"></div><div class="row"></div><a class="ui  label">' + name + '</a> <div class="ui raised segment"> <a class="ui blue ribbon label">Added data</a> <span>' + text + '</span></div>';
+                      }
+                        else if (value['Type']=='removed') {
+                       text += "<p>"+ value['OldValue'] + "</p>"
+                       html += '<div class=" ui horizontal divider header"></div><div class="row"></div><a class="ui  label">' + name + '</a> <div class="ui raised segment"> <a class="ui red ribbon label">Removed data</a> <span>' + text + '</span></div>';
+                      }
+
+                      
+                   
+                    else if(typeof value === 'object'){
+                      text=""
+                      $.each(value, function(entrie, value) {
+                      entrie = parseInt(entrie) + 1;
+                      $.each(value, function(index, value) {
+                         if (value['Type']=='modified') {
+                        text += '<div class="ui raised segment"> <a class="ui red ribbon label">Old data : '+index.toUpperCase()+' '+entrie+'</a> <span>' + value['OldValue'] + '</span> <p></p> <a class="ui blue ribbon label">New data : '+index.toUpperCase()+' '+entrie+'</a> '+ value['NewValue'] + ' <p></p> </div>';
+                      }
+                      else if (value['Type']=='added') {
+                        text += '<a class="ui green ribbon label">Added data : '+index.toUpperCase()+' '+entrie+'</a> <span> <p>'+ value['NewValue'] + '</p> </span>'
+                      }
+                        else if (value['Type']=='removed') {
+                       text += '<a class="ui red ribbon label">Removed data : '+index.toUpperCase()+' '+entrie+'</a> <span> <p>'+ value['OldValue'] + '</p> </span>'
+                      }
+                   });
+                    });
+                       html += '<div class=" ui horizontal divider header"></div><div class="row"></div><a class="ui  label">' + name+'</a> <div class="ui raised segment">'+text+'</div>';
+                    }
+                         
+                      })
+                      append+= version+html+"</div>";
+
+                  })
+                  append='<div class="ui styled accordion changelog" >'+append+'</div>';
+                  $("#changelog .grid .column ").append(append);
+                  $('.ui.accordion.changelog')
+                            .accordion()
+                          ;
+
+
+
+              });
+
+
+
+
+              $('.ui.modal.changelog').modal('show');
+          }
+      }
+  })()
   // Module send_email , Affichage d'un modal permettant d'envoyer un message a un auteur ou au administrateur
   APP.modules.send_email = (function() {
       return {
@@ -1243,7 +1307,7 @@
       $(".date").datepicker({
           dateFormat: "yy-mm-dd",
       });
-     
+
 
       APP.modules.search.init();
-      });
+  });

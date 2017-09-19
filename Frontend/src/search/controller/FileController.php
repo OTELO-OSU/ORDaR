@@ -260,6 +260,24 @@ Class FileController
         
     }
 
+
+    function changelog($doi){
+        $config=self::ConfigFile();
+        $doi=str_replace($config['DOI_PREFIX'], '', $doi);
+        $uploadfolder=$config['UPLOAD_FOLDER'];
+        $json = json_decode(file_get_contents($uploadfolder."/".$config['DOI_PREFIX'].$doi."/changelog/".$doi.".changelog"),TRUE);
+         usort($json, function($a, $b) {
+            return strtotime($b['date']) - strtotime($a['date']);
+             });
+        if ($json) {
+            return json_encode($json);
+        }
+        else{
+            return json_encode(array("0"=>"Empty changelog file"));
+        }
+
+    }
+
     function ConfigFile(){
             $config = parse_ini_file($_SERVER['DOCUMENT_ROOT'] . '/../config.ini');
             $config['REPOSITORY_NAME']=strtoupper($config["REPOSITORY_NAME"]);

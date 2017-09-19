@@ -65,10 +65,10 @@
                 <div class=" field" id="keywords">
                     {% if keywords %}
                     {% for keyword in keywords %}
-                    <div><input type="text" name="keywords[]" value="{{keyword.NAME}}" placeholder="Keyword"></div>
+                    <div><input type="text" name="keywords[]" value="{{keyword.NAME|raw}}" placeholder="Keyword"></div>
                     {% endfor %}
                     {%else%}
-                    <div><input type="text" name="keywords[]"  value="{{keyword.NAME}}" placeholder="Keyword"> </div>
+                    <div><input type="text" name="keywords[]"  value="{{keyword.NAME|raw}}" placeholder="Keyword"> </div>
                     {% endif %}
                 </div>
                 <div class="ui primary right floated button"  id="addkeywords">
@@ -85,7 +85,7 @@
                     <div class="ui input">
                         <div class="ui dropdown fluid search selection  optgroup publisher">
                             {%if publisher%}
-                            <input value="{{publisher}}" data-validate="publisher" type="hidden" name="publisher">
+                            <input value="{{publisher|raw}}" data-validate="publisher" type="hidden" name="publisher">
                             {%else%}
                             <input value="OTELO" data-validate="publisher" type="hidden" name="publisher">
                             {%endif%}
@@ -139,7 +139,7 @@
                     {% for scientific_field in scientific_fields %}
                     <div class="ui input">
                         <select class="ui fluid search dropdown scientific_field" data-validate="scientific_field" name="scientific_field[]"  >
-                            <option value="{{scientific_field.NAME}}">{{scientific_field.NAME}}</option>
+                            <option value="{{scientific_field.NAME|raw}}">{{scientific_field.NAME|raw}}</option>
                             <option value="Addresses">Addresses</option>
                             <option value="Hydrography">  Hydrography</option>
                             <option value="Administrative units"> Administrative units</option>
@@ -229,10 +229,10 @@
                 <div class=" field" id="fundings">
                     {% if fundings %}
                     {% for funding in fundings %}
-                    <div><input type="text" name="fundings[]" value="{{funding.NAME}}" placeholder="Funding"> </div>
+                    <div><input type="text" name="fundings[]" value="{{funding.NAME|raw}}" placeholder="Funding"> </div>
                     {% endfor %}
                     {%else%}
-                    <div><input type="text" name="fundings[]"  value="{{funding.NAME}}" placeholder="Funding"> </div>
+                    <div><input type="text" name="fundings[]"  value="{{funding.NAME|raw}}" placeholder="Funding"> </div>
                     {% endif %}
                 </div>
                 <div class="ui primary right floated  button"  id="addfundings">
@@ -247,7 +247,7 @@
                     {% for institution in institutions %}
                     <div  class="ui input">
                         <div class="ui dropdown fluid search selection  optgroup institution" >
-                            <input value="{{institution.NAME}}" data-validate="institution" type="hidden" name="institution[]">
+                            <input value="{{institution.NAME|raw}}" data-validate="institution" type="hidden" name="institution[]">
                             <div  class="default text">Select a field or type one</div>
                             <i class="dropdown icon"></i>
                             <div class="menu">
@@ -293,7 +293,7 @@
                     {% else %}
                     <div class="ui input">
                         <div class="ui dropdown fluid search selection  optgroup institution">
-                            <input value="{{institution.NAME}}" data-validate="institution" type="hidden" name="institution[]">
+                            <input value="{{institution.NAME|raw}}" data-validate="institution" type="hidden" name="institution[]">
                             <div  class="default text">Select a field or type one</div>
                             <i class="dropdown icon"></i>
                             <div class="menu">
@@ -352,8 +352,8 @@
             <div id="methodology">
                 {% for item in methodology %}
                 <div class=" fields">
-                    <div class="field"><input type="text"  value="{{item.NAME}}" name="methodology_name[]"   ></div>
-                    <div class="field"><input type="text" name="methodology_description[]" value="{{item.DESCRIPTION}}" placeholder="Description" ></div>
+                    <div class="field"><input type="text"  value="{{item.NAME|raw}}" name="methodology_name[]"   ></div>
+                    <div class="field"><input type="text" name="methodology_description[]" value="{{item.DESCRIPTION|raw}}" placeholder="Description" ></div>
                     <div class="ui icon delete  "><i class="remove icon"></i></div>
                 </div>
                 {% endfor%}
@@ -364,8 +364,8 @@
             <div id="acronym">
                 {% for item in acronym %}
                 <div class=" fields">
-                    <div class="field"><label>Acronym</label><input type="text" value="{{item.ABBREVIATION}}" name="acronym_abbreviation[]"  placeholder="Acronym"  ></div>
-                    <div class="field"><label>Acronym description</label><input type="text" value="{{item.DESCRIPTION}}" name="acronym_description[]" placeholder="Description" ></div>
+                    <div class="field"><label>Acronym</label><input type="text" value="{{item.ABBREVIATION|raw}}" name="acronym_abbreviation[]"  placeholder="Acronym"  ></div>
+                    <div class="field"><label>Acronym description</label><input type="text" value="{{item.DESCRIPTION|raw}}" name="acronym_description[]" placeholder="Description" ></div>
                     <div class="ui icon delete "><i class="remove icon"></i></div>
                 </div>
                 {% endfor %}
@@ -447,9 +447,9 @@
             <div id="measurements">
                 <input type="checkbox" class="empty_measurement" /><label for="empty_measurement">No measurements</label>
                 <div class="three fields">
-                    <div class="field"><label>Measurement nature</label><input type="text" value="{{measurement.NATURE}}" name="measurement_nature[]" data-validate="measurement_nature" placeholder="Nature"  ></div>
-                    <div class="field"><label>Measurement abbreviation</label><input type="text" value="{{measurement.ABBREVIATION}}" name="measurement_abbreviation[]" data-validate="measurement_abbreviation" placeholder="Abbreviation" ></div>
-                    <div class="field"><label>Measurement unit(s)</label><input type="text" value="{{measurement.UNIT}}" name="measurement_unit[]" data-validate="measurement_unit" placeholder="Unit(s)" id="units"></div>
+                    <div class="field"><label>Measurement nature</label><input type="text" value="{{measurement.NATURE|raw}}" name="measurement_nature[]" data-validate="measurement_nature" placeholder="Nature"  ></div>
+                    <div class="field"><label>Measurement abbreviation</label><input type="text" value="{{measurement.ABBREVIATION|raw}}" name="measurement_abbreviation[]" data-validate="measurement_abbreviation" placeholder="Abbreviation" ></div>
+                    <div class="field"><label>Measurement unit(s)</label><input type="text" value="{{measurement.UNIT|raw}}" name="measurement_unit[]" data-validate="measurement_unit" placeholder="Unit(s)" id="units"></div>
                     <input type="checkbox" class="checker" /><label for="checker">No units</label>
                     <div class="ui icon delete center"><i class="remove icon"></i></div>
                 </div>
@@ -468,9 +468,9 @@
             </div>
             <input type="checkbox" class="empty_measurement" /><label for="empty_measurement">No measurements</label>
             <div class="three fields">
-                <div class="field"><label>Measurement nature</label><input type="text" value="{{measurement.NATURE}}" name="measurement_nature[]" data-validate="measurement_nature" placeholder="Nature"  ></div>
-                <div class="field"><label>Measurement abbreviation</label><input type="text" value="{{measurement.ABBREVIATION}}" name="measurement_abbreviation[]" data-validate="measurement_abbreviation" placeholder="Abbreviation" ></div>
-                <div class="field"><label>Measurement unit(s)</label><input type="text" value="{{measurement.UNIT}}" name="measurement_unit[]" data-validate="measurement_unit" placeholder="Unit(s)" id="units"></div>
+                <div class="field"><label>Measurement nature</label><input type="text" value="{{measurement.NATURE|raw}}" name="measurement_nature[]" data-validate="measurement_nature" placeholder="Nature"  ></div>
+                <div class="field"><label>Measurement abbreviation</label><input type="text" value="{{measurement.ABBREVIATION|raw}}" name="measurement_abbreviation[]" data-validate="measurement_abbreviation" placeholder="Abbreviation" ></div>
+                <div class="field"><label>Measurement unit(s)</label><input type="text" value="{{measurement.UNIT|raw}}" name="measurement_unit[]" data-validate="measurement_unit" placeholder="Unit(s)" id="units"></div>
                 <input type="checkbox" class="checker" /><label for="checker">No units</label>
             </div>
         </div>
@@ -491,12 +491,12 @@
                 {% if sample_kinds %}
                 {% for sample_kind in sample_kinds %}
                 <div class="ui input">
-                    <input type="text" name="sample_kind[]" placeholder="Sample kind" value="{{sample_kind.NAME}}">
+                    <input type="text" name="sample_kind[]" placeholder="Sample kind" value="{{sample_kind.NAME|raw}}">
                     <div class="ui icon delete"><i class="remove icon"></i></div>
                 </div>
                 {%endfor%}
                 {%else%} 
-                <input type="text" name="sample_kind[]" placeholder="Sample kind" value="{{sample_kind.NAME}}">     
+                <input type="text" name="sample_kind[]" placeholder="Sample kind" value="{{sample_kind.NAME|raw}}">     
                 {%endif%}
             </div>
             <div class="ui primary right floated button"  id="addsamplekind">
@@ -535,12 +535,12 @@
                     {% if sampling_points %}
                     {% for sampling_point in sampling_points %}
                     <div>
-                        <div class="field"><label>Name</label> <input type="text" value="{{sampling_point.NAME}}" name="sampling_point_name[]" placeholder="Name" ></div>
+                        <div class="field"><label>Name</label> <input type="text" value="{{sampling_point.NAME|raw}}" name="sampling_point_name[]" placeholder="Name" ></div>
                         <div class="field">
                             <label>Coordinate reference system</label>
                             <div class="ui input">
                                 <div class="ui dropdown fluid search selection optgroup coordinate">
-                                    <input value="{{sampling_point.COORDINATE_SYSTEM}}"  type="hidden" name="sampling_point_coordinate_system[]">
+                                    <input value="{{sampling_point.COORDINATE_SYSTEM|raw}}"  type="hidden" name="sampling_point_coordinate_system[]">
                                     <div  class="default text">Select a coordinate system or type one</div>
                                     <i class="dropdown icon"></i>
                                     <div class="menu">
@@ -556,22 +556,22 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="field"><label>Abbreviation</label><input type="text" value="{{sampling_point.ABBREVIATION}}" name="sampling_point_abbreviation[]"  placeholder="abbreviation"></div>
-                        <div class="field"><label>Longitude</label><input type="number"  data-content="Type a longitude in decimal format" step="any" value="{{sampling_point.LONGITUDE}}" name="sampling_point_longitude[]" placeholder="longitude" ></div>
-                        <div class="field"><label>Latitude</label><input type="number"  data-content="Type a latitude in decimal format" step="any" value="{{sampling_point.LATITUDE}}" name="sampling_point_latitude[]"  placeholder="latitude"></div>
-                        <div class="field"><label>Elevation</label><input type="number" value="{{sampling_point.ELEVATION}}" name="sampling_point_elevation[]"  placeholder="elevation"></div>
-                        <div class="field"><label>Additionnal description</label><textarea name="sampling_point_description[]"  placeholder="Additionnal description">{{sampling_point.DESCRIPTION}}</textarea></div>
+                        <div class="field"><label>Abbreviation</label><input type="text" value="{{sampling_point.ABBREVIATION|raw}}" name="sampling_point_abbreviation[]"  placeholder="abbreviation"></div>
+                        <div class="field"><label>Longitude</label><input type="number"  data-content="Type a longitude in decimal format" step="any" value="{{sampling_point.LONGITUDE|raw}}" name="sampling_point_longitude[]" placeholder="longitude" ></div>
+                        <div class="field"><label>Latitude</label><input type="number"  data-content="Type a latitude in decimal format" step="any" value="{{sampling_point.LATITUDE|raw}}" name="sampling_point_latitude[]"  placeholder="latitude"></div>
+                        <div class="field"><label>Elevation</label><input type="number" value="{{sampling_point.ELEVATION|raw}}" name="sampling_point_elevation[]"  placeholder="elevation"></div>
+                        <div class="field"><label>Additionnal description</label><textarea name="sampling_point_description[]"  placeholder="Additionnal description">{{sampling_point.DESCRIPTION|raw}}</textarea></div>
                         <div id="deletesamplingpoint" class="ui icon delete"><i class="remove icon"></i></div>
                     </div>
                     {% endfor %}
                     {%else%}
                     <div>
-                        <div class="field"><label>Name</label><input type="text" value="{{sampling_point.NAME}}" name="sampling_point_name[]" placeholder="Name" ></div>
+                        <div class="field"><label>Name</label><input type="text" value="{{sampling_point.NAME|raw}}" name="sampling_point_name[]" placeholder="Name" ></div>
                         <div class="field">
                             <label>Coordinate reference system</label>
                             <div class="ui input">
                                 <div class="ui dropdown fluid search selection optgroup coordinate">
-                                    <input value="{{sampling_point.COORDINATE_SYSTEM}}"  type="hidden" name="sampling_point_coordinate_system[]">
+                                    <input value="{{sampling_point.COORDINATE_SYSTEM|raw}}"  type="hidden" name="sampling_point_coordinate_system[]">
                                     <div  class="default text">Select a coordinate system or type one</div>
                                     <i class="dropdown icon"></i>
                                     <div class="menu">
@@ -587,11 +587,11 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="field"><label>Abbreviation</label><input type="text" value="{{sampling_point.ABBREVIATION}}" name="sampling_point_abbreviation[]"  placeholder="abbreviation"></div>
-                        <div class="field"><label>Longitude</label><input type="number"  data-content="Type a longitude in decimal format" step="any" value="{{sampling_point.LONGITUDE}}" name="sampling_point_longitude[]" placeholder="longitude" ></div>
-                        <div class="field"><label>Latitude</label><input type="number"  data-content="Type a latitude in decimal format" step="any" value="{{sampling_point.LATITUDE}}" name="sampling_point_latitude[]"  placeholder="latitude"></div>
-                        <div class="field"><label>Elevation</label><input type="number" value="{{sampling_point.ELEVATION}}" name="sampling_point_elevation[]"  placeholder="elevation"></div>
-                        <div class="field"><label>Additionnal description</label><textarea name="sampling_point_description[]"  placeholder="Additionnal description">{{sampling_point.DESCRIPTION}}</textarea></div>
+                        <div class="field"><label>Abbreviation</label><input type="text" value="{{sampling_point.ABBREVIATION|raw}}" name="sampling_point_abbreviation[]"  placeholder="abbreviation"></div>
+                        <div class="field"><label>Longitude</label><input type="number"  data-content="Type a longitude in decimal format" step="any" value="{{sampling_point.LONGITUDE|raw}}" name="sampling_point_longitude[]" placeholder="longitude" ></div>
+                        <div class="field"><label>Latitude</label><input type="number"  data-content="Type a latitude in decimal format" step="any" value="{{sampling_point.LATITUDE|raw}}" name="sampling_point_latitude[]"  placeholder="latitude"></div>
+                        <div class="field"><label>Elevation</label><input type="number" value="{{sampling_point.ELEVATION|raw}}" name="sampling_point_elevation[]"  placeholder="elevation"></div>
+                        <div class="field"><label>Additionnal description</label><textarea name="sampling_point_description[]"  placeholder="Additionnal description">{{sampling_point.DESCRIPTION|raw}}</textarea></div>
                         <div id="deletesamplingpoint" class="ui icon delete"><i class="remove icon"></i></div>
                     </div>
                     {%endif%}

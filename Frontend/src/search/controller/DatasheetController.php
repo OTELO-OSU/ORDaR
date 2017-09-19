@@ -3,6 +3,8 @@
 namespace search\controller;
 use \search\controller\RequestController as RequestApi;
 use \search\controller\FileController as File;
+use \search\controller\MailerController as Mailer;
+
 use MongoClient;
 
 
@@ -32,24 +34,7 @@ class DatasheetController
     }
 
 
-    function Warning_mail($filename){
-        $file = new File();
-        $config=$file->ConfigFile();
-          foreach ($config["admin"] as $key => $value) {
-                $array = explode(",", $value);
-            }
-            foreach ($array as $key => $value) {
-        $headers = "From:<".$config['NO_REPLY_MAIL'].">\r\n";
-        $headers .= "MIME-Version: 1.0\r\n";
-        $headers .= "Content-Type: text/html; charset=utf-8\r\n";
-        $mail = mail($value, 'Error in '.$config['REPOSITORY_NAME'], '<html>
-        <body>
-            <h2>Error occured in '.$config['REPOSITORY_NAME'].'!</h2>
-            <p>This file is published, but unpublished data '.$filename.' is not removed, please remove it and create an html file<p>
-        </body>
-        </html> ', $headers);
-        }
-    }
+ 
     
     /**
      * Generate a new DOI
@@ -515,7 +500,9 @@ class DatasheetController
             if ($key == "acronym_abbreviation") {
                 if (count($value) > 1) {
                     foreach ($value as $key => $value) {
+                        if (!empty($value)) {
                         $array["ACRONYM"][$key]["ABBREVIATION"] = htmlspecialchars($value, ENT_QUOTES);
+                    }
                     }
                 } else {
                     if (!empty($value[0])) {
@@ -526,7 +513,9 @@ class DatasheetController
               if ($key == "acronym_description") {
                 if (count($value) > 1) {
                     foreach ($value as $key => $value) {
+                        if (!empty($value)) {
                         $array["ACRONYM"][$key]["DESCRIPTION"] = htmlspecialchars($value, ENT_QUOTES);
+                    }
                     }
                 } else {
                     if (!empty($value[0])) {
@@ -1006,11 +995,18 @@ class DatasheetController
     
     function Newdatasheet($db, $array)
     {
+            $file = new File();
+            $config=$file->ConfigFile();
+            $Mail= new Mailer();
         if (isset($array['error'])) { //Si une erreur est detecté
             return $array;
         } else {
-             $file = new File();
-            $config=$file->ConfigFile();
+            if(is_dir($config["UPLOAD_FOLDER"])==false){
+                 $array['error'] = "Error occured when upload file!";
+                 $Mail->Warning_mail_bad_path_data();
+                 self::UnlockDOI();
+                 return $array;
+            }else{
             $array['dataform']["UPLOAD_DATE"]   = date('Y-m-d');
             $array['dataform']["CREATION_DATE"] = date('Y-m-d');
             $UPLOAD_FOLDER                      = $config["UPLOAD_FOLDER"];
@@ -1063,7 +1059,8 @@ class DatasheetController
             if ($request == "true") { // si datacite reponds et enregistre les données
                 self::Increment_DOI($doi);
                 $collectionObject->insert($json); // on insert dans la base
-                $Request->Send_Mail_To_uploader($array['dataform']['FILE_CREATOR'], $array['dataform']['TITLE'], $doi, $array['dataform']['DATA_DESCRIPTION']); // Envoie d'un mail au auteurs du jeu de données
+                $Mail = new Mailer();
+                $Mail->Send_Mail_To_uploader($array['dataform']['FILE_CREATOR'], $array['dataform']['TITLE'], $doi, $array['dataform']['DATA_DESCRIPTION']); // Envoie d'un mail au auteurs du jeu de données
                 return $array['message'] = '   <div class="ui message green"  style="display: block;">Dataset created!</div>';
             } else {
                 self::UnlockDOI();
@@ -1071,11 +1068,109 @@ class DatasheetController
                 return $array;
             }
         }
+        }
     }
-    
- function WriteChangelog(){
 
+
+    
+ function WriteChangelog($change,$uploadfolder,$doi){
+        if (!empty($change)) {
+            $file = new File();
+            $config=$file->ConfigFile();
+            $doi=str_replace($config['DOI_PREFIX'], '', $doi);
+            mkdir($uploadfolder."/changelog/");
+            $json = json_decode(file_get_contents($uploadfolder."/changelog/".$doi.".changelog"),TRUE);
+             usort($json, function($a, $b) {
+            return strtotime($b['date']) - strtotime($a['date']);
+             });
+            $change['mailuser']=$_SESSION['mail'];
+            $change['date']=date("Y-m-d H:i:s");
+            if ($json) {
+                $change['version']=$json[0]['version']+1;
+            }
+            else{
+                $change['version']=2;
+            }
+                       //Voir pour le versionning du json et les problemes d'affichage
+
+            $json[]=$change;
+
+            $array=json_encode($json);
+            file_put_contents($uploadfolder."/changelog/".$doi.".changelog", $array);
+        }
+    }
+
+
+ function diff($Old,$New){
+    $Diff = [];
+        
+        if( $Old == $New )
+        {
+            return $Diff;
+        }
+        
+        foreach( $Old as $Key => $Value )
+        {
+            if( !isset( $New[ $Key ] ) )
+            {
+                $Diff[ $Key ] = self::Singular( ComparedValue::TYPE_REMOVED, $Value );
+                
+                continue;
+            }
+            
+            $ValueNew = $New[ $Key ];
+            
+            if( is_array( $ValueNew ) )
+            {
+                $Temp = self::Diff( $Value, $ValueNew );
+                
+                if( !empty( $Temp ) )
+                {
+                    $Diff[ $Key ] = $Temp;
+                }
+                
+                continue;
+            }
+            
+            if( $Value != $ValueNew )
+            {
+                $Diff[ $Key ] = new ComparedValue( ComparedValue::TYPE_MODIFIED, $Value, $ValueNew );
+            }
+        }
+        
+        foreach( $New as $Key => $Value )
+        {
+            if( !isset( $Old[ $Key ] ) )
+            {
+                $Diff[ $Key ] = self::Singular( ComparedValue::TYPE_ADDED, $Value );
+            }
+        }
+        
+        return $Diff;
  }
+
+    private static function Singular( $Type, $Value )
+    {
+        if( is_array( $Value ) )
+        {
+            $Diff = [];
+            
+            foreach( $Value as $Key => $Value2 )
+            {
+                $Diff[ $Key ] = self::Singular( $Type, $Value2 );
+            }
+            
+            return $Diff;
+        }
+        
+        if( $Type === ComparedValue::TYPE_REMOVED )
+        {
+            return new ComparedValue( $Type, $Value, null );
+        }
+        
+        return new ComparedValue( $Type, null, $Value );
+    }
+
     
     /**
      * Edit datasheet
@@ -1105,6 +1200,9 @@ class DatasheetController
             }
             if ($value['INTRO']["CREATION_DATE"]) {
                 $array['dataform']['CREATION_DATE'] = $value['INTRO']['CREATION_DATE'];
+            }
+            if ($value['INTRO']["PUBLICATION_DATE"]) {
+                $array['dataform']['PUBLICATION_DATE'] = $value['INTRO']['PUBLICATION_DATE'];
             }
         }
         
@@ -1214,35 +1312,13 @@ class DatasheetController
                     );
                     $cursor           = $collectionObject->find($query);
                    foreach ($cursor as $key => $value) {
-                    $json2=$value['INTRO'];
+                    $arr2=$value['INTRO'];
                    }
-                    $difference = array();
-                    foreach($json['$set']['INTRO'] as $key => $value)
-                    {
-                        if(is_array($value))
-                        {
-                            if(!isset($json2[$key]))
-                            {
-                                $difference[$key] = $value;
-                            }
-                            elseif(!is_array($json2[$key]))
-                            {
-                                $difference[$key] = $value;
-                            }
-                            else
-                            {
-                                $new_diff = array_diff($value, $json2[$key]);
-                                if($new_diff != FALSE)
-                                {
-                                    $difference[$key] = $new_diff;
-                                }
-                            }
-                        }
-                        elseif(!isset($json2[$key]) || $json2[$key] != $value)
-                        {
-                            $difference[$key] = $value;
-                        }
-                    }
+                   
+                  $arr1=$json['$set']['INTRO'];
+                  $diff= self::diff($arr2,$arr1);
+                  $uploadfolder=$UPLOAD_FOLDER . "/" . $doi ;
+                   self::WriteChangelog($diff,$uploadfolder,$doi);
                 
                     $collectionObject->update(array(
                         '_id' => $doi
@@ -1434,15 +1510,16 @@ class DatasheetController
                     //exec("sudo -u ".$config["DATAFILE_UNIXUSER"]." rm ".$ORIGINAL_DATA_URL);
                     $ip = $config["SSH_HOST"];
                         $connection = \ssh2_connect($ip);
+                        $Mail = new Mailer();
                         if ($connection==false) {
-                              self::Warning_mail($ORIGINAL_DATA_URL);
+                              $Mail->Warning_mail($ORIGINAL_DATA_URL);
                         }
                         else{                            
                             $user = $config["SSH_UNIXUSER"];
                             $pass = $config["SSH_UNIXPASSWD"];
                             $auth=\ssh2_auth_password($connection,$user,$pass);
                             if ($auth==false) {
-                                self::Warning_mail($ORIGINAL_DATA_URL);
+                               $Mail->Warning_mail($ORIGINAL_DATA_URL);
                             }
                             $stream = \ssh2_exec($connection,'sudo -u '.$config["DATAFILE_UNIXUSER"].' rm '.$ORIGINAL_DATA_URL ,false);     
                             stream_set_timeout($stream,3);
@@ -1456,7 +1533,7 @@ class DatasheetController
                             fclose($stream);
                             // print the response
                               if ($data!='') {
-                                    self::Warning_mail($ORIGINAL_DATA_URL);
+                                    $Mail->Warning_mail($ORIGINAL_DATA_URL);
                                 }else{
                                 self::Create_published_file($doi,$newdoi,$ORIGINAL_DATA_URL);
                                 }
@@ -1487,7 +1564,8 @@ class DatasheetController
                         "DATA" => $DATA
                     ));
                     self::Increment_DOI($doi);
-                    $Request->Send_Mail_To_uploader($array['dataform']['FILE_CREATOR'], $array['dataform']['TITLE'], $config["DOI_PREFIX"] . "/" . $newdoi, $array['dataform']['DATA_DESCRIPTION']);
+                    $Mail= new Mailer();
+                    $Mail->Send_Mail_To_uploader($array['dataform']['FILE_CREATOR'], $array['dataform']['TITLE'], $config["DOI_PREFIX"] . "/" . $newdoi, $array['dataform']['DATA_DESCRIPTION']);
                     return $array['message'] = '   <div class="ui message green"  style="display: block;">Dataset published!</div>';
                 } else {
                     self::UnlockDOI();
@@ -1609,65 +1687,24 @@ class DatasheetController
         
     }
     
+}
+
+
+class ComparedValue
+{
+    const TYPE_ADDED = 'added';
+    const TYPE_REMOVED = 'removed';
+    const TYPE_MODIFIED = 'modified';
     
-    /**
-     * Send a mail to author of a dataset
-     * @param  doi of dataset , data of dataset,nom de l'auteur,prenom de l'auteur,object du mail,message, mail de l'expediteur
-     * @return true if error else false
-     */
+    public $OldValue;
+    public $NewValue;
+    public $Type;
     
-    function Send_Mail_author($doi, $response, $author_name, $author_firstname, $object, $message, $sendermail)
+    function __construct( $Type, $OldValue, $NewValue )
     {
-            $file = new File();
-    $config=$file->ConfigFile();
-
-        if (!empty($object) && !empty($message) && filter_var($sendermail, FILTER_VALIDATE_EMAIL)) {
-            $title = $response['_source']['INTRO']['TITLE'];
-            $headers = "From:<".$config['NO_REPLY_MAIL'].">\r\n";
-            $headers .= "MIME-Version: 1.0\r\n";
-            $headers .= "Content-Type: text/html; charset=utf-8\r\n";
-            foreach ($response['_source']['INTRO']['FILE_CREATOR'] as $key => $value) {
-                if ($author_name == $value["NAME"] && $author_firstname == $value["FIRST_NAME"]) {
-                    $mail = $value["MAIL"];
-                    mail("<" . $mail . ">", 'Contact from '.$config['REPOSITORY_NAME'].': ' . $object, '<html> 
-                            <head> 
-                            <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
-                            </head> 
-                            <body> 
-                                <h2>Contact from :  <img src="'.$config['REPOSITORY_URL'].'/img/logo.png" alt="Logo " height="30" width="120" /> </h2>  
-                                <table cellspacing="0" style="border: 2px solid black; min-width: 300px; width: auto; height: 200px;  "> 
-                                    <tr> 
-                                        <th>Title</th><td>' . $title . '</td> 
-                                    </tr> 
-                                     <tr style="background-color: #e0e0e0;"> 
-                                        <th>DOI </th><td><a href="http://dx.doi.org/' . $doi . '">' . $doi . '</a></td> 
-                                    </tr> 
-                                   <tr></tr> 
-                                    <br> 
-                                    <tr> 
-                                        <th>From:</th><td>' . $sendermail . '</td> 
-                                    </tr> 
-                                    <tr style="background-color: #e0e0e0;"> 
-                                        <th>Subject:</th><td>' . $object . '</td> 
-                                    </tr> 
-                                    <tr> 
-                                        <th valign="top">Message: </th><td>' . nl2br($message) . '</td> 
-                                    </tr> 
-
-                                </table> 
-                            </body> 
-                        </html> ', $headers);
-                }
-            }
-            if ($mail == true) {
-                return $error = "false";
-            } else {
-                return $error = "true";
-            }
-        } else {
-            return $error = "true";
-        }
-        
+        $this->OldValue = $OldValue;
+        $this->NewValue = $NewValue;
+        $this->Type = $Type;
     }
 }
 

@@ -1,6 +1,8 @@
 <?php
 namespace search\controller;
 use \search\controller\FileController as File;
+use \search\controller\MailerController as Mailer;
+
 
 ini_set('memory_limit', '-1');
 class RequestController
@@ -104,20 +106,8 @@ class RequestController
         $URLisgeneratedinfo      = curl_getinfo($ch2);
         curl_close($ch2);
         if ($info['http_code'] == 200 &&  $URLisgeneratedinfo['http_code']== 200) {
-            foreach ($config["admin"] as $key => $value) {
-                $array = explode(",", $value);
-            }
-            foreach ($array as $key => $value) {
-                $headers = "From:<".$config['NO_REPLY_MAIL'].">\r\n";
-                $headers .= "MIME-Version: 1.0\r\n";
-                $headers .= "Content-Type: text/html; charset=utf-8\r\n";
-                $mail = mail($value, 'Error in '.$config['REPOSITORY_NAME'], '<html>
-                <body>
-                    <h2>Error occured in '.$config['REPOSITORY_NAME'].'!</h2>
-                    <p>This DOI '.$config['REPOSITORY_NAME'].'-' . $NewDOI . ' is already registered check your database DOI.<p>
-                </body>
-                </html> ', $headers);
-            }
+            $Mail = new Mailer();
+            $Mail->DOIerror();
             return true;
         } else {
             return false;
@@ -630,85 +620,6 @@ class RequestController
             }
         
     }
-    /**
-     * Send a mail to contact ORDAR owner admin
-     * @param object,message,mail of sender
-     * @return true if error, else false
-     */
-    function Send_Contact_Mail($object, $message, $sendermail)
-    {
-        $file = new File();
-        $config=$file->ConfigFile();
-        if (!empty($object) && !empty($message) && filter_var($sendermail, FILTER_VALIDATE_EMAIL)) {
-            $headers = "From:<".$config['NO_REPLY_MAIL'].">\r\n";
-            $headers .= "MIME-Version: 1.0\r\n";
-            $headers .= "Content-Type: text/html; charset=utf-8\r\n";
-            $mail = mail("<otelo-si@univ-lorraine.fr>", 'Contact from '.$config['REPOSITORY_NAME'].': ' . $object, '<html>
-    <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    </head>
-    <body>
-         <h2>Contact from :  <img src="'.$config['REPOSITORY_URL'].'/img/logo.png" alt="Logo" height="30" width="120" /> </h2>  
-        <table cellspacing="0" style="border: 2px solid black; width: 400px; height: 200px;">
-            <tr>
-                <th>From:</th><td>' . $sendermail . '</td>
-            </tr>
-            <tr style="background-color: #e0e0e0;">
-                <th>Subject:</th><td>' . $object . '</td>
-            </tr>
-            <tr>
-                <th valign="bottom">Message:</th><td>' . $message . '</td>
-            </tr>
-        </table>
-    </body>
-    </html> ', $headers);
-            if ($mail == true) {
-                $error = "false";
-            } else {
-                $error = "true";
-            }
-            return $error;
-        } else {
-            return $error = "true";
-        }
-    }
-    /**
-     * Send a mail when upload successfull
-     * @return true if error, else false
-     */
-    function Send_Mail_To_uploader($authors,$title, $doi, $description)
-    {        
-        $file = new File();
-        $config=$file->ConfigFile();
-        $headers = "From:<".$config['NO_REPLY_MAIL'].">\r\n";
-        $headers .= "MIME-Version: 1.0\r\n";
-        $headers .= "Content-Type: text/html; charset=utf-8\r\n";
-        foreach ($authors as $key => $value) {
-        $mail = mail($value['MAIL'], 'Dataset submit successfully! ', '<html>
-    <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    </head>
-    <body>
-        <h2>Your dataset is now on <img src="'.$config['REPOSITORY_URL'].'/img/logo.png" alt="Logo " height="30" width="120" /></h2>
-        <p> '.$_SESSION['name'].' '.$_SESSION['firstname'].' has published this dataset </p>
-        <p> Your DOI is : <a href="http://dx.doi.org/' . $doi . '">' . $doi . '</a></p>
-         <table cellspacing="0" style="border: 2px solid black; width: 500px; height: 200px;">
-            <tr>
-                <th>Title : </th><td>' . $title . '</td>
-            </tr>
-             <tr style="background-color: #e0e0e0;">
-                <th>Description : </th><td>' . $description . '</td>
-            </tr>
-        </table>
-    </body>
-    </html> ', $headers); 
-        if ($mail == true) {
-            $error = "false";
-        } else {
-            $error = "true";
-        }
-        }
-        return $error;
-    }
+
 }
 ?>
