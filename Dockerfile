@@ -9,7 +9,7 @@ RUN echo 'extension=ssh2.so' >> /usr/local/etc/php/php.ini
 RUN echo 'sendmail_path = /usr/sbin/ssmtp -t' >> /usr/local/etc/php/php.ini
 RUN mkdir -p /data/applis/ORDaR/Uploads/
 COPY . /var/www/html/ORDaR/
-RUN chown -R www-data:www-data /data/applis/ORDaR/Uploads/
+RUN chown  www-data:www-data /data/applis/ORDaR/Uploads/
 COPY  ./Docker/Apache_PHP/ssmtp.conf  /etc/ssmtp/ssmtp.conf
 COPY ./Docker/Apache_PHP/config.ini /var/www/html/ORDaR/Frontend/config.ini
 COPY ./Docker/Apache_PHP/000-default.conf /etc/apache2/sites-enabled/000-default.conf

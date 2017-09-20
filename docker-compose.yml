@@ -54,7 +54,7 @@ services:
     ports: 
      - "127.0.0.1:8084:80"
     volumes:
-     - /data/applis/ORDaR/Uploads/:/data/applis/ORDaR/Uploads/
+     - /testdata/:/data/applis/ORDaR/Uploads/
 
 
   OrdarOAIPMH:
@@ -92,8 +92,8 @@ services:
     links:
      - mongo
     volumes:
-     - /data/applis/ORDaR/Uploads/:/data/applis/ORDaR/Uploads/
-     - /data/applis/ORDaR/excel/:/data/applis/ORDaR/excel/
+     - /testdata/:/data/applis/ORDaR/Uploads/
+     - /testdata/excel/:/data/applis/ORDaR/excel/
 
 
 

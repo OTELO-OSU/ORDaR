@@ -1154,6 +1154,55 @@
                       $($(this).parent("div").children().find(":input")[2]).val('');
                   }
               });
+            function handleFileSelect(evt) {
+                var files = evt.target.files; // FileList object
+                var file = files[0];
+               var reader = new FileReader();
+                  reader.readAsText(file);
+                  reader.onload = function(event){
+                    var csv = event.target.result;
+                    var data = $.csv.toArrays(csv);
+                  $.each(data, function(index, values) {
+                          $.each(values, function(index, value) {
+
+                            if (value!="") {
+                              if (value=="TITLE") {
+                                $("input[name='title']").val(values[1]);
+                              }
+                               if (value=="LANGUAGE") {
+                                if (values[1].toLowerCase()=="english" ) {
+                                  language="1";
+                                }
+                                if (values[1].toLowerCase()=="french") {
+                                  language="2";
+                                }
+                                $("select[name='language']").val(language);
+                              }
+                               if (value=="NAME") {
+                                  $("#authors").append('<div class="required field" > <div class="three fields"> <div class="field"><label>Author firstname</label><input type="text" name="authors_firstname[]"   placeholder="First Name" required></div> <div class="field"><label>Author name</label><input type="text" name="authors_name[]" value="'+values[1]+'" placeholder="Family Name, Given names" required></div> <div class="field"><label>Author mail</label><input type="email" name="authors_email[]" placeholder="Email" required ></div> <div class="ui icon delete center"><i class="remove icon"></i></div> </div> </div>');
+
+                               
+                              }
+                               if (value=="FIRST NAME") {
+                                //$("input[name='authors_firstname[]']").val(values[1]);
+                              }
+                              if (value=="DATA DESCRIPTION") {
+                                $("textarea[name='description']").val(values[1]);
+                              }
+                            }
+
+                       });
+                  });
+
+
+  }
+}
+
+  document.getElementById('metadatafile').addEventListener('change', handleFileSelect, false);   
+
+
+
+
           },
           checkformbutton: function() {
               if (document.getElementById('embargoed').checked) {

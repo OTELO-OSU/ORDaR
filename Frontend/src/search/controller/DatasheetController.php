@@ -1001,7 +1001,7 @@ class DatasheetController
         if (isset($array['error'])) { //Si une erreur est detecté
             return $array;
         } else {
-            if(is_dir($config["UPLOAD_FOLDER"])==false){
+            if(is_dir($config["UPLOAD_FOLDER"])==false || is_writable($config["UPLOAD_FOLDER"])==false){
                  $array['error'] = "Error occured when upload file!";
                  $Mail->Warning_mail_bad_path_data();
                  self::UnlockDOI();
