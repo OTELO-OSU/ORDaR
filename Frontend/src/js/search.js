@@ -1155,15 +1155,22 @@
                   }
               });
             function handleFileSelect(evt) {
+
                 var files = evt.target.files; // FileList object
                 var file = files[0];
+                if (file['type']=='text/csv') {
+
                var reader = new FileReader();
                   reader.readAsText(file);
-              $('form')[1].reset();
-              $('.delete').parent().remove();
                   reader.onload = function(event){
                     var csv = event.target.result;
                     var data = $.csv.toArrays(csv);
+                    if (data.length==0){
+                      alert('Your CSV file is empty!')
+                      }
+                      else{
+                      $('form')[1].reset();
+                      $('.delete').parent().remove();
                              name="";
                              firstname="";
                              mail="";
@@ -1335,9 +1342,15 @@
 
                        });
                   });
+}
+                }
 
 
   }
+                else{
+                  $('form')[1].reset();
+                  alert("Only CSV file are supported!")
+                }
 }
 
   document.getElementById('metadatafile').addEventListener('change', handleFileSelect, false);   
