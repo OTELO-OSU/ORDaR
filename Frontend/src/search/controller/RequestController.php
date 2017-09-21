@@ -50,6 +50,20 @@ class RequestController
             'password' => $config['password_doi']
         ));
         $collection = $dbdoi->selectCollection($config['DOI_database'], "DOI");
+        $query  = array(
+                            '_id' => $config['REPOSITORY_NAME']."-DOI",
+                );
+            $cursor = $collection->find($query);
+             if ($collection->count() != 1) {
+                $cursor = $collection->insert(array(
+                            '_id' => $config['REPOSITORY_NAME']."-DOI",
+                            'ID' => 0,
+                            'STATE' => "UNLOCKED"
+                        ));
+
+            }
+                    $collection = $dbdoi->selectCollection($config['DOI_database'], "DOI");
+
         if ($collection->count() == 1) {
             $query  = array(
                 'STATE' => 'UNLOCKED'
