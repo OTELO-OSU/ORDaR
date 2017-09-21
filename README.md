@@ -412,8 +412,7 @@ Voici uen configuration de test, à vous de la modifier.
 	#SPECIFIC ORDARUI
 	REPOSITORY_NAME=DOCKER-ORDAR
 	REPOSITORY_URL=http://example.fr
-	UPLOAD_FOLDER=/data/applis/ORDaR/Uploads/
-	Le chemin Upload_folder est aussi à modifier dans le dockerfile du service ordar_ui, qui est a la racine du projet
+	UPLOAD_FOLDER=/data/applis/ORDaR/Uploads/ NE PAS MODIFIER LE CHEMIN, il s'agit du chemin INTERNE du docker
 
 	ADMIN=admin@admin.fr
 	DATAFILE_UNIXUSER="owncloud"
