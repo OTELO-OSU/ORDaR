@@ -1463,7 +1463,8 @@ class DatasheetController
                         "DATA" => $newfiles
                     ));
                     self::Increment_DOI($doi);
-                    $Request->Send_Mail_To_uploader($array['dataform']['FILE_CREATOR'], $array['dataform']['TITLE'], $config["DOI_PREFIX"] . "/" . $newdoi, $array['dataform']['DATA_DESCRIPTION']);
+                    $Mail = new Mailer();
+                    $Mailer->Send_Mail_To_uploader($array['dataform']['FILE_CREATOR'], $array['dataform']['TITLE'], $config["DOI_PREFIX"] . "/" . $newdoi, $array['dataform']['DATA_DESCRIPTION']);
                     return $array['message'] = '   <div class="ui message green"  style="display: block;">Draft published!</div>';
                 } else {
                     self::UnlockDOI();
