@@ -3,9 +3,12 @@
 <input type="hidden" name="csrf_value" value="{{value_CSRF}}">
 <h4 class="ui dividing header">Metadata <i class="database icon"></i> </h4>
 <div class="ui grid">
-<div id="inputs" class="ui right floated six wide column">
-   <div class="text"> Automatic import metadata from a csv file</div> <input type="file" id="metadatafile" name="metadata" />
+{%if title =="" %}
+<div id="inputs" class="ui ten wide column">
+   <div class="text" id="file-select-button">Click here to import metadata from a csv file<i class="upload icon"></i></div> 
+   <input hidden type="file" id="metadatafile" name="metadata" />
   </div>
+  {%endif%}
     <div class="ui fluid styled accordion">
         <div class="active title">
             Basic information <i class="info circle icon"></i> 

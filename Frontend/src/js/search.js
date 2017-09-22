@@ -978,6 +978,9 @@
 
           },
           init: function() {
+            $('#file-select-button').click(function(){
+    $('#metadatafile').click();
+});
               $('form ').on('keypress', function(e) {
                   return e.which !== 13;
               });
@@ -1155,7 +1158,7 @@
                   }
               });
             function handleFileSelect(evt) {
-
+                $('#inputs #filenamemetadata').remove();
                 var files = evt.target.files; // FileList object
                 var file = files[0];
                 if (file['type']=='text/csv') {
@@ -1345,6 +1348,7 @@
 }
                 }
 
+                      $('#inputs').append('<div class="text" id="filenamemetadata">'+file['name']+' successfully loaded!</div>')
 
   }
                 else{
