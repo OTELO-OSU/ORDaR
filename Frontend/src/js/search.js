@@ -1172,7 +1172,10 @@
                       alert('Your CSV file is empty!')
                       }
                       else{
-                      $('form')[1].reset();
+                        if ($("input[name='title']").val()!="") {
+                         $('form')[1].reset();
+                        }
+
                       $('.delete').parent().remove();
                              name="";
                              firstname="";
@@ -1352,7 +1355,6 @@
 
   }
                 else{
-                  $('form')[1].reset();
                   alert("Only CSV file are supported!")
                 }
 }
