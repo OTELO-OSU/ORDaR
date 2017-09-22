@@ -445,12 +445,12 @@ class DatasheetController
                 if (count($value) > 1) {
                     foreach ($value as $key => $value) {
                         if (!empty($value)) {
-                            $array["SAMPLING_POINT"][$key]["LONGITUDE"] = htmlspecialchars($value, ENT_QUOTES);
+                            $array["SAMPLING_POINT"][$key]["LONGITUDE"] = htmlspecialchars(str_replace(',', '.',$value), ENT_QUOTES);
                         }
                     }
                 } else {
                     if (!empty($value[0])) {
-                        $array["SAMPLING_POINT"][0]["LONGITUDE"] = htmlspecialchars($value[0], ENT_QUOTES);
+                        $array["SAMPLING_POINT"][0]["LONGITUDE"] = htmlspecialchars(str_replace(',', '.',$value[0]), ENT_QUOTES);
                     }
                 }
                 
@@ -459,12 +459,12 @@ class DatasheetController
                 if (count($value) > 1) {
                     foreach ($value as $key => $value) {
                         if (!empty($value)) {
-                            $array["SAMPLING_POINT"][$key]["LATITUDE"] = htmlspecialchars($value, ENT_QUOTES);
+                            $array["SAMPLING_POINT"][$key]["LATITUDE"] = htmlspecialchars(str_replace(',', '.',$value), ENT_QUOTES);
                         }
                     }
                 } else {
                     if (!empty($value[0])) {
-                        $array["SAMPLING_POINT"][0]["LATITUDE"] = htmlspecialchars($value[0], ENT_QUOTES);
+                        $array["SAMPLING_POINT"][0]["LATITUDE"] = htmlspecialchars(str_replace(',', '.',$value[0]), ENT_QUOTES);
                     }
                 }
                 
@@ -473,12 +473,12 @@ class DatasheetController
                 if (count($value) > 1) {
                     foreach ($value as $key => $value) {
                         if (!empty($value)) {
-                            $array["SAMPLING_POINT"][$key]["ELEVATION"] = htmlspecialchars($value, ENT_QUOTES);
+                            $array["SAMPLING_POINT"][$key]["ELEVATION"] = htmlspecialchars(str_replace(',', '.',$value), ENT_QUOTES);
                         }
                     }
                 } else {
                     if (!empty($value[0])) {
-                        $array["SAMPLING_POINT"][0]["ELEVATION"] = htmlspecialchars($value[0], ENT_QUOTES);
+                        $array["SAMPLING_POINT"][0]["ELEVATION"] = htmlspecialchars(str_replace(',', '.',$value[0]), ENT_QUOTES);
                     }
                 }
                 
