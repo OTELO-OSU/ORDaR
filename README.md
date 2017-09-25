@@ -484,6 +484,10 @@ Modifier le fichier Docker/Apache_PHP/ssmtp.conf:
 
 mailhub= ADRESSE DE VOTRE SMTP
 
+Modifier le fichier Docker/Ordar_script/Dockerfile:
+
+Ajouter votre access token bitbucket afin de pouvoir cloner le projet ordar_script
+
 
 Un fois cela effectué, lancé docker-compose:
 
