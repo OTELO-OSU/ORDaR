@@ -1555,6 +1555,7 @@ class DatasheetController
                     foreach ($olddata as $key => $value) {
                         $INTRO                                          = $value["INTRO"];
                         $DATA                                           = $value["DATA"];
+                        $DATA['FILES'][0]['ORIGINAL_DATA_URL']=$UPLOAD_FOLDER . "/" . $config["DOI_PREFIX"] . "/" . $newdoi . "/" . $doi . '_DATA.csv';
                     }
                     $collectionObject->remove(array(
                         '_id' => $doi
