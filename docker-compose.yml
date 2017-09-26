@@ -81,19 +81,19 @@ services:
     links:
      - mongo
 
-  Ordar_script_mobised:
-    image: ordar_script_img
-    build: ./Docker/Ordar_script
-    container_name: ordar_script
-    env_file:
-     - Configure.env
-    depends_on:
-     - mongo
-    links:
-     - mongo
-    volumes:
-     - /testdata/:/data/applis/ORDaR/Uploads/
-     - /testdata/excel/:/data/applis/ORDaR/excel/
+# Ordar_script_mobised:
+#    image: ordar_script-mobised_img
+#    build: ./Docker/Ordar_script-mobised
+#    container_name: ordar_script-mobised
+#    env_file:
+#     - Configure.env
+#    depends_on:
+#     - mongo
+#    links:
+#     - mongo
+#    volumes:
+#     - /testdata/:/data/applis/ORDaR/Uploads/
+#     - /testdata/excel/:/data/applis/ORDaR/excel/
 
 
 
