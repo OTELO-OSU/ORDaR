@@ -482,12 +482,17 @@ Exemple pour le service OrdarUI
 
 Modifier le fichier Docker/Apache_PHP/ssmtp.conf:
 
-mailhub= ADRESSE DE VOTRE SMTP
+	mailhub= ADRESSE DE VOTRE SMTP
 
 Modifier le fichier Docker/Ordar_script/Dockerfile:
 
 Ajouter votre access token bitbucket afin de pouvoir cloner le projet ordar_script
 
+	pour créer votre access token (valable 1 heure), se rendre sur le compte bitbucket :settings : OAuth
+	copier votre "key" et votre "secret"
+	
+	-> générer votre token : 
+	curl https://bitbucket.org/site/oauth2/access_token -d grant_type=client_credentials -u key:secret
 
 Un fois cela effectué, lancé docker-compose:
 
