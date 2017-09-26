@@ -4,7 +4,7 @@ RUN apt-get install  php5-curl libssl-dev git cron -y
 RUN pecl install mongo
 RUN echo 'extension=mongo.so' >> /usr/local/etc/php/php.ini
 RUN docker-php-ext-install zip 
-RUN git clone https://x-token-auth:ACCESSTOKENHERE@bitbucket.org/arnouldpy/ordar_scripts.git
+RUN git clone https://x-token-auth:ACCESSTOKENHERE@bitbucket.org/OTELO-OSU/ordar_scripts.git
 COPY config.ini /ordar_scripts/src/config/config.ini
 COPY start.sh /ordar_scripts/src/start.sh
 RUN chmod +x /ordar_scripts/src/start.sh
