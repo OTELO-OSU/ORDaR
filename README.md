@@ -2,16 +2,40 @@
 
 # ORDaR Beta 1
 
-Table of contents:
+Sommaire:
 =================
+* [Présentation](#presentation)
 * [Installation](#installation)
 * [Organisation](#organisation)
 * [Utilisation](#utilisation)
 * [Docker](#docker)
 
 
-# Installation  <a name="installation"></a>
+# Présentation <a name="presentation"></a>
+ORDaR est un entrepot de données.
 
+ORDaR offre un environnement sécurisé et pérenne pour le dépôt de jeux de données et permet d'obtenir un DOI (Digital Object Identifier) pour publication ou datapaper.
+
+Les ensembles de données peuvent etre publiés dans ORDaR sous différents accées:
+
+	 Ouvert: accès total (opendata)
+	 Fermé: Accès restreint aux seules métadonnées
+	 Embargo: accès restreint aux métadonnées seulement jusqu'à la date de publication fixée par le producteur
+	
+
+Toutes les métadonnées sont ouvertes et décrites dans les normes internationales, elles sont téléchargeables en 4 formats:
+
+	 Datacite
+	 BibteX
+	 JSON
+	 DublinCore
+	 
+Enfin, chaque ensemble de données est publié avec une licence Creative Common qui spécifie les termes de réutilisation juridique
+
+Cette entrepôt vise à promouvoir l'accès ouvert: valoriser et partager les connaissances.
+
+
+# Installation  <a name="installation"></a>
 
 
 **Prérequis :**
