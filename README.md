@@ -295,6 +295,25 @@ Seulles les facettes Access right ont l’opérateur OR
 
 Lors de la sélection de plusieurs facettes, l'opérateur de recherche est AND. 
 
+
+**Configuration de l'authentification:**
+
+L'authentification s'effectue via la route /login.
+Cette route recupère les variables contenu dans les headers HTTP d'un serveur d'authentification ( dans notre exemple shibboleth) et va assigné les variables de session php avec leurs valeurs.
+Variables utilisés:
+
+	-HTTP_SN
+	-HTTP_GIVENNAME
+	-HTTP_MAIL
+	
+Voici un schema explicatif du fonctionnement:
+
+![Alt text](/Img_doc/config_login.png?raw=true)
+
+
+
+
+
 **Insertion d'un nouveau jeu de données:**
 
 Avant tout dépot de jeu de données une vérification de disponibilité de l'API datacite est effectuée.
