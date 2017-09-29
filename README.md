@@ -81,53 +81,6 @@ Pour ubuntu 16.04(pour d’autre systèmes consulter le manuel de mongodb)
 
 Afin d'envoyer des mails, vous devez configurer un SMTP sur votre serveur.
 
-    
-
-**Configuration apache2**
-
-    activer mode rewrite :
-    sudo a2enmod rewrite
-
-    Modifier la configuration apache:
-    DocumentRoot /var/www/html/ORDaR/Frontend/src/
-
-
-    <Directory "/var/www/html/ORDaR/Frontend/src/">
-            AllowOverride All
-            Order allow,deny
-            Allow from all
-        </Directory>
-
-**Demarrer la base mongo en mode replica set :**
-    
-    sudo mongod --replSet "rs0"
-
-    Démarrer shell mongo et exécuter :
-        rs.initiate()
-
-    Se connecter sur la base admin:
-
-        use admin
-
-    Créer un utilisateur avec un rôle backup:
-
-    db.createUser({user: "USER",pwd: "PASSWORD",roles: [ { role: "backup", db: "admin" } ]})
-
-    Ensuite se connecter sur la base ORDaR et créer l'utilisateur qui pourra modifier les données:
-
-        use ORDaR
-
-        db.createUser({user: "USER",pwd: "PASSWORD",roles: [ { role: "readWrite", db: "ORDaR" } ]})
-
-    Créer aussi une base DOI et créer l'utilisateur qui pourra modifier les données:
-
-        use DOI
-
-        db.createUser({user: "USER",pwd: "PASSWORD",roles: [ { role: "readWrite", db: "DOI" } ]})
-
-Ensuite démarrer elasticsearch,
-rendez vous dans le dossier précédemment téléchargé /bin et exécuter :
-./elasticsearch
 
 **Récupérer le projet :**
 
@@ -167,8 +120,90 @@ rendez vous dans le dossier précédemment téléchargé /bin et exécuter :
     user_doi = Le username de votre BDD qui contiendra le numéro de DOI
     password_doi = Le mot de passe de votre BDD qui contiendra le numéro de DOI
     Auth_config_datacite = Token d'authentification (Basic https) de datacite
-     
+    
 
+**Configuration apache2**
+
+    activer mode rewrite :
+    sudo a2enmod rewrite
+
+    Modifier la configuration apache:
+    DocumentRoot /var/www/html/ORDaR/Frontend/src/
+
+
+    <Directory "/var/www/html/ORDaR/Frontend/src/">
+            AllowOverride All
+            Order allow,deny
+            Allow from all
+        </Directory>
+	
+**Configuration de l'authentification:**
+
+L'authentification s'effectue via la route /login.
+Cette route recupère les variables contenu dans les headers HTTP d'un serveur d'authentification ( dans notre exemple shibboleth) et va assigné les variables de session php avec leurs valeurs.
+Variables utilisés:
+
+	-HTTP_SN
+	-HTTP_GIVENNAME
+	-HTTP_MAIL
+	
+Voici un schema explicatif du fonctionnement:
+
+![Alt text](/Img_doc/config_login.png?raw=true)
+
+
+Voici un exemple de code pour configurer apache avec shibboleth:
+
+	<Location />
+	     AuthType shibboleth
+	     Require shibboleth
+		ShibRequestSetting applicationId ordar
+	   </Location>
+
+	<Location /login>
+		# Auth Shibb
+		AuthType shibboleth
+		ShibRequestSetting requireSession true
+		ShibRequestSetting applicationId ordar
+
+		ShibUseHeaders On
+		ShibRequireSession On
+	       	AuthGroupFile /etc/ordar.conf #Ajout du fichier contenant les utilisateurs autorisés
+		Require group ordar
+
+	</Location>
+
+
+**Demarrer la base mongo en mode replica set :**
+    
+    sudo mongod --replSet "rs0"
+
+    Démarrer shell mongo et exécuter :
+        rs.initiate()
+
+    Se connecter sur la base admin:
+
+        use admin
+
+    Créer un utilisateur avec un rôle backup:
+
+    db.createUser({user: "USER",pwd: "PASSWORD",roles: [ { role: "backup", db: "admin" } ]})
+
+    Ensuite se connecter sur la base ORDaR et créer l'utilisateur qui pourra modifier les données:
+
+        use ORDaR
+
+        db.createUser({user: "USER",pwd: "PASSWORD",roles: [ { role: "readWrite", db: "ORDaR" } ]})
+
+    Créer aussi une base DOI et créer l'utilisateur qui pourra modifier les données:
+
+        use DOI
+
+        db.createUser({user: "USER",pwd: "PASSWORD",roles: [ { role: "readWrite", db: "DOI" } ]})
+
+Ensuite démarrer elasticsearch,
+rendez vous dans le dossier précédemment téléchargé /bin et exécuter :
+./elasticsearch
 
 
 **Parametrage du fichier de configuration de mongo_connector:**
@@ -195,7 +230,6 @@ il doit vous retourner acknowledge:true.
 
 
 
-
 # Organisation  <a name="organisation"></a>
 
 **Organisation des bases de données:**
@@ -205,7 +239,7 @@ Ordar comporte 2 bases de données:
     - ORDAR
     - DOI
     
- La base Ordar contient plusieurs collections, une depot manuel : Manual_Depot et plusieurs autres en fonction des projets importés avec OteloCloud.
+ La base Ordar contient plusieurs collections, une depot manuel : Manual_Depot et plusieurs autres en fonction des projets importés avec ordar_script.
  
  La base DOI contient une seule collection, DOI, elle contient un document avec un ID ORDAR-DOI, un ID est l’état du document (cet état permet de gérer des accès concurrents, locked/unlocked est positionné pour utiliser la ressource). 
 
@@ -307,43 +341,6 @@ Seulles les facettes Access right ont l’opérateur OR
 Lors de la sélection de plusieurs facettes, l'opérateur de recherche est AND. 
 
 
-**Configuration de l'authentification:**
-
-L'authentification s'effectue via la route /login.
-Cette route recupère les variables contenu dans les headers HTTP d'un serveur d'authentification ( dans notre exemple shibboleth) et va assigné les variables de session php avec leurs valeurs.
-Variables utilisés:
-
-	-HTTP_SN
-	-HTTP_GIVENNAME
-	-HTTP_MAIL
-	
-Voici un schema explicatif du fonctionnement:
-
-![Alt text](/Img_doc/config_login.png?raw=true)
-
-
-Voici un exemple de code pour configurer apache avec shibboleth:
-
-	<Location />
-	     AuthType shibboleth
-	     Require shibboleth
-		ShibRequestSetting applicationId ordar
-	   </Location>
-
-	<Location /login>
-		# Auth Shibb
-		AuthType shibboleth
-		ShibRequestSetting requireSession true
-		ShibRequestSetting applicationId ordar
-
-		ShibUseHeaders On
-		ShibRequireSession On
-	       	AuthGroupFile /etc/ordar.conf #Ajout du fichier contenant les utilisateurs autorisés
-		Require group ordar
-
-	</Location>
-
-
 **Insertion d'un nouveau jeu de données:**
 
 Avant tout dépot de jeu de données une vérification de disponibilité de l'API datacite est effectuée.
@@ -358,7 +355,7 @@ Mongo connector se charge ensuite d'indexer ces données.
 
 L'utilisateur recevra un mail avec le DOI qui a été attribué au jeu de données.
 
-**Importation d'un jeu de données via OTELoCloud:**
+**Importation d'un jeu de données via Ordar script (OTELoCloud):**
 
 OTELO utilise des canevas afin que les chercheurs puissent créés des fichiers de données interroperable.
 
@@ -397,7 +394,6 @@ La suppression entraîne la suppression TOTALE du jeu de données:
 -l'entrée en base de données
 
 
-
 ![Alt text](/Img_doc/Diagram_ORDAR.png?raw=true)
 
 
@@ -405,8 +401,6 @@ La suppression entraîne la suppression TOTALE du jeu de données:
 **Enregistrement des DOIs:**
 
 ![Alt text](/Img_doc/DOI_save.png?raw=true)
-
-
 
 
 **Mode Administrateur:**
@@ -451,9 +445,6 @@ L'administrateur peut aussi modifier et ajouter des fichiers (avec un minimum de
                 FILETYPE:Extension du fichier
 
 # Docker  <a name="docker"></a>
-
-**Docker:** 
-
 
 Pour utiliser Docker vous devez configurer le fichier Configure.env qui contient toutes les variable de configuration des différents services:
 Voici uen configuration de test, à vous de la modifier.
@@ -553,9 +544,7 @@ Executez cette commande afin d'initialiser le mapping ElasticSearch:
 
 	docker exec ordar_ui php ORDaR/Init_elasticsearch_index.php
 
-
 L'installation est terminé!
-
 
 Pour stopper les containers:
 
@@ -567,7 +556,6 @@ Pour les lancer :
 	docker-compose start
 
 
-
 Il y a 2 volumes présent sur ce projet afin de garantir la persistance des données:
 
 	- mongodb, pour la base de données
@@ -576,23 +564,4 @@ Il y a 2 volumes présent sur ce projet afin de garantir la persistance des donn
 Les fichiers de données sont stocké sur le systeme hôte et ensuite monté dans les différents container qui les utilisent.
 
 
-
 ATTENTION: Mongo-connector indexe 2 minutes apres le lancement des conteneurs, ceci est du au demmarrage des différents services (mongo, elasticsearch)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
