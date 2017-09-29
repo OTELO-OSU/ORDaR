@@ -196,6 +196,9 @@ Voici un exemple de code pour configurer apache avec shibboleth:
 		Require group ordar
 
 	</Location>
+	
+Il faut ensuite modifier la route logout afin de se deconnecter du serveur single sign in (Shibboleth, CAS).
+Modifier le Redirect vers la route logout de votre service.
 
 
 **Demarrer la base mongo en mode replica set :**
