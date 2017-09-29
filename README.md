@@ -1,6 +1,6 @@
 ![Alt text](/Frontend/src/img/logo.png?raw=true)
 
-# ORDaR Beta 1
+# ORDaR
 
 Sommaire:
 =================
