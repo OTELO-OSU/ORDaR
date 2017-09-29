@@ -1188,9 +1188,6 @@
                              name="";
                              firstname="";
                              mail="";
-                             referentname="";
-                             referentfirstname="";
-                             referentmail="";
                   $.each(data, function(index, values) {
                           $.each(values, function(index, value) {
                             if (value!="") {
@@ -1219,21 +1216,6 @@
                                if ($("input[name='authors_email[]']").val()!=mail) {
 
                               $("#authors").append('<div class="required field" > <div class="three fields"> <div class="field"><label>Author firstname</label><input type="text" name="authors_firstname[]" value="'+firstname+'"  placeholder="First Name" required></div> <div class="field"><label>Author name</label><input type="text" name="authors_name[]" value="'+name+'" placeholder="Family Name, Given names" required></div> <div class="field"><label>Author mail</label><input type="email" name="authors_email[]" value="'+mail+'" placeholder="Email" required ></div> <div class="ui icon delete center"><i class="remove icon"></i></div> </div> </div>');
-                               } 
-
-                              }
-                              if (value=="NAME REFERENT") {
-                                referentname=values[1];
-                               
-                              }
-                               if (value=="FIRST NAME REFERENT") {
-                                referentfirstname=values[1];
-
-                              }
-                               if (value=="MAIL REFERENT") {
-                                referentmail=values[1];
-                               if ($("input[name='referents_email[]']").val()!=mail) {
-                                 $("#referent").append('<div class=" field" > <div class="three fields"> <div class="field"><label>Referent firstname</label><input type="text" name="referents_firstname[]" value="'+referentfirstname+'" data-validate="authors_firstname" placeholder="First Name" ></div> <div class="field"><label>Referent name</label><input type="text" value="'+referentname+'" name="referents_name[]" data-validate="authors_name" placeholder="Family Name, Given names" ></div> <div class="field"><label>Referent mail</label><input type="email" value="'+referentmail+'"name="referents_email[]" placeholder="Email" required ></div><a class="ui icon  delete center"><i class="remove icon"></i></a></div></div>');
                                } 
 
                               }

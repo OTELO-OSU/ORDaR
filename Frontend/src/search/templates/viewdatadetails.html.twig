@@ -121,19 +121,24 @@
                          <i class="dropdown icon"></i></label>
                  </div>
                  <div class="content">
-               {%if referent %}
-               <h4 class="ui  header">Referents:</h4>
-               {%for referent in referent%}
-               <p>Name: {{referent.NAME_REFERENT}} </p>
-               <p>First Name:  {{referent.FIRST_NAME_REFERENT}}</p>
-               <br>
-               {%endfor%}
-               {%endif%}
-
-               {%for key,item in supplementary_fields%}
+               {%for key,item in supplementary_fields|reverse%}
+               {%if "REFERENT" not in key and "OPERATOR" not in key%}
                <h4 class="ui  header">{{key}}:</h4>
                <p>{{item}}</p>
-                 {%endfor%}
+               {%endif%}
+               {%endfor%}
+               {%for key,item in supplementary_fields|reverse%}
+               {%if "REFERENT" in key%}
+               <h4 class="ui  header">{{key}}:</h4>
+               <p>{{item}}</p>
+               {%endif%}
+               {%endfor%}
+               {%for key,item in supplementary_fields|reverse%}
+               {%if "OPERATOR"  in key%}
+               <h4 class="ui  header">{{key}}:</h4>
+               <p>{{item}}</p>
+               {%endif%}
+               {%endfor%}
                </div>
                </div>
                {%endif%}
