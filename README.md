@@ -20,7 +20,7 @@ Les ensembles de données peuvent etre publiés dans ORDaR sous différents acc�
 
 	 Ouvert: accès total (opendata)
 	 Fermé: Accès restreint aux seules métadonnées
-	 Embargo: accès restreint aux métadonnées seulement jusqu'à la date de publication fixée par le producteur
+	 Embargo: accès restreint aux métadonnées seulement jusqu'à la date de publication fixée par le producteur du jeux de données
 	
 
 Toutes les métadonnées sont ouvertes et décrites dans les normes internationales, elles sont téléchargeables en 4 formats:
