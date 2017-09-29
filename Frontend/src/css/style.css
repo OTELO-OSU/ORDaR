@@ -9,6 +9,11 @@ cursor:pointer
 font-size:18px
 }
 
+#uploadmetadata{
+  margin-left: 5px;
+  cursor: pointer;
+}
+
 #date_end {
 display:none
 }
