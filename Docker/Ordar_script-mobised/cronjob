@@ -1,2 +1,2 @@
-* * * * *   /ordar_scripts/src/start.sh 2>&1
+@daily   /ordar_scripts/src/start.sh 2>&1
 
