@@ -1,7 +1,16 @@
 ![Alt text](/Frontend/src/img/logo.png?raw=true)
 
+# ORDaR Beta 1
 
-# Installation ORDaR Beta 1
+Table of contents:
+=================
+* [Installation](#installation)
+* [Organisation](#organisation)
+* [Utilisation](#utilisation)
+* [Docker](#docker)
+
+
+# Installation  <a name="installation"></a>
 
 
 
@@ -184,6 +193,11 @@ il doit vous retourner acknowledge:true.
 
 ![Alt text](/Img_doc/Mongoconnector.png?raw=true)
 
+
+
+
+# Organisation  <a name="organisation"></a>
+
 **Organisation des bases de données:**
 
 Ordar comporte 2 bases de données:
@@ -251,7 +265,7 @@ Pour l’aspect, le framework Semantic UI a été choisi pour sa simplicité d�
 ![Alt text](/Img_doc/Ordar_accueil.png?raw=true)
 
 
-
+# Utilisation  <a name="utilisation"></a>
 
 **Définition d'un jeu de données:**
 
@@ -267,9 +281,6 @@ Un jeu de données à un accès défini: il peut être :
 
 **Modification du statut Embargoed -> Open:**
 Le script Check_Embargoed_access.php doit être exécuté une fois par jour afin de changer les statuts des jeux de données arrivé à échéance: des lors que la date du jour est égale à la date de l'embargo, le jeu de données est modifié en statut Open.
-
-
-# Utilisation
 
 
 **Rechercher un jeu de données:**
@@ -439,7 +450,7 @@ L'administrateur peut aussi modifier et ajouter des fichiers (avec un minimum de
                 DATA_URL:Denomination du fichier
                 FILETYPE:Extension du fichier
 
-
+# Docker  <a name="docker"></a>
 
 **Docker:** 
 
