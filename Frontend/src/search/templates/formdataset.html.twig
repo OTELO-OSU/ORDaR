@@ -66,6 +66,24 @@
             <div class="ui primary right floated button" id="addauthors">
                 <i class="plus icon"></i> Add a new author
             </div>
+             <div class="field" id="referent">
+                <label>Referents</label>
+                {% if referent %}
+                {% for referent in referent %}
+                <div class=" field" >
+                    <div class="three fields">
+                        <div class="field"><label>Referent firstname</label><input type="text" value="{{referent.FIRST_NAME_REFERENT}}" data-validate="authors_firstname" name="referents_firstname[]" placeholder="First Name"  ></div>
+                        <div class="field"><label>Referent name</label><input type="text" value="{{referent.NAME_REFERENT}}" data-validate="authors_name" name="referents_name[]" placeholder="Family Name, Given names"  ></div>
+                        <div class="field"><label>Referent mail</label><input type="email" name="referents_email[]"  value="{{referent.MAIL}}" placeholder="Email" required ></div>
+                        <a class="ui icon  delete center"><i class="remove icon"></i></a>
+                    </div>
+                </div>
+                {% endfor %}              
+                {%endif%}
+            </div>
+               <div class="ui primary right floated button" id="addreferent">
+                <i class="plus icon"></i> Add a new referent
+            </div>
             <div class=" field">
                 <label>Keywords</label>
                 <div class=" field" id="keywords">
@@ -609,6 +627,44 @@
         </div>
     </div>
     <div class="row"></div>
+     <div class="ui fluid styled accordion">
+        <div class=" title">
+                <label>Supplementary fields</i>
+                <i class="dropdown icon"></i></label>
+        </div>
+        {%if supplementary_fields%}
+        <div class="active content" >
+        {%for key,item in supplementary_fields%}
+        <div id="supplementary_fields">
+        <div class="two fields"  >
+            <div class="field"><label>Key</label><input type="text" value="{{key}}" name="supplementary_fields_key[]"  placeholder="Key" ></div>
+            <div class="field"><label>Value</label><input type="text" value="{{item}}" name="supplementary_fields_value[]"  placeholder="Value"></div>
+            <div class="ui icon delete center"><i class="remove icon"></i></div>
+        </div>
+        </div>
+        {%endfor%}
+         <div class="ui primary right floated button"  id="addnewfield">
+                    <i class="plus icon"></i> Add a new field
+                </div>
+        </div>
+        {%else%}
+         <div class="content">
+        <div id="supplementary_fields">
+          <div class="two fields" >
+            <div class="field"><label>Key</label><input type="text" value="{{key}}" name="supplementary_fields_key[]"  placeholder="Key" ></div>
+            <div class="field"><label>Value</label><input type="text" value="{{item}}" name="supplementary_fields_value[]"  placeholder="Value"></div>
+            <div class="ui icon delete center"><i class="remove icon"></i></div>
+        </div>
+        </div>
+          <div class="ui primary right floated button"  id="addnewfield">
+                    <i class="plus icon"></i> Add a new field
+                </div>
+
+        </div>
+        {%endif%}
+    </div>
+        <div class="row"></div>
+
     <div class="ui fluid styled accordion">
         <div class="active title">
             <div class="required field">

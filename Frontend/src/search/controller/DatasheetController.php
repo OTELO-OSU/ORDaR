@@ -547,7 +547,19 @@ class DatasheetController
                 }
             }
 
-
+             if ($key == "supplementary_fields_value") {
+                if (count($value) > 1) {
+                    foreach ($value as $key => $value) {
+                       if ($_POST['supplementary_fields_key'][$key]!=null) {
+                        $array["SUPPLEMENTARY_FIELDS"][$_POST['supplementary_fields_key'][$key]] = htmlspecialchars($value, ENT_QUOTES);
+                        } 
+                    }
+                } else {
+                    if ($_POST['supplementary_fields_key'][0]!=null) {
+                    $array["SUPPLEMENTARY_FIELDS"][$_POST['supplementary_fields_key'][0]] = htmlspecialchars($value[0], ENT_QUOTES);
+                }
+                }
+            }
 
             
             if ($key == "measurement_nature") {//Traitement measurement
@@ -668,6 +680,43 @@ class DatasheetController
                     }
                 } else {
                     $array["FILE_CREATOR"][0]["MAIL"] = htmlspecialchars($value[0], ENT_QUOTES);
+                }
+            }
+              if ($key == "referents_name") {
+                if (count($value) > 1) {
+                    foreach ($value as $keys => $value) {
+                        if (!empty($value)) {
+                        $array["REFERENT"][$keys]["NAME_REFERENT"] = htmlspecialchars($value, ENT_QUOTES);                       
+                        }
+                    }
+                } else {
+                    $array["REFERENT"][0]["NAME_REFERENT"] = htmlspecialchars($value[0], ENT_QUOTES);
+                }
+            }
+            if ($key == "referents_email") {
+                if (count($value) > 1) {
+                    foreach ($value as $key => $value) {
+                        if (!empty($value)) {
+                         $array["REFERENT"][$key]["MAIL"] = htmlspecialchars($value, ENT_QUOTES);
+                        }
+                        if (!filter_var($value, FILTER_VALIDATE_EMAIL)) {
+                            $error = "Warning referent mail invalid ";
+                        }
+                        
+                    }
+                } else {
+                    $array["REFERENT"][0]["MAIL"] = htmlspecialchars($value[0], ENT_QUOTES);
+                }
+            }
+             if ($key == "referents_firstname") {
+                if (count($value) > 1) {
+                    foreach ($value as $key => $value) {
+                        if (!empty($value)) {
+                        $array["REFERENT"][$key]["FIRST_NAME_REFERENT"] = htmlspecialchars($value, ENT_QUOTES);
+                        }
+                    }
+                } else {
+                    $array["REFERENT"][0]["FIRST_NAME_REFERENT"] = htmlspecialchars($value[0], ENT_QUOTES);
                 }
             }
             if ($key == "keywords") {
@@ -1463,7 +1512,7 @@ class DatasheetController
                         "DATA" => $newfiles
                     ));
                     self::Increment_DOI($doi);
-                    $Mail = new Mailer();
+                    $Mailer = new Mailer();
                     $Mailer->Send_Mail_To_uploader($array['dataform']['FILE_CREATOR'], $array['dataform']['TITLE'], $config["DOI_PREFIX"] . "/" . $newdoi, $array['dataform']['DATA_DESCRIPTION']);
                     return $array['message'] = '   <div class="ui message green"  style="display: block;">Draft published!</div>';
                 } else {

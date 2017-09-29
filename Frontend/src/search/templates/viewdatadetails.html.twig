@@ -114,6 +114,29 @@
                      <h3 class="ui  header">Publisher:</h3>
                      <p>{{publisher}}</p>
                   {%endif%}
+               {%if supplementary_fields %}
+                <div class="ui fluid styled accordion">
+                 <div class=" title">
+                         <label>Supplementary fields</i>
+                         <i class="dropdown icon"></i></label>
+                 </div>
+                 <div class="content">
+               {%if referent %}
+               <h4 class="ui  header">Referents:</h4>
+               {%for referent in referent%}
+               <p>Name: {{referent.NAME_REFERENT}} </p>
+               <p>First Name:  {{referent.FIRST_NAME_REFERENT}}</p>
+               <br>
+               {%endfor%}
+               {%endif%}
+
+               {%for key,item in supplementary_fields%}
+               <h4 class="ui  header">{{key}}:</h4>
+               <p>{{item}}</p>
+                 {%endfor%}
+               </div>
+               </div>
+               {%endif%}
                </div>
             </div>
             <div class="ui modal preview">

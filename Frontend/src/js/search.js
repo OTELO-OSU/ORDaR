@@ -1022,6 +1022,9 @@
               $("#addauthors").click(function(e) {
                   $("#authors").append('<div class="required field" > <div class="three fields"> <div class="field"><label>Author firstname</label><input type="text" name="authors_firstname[]"   placeholder="First Name" required></div> <div class="field"><label>Author name</label><input type="text" name="authors_name[]" placeholder="Family Name, Given names" required></div> <div class="field"><label>Author mail</label><input type="email" name="authors_email[]" placeholder="Email" required ></div> <div class="ui icon delete center"><i class="remove icon"></i></div> </div> </div>');
               });
+               $("#addnewfield").click(function(e) {
+                  $("#supplementary_fields").append('<div class="two fields"> <div class="field"><label>Key</label><input type="text" name="supplementary_fields_key[]" placeholder="Key" ></div> <div class="field"><label>Value</label><input type="text"  name="supplementary_fields_value[]" placeholder="Value"></div> <div class="ui icon delete center"><i class="remove icon"></i></div> </div>');
+              });
               $("body").on("click", ".delete", function(e) {
                   $(this).parent("div").remove();
               });
@@ -1104,6 +1107,11 @@
                       dateFormat: "yy-mm-dd"
                   });
               });
+
+              $("#addreferent").click(function(e) {
+                  $("#referent").append('<div class=" field" > <div class="three fields"> <div class="field"><label>Referent firstname</label><input type="text" name="referents_firstname[]" data-validate="authors_firstname" placeholder="First Name" ></div> <div class="field"><label>Referent name</label><input type="text" name="referents_name[]" data-validate="authors_name" placeholder="Family Name, Given names" ></div> <div class="field"><label>Referent mail</label><input type="email" name="referents_email[]" placeholder="Email" required ></div><a class="ui icon  delete center"><i class="remove icon"></i></a></div></div>');
+              });
+
               $("body").on("click", ".delete", function(e) {
                   $(this).parent("div").remove();
               });
@@ -1180,6 +1188,9 @@
                              name="";
                              firstname="";
                              mail="";
+                             referentname="";
+                             referentfirstname="";
+                             referentmail="";
                   $.each(data, function(index, values) {
                           $.each(values, function(index, value) {
                             if (value!="") {
@@ -1208,6 +1219,21 @@
                                if ($("input[name='authors_email[]']").val()!=mail) {
 
                               $("#authors").append('<div class="required field" > <div class="three fields"> <div class="field"><label>Author firstname</label><input type="text" name="authors_firstname[]" value="'+firstname+'"  placeholder="First Name" required></div> <div class="field"><label>Author name</label><input type="text" name="authors_name[]" value="'+name+'" placeholder="Family Name, Given names" required></div> <div class="field"><label>Author mail</label><input type="email" name="authors_email[]" value="'+mail+'" placeholder="Email" required ></div> <div class="ui icon delete center"><i class="remove icon"></i></div> </div> </div>');
+                               } 
+
+                              }
+                              if (value=="NAME REFERENT") {
+                                referentname=values[1];
+                               
+                              }
+                               if (value=="FIRST NAME REFERENT") {
+                                referentfirstname=values[1];
+
+                              }
+                               if (value=="MAIL REFERENT") {
+                                referentmail=values[1];
+                               if ($("input[name='referents_email[]']").val()!=mail) {
+                                 $("#referent").append('<div class=" field" > <div class="three fields"> <div class="field"><label>Referent firstname</label><input type="text" name="referents_firstname[]" value="'+referentfirstname+'" data-validate="authors_firstname" placeholder="First Name" ></div> <div class="field"><label>Referent name</label><input type="text" value="'+referentname+'" name="referents_name[]" data-validate="authors_name" placeholder="Family Name, Given names" ></div> <div class="field"><label>Referent mail</label><input type="email" value="'+referentmail+'"name="referents_email[]" placeholder="Email" required ></div><a class="ui icon  delete center"><i class="remove icon"></i></a></div></div>');
                                } 
 
                               }
@@ -1344,6 +1370,16 @@
                                                                  
 
                               }
+                     if (value=="SUPPLEMENTARY FIELDS") {
+                      if ($("input[name='supplementary_fields_key[]']").val()!="") {
+                            $("#supplementary_fields").append('<div class="two fields"> <div class="field"><label>Key</label><input type="text" value="'+values[1]+'" name="supplementary_fields_key[]" placeholder="Key" ></div> <div class="field"><label>Value</label><input type="text"   value="'+values[2]+'" name="supplementary_fields_value[]" placeholder="Value"></div> <div class="ui icon delete center"><i class="remove icon"></i></div> </div>');
+                      }
+                      else{
+                      $("input[name='supplementary_fields_key[]']").val(values[1]);
+                      $("input[name='supplementary_fields_value[]']").val(values[2]);                        
+                      }
+
+                    }
                             }
 
                        });
@@ -1395,12 +1431,11 @@
 
                   }
                   append=''
-                  html = ''
                   $.each(data, function(index, value) {
+                  html = ''
                       version = '<div class=" title">Version '+value['version']+'</div><div class="content"><div class="ui green label right floated "  data-tooltip="Date of metadata">' + value['date'] + '</div><div class="ui green label right floated "   data-tooltip="User who submit modification">' + value['mailuser'] +"</div><div class='row'></div><div class='row'></div>";
                       $.each(value, function(name, value) {
                     text=""
-                                             // console.log(value)
                       if (value['Type']=='modified') {
                         text += '<div class="ui raised segment"> <a class="ui red ribbon label">Old data</a> <span>' + value['OldValue'] + '</span> <p></p> <a class="ui blue ribbon label">New data</a> '+ value['NewValue'] + ' <p></p> </div>';
                         html += '<div class=" ui horizontal divider header"></div><div class="row"></div><a class="ui  label">' + name +'</a> <div class="ui raised segment"> ' + text + '</div>';
@@ -1419,18 +1454,32 @@
                     else if(typeof value === 'object'){
                       text=""
                       $.each(value, function(entrie, value) {
-                      entrie = parseInt(entrie) + 1;
-                      $.each(value, function(index, value) {
-                         if (value['Type']=='modified') {
-                        text += '<div class="ui raised segment"> <a class="ui red ribbon label">Old data : '+index.toUpperCase()+' '+entrie+'</a> <span>' + value['OldValue'] + '</span> <p></p> <a class="ui blue ribbon label">New data : '+index.toUpperCase()+' '+entrie+'</a> '+ value['NewValue'] + ' <p></p> </div>';
+                        if (isNaN(entrie)) {
+
+                        if (value['Type']=='modified') {
+                        text += '<div class="ui raised segment"> <a class="ui red ribbon label">Old data : '+entrie.toUpperCase()+'</a> <span>' + value['OldValue'] + '</span> <p></p> <a class="ui blue ribbon label">New data : '+entrie.toUpperCase()+'</a> '+ value['NewValue'] + ' <p></p> </div>';
                       }
                       else if (value['Type']=='added') {
-                        text += '<a class="ui green ribbon label">Added data : '+index.toUpperCase()+' '+entrie+'</a> <span> <p>'+ value['NewValue'] + '</p> </span>'
+                        text += '<a class="ui green ribbon label">Added data : '+entrie.toUpperCase()+'</a> <span> <p>'+ value['NewValue'] + '</p> </span>'
                       }
                         else if (value['Type']=='removed') {
-                       text += '<a class="ui red ribbon label">Removed data : '+index.toUpperCase()+' '+entrie+'</a> <span> <p>'+ value['OldValue'] + '</p> </span>'
+                       text += '<a class="ui red ribbon label">Removed data : '+entrie.toUpperCase()+'</a> <span> <p>'+ value['OldValue'] + '</p> </span>'
                       }
-                   });
+                        }
+                        else{
+                          entrie = parseInt(entrie) + 1;
+                          $.each(value, function(index, value) {
+                             if (value['Type']=='modified') {
+                            text += '<div class="ui raised segment"> <a class="ui red ribbon label">Old data : '+index.toUpperCase()+' '+entrie+'</a> <span>' + value['OldValue'] + '</span> <p></p> <a class="ui blue ribbon label">New data : '+index.toUpperCase()+' '+entrie+'</a> '+ value['NewValue'] + ' <p></p> </div>';
+                          }
+                          else if (value['Type']=='added') {
+                            text += '<a class="ui green ribbon label">Added data : '+index.toUpperCase()+' '+entrie+'</a> <span> <p>'+ value['NewValue'] + '</p> </span>'
+                          }
+                            else if (value['Type']=='removed') {
+                           text += '<a class="ui red ribbon label">Removed data : '+index.toUpperCase()+' '+entrie+'</a> <span> <p>'+ value['OldValue'] + '</p> </span>'
+                          }
+                       });
+                        }
                     });
                        html += '<div class=" ui horizontal divider header"></div><div class="row"></div><a class="ui  label">' + name+'</a> <div class="ui raised segment">'+text+'</div>';
                     }
