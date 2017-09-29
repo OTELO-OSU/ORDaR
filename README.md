@@ -311,7 +311,26 @@ Voici un schema explicatif du fonctionnement:
 ![Alt text](/Img_doc/config_login.png?raw=true)
 
 
+Voici un exemple de code pour configurer apache avec shibboleth:
 
+	<Location />
+	     AuthType shibboleth
+	     Require shibboleth
+		ShibRequestSetting applicationId ordar
+	   </Location>
+
+	<Location /login>
+		# Auth Shibb
+		AuthType shibboleth
+		ShibRequestSetting requireSession true
+		ShibRequestSetting applicationId ordar
+
+		ShibUseHeaders On
+		ShibRequireSession On
+	       	AuthGroupFile /etc/ordar.conf #Ajout du fichier contenant les utilisateurs autorisés
+		Require group ordar
+
+	</Location>
 
 
 **Insertion d'un nouveau jeu de données:**
