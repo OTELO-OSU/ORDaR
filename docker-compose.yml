@@ -52,7 +52,7 @@ services:
      - elasticsearch
      - mongo
     ports: 
-     - "127.0.0.1:8084:80"
+     - "8084:80"
     volumes:
      - /testdata/:/data/applis/ORDaR/Uploads/
 
