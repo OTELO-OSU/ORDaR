@@ -1552,7 +1552,12 @@ class DatasheetController
                                 }
                                           
                         }
-                    rename($UPLOAD_FOLDER . $doi . '/' . $doi . '_DATA.csv', $UPLOAD_FOLDER . "/" . $config["DOI_PREFIX"] . "/" . $newdoi . "/" . $doi . '_DATA.csv');
+                    //rename($UPLOAD_FOLDER . $doi . '/' . $doi . '_DATA.csv', $UPLOAD_FOLDER . "/" . $config["DOI_PREFIX"] . "/" . $newdoi . "/" . $doi . '_DATA.csv');
+                    //
+                    foreach ($value['DATA']['FILES'] as $key => $value) {
+                        rename($UPLOAD_FOLDER . $doi . '/' . $value['DATA_URL'], $UPLOAD_FOLDER . "/" . $config["DOI_PREFIX"] . "/" . $newdoi . "/" .$value['DATA_URL']);
+                    }
+
                     rmdir($UPLOAD_FOLDER . $doi);
                     $collectionObject->update(array(
                         '_id' => $doi
@@ -1567,7 +1572,14 @@ class DatasheetController
                     foreach ($olddata as $key => $value) {
                         $INTRO                                          = $value["INTRO"];
                         $DATA                                           = $value["DATA"];
-                        $DATA['FILES'][0]['ORIGINAL_DATA_URL']=$UPLOAD_FOLDER . "/" . $config["DOI_PREFIX"] . "/" . $newdoi . "/" . $doi . '_DATA.csv';
+                        foreach ($DATA['FILES'] as $key => $value) {
+                            if ($key==0) {
+                                $DATA['FILES'][0]['ORIGINAL_DATA_URL']=$UPLOAD_FOLDER . "/" . $config["DOI_PREFIX"] . "/" . $newdoi . "/" . $doi . '_DATA.csv';
+                            }else{
+                                $DATA['FILES'][$key]['ORIGINAL_DATA_URL']=$UPLOAD_FOLDER . "/" . $config["DOI_PREFIX"] . "/" . $newdoi . "/".$value['DATA_URL'];
+                            }
+                            
+                        }
                     }
                     $collectionObject->remove(array(
                         '_id' => $doi
@@ -1650,11 +1662,12 @@ class DatasheetController
             );
             $cursor           = $collectionObject->find($query);
             $state="true";
-            foreach ($cursor as $key => $value) {
-                foreach ($value["DATA"]["FILES"] as $key => $value) {
-                    $ORIGINAL_DATA_URL = $value["ORIGINAL_DATA_URL"];
+            foreach ($cursor as $key => $values) {
+                foreach ($values["DATA"]["FILES"] as $key => $value) {
+                    $ORIGINAL_DATA_URL = $value["ORIGINAL_DATA_URL"]; 
                     $data_url=$value["DATA_URL"];
                     unlink($UPLOAD_FOLDER . $doi . '/'. $data_url);//remove datafile
+                }
                     if (strstr($doi, 'Draft') == FALSE) {  //Remove xls if unpublished from otelocloud
                         //unlink($ORIGINAL_DATA_URL);
                         //exec("sudo -u ".$config["DATAFILE_UNIXUSER"]." rm ".$ORIGINAL_DATA_URL);
@@ -1670,7 +1683,7 @@ class DatasheetController
                             if ($auth==false) {
                                 $state="fail_ssh";
                             }
-                            $stream = \ssh2_exec($connection,'sudo -u '.$config["DATAFILE_UNIXUSER"].' rm '.$ORIGINAL_DATA_URL ,false);     
+                            $stream = \ssh2_exec($connection,'sudo -u '.$config["DATAFILE_UNIXUSER"].' rm '.$values["DATA"]["FILES"][0]['ORIGINAL_DATA_URL'] ,false);     
                             stream_set_timeout($stream,3);
                             stream_set_blocking($stream, true);
                             // read the output into a variable
@@ -1681,6 +1694,7 @@ class DatasheetController
                             // close the stream
                             fclose($stream);
                             // print the response
+                            var_dump($data);
                               if ($data!='') {
                                     $state="fail_ssh";
                                 }
@@ -1688,7 +1702,6 @@ class DatasheetController
                         }
 
                      }
-                }
             }
             if ($state=="true") {
                 $collectionObject->remove(array(

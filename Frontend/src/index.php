@@ -197,9 +197,8 @@ $app->get('/logout', function (Request $req, Response $responseSlim) {
     $loader = new Twig_Loader_Filesystem('search/templates');
     $twig = new Twig_Environment($loader);
     session_destroy();
-        $file = new File();
+    $file = new File();
     $config=$file->ConfigFile();
-
     return $responseSlim->withRedirect($config['REPOSITORY_URL'].'/Shibboleth.sso/Logout?return='.$config['REPOSITORY_URL']);
 
 })->add($mw);
