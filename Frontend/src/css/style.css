@@ -14,6 +14,12 @@ font-size:18px
   cursor: pointer;
 }
 
+#donwloadmetadata{
+  margin-left: 5px;
+  cursor: pointer;
+}
+
+
 #date_end {
 display:none
 }
@@ -205,4 +211,8 @@ li::before {
 
 .card {
   overflow: auto;
+}
+
+#file-select-button{
+  margin-top: 3%;
 }
