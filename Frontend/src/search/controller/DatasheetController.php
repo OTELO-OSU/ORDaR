@@ -10,6 +10,12 @@ use MongoClient;
 
 class DatasheetController
 {
+    private $upload_max;
+    function __construct(){
+          $upload_max = ini_get('upload_max_filesize');
+          $upload_max=self::return_bytes($upload_max);
+          return $this->upload_max=$upload_max;
+    }
     /**
      * Create a mongo connection instance
      * @return Mongo_instance
@@ -880,35 +886,50 @@ class DatasheetController
                     }
                 }
                 
-                
-                for ($i = 0; $i < count($_FILES['file']['name']); $i++) {//On parcout les nouveau fichiers uploader
-                    $repertoireDestination         = $UPLOAD_FOLDER;
-                    $nomDestination                = str_replace(' ', '_', $_FILES["file"]["name"][$i]);
-                    $data[$i]["DATA_URL"]          = $nomDestination;
-                    
-                    if (is_uploaded_file($_FILES["file"]["tmp_name"][$i])) {
-                        if (is_dir($repertoireDestination . $config['DOI_PREFIX']) == false) {
-                            mkdir($repertoireDestination . $config['DOI_PREFIX']);
-                        }
-                        if (!file_exists($repertoireDestination . $doi)) {
-                            mkdir($repertoireDestination . $doi);
-                        }
-                        if (rename($_FILES["file"]["tmp_name"][$i], $repertoireDestination . $doi . "/" . $nomDestination)) {
-                            $extension = new \SplFileInfo($repertoireDestination . $doi . "/" . $nomDestination);
-                            $filetypes = $extension->getExtension();
-                            if (strlen($filetypes) == 0 OR strlen($filetypes) > 4) {
-                                $filetypes = 'unknow';
+                if ($_FILES['file']['name'][0] != "") {//Check des fichier uploader 
+                    for ($i = 0; $i < count($_FILES['file']['name']); $i++) {
+                        if ($_FILES['file']['error'][$i]==0) {
+                            
+                        
+                        $repertoireDestination                  = $UPLOAD_FOLDER;
+                        $nomDestination                         = str_replace(' ', '_', $_FILES["file"]["name"][$i]);
+                        $data[$i]["DATA_URL"]          = $nomDestination;
+                        if ($_FILES["file"]["tmp_name"][$i]!="") {
+                            
+                        if (filesize($_FILES["file"]["tmp_name"][$i])<=$this->upload_max) {                        
+                        if (is_uploaded_file($_FILES["file"]["tmp_name"][$i])) {
+                            if (is_dir($repertoireDestination . $config['DOI_PREFIX']) == false) {
+                                mkdir($repertoireDestination . $config['DOI_PREFIX']);
                             }
-                            $data[$i]["FILETYPE"] = $filetypes;
-                            $collectionObject     = $this->db->selectCollection($config["authSource"], $collection);
-                        } else {
-                            $returnarray[] = "false";
-                            $returnarray[] = $array['dataform'];
-                            return $returnarray;
+                            if (!file_exists($repertoireDestination . $doi)) {
+                                mkdir($repertoireDestination . $doi);
+                            }
+                            rename($_FILES["file"]["tmp_name"][$i], $repertoireDestination . $doi . "/" . $nomDestination);
+                            if (file_exists($repertoireDestination . $doi . "/" . $nomDestination)) {
+                                $extension = new \SplFileInfo($repertoireDestination . $doi . "/" . $nomDestination);
+                                $filetypes = $extension->getExtension();
+                                if (strlen($filetypes) == 0 OR strlen($filetypes) > 4) {
+                                    $filetypes = 'unknow';
+                                }
+                                $data[$i]["FILETYPE"] = $filetypes;
+                                $collectionObject              = $this->db->selectCollection($config["authSource"], $collection);
+                            } else {
+                                $returnarray[] = "false";
+                                $returnarray[] = $array['dataform'];
+                                return $returnarray;
+                            }
                         }
+                       
                     }
-                    
+                        }
+                                            
+                    }
                 }
+                }
+
+                    
+                
+                
                 
                 if (count($intersect) != 0 and $data != 0) { //si il y a eu des suppressions et des ajouts
                     $merge = array_merge($intersect, $data); // on merge les tableaux 
@@ -941,10 +962,11 @@ class DatasheetController
                         "DATA.FILES" => $merge
                     )
                 );//Json a envoyer a mongo
-                $collectionObject->update(array(
-                    '_id' => $doi
-                ), $json);//Mise a jour de la base
-                return $array['message'] = '   <div class="ui message grey"  style="display: block;">Draft edited! </div>';
+                    $collectionObject->update(array(
+                        '_id' => $doi
+                    ), $json);//Mise a jour de la base
+                    return $array['message'] = '   <div class="ui message grey"  style="display: block;">Draft edited! </div>';
+                
             } else {// Si c'est un nouveau draft
                 $array['dataform']["UPLOAD_DATE"]   = date('Y-m-d');
                 $array['dataform']["CREATION_DATE"] = date('Y-m-d');
@@ -953,7 +975,7 @@ class DatasheetController
                         $repertoireDestination                  = $UPLOAD_FOLDER;
                         $nomDestination                         = str_replace(' ', '_', $_FILES["file"]["name"][$i]);
                         $data['FILES'][$i]["DATA_URL"]          = $nomDestination;
-                        
+                        if (filesize($_FILES["file"]["tmp_name"][$i])<=$this->upload_max) {                        
                         if (is_uploaded_file($_FILES["file"]["tmp_name"][$i])) {
                             if (is_dir($repertoireDestination . $config['DOI_PREFIX']) == false) {
                                 mkdir($repertoireDestination . $config['DOI_PREFIX']);
@@ -961,7 +983,8 @@ class DatasheetController
                             if (!file_exists($repertoireDestination . $doi)) {
                                 mkdir($repertoireDestination . $doi);
                             }
-                            if (rename($_FILES["file"]["tmp_name"][$i], $repertoireDestination . $doi . "/" . $nomDestination)) {
+                            rename($_FILES["file"]["tmp_name"][$i], $repertoireDestination . $doi . "/" . $nomDestination);
+                            if (file_exists($repertoireDestination . $doi . "/" . $nomDestination)) {
                                 $extension = new \SplFileInfo($repertoireDestination . $doi . "/" . $nomDestination);
                                 $filetypes = $extension->getExtension();
                                 if (strlen($filetypes) == 0 OR strlen($filetypes) > 4) {
@@ -975,8 +998,16 @@ class DatasheetController
                                 return $returnarray;
                             }
                         }
+                         else {
+                    $data["FILES"] = null;
+                }
+                    }
+                    else {
+                    $data["FILES"] = null;
+                }
                         
                     }
+
                     
                 } else {
                     $data["FILES"] = null;
@@ -989,8 +1020,13 @@ class DatasheetController
                     "INTRO" => $array['dataform'],
                     "DATA" => $data
                 );
-                $collectionObject->insert($json);// on insert le nouveau Draft
+                if ($data['FILES']!=null) {
+                    $collectionObject->insert($json);// on insert le nouveau Draft
                 return $array['message'] = '   <div class="ui message grey"  style="display: block;">Draft created! </div>';
+                }
+                else{
+                 return $array['message'] = '   <div class="ui message grey"  style="display: block;">Error please try again later! </div>';
+                }
                 
             }
             
@@ -1023,10 +1059,14 @@ class DatasheetController
             $array['dataform']["CREATION_DATE"] = date('Y-m-d');
             $UPLOAD_FOLDER                      = $config["UPLOAD_FOLDER"];
             $doi                                = $array['doi'];
-            if ($_FILES['file']['error'][0] == 4) { // on verifie qu'il y a au moins un fichier de donné lié
-                $array['error'] = "Fichier manquant!";
+
+            if ($_FILES['file']['error'][0] != '0') { // on verifie qu'il y a au moins un fichier de donné lié
+                $array['error'] = "Bad file size!";
+                self::UnlockDOI();
                 return $array;
             }
+            else{
+
             for ($i = 0; $i < count($_FILES['file']['name']); $i++) { // on parcourt les fichiers uploader
                 $repertoireDestination                  = $UPLOAD_FOLDER;
                 $nomDestination                         = str_replace(' ', '_', $_FILES["file"]["name"][$i]);
@@ -1079,6 +1119,8 @@ class DatasheetController
                 $array['error'] = "Unable to send metadata to Datacite"; // Si datacite est indisponible on afficher une erreur
                 return $array;
             }
+    
+            }
         }
         }
     }
@@ -1111,7 +1153,21 @@ class DatasheetController
             file_put_contents($uploadfolder."/changelog/".$doi.".changelog", $array);
         }
     }
+function return_bytes($val) {
+    $val = trim($val);
+    $last = strtolower($val[strlen($val)-1]);
+    switch($last) {
+        // The 'G' modifier is available since PHP 5.1.0
+        case 'g':
+            $val *= 1024;
+        case 'm':
+            $val *= 1024;
+        case 'k':
+            $val *= 1024;
+    }
 
+    return $val;
+}
 
  function diff($Old,$New){
     $Diff = [];
@@ -1244,7 +1300,11 @@ class DatasheetController
                             }
                         }
                     }
-                    
+                if ($_FILES['file']['error'][0] != '0') { // on verifie qu'il y a au moins un fichier de donné lié
+                $array['error'] = "Bad file size!";
+                return $array;
+                    }
+                    else{
                     for ($i = 0; $i < count($_FILES['file']['name']); $i++) {
                         $repertoireDestination         = $UPLOAD_FOLDER;
                         $nomDestination                = str_replace(' ', '_', $_FILES["file"]["name"][$i]);
@@ -1273,6 +1333,7 @@ class DatasheetController
                         }
                         
                     }
+                }
                     
                     if (count($intersect) != 0 and $data != 0) {
                         $merge = array_merge($intersect, $data);

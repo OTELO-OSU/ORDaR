@@ -979,8 +979,22 @@
           },
           init: function() {
             $('#file-select-button').click(function(){
-    $('#metadatafile').click();
-});
+                $('#metadatafile').click();
+            });
+            $("#file").change(function(){
+                  var fsize = $('#file')[0].files[0].size;
+                  if(fsize>104857600) 
+                  {
+                    $('#warning .warning').remove();
+                    $('#warning').prepend('<div class="ui warning message"><div class="header">Warning!</div>File is too big. Max upload size=100Mo</div>');
+                    $(this).val('');
+                  }
+                  else{
+                      $('#warning .warning').remove();
+
+                  }
+
+           });
               $('form ').on('keypress', function(e) {
                   return e.which !== 13;
               });
@@ -1029,7 +1043,21 @@
                   $(this).parent("div").remove();
               });
               $("#addfile").click(function(e) {
-                  $("#files").append('<div class="row"></div><div class="ui input"><input data-validate="file" type="file" name="file[]" required><div class="ui icon delete"><i class="remove icon"></i></div> </div>');
+                  $("#files").append('<div class="row"></div><div class="ui input"><input data-validate="file" class="file" id="file" type="file" name="file[]" required><div class="ui icon delete"><i class="remove icon"></i></div> </div>');
+                $(".file").change(function(){
+                  var fsize = this.files[0].size;
+                  if(fsize>104857600) 
+                  {
+                    $('#warning .warning').remove();
+                    $('#warning').prepend('<div class="ui warning message"><div class="header">Warning!</div>File is too big. Max upload size=100Mo</div>');
+                    $(this).val('');
+                  }
+                  else{
+                      $('#warning .warning').remove();
+                  }
+
+           });
+
               });
               $("body").on("click", ".delete", function(e) {
                   $(this).parent("div").remove();

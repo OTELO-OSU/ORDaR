@@ -92,7 +92,7 @@ Class FileController
     function export_to_dublincore_xml($response)
     {
         if (isset($response['_source']['INTRO'])) {
-            $sxe = new \SimpleXMLElement("<oai_dc:dc/>");
+            @$sxe = new \SimpleXMLElement("<oai_dc:dc/>");
             $sxe->addAttribute('xmlns:xmlns:dc', 'http://purl.org/dc/elements/1.1/');
             $sxe->addAttribute('xmlns:xmlns:oai_dc', 'http://www.openarchives.org/OAI/2.0/oai_dc/');
             $sxe->addAttribute('xmlns:xmlns:xsi', 'http://www.w3.org/2001/XMLSchema-instance');
@@ -210,7 +210,8 @@ Class FileController
                         }
                     }
                     echo "<tr>";
-                    
+                    if ($data) {
+
                     foreach ($data as $value) {
                         if ($firstTimeHeader) {
                             echo "<th>" . $value . "</th>";
@@ -220,6 +221,7 @@ Class FileController
                     }
                     
                     echo "</tr>";
+                    }
                     if ($firstTimeHeader) {
                         $firstTimeHeader = false;
                     }
