@@ -1347,7 +1347,7 @@ function return_bytes($val) {
                                 }
                                 $data[$i]["FILETYPE"] = $filetypes;
                                 $collectionObject     = $this->db->selectCollection($config["authSource"], $collection);
-                            } else {
+                            } else { 
                                 $returnarray[] = "false";
                                 $returnarray[] = $array['dataform'];
                                 return $returnarray;
@@ -1442,8 +1442,6 @@ function return_bytes($val) {
                 $xml        = $array['xml'];
                 $identifier = $xml->addChild('identifier', $config["DOI_PREFIX"] . "/" . $newdoi);
                 $identifier->addAttribute('identifierType', 'DOI');
-                $request = $Request->send_XML_to_datacite($xml->asXML(), $config["DOI_PREFIX"] . "/" . $newdoi);
-                if ($request == "true") {
                     $collection       = "Manual_Depot";
                     $query            = array(
                         '_id' => $doi
@@ -1516,7 +1514,9 @@ function return_bytes($val) {
                         
                     }
 
+                $request = $Request->send_XML_to_datacite($xml->asXML(), $config["DOI_PREFIX"] . "/" . $newdoi);
                     
+                if ($request == "true") {
                     $merge = array_map("unserialize", array_unique(array_map("serialize", $merge)));
                     mkdir($UPLOAD_FOLDER . "/" . $doi . "/tmp");
                     foreach ($merge as $key => $value) {
@@ -1559,14 +1559,11 @@ function return_bytes($val) {
                         '_id' => $doi
                     ));
                     $newfiles['FILES'] = $merge;
-                    } 
-                    else {
-                     self::UnlockDOI();
-                        $array['dataform'] = $array;
-                        $array['error']    = "Warning files dataset limits reached !";
-                        return $array;
+                } else {
+                    self::UnlockDOI();
+                    $array['error'] = "Unable to send metadata to Datacite";
+                    return $array;
                 }
-                    
                     $collectionObject->insert(array(
                         '_id' => $config["DOI_PREFIX"] . "/" . $newdoi,
                         "INTRO" => $INTRO,
@@ -1576,12 +1573,15 @@ function return_bytes($val) {
                     $Mailer = new Mailer();
                     $Mailer->Send_Mail_To_uploader($array['dataform']['FILE_CREATOR'], $array['dataform']['TITLE'], $config["DOI_PREFIX"] . "/" . $newdoi, $array['dataform']['DATA_DESCRIPTION']);
                     return $array['message'] = '   <div class="ui message green"  style="display: block;">Draft published!</div>';
+                    } 
+                    else {
+                     self::UnlockDOI();
+                        $array['dataform'] = $array;
+                        $array['error']    = "Warning files dataset limits reached !";
+                        return $array;
                 }
-                } else {
-                    self::UnlockDOI();
-                    $array['error'] = "Unable to send metadata to Datacite";
-                    return $array;
                 }
+                    
                 
             }
             
