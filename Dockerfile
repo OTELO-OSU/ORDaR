@@ -7,6 +7,8 @@ RUN a2enmod rewrite
 RUN echo 'extension=mongo.so' >> /usr/local/etc/php/php.ini
 RUN echo 'extension=ssh2.so' >> /usr/local/etc/php/php.ini
 RUN echo 'sendmail_path = /usr/sbin/ssmtp -t' >> /usr/local/etc/php/php.ini
+RUN sed -i 's/upload_max_filesize = .*/upload_max_filesize = 1G/'   /usr/local/etc/php/php.ini
+RUN sed -i 's/post_max_size = .*/post_max_size = 1050M/'   /usr/local/etc/php/php.ini
 RUN mkdir -p /data/applis/ORDaR/Uploads/
 COPY . /var/www/html/ORDaR/
 RUN chown  www-data:www-data /data/applis/ORDaR/Uploads/

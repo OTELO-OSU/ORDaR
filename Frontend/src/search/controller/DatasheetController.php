@@ -1031,18 +1031,16 @@ class DatasheetController
                 
                 $collectionObject = $this->db->selectCollection($config["authSource"], $collection);
                 
-                $json = array(
+               
+                
+                    $json = array(
                     '_id' => $doi,
                     "INTRO" => $array['dataform'],
                     "DATA" => $data
                 );
-                if ($data['FILES']!=null) {
-                    $collectionObject->insert($json);// on insert le nouveau Draft
+
+                $collectionObject->insert($json);// on insert le nouveau Draft
                 return $array['message'] = '   <div class="ui message grey"  style="display: block;">Draft created! </div>';
-                }
-                else{
-                 return $array['message'] = '   <div class="ui message grey"  style="display: block;">Error please try again later! </div>';
-                }
                 
             }
             
