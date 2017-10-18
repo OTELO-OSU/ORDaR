@@ -1089,7 +1089,6 @@ class DatasheetController
                 $repertoireDestination                  = $UPLOAD_FOLDER;
                 $nomDestination                         = str_replace(' ', '_', $_FILES["file"]["name"][$i]);
                 $data["FILES"][$i]["DATA_URL"]          = $nomDestination;
-                var_dump($maxsize);
                 if ($maxsize<=$this->upload_max) {                        
                     if (file_exists($repertoireDestination . $_FILES["file"]["name"][$i])) {
                         $returnarray[] = "false";
@@ -1327,11 +1326,7 @@ function return_bytes($val) {
                             }
                         }
                     }
-                if ($_FILES['file']['error'][0] != '0') { // on verifie qu'il y a au moins un fichier de donné lié
-                $array['error'] = "Bad file size!";
-                return $array;
-                    }
-                    else{
+                
                     for ($i = 0; $i < count($_FILES['file']['name']); $i++) {
                         $repertoireDestination         = $UPLOAD_FOLDER;
                         $nomDestination                = str_replace(' ', '_', $_FILES["file"]["name"][$i]);
@@ -1360,7 +1355,7 @@ function return_bytes($val) {
                         }
                         
                     }
-                }
+                
                     
                     if (count($intersect) != 0 and $data != 0) {
                         $merge = array_merge($intersect, $data);
@@ -1429,6 +1424,7 @@ function return_bytes($val) {
                     return $array;
                 }
             } elseif (strstr($doi, 'Draft') !== FALSE) { /// publication d'un draft
+            $maxsize=0;
              $generatedoi=self::generateDOI();
                 $collection       = "Manual_Depot";
                 $exist = self::Check_Document($collection,$db,$doi);
@@ -1455,11 +1451,37 @@ function return_bytes($val) {
                     $doi              = $array['doi'];
                     $collectionObject = $this->db->selectCollection($config["authSource"], $collection);
                     $cursor           = $collectionObject->find($query);
+
+                    foreach ($cursor as $key => $value) {
+                        if ($value['INTRO']["UPLOAD_DATE"]) {
+                            $array['dataform']['UPLOAD_DATE'] = $value['INTRO']['UPLOAD_DATE'];
+                        }
+                        if ($value['INTRO']["CREATION_DATE"]) {
+                            $array['dataform']['CREATION_DATE'] = $value['INTRO']['CREATION_DATE'];
+                        }
+                        foreach ($value["DATA"]["FILES"] as $key => $value) {
+                            $tmparray[] = $value;
+                        }
+                    }
+                                       
+                    $intersect = array();
+                    foreach ($tmparray as $key => $value) {
+                        foreach ($array['file_already_uploaded'] as $key => $value2) {
+                            if ($value['DATA_URL'] == $value2['DATA_URL']) {
+                                $intersect[] = $value;
+                                $size=filesize($UPLOAD_FOLDER . "/" . $doi . "/" . $value['DATA_URL']);
+                                $maxsize+=$size;                                
+                            }
+                        }
+                    }
                     for ($i = 0; $i < count($_FILES['file']['name']); $i++) {
+                        $size= $_FILES["file"]["size"][$i];
+                        $maxsize+=$size;
                         $repertoireDestination         = $UPLOAD_FOLDER;
                         $nomDestination                = str_replace(' ', '_', $_FILES["file"]["name"][$i]);
                         $data[$i]["DATA_URL"]          = $nomDestination;
                         
+                    if ($maxsize<=$this->upload_max) {                        
                         if (is_uploaded_file($_FILES["file"]["tmp_name"][$i])) {
                             if (is_dir($repertoireDestination . $config['DOI_PREFIX']) == false) {
                                 mkdir($repertoireDestination . $config['DOI_PREFIX']);
@@ -1482,27 +1504,7 @@ function return_bytes($val) {
                             }
                         }
                         
-                    }
-                    foreach ($cursor as $key => $value) {
-                        if ($value['INTRO']["UPLOAD_DATE"]) {
-                            $array['dataform']['UPLOAD_DATE'] = $value['INTRO']['UPLOAD_DATE'];
-                        }
-                        if ($value['INTRO']["CREATION_DATE"]) {
-                            $array['dataform']['CREATION_DATE'] = $value['INTRO']['CREATION_DATE'];
-                        }
-                        foreach ($value["DATA"]["FILES"] as $key => $value) {
-                            $tmparray[] = $value;
-                        }
-                    }
-                                       
-                    $intersect = array();
-                    foreach ($tmparray as $key => $value) {
-                        foreach ($array['file_already_uploaded'] as $key => $value2) {
-                            if ($value['DATA_URL'] == $value2['DATA_URL']) {
-                                $intersect[] = $value;
-                            }
-                        }
-                    }
+                   
                                         
                     if (count($intersect) != 0 and $data != 0) {
                         $merge = array_merge($intersect, $data);
@@ -1513,6 +1515,7 @@ function return_bytes($val) {
                         $merge = $data;
                         
                     }
+
                     
                     $merge = array_map("unserialize", array_unique(array_map("serialize", $merge)));
                     mkdir($UPLOAD_FOLDER . "/" . $doi . "/tmp");
@@ -1556,6 +1559,13 @@ function return_bytes($val) {
                         '_id' => $doi
                     ));
                     $newfiles['FILES'] = $merge;
+                    } 
+                    else {
+                     self::UnlockDOI();
+                        $array['dataform'] = $array;
+                        $array['error']    = "Warning files dataset limits reached !";
+                        return $array;
+                }
                     
                     $collectionObject->insert(array(
                         '_id' => $config["DOI_PREFIX"] . "/" . $newdoi,
@@ -1566,6 +1576,7 @@ function return_bytes($val) {
                     $Mailer = new Mailer();
                     $Mailer->Send_Mail_To_uploader($array['dataform']['FILE_CREATOR'], $array['dataform']['TITLE'], $config["DOI_PREFIX"] . "/" . $newdoi, $array['dataform']['DATA_DESCRIPTION']);
                     return $array['message'] = '   <div class="ui message green"  style="display: block;">Draft published!</div>';
+                }
                 } else {
                     self::UnlockDOI();
                     $array['error'] = "Unable to send metadata to Datacite";
