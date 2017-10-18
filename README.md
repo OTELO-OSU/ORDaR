@@ -128,6 +128,7 @@ Afin d'envoyer des mails, vous devez configurer un SMTP sur votre serveur.
     SSH_UNIXUSER=USER ssh
     SSH_UNIXPASSWD=password
     SMTP=votre smtp
+    DATASET_FILES_MAX_SIZE= Nombre d'espace à allouer (ex: 1G pour 1 gigas)
     admin[]= l'adresse mail des administrateurs avec des doubles quotes séparé d'une virgule
     #ELASTICSEARCH CONFIG
     ESHOST=Host d'elasticsearch
@@ -160,6 +161,14 @@ Afin d'envoyer des mails, vous devez configurer un SMTP sur votre serveur.
             Order allow,deny
             Allow from all
         </Directory>
+
+**Configuration php.ini:**
+
+	upload_max_filesize = 1G
+
+	post_max_size = 1050M
+
+
 	
 **Configuration de l'authentification:**
 
