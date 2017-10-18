@@ -177,7 +177,7 @@ Class FileController
             header("Content-Disposition: inline; filename='" . $filename."'");
             foreach ($response['_source']['DATA']['FILES'] as $key => $value) {
                 if ($filename == $value["DATA_URL"]) {
-                    $mime = $value["FILETYPE"];
+                    $mime = strtolower($value["FILETYPE"]);
                 }
                 
             }
@@ -245,11 +245,11 @@ Class FileController
                 header('Content-Type:  ' . $mime);
             }
             
-            }
             else {
                 echo "<h1>Cannot preview file</h1> <p>Sorry, we are unfortunately not able to preview this file.<p>";
                 $readfile = false;
                 header('Content-Type:  text/html');
+            }
             }
             
             if ($readfile == false) {
