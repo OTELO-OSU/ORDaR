@@ -12,7 +12,9 @@ class DatasheetController
 {
     private $upload_max;
     function __construct(){
-          $upload_max = ini_get('upload_max_filesize');
+          $file = new File();
+          $config=$file->ConfigFile();
+          $upload_max = $config['DATASET_FILES_MAX_SIZE'];
           $upload_max=self::return_bytes($upload_max);
           return $this->upload_max=$upload_max;
     }
@@ -863,6 +865,7 @@ class DatasheetController
             $cursor           = $collectionObject->find($query);
             $tmparray         = array();
             if ($cursor->count() == 1) {//Verification si le draft existe deja
+                $maxsize=0;
                 foreach ($cursor as $key => $value) {
                     if ($value['INTRO']["UPLOAD_DATE"]) {
                         $array['dataform']['UPLOAD_DATE'] = $value['INTRO']['UPLOAD_DATE'];//Mise a jour de la date d'upload
@@ -882,6 +885,7 @@ class DatasheetController
                     foreach ($array['file_already_uploaded'] as $key => $value2) {//On parcout ceux du formulaire pour voir les suppression eventuels
                         if ($value['DATA_URL'] == $value2['DATA_URL']) {
                             $intersect[] = $value;
+                            $maxsize+=filesize($UPLOAD_FOLDER.$doi.'/'.$value['DATA_URL']);
                         }
                     }
                 }
@@ -889,14 +893,15 @@ class DatasheetController
                 if ($_FILES['file']['name'][0] != "") {//Check des fichier uploader 
                     for ($i = 0; $i < count($_FILES['file']['name']); $i++) {
                         if ($_FILES['file']['error'][$i]==0) {
-                            
+                        $size= $_FILES["file"]["size"][$i];
+                        $maxsize+=$size;
                         
                         $repertoireDestination                  = $UPLOAD_FOLDER;
                         $nomDestination                         = str_replace(' ', '_', $_FILES["file"]["name"][$i]);
                         $data[$i]["DATA_URL"]          = $nomDestination;
+                        if ($maxsize<=$this->upload_max) {                        
                         if ($_FILES["file"]["tmp_name"][$i]!="") {
                             
-                        if (filesize($_FILES["file"]["tmp_name"][$i])<=$this->upload_max) {                        
                         if (is_uploaded_file($_FILES["file"]["tmp_name"][$i])) {
                             if (is_dir($repertoireDestination . $config['DOI_PREFIX']) == false) {
                                 mkdir($repertoireDestination . $config['DOI_PREFIX']);
@@ -921,7 +926,13 @@ class DatasheetController
                         }
                        
                     }
-                        }
+                        } 
+                    else {
+                        $data = null;
+                        $array['dataform'] = $array;
+                        $array['error']    = "Warning files dataset limits reached !";
+                        return $array;
+                }
                                             
                     }
                 }
@@ -970,12 +981,16 @@ class DatasheetController
             } else {// Si c'est un nouveau draft
                 $array['dataform']["UPLOAD_DATE"]   = date('Y-m-d');
                 $array['dataform']["CREATION_DATE"] = date('Y-m-d');
+                $maxsize=0;
                 if ($_FILES['file']['name'][0] != "") {//Check des fichier uploader 
                     for ($i = 0; $i < count($_FILES['file']['name']); $i++) {
+                        $size= $_FILES["file"]["size"][$i];
+                        $maxsize+=$size;
+                        $config['DATASET_FILES_MAX_SIZE'];
                         $repertoireDestination                  = $UPLOAD_FOLDER;
                         $nomDestination                         = str_replace(' ', '_', $_FILES["file"]["name"][$i]);
                         $data['FILES'][$i]["DATA_URL"]          = $nomDestination;
-                        if (filesize($_FILES["file"]["tmp_name"][$i])<=$this->upload_max) {                        
+                        if ($maxsize<=$this->upload_max) {                        
                         if (is_uploaded_file($_FILES["file"]["tmp_name"][$i])) {
                             if (is_dir($repertoireDestination . $config['DOI_PREFIX']) == false) {
                                 mkdir($repertoireDestination . $config['DOI_PREFIX']);
@@ -1007,6 +1022,7 @@ class DatasheetController
                 }
                         
                     }
+
 
                     
                 } else {
@@ -1061,48 +1077,59 @@ class DatasheetController
             $doi                                = $array['doi'];
 
             if ($_FILES['file']['error'][0] != '0') { // on verifie qu'il y a au moins un fichier de donné lié
-                $array['error'] = "Bad file size!";
+                $array['error'] = "No data found!";
                 self::UnlockDOI();
                 return $array;
             }
             else{
-
+                $maxsize=0;
             for ($i = 0; $i < count($_FILES['file']['name']); $i++) { // on parcourt les fichiers uploader
+                $size= $_FILES["file"]["size"][$i];
+                $maxsize+=$size;
                 $repertoireDestination                  = $UPLOAD_FOLDER;
                 $nomDestination                         = str_replace(' ', '_', $_FILES["file"]["name"][$i]);
                 $data["FILES"][$i]["DATA_URL"]          = $nomDestination;
-                if (file_exists($repertoireDestination . $_FILES["file"]["name"][$i])) {
-                    $returnarray[] = "false";
-                    $returnarray[] = $array['dataform'];
-                    return $returnarray;
-                } else {
-                    if (is_uploaded_file($_FILES["file"]["tmp_name"][$i])) {
-                        if (is_dir($repertoireDestination . $config['DOI_PREFIX']) == false) {
-                            mkdir($repertoireDestination . $config['DOI_PREFIX']);
-                        }
-                        if (!file_exists($repertoireDestination . $doi)) {
-                            mkdir($repertoireDestination . $doi);
-                        }
-                        if (rename($_FILES["file"]["tmp_name"][$i], $repertoireDestination . $doi . "/" . $nomDestination)) {
-                            $extension = new \SplFileInfo($repertoireDestination . $doi . "/" . $nomDestination);
-                            $filetypes = $extension->getExtension();
-                            if (strlen($filetypes) == 0 OR strlen($filetypes) > 4) {
-                                $filetypes = 'unknow';
+                var_dump($maxsize);
+                if ($maxsize<=$this->upload_max) {                        
+                    if (file_exists($repertoireDestination . $_FILES["file"]["name"][$i])) {
+                        $returnarray[] = "false";
+                        $returnarray[] = $array['dataform'];
+                        return $returnarray;
+                    } else {
+                        if (is_uploaded_file($_FILES["file"]["tmp_name"][$i])) {
+                            if (is_dir($repertoireDestination . $config['DOI_PREFIX']) == false) {
+                                mkdir($repertoireDestination . $config['DOI_PREFIX']);
                             }
-                            $data["FILES"][$i]["FILETYPE"] = $filetypes;
-                            $collection                    = "Manual_Depot";
-                            $collectionObject              = $this->db->selectCollection($config["authSource"], $collection);
-                            $json                          = array(
-                                '_id' => $doi,
-                                "INTRO" => $array['dataform'],
-                                "DATA" => $data
-                            );
-                        } else {
-                            $returnarray[] = "false";
-                            $returnarray[] = $array['dataform'];
-                            return $returnarray;
+                            if (!file_exists($repertoireDestination . $doi)) {
+                                mkdir($repertoireDestination . $doi);
+                            }
+                            if (rename($_FILES["file"]["tmp_name"][$i], $repertoireDestination . $doi . "/" . $nomDestination)) {
+                                $extension = new \SplFileInfo($repertoireDestination . $doi . "/" . $nomDestination);
+                                $filetypes = $extension->getExtension();
+                                if (strlen($filetypes) == 0 OR strlen($filetypes) > 4) {
+                                    $filetypes = 'unknow';
+                                }
+                                $data["FILES"][$i]["FILETYPE"] = $filetypes;
+                                $collection                    = "Manual_Depot";
+                                $collectionObject              = $this->db->selectCollection($config["authSource"], $collection);
+                                $json                          = array(
+                                    '_id' => $doi,
+                                    "INTRO" => $array['dataform'],
+                                    "DATA" => $data
+                                );
+                            } else {
+                                $returnarray[] = "false";
+                                $returnarray[] = $array['dataform'];
+                                return $returnarray;
+                            }
                         }
                     }
+                }
+                 else {
+                        $array['dataform'] = $array;
+                        self::UnlockDOI();
+                        $array['error']    = "Warning files dataset limits reached !";
+                        return $array;
                 }
             }
             

@@ -1,6 +1,7 @@
   var APP = (function() {
       return {
-          modules: {}
+          modules: {},
+          maxsize: 0
       }
   })();
   // Module datatable, Affichage des resultats sous forme de pagination
@@ -978,23 +979,33 @@
 
           },
           init: function() {
-            $('#file-select-button').click(function(){
-                $('#metadatafile').click();
-            });
-            $("#file").change(function(){
+              $('#file-select-button').click(function() {
+                  $('#metadatafile').click();
+              });
+              $("#file").on('focus', function() {
+                  if (typeof $('#file')[0].files[0] !== "undefined") {
+                      previous = $('#file')[0].files[0].size;
+
+                  }
+              }).change(function() {
+                  if (typeof previous !== "undefined") {
+                      APP.maxsize = APP.maxsize - previous;
+                  }
                   var fsize = $('#file')[0].files[0].size;
-                  if(fsize>104857600) 
-                  {
-                    $('#warning .warning').remove();
-                    $('#warning').prepend('<div class="ui warning message"><div class="header">Warning!</div>File is too big. Max upload size=100Mo</div>');
-                    $(this).val('');
-                  }
-                  else{
+                  APP.maxsize += fsize;
+                  if (APP.maxsize > 1000000000) {
                       $('#warning .warning').remove();
+                      $('#warning').prepend('<div class="ui warning message"><div class="header">Warning!</div>Files are too big. Max upload size=1GO</div>');
+                      $("button[name='save']").addClass('disabled');
+                      $("button[name='publish']").addClass('disabled');
+                  } else {
+                      $('#warning .warning').remove();
+                      $("button[name='save']").removeClass('disabled');
+                      $("button[name='publish']").removeClass('disabled');
 
                   }
 
-           });
+              });
               $('form ').on('keypress', function(e) {
                   return e.which !== 13;
               });
@@ -1036,7 +1047,7 @@
               $("#addauthors").click(function(e) {
                   $("#authors").append('<div class="required field" > <div class="three fields"> <div class="field"><label>Author firstname</label><input type="text" name="authors_firstname[]"   placeholder="First Name" required></div> <div class="field"><label>Author name</label><input type="text" name="authors_name[]" placeholder="Family Name, Given names" required></div> <div class="field"><label>Author mail</label><input type="email" name="authors_email[]" placeholder="Email" required ></div> <div class="ui icon delete center"><i class="remove icon"></i></div> </div> </div>');
               });
-               $("#addnewfield").click(function(e) {
+              $("#addnewfield").click(function(e) {
                   $("#supplementary_fields").append('<div class="two fields"> <div class="field"><label>Key</label><input type="text" name="supplementary_fields_key[]" placeholder="Key" ></div> <div class="field"><label>Value</label><input type="text"  name="supplementary_fields_value[]" placeholder="Value"></div> <div class="ui icon delete center"><i class="remove icon"></i></div> </div>');
               });
               $("body").on("click", ".delete", function(e) {
@@ -1044,22 +1055,46 @@
               });
               $("#addfile").click(function(e) {
                   $("#files").append('<div class="row"></div><div class="ui input"><input data-validate="file" class="file" id="file" type="file" name="file[]" required><div class="ui icon delete"><i class="remove icon"></i></div> </div>');
-                $(".file").change(function(){
-                  var fsize = this.files[0].size;
-                  if(fsize>104857600) 
-                  {
-                    $('#warning .warning').remove();
-                    $('#warning').prepend('<div class="ui warning message"><div class="header">Warning!</div>File is too big. Max upload size=100Mo</div>');
-                    $(this).val('');
-                  }
-                  else{
-                      $('#warning .warning').remove();
-                  }
+                  $(".file").unbind();
+                  var previous;
+                  $(".file").on('focus', function() {
+                      if (typeof this.files[0] !== "undefined") {
+                          previous = this.files[0].size;
+                      }
+                  }).change(function() {
+                      if (typeof previous !== "undefined") {
+                          APP.maxsize = APP.maxsize - previous;
+                      }
+                      var fsize = this.files[0].size;
+                      APP.maxsize += fsize;
+                      if (APP.maxsize >= 1000000000) {
+                          $('#warning .warning').remove();
+                          $('#warning').prepend('<div class="ui warning message"><div class="header">Warning!</div>Files are too big. Max upload size=1Go</div>');
+                          $("button[name='save']").addClass('disabled');
+                          $("button[name='publish']").addClass('disabled');
+                      } else {
+                          $('#warning .warning').remove();
+                          $("button[name='save']").removeClass('disabled');
+                          $("button[name='publish']").removeClass('disabled');
+                      }
 
-           });
+                  });
 
               });
               $("body").on("click", ".delete", function(e) {
+                  var fsize = $(this).parent().children('input')[0].files[0].size;
+                  APP.maxsize -= fsize;
+                  if (APP.maxsize >= 1000000000) {
+                      $('#warning .warning').remove();
+                      $('#warning').prepend('<div class="ui warning message"><div class="header">Warning!</div>Files are too big. Max upload size=1GO</div>');
+                      $("button[name='save']").addClass('disabled');
+                      $("button[name='publish']").addClass('disabled');
+                  } else {
+                      $('#warning .warning').remove();
+                      $("button[name='save']").removeClass('disabled');
+                      $("button[name='publish']").removeClass('disabled');
+
+                  }
                   $(this).parent("div").remove();
               });
               var i = 0;
@@ -1193,219 +1228,212 @@
                       $($(this).parent("div").children().find(":input")[2]).val('');
                   }
               });
-            function handleFileSelect(evt) {
-                $('#inputs #filenamemetadata').remove();
-                var files = evt.target.files; // FileList object
-                var file = files[0];
-                if (file['type']=='text/csv') {
 
-               var reader = new FileReader();
-                  reader.readAsText(file);
-                  reader.onload = function(event){
-                    var csv = event.target.result;
-                    var data = $.csv.toArrays(csv);
-                    if (data.length==0){
-                      alert('Your CSV file is empty!')
-                      }
-                      else{
-                        if ($("input[name='title']").val()!="") {
-                         $('form')[1].reset();
-                        }
+              function handleFileSelect(evt) {
+                  $('#inputs #filenamemetadata').remove();
+                  var files = evt.target.files; // FileList object
+                  var file = files[0];
+                  if (file['type'] == 'text/csv') {
 
-                      $('.delete').parent().remove();
-                             name="";
-                             firstname="";
-                             mail="";
-                  $.each(data, function(index, values) {
-                          $.each(values, function(index, value) {
-                            if (value!="") {
-                              if (value=="TITLE") {
-                                $("input[name='title']").val(values[1]);
+                      var reader = new FileReader();
+                      reader.readAsText(file);
+                      reader.onload = function(event) {
+                          var csv = event.target.result;
+                          var data = $.csv.toArrays(csv);
+                          if (data.length == 0) {
+                              alert('Your CSV file is empty!')
+                          } else {
+                              if ($("input[name='title']").val() != "") {
+                                  $('form')[1].reset();
                               }
-                               if (value=="LANGUAGE") {
-                                if (values[1].toLowerCase()=="english" ) {
-                                  language="1";
-                                }
-                                if (values[1].toLowerCase()=="french") {
-                                  language="2";
-                                }
-                                $("select[name='language']").val(language);
-                              }
-                               if (value=="NAME") {
-                                name=values[1];
-                               
-                              }
-                               if (value=="FIRST NAME") {
-                                firstname=values[1];
 
-                              }
-                               if (value=="MAIL") {
-                                mail=values[1];
-                               if ($("input[name='authors_email[]']").val()!=mail) {
-
-                              $("#authors").append('<div class="required field" > <div class="three fields"> <div class="field"><label>Author firstname</label><input type="text" name="authors_firstname[]" value="'+firstname+'"  placeholder="First Name" required></div> <div class="field"><label>Author name</label><input type="text" name="authors_name[]" value="'+name+'" placeholder="Family Name, Given names" required></div> <div class="field"><label>Author mail</label><input type="email" name="authors_email[]" value="'+mail+'" placeholder="Email" required ></div> <div class="ui icon delete center"><i class="remove icon"></i></div> </div> </div>');
-                               } 
-
-                              }
-                                if (value=="KEYWORD") {
-                                  i = $('#keywords input').length;
-                                    if (i <= 2) {
-
-                                  if ($("input[name='keywords[]']").val()!="") {
-                                    $("#keywords").append('<div class="ui input"><input type="text"  value="'+values[1]+'" name="keywords[]"" placeholder="Keyword"><div class="ui icon delete"><i class="remove icon"></i></div> </div>');
-                                  }
-                                  else{
-                                   $("input[name='keywords[]']").val(values[1]);
-                                  }
-                                }
-
-                              }
-                               if (value=="SCIENTIFIC FIELD") {
-                                  i = $('#scientificfields input').length;
-                                    if (i <= 2) {
-
-                                  if ($("select[name='scientific_field[]']").val()!="") {
-                                  $("#scientificfields").append('<div class="ui input"><select class="ui fluid search dropdown scientific_field" name="scientific_field[]" > <option value="'+values[1]+'">'+values[1]+'</option> <option value="Addresses">Addresses</option> <option value="Hydrography"> Hydrography</option> <option value="Administrative units"> Administrative units</option> <option value="Land cover"> Land cover</option> <option value="Agricultural and aquaculture facilities"> Agricultural and aquaculture facilities</option> <option value="Land use"> Land use</option> <option value="Area management/restriction/regulation zones and reporting units"> Area management/restriction/regulation zones and reporting units</option> <option value="Meteorological geographical features"> Meteorological geographical features</option> <option value="Atmospheric conditions"> Atmospheric conditions</option> <option value="Mineral resources"> Mineral resources</option> <option value="Bio-geographical regions"> Bio-geographical regions</option> <option value="Natural risk zones"> Natural risk zones</option> <option value="Buildings"> Buildings</option> <option value="Oceanographic geographical features"> Oceanographic geographical features</option> <option value="Cadastral parcels"> Cadastral parcels</option> <option value="Orthoimagery"> Orthoimagery</option> <option value="Coordinate reference systems">Coordinate reference systems</option> <option value="Population distribution — demography">Population distribution — demography</option> <option value="Elevation">Elevation</option> <option value="Production and industrial facilities">Production and industrial facilities</option> <option value="Energy resources">Energy resources</option> <option value="Protected sites">Protected sites</option> <option value="Environmental monitoring facilities">Environmental monitoring facilities</option> <option value="Sea regions">Sea regions</option> <option value="Geographical grid systems">Geographical grid systems</option> <option value="Soil">Soil</option> <option value="Geographical names">Geographical names</option> <option value="Species distribution">Species distribution</option> <option value="Geology">Geology</option> <option value="Statistical units">Statistical units</option> <option value="Habitats and biotopes">Habitats and biotopes</option> <option value="Transport networks">Transport networks</option> <option value="Human health and safety">Human health and safety</option> <option value="Utility and governmental services">Utility and governmental services</option> </select><div class="ui icon delete"><i class="remove icon"></i></div> </div>');
-                                        $('.ui .dropdown.scientific_field').dropdown({
-                                            allowAdditions: true
-                                        });                                  }
-                                  else{
-                                    $("#scientificfields .input").remove();
-                                  $("#scientificfields").append('<div class="ui input"><select class="ui fluid search dropdown scientific_field" name="scientific_field[]" > <option value="'+values[1]+'">'+values[1]+'</option> <option value="Addresses">Addresses</option> <option value="Hydrography"> Hydrography</option> <option value="Administrative units"> Administrative units</option> <option value="Land cover"> Land cover</option> <option value="Agricultural and aquaculture facilities"> Agricultural and aquaculture facilities</option> <option value="Land use"> Land use</option> <option value="Area management/restriction/regulation zones and reporting units"> Area management/restriction/regulation zones and reporting units</option> <option value="Meteorological geographical features"> Meteorological geographical features</option> <option value="Atmospheric conditions"> Atmospheric conditions</option> <option value="Mineral resources"> Mineral resources</option> <option value="Bio-geographical regions"> Bio-geographical regions</option> <option value="Natural risk zones"> Natural risk zones</option> <option value="Buildings"> Buildings</option> <option value="Oceanographic geographical features"> Oceanographic geographical features</option> <option value="Cadastral parcels"> Cadastral parcels</option> <option value="Orthoimagery"> Orthoimagery</option> <option value="Coordinate reference systems">Coordinate reference systems</option> <option value="Population distribution — demography">Population distribution — demography</option> <option value="Elevation">Elevation</option> <option value="Production and industrial facilities">Production and industrial facilities</option> <option value="Energy resources">Energy resources</option> <option value="Protected sites">Protected sites</option> <option value="Environmental monitoring facilities">Environmental monitoring facilities</option> <option value="Sea regions">Sea regions</option> <option value="Geographical grid systems">Geographical grid systems</option> <option value="Soil">Soil</option> <option value="Geographical names">Geographical names</option> <option value="Species distribution">Species distribution</option> <option value="Geology">Geology</option> <option value="Statistical units">Statistical units</option> <option value="Habitats and biotopes">Habitats and biotopes</option> <option value="Transport networks">Transport networks</option> <option value="Human health and safety">Human health and safety</option> <option value="Utility and governmental services">Utility and governmental services</option> </select> </div>');
-                                        $('.ui .dropdown.scientific_field').dropdown({
-                                            allowAdditions: true
-                                        });   
-                                  }
-                                }
-
-                              }
-                                if (value=="FUNDING") {
-                                  i = $('#fundings input').length;
-                                    if (i <= 2) {
-
-
-                                  if ($("input[name='fundings[]']").val()!="") {
-                                      $("#fundings").append('<div class="ui input"><input type="text" value="'+values[1]+'" name="fundings[]"" placeholder="Funding"><div class="ui icon delete"><i class="remove icon"></i></div> </div>');
+                              $('.delete').parent().remove();
+                              name = "";
+                              firstname = "";
+                              mail = "";
+                              $.each(data, function(index, values) {
+                                  $.each(values, function(index, value) {
+                                      if (value != "") {
+                                          if (value == "TITLE") {
+                                              $("input[name='title']").val(values[1]);
+                                          }
+                                          if (value == "LANGUAGE") {
+                                              if (values[1].toLowerCase() == "english") {
+                                                  language = "1";
+                                              }
+                                              if (values[1].toLowerCase() == "french") {
+                                                  language = "2";
+                                              }
+                                              $("select[name='language']").val(language);
+                                          }
+                                          if (value == "NAME") {
+                                              name = values[1];
 
                                           }
-                                  else{
-                                   $("input[name='fundings[]']").val(values[1]);
-                                  }
-                                }
+                                          if (value == "FIRST NAME") {
+                                              firstname = values[1];
 
-                              }
-                              if (value=="INSTITUTION") {
-                                   
+                                          }
+                                          if (value == "MAIL") {
+                                              mail = values[1];
+                                              if ($("input[name='authors_email[]']").val() != mail) {
 
-                                  if ($("input[name='institution[]']").val()!="") {
-                                    $("#institution").append('<div class="ui input"><div class="ui dropdown fluid search selection optgroup institution" "> <input type="hidden" value="'+values[1]+'" name="institution[]"> <div class="text">'+values[1]+'</div> <i class="dropdown icon"></i> <div class="menu"> <div class="item">ADIT Agency for the dissemination of technological information</div> <div class="item">ANDRA National Agency for Radioactive Waste Management</div> <div class="item">B.R.G.M. THE FRENCH GEOLOGICAL SURVEY</div> <div class="item">C.E.A. The French Alternative Energies and Atomic Energy Commission</div> <div class="item">C.E.E. Center for Employment Studies</div> <div class="item">CEPH Human plymorphism Study Center</div> <div class="item">CIRAD Agricultural Research for development</div> <div class="item">Cité des sciences et Palais de la découverte</div> <div class="item">National Museum of the History of Immigration</div> <div class="item">CNES National Center for Space Studies</div> <div class="item">C.N.R.S. National Center for Scientific Research</div> <div class="item">GENOPOLE France’s leading biocluster for biotechnologies and research in genomics and genetics</div> <div class="item">IFE French Institute of Education</div> <div class="item">IFREMER French Research Institute for Exploitation of the Sea</div> <div class="item">IFPEN Research and training player in the ﬁelds of energy, transport and the environment</div> <div class="item">IFSTTAR French Institute of science and technology for transport, development and networks</div> <div class="item">INCA National Institute of cancer</div> <div class="item">INED National Institute for Demographic Studies</div> <div class="item">INERIS National Institute for the Industrial Environment and Risks</div> <div class="item">INRA National Institute of Agronomic Research</div> <div class="item">INRIA National Institute for Research in Computer Science and Automation</div> <div class="item">INSERM National Institute of Health and Medical Research</div> <div class="item">Curie Institute</div> <div class="item">Pasteur Institute</div> <div class="item">IPEV French Polar Institute Paul Emile Victor</div> <div class="item">I.R.D. Research Institute for Development</div> <div class="item">I.R.S.N. Institute for Radiation Protection and Nuclear Safety</div> <div class="item">IRSTEA National Science and Technology Research Institute for Environment and Agriculture</div> <div class="item">M.N.H.N National Museum of Natural History</div> <div class="item">Quai Branly Museum</div> <div class="item">ONERA National Office for Aeronautical Studies and Research</div> <div class="item">OSEO</div> <div class="item">O.S.T. Science and Technology Observatory</div> <div class="item">RENATER National Telecommunication Network for Technology, Education and Research</div></div> </div><div class="ui icon delete"><i class="remove icon"></i></div> </div>');
-                                    $('.ui .dropdown.institution').dropdown({
-                                        allowAdditions: true
-                                    });
-                                  }                                  
-                                  else{
-                                   $("input[name='institution[]']").val(values[1]);
-                                  }
-                                
+                                                  $("#authors").append('<div class="required field" > <div class="three fields"> <div class="field"><label>Author firstname</label><input type="text" name="authors_firstname[]" value="' + firstname + '"  placeholder="First Name" required></div> <div class="field"><label>Author name</label><input type="text" name="authors_name[]" value="' + name + '" placeholder="Family Name, Given names" required></div> <div class="field"><label>Author mail</label><input type="email" name="authors_email[]" value="' + mail + '" placeholder="Email" required ></div> <div class="ui icon delete center"><i class="remove icon"></i></div> </div> </div>');
+                                              }
 
-                              }
-                              if (value=="DATA DESCRIPTION") {
-                                $("textarea[name='description']").val(values[1]);
-                              }
-                                if (value=="METHODOLOGY") {
-                                  i = $('#methodology .fields').length;
-                                  if (i <= 9) {
-                                      $("#methodology").append('<div class=" fields"> <div class="field"><input type="text"  value="'+values[1]+'"  placeholder="Keywords" name="methodology_name[]" ></div> <div class="field"><input type="text"  value="'+values[2]+'" name="methodology_description[]" placeholder="Description" ></div> <div class="ui icon delete "><i class="remove icon"></i></div> </div>');
-                                  }
-                              }
-                               if (value=="ACRONYM") {
-                                  i = $('#acronym_abbreviation_ .fields').length;
-                                  if (i <= 9) {
-                                      $("#acronym").append('<div class=" fields"> <div class="field"><input type="text" value="'+values[1]+'" name="acronym_abbreviation[]" placeholder="Acronym" ></div> <div class="field"><input type="text" value="'+values[2]+'" name="acronym_description[]" placeholder="Description" ></div> <div class="ui icon delete "><i class="remove icon"></i></div> </div>');
-                                  }
-                              }
-                              if (value=="MEASUREMENT") {
-                                 if ($("input[name='measurement_nature[]']").val()!="") {
-                                $("#measurements").append('<div class="three fields"> <div class="field"><label>Measurement nature</label><input type="text" value="'+values[1]+'" name="measurement_nature[]"  placeholder="Nature" ></div> <div class="field"><label>Measurement abbreviation</label><input type="text"  value="'+values[2]+'" name="measurement_abbreviation[]" data-validate="measurement_abbreviation" placeholder="Abbreviation" ></div> <div class="field"><label>Measurement unit(s)</label><input type="text"   value="'+values[3]+'" name="measurement_unit[]" data-validate="measurement_unit" id="units" placeholder="Unit(s)" ></div> <input type="checkbox" class="checker" /><label for="checker">No units</label><div class="ui icon delete center"><i class="remove icon"></i></div></div>');
-                                }
-                                else{
-                                    $("input[name='measurement_nature[]']").val(values[1]);
-                                    $("input[name='measurement_abbreviation[]']").val(values[2]);
-                                    $("input[name='measurement_unit[]']").val(values[3]);
-                                }
-                              }
-                               if (value=="SAMPLE KIND") {
-                                if ($("input[name='sample_kind[]']").val()!="") {
-                                                    $("#sample_kind").append('<div class="ui input"><input type="text" value="'+values[1]+'" name="sample_kind[]" placeholder="Sample kind" ><div class="ui icon delete"><i class="remove icon"></i></div> </div>');
-                                }
-                                else{
-                                $("input[name='sample_kind[]']").val(values[1]);
-                                  
-                                }
+                                          }
+                                          if (value == "KEYWORD") {
+                                              i = $('#keywords input').length;
+                                              if (i <= 2) {
 
-                              }
-                              if (value=="SAMPLING DATE") {
-                                if ($("input[name='sampling_date[]']").val()!="") {
-                                   $("#sampling_date").append('        <div class="ui input"><input type="date"  class="date" value="'+values[1]+'" name="sampling_date[]" placeholder="Sampling date" ><div class="ui icon delete"><i class="remove icon"></i></div> </div>');
-                                                    $(".date").datepicker({
-                                                        dateFormat: "yy-mm-dd"
-                                                    });                                }
-                                                                  else{
-                                $("input[name='sampling_date[]']").val(values[1]);
-                                  
-                                }
+                                                  if ($("input[name='keywords[]']").val() != "") {
+                                                      $("#keywords").append('<div class="ui input"><input type="text"  value="' + values[1] + '" name="keywords[]"" placeholder="Keyword"><div class="ui icon delete"><i class="remove icon"></i></div> </div>');
+                                                  } else {
+                                                      $("input[name='keywords[]']").val(values[1]);
+                                                  }
+                                              }
 
-                              }
-                              if (value=="SAMPLING_POINT") {
-                               $("#sampling_points").append('<div> <div class="field"><label>Name</label> <input type="text" name="sampling_point_name[]" value="'+values[1]+'" placeholder="Name" ></div> <div class="field"> <label>Coordinate reference system</label> <div class="ui input"> <div class="ui dropdown fluid search selection optgroup coordinate"> <input  type="hidden"  value="'+values[2]+'" name="sampling_point_coordinate_system[]"> <div class=" text">'+values[2]+'</div> <i class="dropdown icon"></i> <div class="menu"><div class="item">NTF meridian of Paris</div><div class="item">WGS84 Greenwich</div> <div class="item">ED50 Greenwich</div> <div class="item">NTF Lambert 1</div> <div class="item">NTF Lambert 2 extend</div> <div class="item">ED50 UTM 32</div> <div class="item">WGS84 UTM 32</div> <div class="item">RGF93 projection Lambert93</div> </div> </div> </div> </div> <div class="field"><label>Abbreviation</label><input type="text"  name="sampling_point_abbreviation[]"  value="'+values[3]+'" placeholder="abbreviation"></div> <div class="field"><label>Longitude</label><input type="text"   value="'+values[4]+'" name="sampling_point_longitude[]" placeholder="longitude" ></div> <div class="field"><label>Latitude</label><input type="text" data-content="Type a latitude in decimal format" step="any"  value="'+values[5]+'" name="sampling_point_latitude[]" placeholder="latitude"></div> <div class="field"><label>Elevation</label><input type="text"  name="sampling_point_elevation[]" value="'+values[6]+'" placeholder="elevation"></div> <div class="field"><label>Additionnal description</label><textarea name="sampling_point_description[]"   placeholder="Additionnal description">'+values[7]+'</textarea></div> <div id="deletesamplingpoint" class="ui icon delete"><i class="remove icon"></i></div></div>');
-                  $('.ui .dropdown.coordinate').dropdown({
-                      allowAdditions: true
-                  });
-                  $('#sampling_points input')
-                      .popup({
-                          on: 'focus'
-                      });
-                  $("#sampling_points input[name='sampling_point_longitude[]']").on('keypress', function(e) {
-                      return e.metaKey || // cmd/ctrl
-                          e.which <= 0 || // arrow keys
-                          e.which == 8 || // delete key
-                          /[0-9,-.]/.test(String.fromCharCode(e.which)); // numbers
-                  })
-                  $("#sampling_points input[name='sampling_point_latitude[]'] ").on('keypress', function(e) {
-                      return e.metaKey || // cmd/ctrl
-                          e.which <= 0 || // arrow keys
-                          e.which == 8 || // delete key
-                          /[0-9,-.]/.test(String.fromCharCode(e.which)); // numbers
-                  })
-                                                                 
+                                          }
+                                          if (value == "SCIENTIFIC FIELD") {
+                                              i = $('#scientificfields input').length;
+                                              if (i <= 2) {
 
-                              }
-                     if (value=="SUPPLEMENTARY FIELDS") {
-                      if ($("input[name='supplementary_fields_key[]']").val()!="") {
-                            $("#supplementary_fields").append('<div class="two fields"> <div class="field"><label>Key</label><input type="text" value="'+values[1]+'" name="supplementary_fields_key[]" placeholder="Key" ></div> <div class="field"><label>Value</label><input type="text"   value="'+values[2]+'" name="supplementary_fields_value[]" placeholder="Value"></div> <div class="ui icon delete center"><i class="remove icon"></i></div> </div>');
+                                                  if ($("select[name='scientific_field[]']").val() != "") {
+                                                      $("#scientificfields").append('<div class="ui input"><select class="ui fluid search dropdown scientific_field" name="scientific_field[]" > <option value="' + values[1] + '">' + values[1] + '</option> <option value="Addresses">Addresses</option> <option value="Hydrography"> Hydrography</option> <option value="Administrative units"> Administrative units</option> <option value="Land cover"> Land cover</option> <option value="Agricultural and aquaculture facilities"> Agricultural and aquaculture facilities</option> <option value="Land use"> Land use</option> <option value="Area management/restriction/regulation zones and reporting units"> Area management/restriction/regulation zones and reporting units</option> <option value="Meteorological geographical features"> Meteorological geographical features</option> <option value="Atmospheric conditions"> Atmospheric conditions</option> <option value="Mineral resources"> Mineral resources</option> <option value="Bio-geographical regions"> Bio-geographical regions</option> <option value="Natural risk zones"> Natural risk zones</option> <option value="Buildings"> Buildings</option> <option value="Oceanographic geographical features"> Oceanographic geographical features</option> <option value="Cadastral parcels"> Cadastral parcels</option> <option value="Orthoimagery"> Orthoimagery</option> <option value="Coordinate reference systems">Coordinate reference systems</option> <option value="Population distribution — demography">Population distribution — demography</option> <option value="Elevation">Elevation</option> <option value="Production and industrial facilities">Production and industrial facilities</option> <option value="Energy resources">Energy resources</option> <option value="Protected sites">Protected sites</option> <option value="Environmental monitoring facilities">Environmental monitoring facilities</option> <option value="Sea regions">Sea regions</option> <option value="Geographical grid systems">Geographical grid systems</option> <option value="Soil">Soil</option> <option value="Geographical names">Geographical names</option> <option value="Species distribution">Species distribution</option> <option value="Geology">Geology</option> <option value="Statistical units">Statistical units</option> <option value="Habitats and biotopes">Habitats and biotopes</option> <option value="Transport networks">Transport networks</option> <option value="Human health and safety">Human health and safety</option> <option value="Utility and governmental services">Utility and governmental services</option> </select><div class="ui icon delete"><i class="remove icon"></i></div> </div>');
+                                                      $('.ui .dropdown.scientific_field').dropdown({
+                                                          allowAdditions: true
+                                                      });
+                                                  } else {
+                                                      $("#scientificfields .input").remove();
+                                                      $("#scientificfields").append('<div class="ui input"><select class="ui fluid search dropdown scientific_field" name="scientific_field[]" > <option value="' + values[1] + '">' + values[1] + '</option> <option value="Addresses">Addresses</option> <option value="Hydrography"> Hydrography</option> <option value="Administrative units"> Administrative units</option> <option value="Land cover"> Land cover</option> <option value="Agricultural and aquaculture facilities"> Agricultural and aquaculture facilities</option> <option value="Land use"> Land use</option> <option value="Area management/restriction/regulation zones and reporting units"> Area management/restriction/regulation zones and reporting units</option> <option value="Meteorological geographical features"> Meteorological geographical features</option> <option value="Atmospheric conditions"> Atmospheric conditions</option> <option value="Mineral resources"> Mineral resources</option> <option value="Bio-geographical regions"> Bio-geographical regions</option> <option value="Natural risk zones"> Natural risk zones</option> <option value="Buildings"> Buildings</option> <option value="Oceanographic geographical features"> Oceanographic geographical features</option> <option value="Cadastral parcels"> Cadastral parcels</option> <option value="Orthoimagery"> Orthoimagery</option> <option value="Coordinate reference systems">Coordinate reference systems</option> <option value="Population distribution — demography">Population distribution — demography</option> <option value="Elevation">Elevation</option> <option value="Production and industrial facilities">Production and industrial facilities</option> <option value="Energy resources">Energy resources</option> <option value="Protected sites">Protected sites</option> <option value="Environmental monitoring facilities">Environmental monitoring facilities</option> <option value="Sea regions">Sea regions</option> <option value="Geographical grid systems">Geographical grid systems</option> <option value="Soil">Soil</option> <option value="Geographical names">Geographical names</option> <option value="Species distribution">Species distribution</option> <option value="Geology">Geology</option> <option value="Statistical units">Statistical units</option> <option value="Habitats and biotopes">Habitats and biotopes</option> <option value="Transport networks">Transport networks</option> <option value="Human health and safety">Human health and safety</option> <option value="Utility and governmental services">Utility and governmental services</option> </select> </div>');
+                                                      $('.ui .dropdown.scientific_field').dropdown({
+                                                          allowAdditions: true
+                                                      });
+                                                  }
+                                              }
+
+                                          }
+                                          if (value == "FUNDING") {
+                                              i = $('#fundings input').length;
+                                              if (i <= 2) {
+
+
+                                                  if ($("input[name='fundings[]']").val() != "") {
+                                                      $("#fundings").append('<div class="ui input"><input type="text" value="' + values[1] + '" name="fundings[]"" placeholder="Funding"><div class="ui icon delete"><i class="remove icon"></i></div> </div>');
+
+                                                  } else {
+                                                      $("input[name='fundings[]']").val(values[1]);
+                                                  }
+                                              }
+
+                                          }
+                                          if (value == "INSTITUTION") {
+
+
+                                              if ($("input[name='institution[]']").val() != "") {
+                                                  $("#institution").append('<div class="ui input"><div class="ui dropdown fluid search selection optgroup institution" "> <input type="hidden" value="' + values[1] + '" name="institution[]"> <div class="text">' + values[1] + '</div> <i class="dropdown icon"></i> <div class="menu"> <div class="item">ADIT Agency for the dissemination of technological information</div> <div class="item">ANDRA National Agency for Radioactive Waste Management</div> <div class="item">B.R.G.M. THE FRENCH GEOLOGICAL SURVEY</div> <div class="item">C.E.A. The French Alternative Energies and Atomic Energy Commission</div> <div class="item">C.E.E. Center for Employment Studies</div> <div class="item">CEPH Human plymorphism Study Center</div> <div class="item">CIRAD Agricultural Research for development</div> <div class="item">Cité des sciences et Palais de la découverte</div> <div class="item">National Museum of the History of Immigration</div> <div class="item">CNES National Center for Space Studies</div> <div class="item">C.N.R.S. National Center for Scientific Research</div> <div class="item">GENOPOLE France’s leading biocluster for biotechnologies and research in genomics and genetics</div> <div class="item">IFE French Institute of Education</div> <div class="item">IFREMER French Research Institute for Exploitation of the Sea</div> <div class="item">IFPEN Research and training player in the ﬁelds of energy, transport and the environment</div> <div class="item">IFSTTAR French Institute of science and technology for transport, development and networks</div> <div class="item">INCA National Institute of cancer</div> <div class="item">INED National Institute for Demographic Studies</div> <div class="item">INERIS National Institute for the Industrial Environment and Risks</div> <div class="item">INRA National Institute of Agronomic Research</div> <div class="item">INRIA National Institute for Research in Computer Science and Automation</div> <div class="item">INSERM National Institute of Health and Medical Research</div> <div class="item">Curie Institute</div> <div class="item">Pasteur Institute</div> <div class="item">IPEV French Polar Institute Paul Emile Victor</div> <div class="item">I.R.D. Research Institute for Development</div> <div class="item">I.R.S.N. Institute for Radiation Protection and Nuclear Safety</div> <div class="item">IRSTEA National Science and Technology Research Institute for Environment and Agriculture</div> <div class="item">M.N.H.N National Museum of Natural History</div> <div class="item">Quai Branly Museum</div> <div class="item">ONERA National Office for Aeronautical Studies and Research</div> <div class="item">OSEO</div> <div class="item">O.S.T. Science and Technology Observatory</div> <div class="item">RENATER National Telecommunication Network for Technology, Education and Research</div></div> </div><div class="ui icon delete"><i class="remove icon"></i></div> </div>');
+                                                  $('.ui .dropdown.institution').dropdown({
+                                                      allowAdditions: true
+                                                  });
+                                              } else {
+                                                  $("input[name='institution[]']").val(values[1]);
+                                              }
+
+
+                                          }
+                                          if (value == "DATA DESCRIPTION") {
+                                              $("textarea[name='description']").val(values[1]);
+                                          }
+                                          if (value == "METHODOLOGY") {
+                                              i = $('#methodology .fields').length;
+                                              if (i <= 9) {
+                                                  $("#methodology").append('<div class=" fields"> <div class="field"><input type="text"  value="' + values[1] + '"  placeholder="Keywords" name="methodology_name[]" ></div> <div class="field"><input type="text"  value="' + values[2] + '" name="methodology_description[]" placeholder="Description" ></div> <div class="ui icon delete "><i class="remove icon"></i></div> </div>');
+                                              }
+                                          }
+                                          if (value == "ACRONYM") {
+                                              i = $('#acronym_abbreviation_ .fields').length;
+                                              if (i <= 9) {
+                                                  $("#acronym").append('<div class=" fields"> <div class="field"><input type="text" value="' + values[1] + '" name="acronym_abbreviation[]" placeholder="Acronym" ></div> <div class="field"><input type="text" value="' + values[2] + '" name="acronym_description[]" placeholder="Description" ></div> <div class="ui icon delete "><i class="remove icon"></i></div> </div>');
+                                              }
+                                          }
+                                          if (value == "MEASUREMENT") {
+                                              if ($("input[name='measurement_nature[]']").val() != "") {
+                                                  $("#measurements").append('<div class="three fields"> <div class="field"><label>Measurement nature</label><input type="text" value="' + values[1] + '" name="measurement_nature[]"  placeholder="Nature" ></div> <div class="field"><label>Measurement abbreviation</label><input type="text"  value="' + values[2] + '" name="measurement_abbreviation[]" data-validate="measurement_abbreviation" placeholder="Abbreviation" ></div> <div class="field"><label>Measurement unit(s)</label><input type="text"   value="' + values[3] + '" name="measurement_unit[]" data-validate="measurement_unit" id="units" placeholder="Unit(s)" ></div> <input type="checkbox" class="checker" /><label for="checker">No units</label><div class="ui icon delete center"><i class="remove icon"></i></div></div>');
+                                              } else {
+                                                  $("input[name='measurement_nature[]']").val(values[1]);
+                                                  $("input[name='measurement_abbreviation[]']").val(values[2]);
+                                                  $("input[name='measurement_unit[]']").val(values[3]);
+                                              }
+                                          }
+                                          if (value == "SAMPLE KIND") {
+                                              if ($("input[name='sample_kind[]']").val() != "") {
+                                                  $("#sample_kind").append('<div class="ui input"><input type="text" value="' + values[1] + '" name="sample_kind[]" placeholder="Sample kind" ><div class="ui icon delete"><i class="remove icon"></i></div> </div>');
+                                              } else {
+                                                  $("input[name='sample_kind[]']").val(values[1]);
+
+                                              }
+
+                                          }
+                                          if (value == "SAMPLING DATE") {
+                                              if ($("input[name='sampling_date[]']").val() != "") {
+                                                  $("#sampling_date").append('        <div class="ui input"><input type="date"  class="date" value="' + values[1] + '" name="sampling_date[]" placeholder="Sampling date" ><div class="ui icon delete"><i class="remove icon"></i></div> </div>');
+                                                  $(".date").datepicker({
+                                                      dateFormat: "yy-mm-dd"
+                                                  });
+                                              } else {
+                                                  $("input[name='sampling_date[]']").val(values[1]);
+
+                                              }
+
+                                          }
+                                          if (value == "SAMPLING_POINT") {
+                                              $("#sampling_points").append('<div> <div class="field"><label>Name</label> <input type="text" name="sampling_point_name[]" value="' + values[1] + '" placeholder="Name" ></div> <div class="field"> <label>Coordinate reference system</label> <div class="ui input"> <div class="ui dropdown fluid search selection optgroup coordinate"> <input  type="hidden"  value="' + values[2] + '" name="sampling_point_coordinate_system[]"> <div class=" text">' + values[2] + '</div> <i class="dropdown icon"></i> <div class="menu"><div class="item">NTF meridian of Paris</div><div class="item">WGS84 Greenwich</div> <div class="item">ED50 Greenwich</div> <div class="item">NTF Lambert 1</div> <div class="item">NTF Lambert 2 extend</div> <div class="item">ED50 UTM 32</div> <div class="item">WGS84 UTM 32</div> <div class="item">RGF93 projection Lambert93</div> </div> </div> </div> </div> <div class="field"><label>Abbreviation</label><input type="text"  name="sampling_point_abbreviation[]"  value="' + values[3] + '" placeholder="abbreviation"></div> <div class="field"><label>Longitude</label><input type="text"   value="' + values[4] + '" name="sampling_point_longitude[]" placeholder="longitude" ></div> <div class="field"><label>Latitude</label><input type="text" data-content="Type a latitude in decimal format" step="any"  value="' + values[5] + '" name="sampling_point_latitude[]" placeholder="latitude"></div> <div class="field"><label>Elevation</label><input type="text"  name="sampling_point_elevation[]" value="' + values[6] + '" placeholder="elevation"></div> <div class="field"><label>Additionnal description</label><textarea name="sampling_point_description[]"   placeholder="Additionnal description">' + values[7] + '</textarea></div> <div id="deletesamplingpoint" class="ui icon delete"><i class="remove icon"></i></div></div>');
+                                              $('.ui .dropdown.coordinate').dropdown({
+                                                  allowAdditions: true
+                                              });
+                                              $('#sampling_points input')
+                                                  .popup({
+                                                      on: 'focus'
+                                                  });
+                                              $("#sampling_points input[name='sampling_point_longitude[]']").on('keypress', function(e) {
+                                                  return e.metaKey || // cmd/ctrl
+                                                      e.which <= 0 || // arrow keys
+                                                      e.which == 8 || // delete key
+                                                      /[0-9,-.]/.test(String.fromCharCode(e.which)); // numbers
+                                              })
+                                              $("#sampling_points input[name='sampling_point_latitude[]'] ").on('keypress', function(e) {
+                                                  return e.metaKey || // cmd/ctrl
+                                                      e.which <= 0 || // arrow keys
+                                                      e.which == 8 || // delete key
+                                                      /[0-9,-.]/.test(String.fromCharCode(e.which)); // numbers
+                                              })
+
+
+                                          }
+                                          if (value == "SUPPLEMENTARY FIELDS") {
+                                              if ($("input[name='supplementary_fields_key[]']").val() != "") {
+                                                  $("#supplementary_fields").append('<div class="two fields"> <div class="field"><label>Key</label><input type="text" value="' + values[1] + '" name="supplementary_fields_key[]" placeholder="Key" ></div> <div class="field"><label>Value</label><input type="text"   value="' + values[2] + '" name="supplementary_fields_value[]" placeholder="Value"></div> <div class="ui icon delete center"><i class="remove icon"></i></div> </div>');
+                                              } else {
+                                                  $("input[name='supplementary_fields_key[]']").val(values[1]);
+                                                  $("input[name='supplementary_fields_value[]']").val(values[2]);
+                                              }
+
+                                          }
+                                      }
+
+                                  });
+                              });
+                          }
                       }
-                      else{
-                      $("input[name='supplementary_fields_key[]']").val(values[1]);
-                      $("input[name='supplementary_fields_value[]']").val(values[2]);                        
-                      }
 
-                    }
-                            }
+                      $('#inputs').append('<div class="text" id="filenamemetadata">' + file['name'] + ' successfully loaded!</div>')
 
-                       });
-                  });
-}
-                }
+                  } else {
+                      alert("Only CSV file are supported!")
+                  }
+              }
 
-                      $('#inputs').append('<div class="text" id="filenamemetadata">'+file['name']+' successfully loaded!</div>')
-
-  }
-                else{
-                  alert("Only CSV file are supported!")
-                }
-}
-
-  document.getElementById('metadatafile').addEventListener('change', handleFileSelect, false);   
+              document.getElementById('metadatafile').addEventListener('change', handleFileSelect, false);
 
 
 
@@ -1440,69 +1468,57 @@
                       $("#changelog .grid .column ").append('Metadata version is the first one!');
 
                   }
-                  append=''
+                  append = ''
                   $.each(data, function(index, value) {
-                  html = ''
-                      version = '<div class=" title">Version '+value['version']+'</div><div class="content"><div class="ui green label right floated "  data-tooltip="Date of metadata">' + value['date'] + '</div><div class="ui green label right floated "   data-tooltip="User who submit modification">' + value['mailuser'] +"</div><div class='row'></div><div class='row'></div>";
+                      html = ''
+                      version = '<div class=" title">Version ' + value['version'] + '</div><div class="content"><div class="ui green label right floated "  data-tooltip="Date of metadata">' + value['date'] + '</div><div class="ui green label right floated "   data-tooltip="User who submit modification">' + value['mailuser'] + "</div><div class='row'></div><div class='row'></div>";
                       $.each(value, function(name, value) {
-                    text=""
-                      if (value['Type']=='modified') {
-                        text += '<div class="ui raised segment"> <a class="ui red ribbon label">Old data</a> <span>' + value['OldValue'] + '</span> <p></p> <a class="ui blue ribbon label">New data</a> '+ value['NewValue'] + ' <p></p> </div>';
-                        html += '<div class=" ui horizontal divider header"></div><div class="row"></div><a class="ui  label">' + name +'</a> <div class="ui raised segment"> ' + text + '</div>';
-                      }
-                      else if (value['Type']=='added') {
-                       text += "<p>"+ value['NewValue'] + "</p>"
-                       html += '<div class=" ui horizontal divider header"></div><div class="row"></div><a class="ui  label">' + name + '</a> <div class="ui raised segment"> <a class="ui blue ribbon label">Added data</a> <span>' + text + '</span></div>';
-                      }
-                        else if (value['Type']=='removed') {
-                       text += "<p>"+ value['OldValue'] + "</p>"
-                       html += '<div class=" ui horizontal divider header"></div><div class="row"></div><a class="ui  label">' + name + '</a> <div class="ui raised segment"> <a class="ui red ribbon label">Removed data</a> <span>' + text + '</span></div>';
-                      }
+                          text = ""
+                          if (value['Type'] == 'modified') {
+                              text += '<div class="ui raised segment"> <a class="ui red ribbon label">Old data</a> <span>' + value['OldValue'] + '</span> <p></p> <a class="ui blue ribbon label">New data</a> ' + value['NewValue'] + ' <p></p> </div>';
+                              html += '<div class=" ui horizontal divider header"></div><div class="row"></div><a class="ui  label">' + name + '</a> <div class="ui raised segment"> ' + text + '</div>';
+                          } else if (value['Type'] == 'added') {
+                              text += "<p>" + value['NewValue'] + "</p>"
+                              html += '<div class=" ui horizontal divider header"></div><div class="row"></div><a class="ui  label">' + name + '</a> <div class="ui raised segment"> <a class="ui blue ribbon label">Added data</a> <span>' + text + '</span></div>';
+                          } else if (value['Type'] == 'removed') {
+                              text += "<p>" + value['OldValue'] + "</p>"
+                              html += '<div class=" ui horizontal divider header"></div><div class="row"></div><a class="ui  label">' + name + '</a> <div class="ui raised segment"> <a class="ui red ribbon label">Removed data</a> <span>' + text + '</span></div>';
+                          } else if (typeof value === 'object') {
+                              text = ""
+                              $.each(value, function(entrie, value) {
+                                  if (isNaN(entrie)) {
 
-                      
-                   
-                    else if(typeof value === 'object'){
-                      text=""
-                      $.each(value, function(entrie, value) {
-                        if (isNaN(entrie)) {
+                                      if (value['Type'] == 'modified') {
+                                          text += '<div class="ui raised segment"> <a class="ui red ribbon label">Old data : ' + entrie.toUpperCase() + '</a> <span>' + value['OldValue'] + '</span> <p></p> <a class="ui blue ribbon label">New data : ' + entrie.toUpperCase() + '</a> ' + value['NewValue'] + ' <p></p> </div>';
+                                      } else if (value['Type'] == 'added') {
+                                          text += '<a class="ui green ribbon label">Added data : ' + entrie.toUpperCase() + '</a> <span> <p>' + value['NewValue'] + '</p> </span>'
+                                      } else if (value['Type'] == 'removed') {
+                                          text += '<a class="ui red ribbon label">Removed data : ' + entrie.toUpperCase() + '</a> <span> <p>' + value['OldValue'] + '</p> </span>'
+                                      }
+                                  } else {
+                                      entrie = parseInt(entrie) + 1;
+                                      $.each(value, function(index, value) {
+                                          if (value['Type'] == 'modified') {
+                                              text += '<div class="ui raised segment"> <a class="ui red ribbon label">Old data : ' + index.toUpperCase() + ' ' + entrie + '</a> <span>' + value['OldValue'] + '</span> <p></p> <a class="ui blue ribbon label">New data : ' + index.toUpperCase() + ' ' + entrie + '</a> ' + value['NewValue'] + ' <p></p> </div>';
+                                          } else if (value['Type'] == 'added') {
+                                              text += '<a class="ui green ribbon label">Added data : ' + index.toUpperCase() + ' ' + entrie + '</a> <span> <p>' + value['NewValue'] + '</p> </span>'
+                                          } else if (value['Type'] == 'removed') {
+                                              text += '<a class="ui red ribbon label">Removed data : ' + index.toUpperCase() + ' ' + entrie + '</a> <span> <p>' + value['OldValue'] + '</p> </span>'
+                                          }
+                                      });
+                                  }
+                              });
+                              html += '<div class=" ui horizontal divider header"></div><div class="row"></div><a class="ui  label">' + name + '</a> <div class="ui raised segment">' + text + '</div>';
+                          }
 
-                        if (value['Type']=='modified') {
-                        text += '<div class="ui raised segment"> <a class="ui red ribbon label">Old data : '+entrie.toUpperCase()+'</a> <span>' + value['OldValue'] + '</span> <p></p> <a class="ui blue ribbon label">New data : '+entrie.toUpperCase()+'</a> '+ value['NewValue'] + ' <p></p> </div>';
-                      }
-                      else if (value['Type']=='added') {
-                        text += '<a class="ui green ribbon label">Added data : '+entrie.toUpperCase()+'</a> <span> <p>'+ value['NewValue'] + '</p> </span>'
-                      }
-                        else if (value['Type']=='removed') {
-                       text += '<a class="ui red ribbon label">Removed data : '+entrie.toUpperCase()+'</a> <span> <p>'+ value['OldValue'] + '</p> </span>'
-                      }
-                        }
-                        else{
-                          entrie = parseInt(entrie) + 1;
-                          $.each(value, function(index, value) {
-                             if (value['Type']=='modified') {
-                            text += '<div class="ui raised segment"> <a class="ui red ribbon label">Old data : '+index.toUpperCase()+' '+entrie+'</a> <span>' + value['OldValue'] + '</span> <p></p> <a class="ui blue ribbon label">New data : '+index.toUpperCase()+' '+entrie+'</a> '+ value['NewValue'] + ' <p></p> </div>';
-                          }
-                          else if (value['Type']=='added') {
-                            text += '<a class="ui green ribbon label">Added data : '+index.toUpperCase()+' '+entrie+'</a> <span> <p>'+ value['NewValue'] + '</p> </span>'
-                          }
-                            else if (value['Type']=='removed') {
-                           text += '<a class="ui red ribbon label">Removed data : '+index.toUpperCase()+' '+entrie+'</a> <span> <p>'+ value['OldValue'] + '</p> </span>'
-                          }
-                       });
-                        }
-                    });
-                       html += '<div class=" ui horizontal divider header"></div><div class="row"></div><a class="ui  label">' + name+'</a> <div class="ui raised segment">'+text+'</div>';
-                    }
-                         
                       })
-                      append+= version+html+"</div>";
+                      append += version + html + "</div>";
 
                   })
-                  append='<div class="ui styled accordion changelog" >'+append+'</div>';
+                  append = '<div class="ui styled accordion changelog" >' + append + '</div>';
                   $("#changelog .grid .column ").append(append);
                   $('.ui.accordion.changelog')
-                            .accordion()
-                          ;
+                      .accordion();
 
 
 
