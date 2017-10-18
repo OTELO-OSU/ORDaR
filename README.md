@@ -504,6 +504,7 @@ Voici uen configuration de test, à vous de la modifier.
 	SSH_UNIXUSER=user
 	SSH_UNIXPASSWD=pass
 	SMTP=votre SMTP
+	DATASET_FILES_MAX_SIZE= Taille des fichiers maximum par dataset  
 	#DATACITE CREDENTIALS
 
 	AUTH_CONFIG_DATACITE="YOUR SECRETS CREDENTIALS HERE"
@@ -559,6 +560,13 @@ Exemple pour le service OrdarUI
 Modifier le fichier Docker/Apache_PHP/ssmtp.conf:
 
 	mailhub= ADRESSE DE VOTRE SMTP
+
+Modifier le fichier Dockerfile a la racine du projet:
+Remplacer TAILLESOUHAITE par une taille
+
+	RUN echo 'upload_max_filesize = TAILLESOUHAITE' >> /usr/local/etc/php/php.ini
+	RUN echo 'post_max_size = TAILLESOUHAITE' >> /usr/local/etc/php/php.ini
+
 
 Modifier le fichier Docker/Ordar_script/Dockerfile:
 
