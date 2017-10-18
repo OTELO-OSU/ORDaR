@@ -251,6 +251,11 @@ Class FileController
                 header('Content-Type:  text/html');
             }
             }
+             else {
+                echo "<h1>Cannot preview file</h1> <p>Sorry, we are unfortunately not able to preview this file.<p>";
+                $readfile = false;
+                header('Content-Type:  text/html');
+            }
             
             if ($readfile == false) {
                 return false;
