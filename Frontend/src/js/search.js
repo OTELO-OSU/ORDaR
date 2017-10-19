@@ -292,6 +292,7 @@
                   var creationdatearray = [];
                   aggs = data['aggregations'];
                   data = data['hits']['hits'];
+                  if (aggs['min_date']['value_as_string']) {
                   $("#date").append('<div class="header" >Creation date</div>');
                   minyear = aggs['min_date']['value_as_string'].split("-", 2);
                   maxyear = aggs['max_date']['value_as_string'].split("-", 2);
@@ -301,6 +302,7 @@
                       minyear = maxyear - 1;
                   }
                   $('#date').append('<input class="range-slider" value="' + minyear + ',' + maxyear + '" type="hidden">');
+                    
                   $('.range-slider').jRange({
                       from: minyear,
                       to: maxyear,
@@ -342,6 +344,7 @@
                   $('form .ui.grid .button').on("click", function() {
                       $(".facets").toggle();
                   })
+                  }
                   $(window).resize(function() {
                       APP.modules.search.checksize();
 
@@ -655,6 +658,7 @@
                   var creationdatearray = [];
                   aggs = data['aggregations'];
                   data = data['hits']['hits'];
+                  if (aggs['min_date']['value_as_string']) {
                   $("#date").append('<div class="header" > Creation date</div>');
                   minyear = aggs['min_date']['value_as_string'].split("-", 2);
                   maxyear = aggs['max_date']['value_as_string'].split("-", 2);
@@ -705,6 +709,7 @@
                   $('form .ui.grid .button').on("click", function() {
                       $(".facets").toggle();
                   })
+                }
                   $(window).resize(function() {
                       APP.modules.search.checksize();
 
