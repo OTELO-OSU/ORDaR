@@ -163,9 +163,9 @@ $app->get('/login', function (Request $req, Response $responseSlim) {
     $file = new File();
     $config=$file->ConfigFile();
     
-    $_SESSION['name'] = $_SERVER['HTTP_SN'];
-    $_SESSION['firstname'] = $_SERVER['HTTP_GIVENNAME'];
-    $_SESSION['mail'] = $_SERVER['HTTP_MAIL'];
+    $_SESSION['name'] = "t";
+    $_SESSION['firstname'] = "t";
+    $_SESSION['mail'] = "admin@admin.fr";
     $_SESSION['admin'] = "0";
       
 

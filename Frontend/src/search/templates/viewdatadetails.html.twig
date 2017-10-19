@@ -275,9 +275,9 @@
                   <div class="ui fluid card">
                      <div class="content files">
                         <div class="header "> <i class="file icon"></i>Files</div>
-                        {% if accessright == "Closed" or accessright == "Unpublished" or accessright == "Draft" %}
+                        {% if accessright == "Closed" or accessright == "Unpublished"%}
                         {% if files == NULL %}
-                        <div class="ui red message">Data are not available</div>
+                        <div class="ui red message">Restricted access</div>
                         {% else %}
                         <div class="ui list">
                            {% for filename in files %}
@@ -292,7 +292,7 @@
                         {% endif %}
                         {% elseif accessright == "Embargoed" %}
                         {% if files == NULL %}
-                        <div class="ui red message">Data are not available</div>
+                        <div class="ui red message">Restricted access</div>
                         {% else %}
                         <div class="ui list">
                            {% for filename in files %}
@@ -304,7 +304,22 @@
                            </div>
                            {% endfor %}
                         </div>
-                        {% endif %}     
+                        {% endif %}  
+                        {% elseif accessright == "Draft" %}
+                        {% if files == NULL %}
+                        <div class="ui red message">No file</div>
+                        {% else %}
+                        <div class="ui list">
+                           {% for filename in files %}
+                           <div class="item">
+                              <div class="content">
+                              <i class="file icon"></i>
+                                 <a href="files/{{id}}/{{filename.DATA_URL}}">{{filename.DATA_URL}}</a><a href="files/{{id}}/{{filename.DATA_URL}}"><input value="Download" type="button" class="ui right floated button" ></a><input value="Preview"onclick="APP.modules.preview.previewdocument('preview/{{id}}/{{filename.DATA_URL}}')" type="button" class="ui right floated button" >
+                              </div>
+                           </div>
+                           {% endfor %}
+                        </div>
+                        {% endif %}   
                         {% elseif accessright == "Open" %}
                         <div class="ui list">
                            {% for filename in files %}
@@ -493,7 +508,7 @@
                         </table>
                         <br>
                         {% else %}
-                        <p>No data to show </p>
+                        <p>No data</p>
                         {%endif%}
                      </div>
                   </div>
@@ -520,7 +535,7 @@
                            </tbody>
                         </table>
                         {% else %}
-                        <p>No data to show </p>
+                        <p>No data</p>
                         {% endif %}
                      </div>
                   </div>

@@ -1499,9 +1499,12 @@ function return_bytes($val) {
                                 return $returnarray;
                             }
                         }
+                }
                         
+                    } 
                    
                                         
+                if ($maxsize<=$this->upload_max) {                        
                     if (count($intersect) != 0 and $data != 0) {
                         $merge = array_merge($intersect, $data);
                     } else if (count($intersect) != 0) {
@@ -1511,7 +1514,7 @@ function return_bytes($val) {
                         $merge = $data;
                         
                     }
-
+  
                 $request = $Request->send_XML_to_datacite($xml->asXML(), $config["DOI_PREFIX"] . "/" . $newdoi);
                     
                 if ($request == "true") {
@@ -1571,13 +1574,12 @@ function return_bytes($val) {
                     $Mailer = new Mailer();
                     $Mailer->Send_Mail_To_uploader($array['dataform']['FILE_CREATOR'], $array['dataform']['TITLE'], $config["DOI_PREFIX"] . "/" . $newdoi, $array['dataform']['DATA_DESCRIPTION']);
                     return $array['message'] = '   <div class="ui message green"  style="display: block;">Draft published!</div>';
-                    } 
+                   }
                     else {
                      self::UnlockDOI();
                         $array['dataform'] = $array;
                         $array['error']    = "Warning files dataset limits reached !";
                         return $array;
-                }
                 }
                     
                 
