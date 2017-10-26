@@ -222,7 +222,7 @@ class RequestController
             }  
         }';
         $bdd                        = strtolower($config['authSource']);
-        $url                        = 'http://'.$config['ESHOST'].'/'. $bdd . '/_search?q=' . $query . '&size=10&from='.$from;
+        $url                        = 'http://'.$config['ESHOST'].'/'. $bdd . '/_search?q=' . $query . '%20AND%20NOT%20INTRO.MEASUREMENT.ABBREVIATION:*_RAW&size=10&from='.$from;
         $curlopt                    = array(
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_PORT => $config['ESPORT'],
@@ -238,10 +238,12 @@ class RequestController
         $responses["hits"]["total"] = $response["hits"]["total"];
         $responses['aggregations']  = $response['aggregations'];
         foreach ($response["hits"]["hits"] as $key => $value) {
+                
             $responses["hits"]["hits"][$key]           = $value["_source"]["INTRO"];
             $responses["hits"]["hits"][$key]["_index"] = $value["_index"];
             $responses["hits"]["hits"][$key]["_id"]    = $value["_id"];
             $responses["hits"]["hits"][$key]["_type"]  = $value["_type"];
+            
         }
         ;
         $responses = json_encode($responses);
@@ -517,10 +519,10 @@ class RequestController
         }';
         $bdd         = strtolower($config['authSource']);
         if ($query == "null") { // SI pas de facets 
-            $url = 'http://'.$config['ESHOST'].'/'. $bdd . '/_search?q=INTRO.FILE_CREATOR.MAIL:' . $author_mail . '&size=10&from='.$from;
+            $url = 'http://'.$config['ESHOST'].'/'. $bdd . '/_search?q=INTRO.FILE_CREATOR.MAIL:' . $author_mail . '%20AND%20NOT%20INTRO.MEASUREMENT.ABBREVIATION:*_RAW&size=10&from='.$from;
         } else { // Sinon on recher avec les facets
             $query = rawurlencode($query);
-            $url   = 'http://'.$config['ESHOST'].'/'. $bdd . '/_search?q=' . $query . '%20AND%20(INTRO.FILE_CREATOR.MAIL:' . $author_mail . ')&size=10&from='.$from;
+            $url   = 'http://'.$config['ESHOST'].'/'. $bdd . '/_search?q=' . $query . '%20AND%20(INTRO.FILE_CREATOR.MAIL:' . $author_mail . ')%20AND%20NOT%20INTRO.MEASUREMENT.ABBREVIATION:*_RAW&size=10&from='.$from;
         }
         $curlopt                    = array(
             CURLOPT_RETURNTRANSFER => true,
