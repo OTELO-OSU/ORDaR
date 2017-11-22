@@ -1472,6 +1472,182 @@
           }
       }
   })()
+
+
+  APP.modules.account = (function() {
+      return {
+          check_signup: function() {
+            $('.signup').form({
+          fields: {
+              usermail: {
+                  identifier: 'email',
+                  rules: [{
+                      type: 'email',
+                      prompt: 'Please enter a valid email'
+                  }]
+              },
+              username: {
+                  identifier: 'name',
+                  rules: [{
+                      type: 'empty',
+                      prompt: 'Please enter your name'
+                  }]
+              },
+              userfirstname: {
+                  identifier: 'firstname',
+                  rules: [{
+                      type: 'empty',
+                      prompt: 'Please enter your firstname'
+                  }]
+              },
+              password: {
+        identifier  : 'password',
+        rules: [
+          {
+            type   : 'regExp[/^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[$@$!%*?&])[A-Za-z\\d$@$!%*?&]{8,}$/]',
+            prompt : 'Password can not be less than 8 characters and must have at least one number, one uppercase and one lowercase, and one special characters'
+          }
+        ]
+      },
+          password_confirm: {
+        identifier  : 'password_confirm',
+        rules: [
+          {
+            type   : 'match[password]',
+            prompt : 'Password verification failed'
+          }
+        ]
+      }
+          }
+      });
+          },
+           check_login: function() {
+            $('.login').form({
+          fields: {
+              usermail: {
+                  identifier: 'email',
+                  rules: [{
+                      type: 'email',
+                      prompt: 'Please enter a valid email'
+                  }]
+              },
+              password: {
+        identifier  : 'password',
+        rules: [
+          {
+            type   : 'regExp[/^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[$@$!%*?&])[A-Za-z\\d$@$!%*?&]{8,}$/]',
+            prompt : 'Password can not be less than 8 characters and must have at least one number, one uppercase and one lowercase, and one special characters'
+          }
+        ]
+      }
+          }
+      });
+          },
+          check_recover: function() {
+            $('.recover').form({
+          fields: {
+              usermail: {
+                  identifier: 'email',
+                  rules: [{
+                      type: 'email',
+                      prompt: 'Please enter a valid email'
+                  }]
+              }
+          }
+      });
+          },
+           check_change_password: function() {
+            $('.change_password').form({
+          fields: {
+                password: {
+        identifier  : 'password',
+        rules: [
+          {
+            type   : 'regExp[/^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[$@$!%*?&])[A-Za-z\\d$@$!%*?&]{8,}$/]',
+            prompt : 'Password can not be less than 8 characters and must have at least one number, one uppercase and one lowercase, and one special characters'
+          }
+        ]
+      },
+          password_confirm: {
+        identifier  : 'password_confirm',
+        rules: [
+          {
+            type   : 'match[password]',
+            prompt : 'Password verification failed'
+          }
+        ]
+      }
+          }
+      });
+          },
+          check_myaccount: function() {
+            $('.myaccount').form({
+          fields: {
+             username: {
+                  identifier: 'name',
+                  rules: [{
+                      type: 'empty',
+                      prompt: 'Please enter your name'
+                  }]
+              },
+              userfirstname: {
+                  identifier: 'firstname',
+                  rules: [{
+                      type: 'empty',
+                      prompt: 'Please enter your firstname'
+                  }]
+              }
+          }
+      });
+          },
+      check_clicked: function(e,name_CSRF,value_CSRF,name,firstname,mail,type) {
+        var action=e.target.name;
+            if (action=='approve') {
+              var action="approveuser";
+              $(".modal.user .header").empty();
+              $(".modal.user .content").empty();
+               $(".modal.user .header").append('Are you sure to approve '+mail+'?  ');
+              $(".modal.user .content").append('<form class="ui form '+action+' " action="'+action+'" method="post"><input type="hidden" name="csrf_name" value="'+name_CSRF+'"><input type="hidden" name="csrf_value" value="'+value_CSRF+'"><input type="hidden" name="email" value="'+mail+'"> <div class="actions"> <div class="ui black deny button"> Cancel </div> <button class="ui submit green button" >Yes</button> </div> </form>');
+              $('.ui.modal.user').modal('show');
+
+            }
+            else if (action=='disable') {
+              var action="disableuser";
+              $(".modal.user .header").empty();
+              $(".modal.user .content").empty();
+               $(".modal.user .header").append('Are you sure to disable '+mail+'?');
+              $(".modal.user .content").append('<form class="ui form '+action+' " action="'+action+'" method="post"><input type="hidden" name="csrf_name" value="'+name_CSRF+'"><input type="hidden" name="csrf_value" value="'+value_CSRF+'"><input type="hidden" name="email" value="'+mail+'"> <div class="actions"> <div class="ui black deny button"> Cancel </div> <button class="ui submit button" >Yes</button> </div> </form>');
+              $('.ui.modal.user').modal('show');
+
+            }
+
+            else if (action=='remove') {
+              var action="removeuser";
+              $(".modal.user .header").empty();
+              $(".modal.user .content").empty();
+               $(".modal.user .header").append('Are you sure to remove '+mail+'?');
+              $(".modal.user .content").append('<form class="ui form '+action+' " action="'+action+'" method="post"><input type="hidden" name="csrf_name" value="'+name_CSRF+'"><input type="hidden" name="csrf_value" value="'+value_CSRF+'"><input type="hidden" name="email" value="'+mail+'"> <div class="actions"> <div class="ui black deny button"> Cancel </div> <button class="ui submit red button" >Yes</button> </div> </form>');
+              $('.ui.modal.user').modal('show');
+
+            }
+             else if (action=='modify') {
+
+              if (type=="1") {
+                var type='checked'
+              }
+              $(".modal.user .header").empty();
+              $(".modal.user .content").empty();
+               $(".modal.user .header").append('Modify informations: '+mail);
+              $(".modal.user .content").append('<form class="ui large form myaccount" method="post" action="/modifyuser"><input type="hidden" name="csrf_name" value="'+name_CSRF+'"><input type="hidden" name="csrf_value" value="'+value_CSRF+'"><input type="hidden" name="email" value="'+mail+'"> <div class="ui error message"></div> <div class="ui stacked segment"> <div class="field"> <div class="ui left icon input"> <i class="user icon"></i> <input type="text" name="name" value="'+name+'" placeholder="Name"> </div> </div> <div class="field"> <div class="ui left icon input"> <i class="user icon"></i> <input type="text" name="firstname" value="'+firstname+'" placeholder="Firstname"> </div> <div class="ui toggle checkbox"> <input type="checkbox" name="type" '+type+'> <label>Administrator</label> </div></div> </div> <div class="ui black deny button"> Cancel </div> <button class="ui submit red button" >Yes</button> </div> </form>');
+              $('.ui.modal.user').modal('show');
+
+            }
+
+
+
+          },
+      }
+  })()
   $(document).ready(function() {
       //Allow dropdown
       $('.ui .dropdown.license').dropdown();

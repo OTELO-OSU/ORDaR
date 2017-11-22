@@ -1,11 +1,21 @@
 <?php
 namespace search\controller;
 use \search\controller\FileController as File;
+use \search\model\Users as Users;
+use \search\controller\ConnectController as ConnectDB;
+use  Illuminate\Database\Capsule\Manager as DB;
+
 
 
 Class MailerController
 {
+private $DBinstance;
 
+	function __construct()
+		{
+			$ConnectDB= new ConnectDB();
+			$DBinstance=$ConnectDB->EloConfigure($_SERVER['DOCUMENT_ROOT'] . '/../mysql.ini');
+		}
 
 	function CheckSMTPstatus(){
 		 	$file = new File();
@@ -187,14 +197,12 @@ Class MailerController
 	if ($connected===true) {
     	$file = new File();
         $config=$file->ConfigFile();
-    	 foreach ($config["admin"] as $key => $value) {
-                $array = explode(",", $value);
-            }
-            foreach ($array as $key => $value) {
+        $admin = Users::where('type','=',"1")->get();
+            foreach ($admin as $key => $value) {
                 $headers = "From:<".$config['NO_REPLY_MAIL'].">\r\n";
                 $headers .= "MIME-Version: 1.0\r\n";
                 $headers .= "Content-Type: text/html; charset=utf-8\r\n";
-                $mail = mail($value, 'Error in '.$config['REPOSITORY_NAME'], '<html>
+                $mail = mail($value->mail, 'Error in '.$config['REPOSITORY_NAME'], '<html>
                 <body>
                     <h2>Error occured in '.$config['REPOSITORY_NAME'].'!</h2>
                     <p>This DOI '.$config['REPOSITORY_NAME'].'-' . $NewDOI . ' is already registered check your database DOI.<p>
@@ -210,14 +218,12 @@ Class MailerController
 	if ($connected===true) {
         $file = new File();
         $config=$file->ConfigFile();
-          foreach ($config["admin"] as $key => $value) {
-                $array = explode(",", $value);
-            }
-            foreach ($array as $key => $value) {
+        $admin = Users::where('type','=',"1")->get();
+        foreach ($admin as $key => $value) {
         $headers = "From:<".$config['NO_REPLY_MAIL'].">\r\n";
         $headers .= "MIME-Version: 1.0\r\n";
         $headers .= "Content-Type: text/html; charset=utf-8\r\n";
-        $mail = mail($value, 'Error in '.$config['REPOSITORY_NAME'], '<html>
+        $mail = mail($value->mail, 'Error in '.$config['REPOSITORY_NAME'], '<html>
         <body>
             <h2>Error occured in '.$config['REPOSITORY_NAME'].'!</h2>
             <p>This file is published, but unpublished data '.$filename.' is not removed, please remove it and create an html file<p>
@@ -232,14 +238,12 @@ Class MailerController
 	if ($connected===true) {
 	        $file = new File();
 	        $config=$file->ConfigFile();
-	          foreach ($config["admin"] as $key => $value) {
-	                $array = explode(",", $value);
-	            }
-	            foreach ($array as $key => $value) {
+	         $admin = Users::where('type','=',"1")->get();
+	            foreach ($admin as $key => $value) {
 	        $headers = "From:<".$config['NO_REPLY_MAIL'].">\r\n";
 	        $headers .= "MIME-Version: 1.0\r\n";
 	        $headers .= "Content-Type: text/html; charset=utf-8\r\n";
-	        $mail = mail($value, 'Error in '.$config['REPOSITORY_NAME'], '<html>
+	        $mail = mail($value->mail, 'Error in '.$config['REPOSITORY_NAME'], '<html>
 	        <body>
 	            <h2>Error occured in '.$config['REPOSITORY_NAME'].'!</h2>
 	            <p>Your path for file is set to'.$config['UPLOAD_FOLDER'].', and it does not exist or have bad permissions. <p>
@@ -251,7 +255,239 @@ Class MailerController
 
 
 
+ /**
+     * Send a mail to reset password
+     * @return true if error, else false
+     */
+    function Send_Reset_Mail($email,$token)
+    {      
+      	$connected=self::CheckSMTPstatus();
+	if ($connected===true) {
+	        $file = new File();
+	        $config=$file->ConfigFile();
+	        $headers = "From:<".$config['NO_REPLY_MAIL'].">\r\n";
+	        $headers .= "MIME-Version: 1.0\r\n";
+	        $headers .= "Content-Type: text/html; charset=utf-8\r\n";
+	        $mail = mail($email, '['.$config['REPOSITORY_NAME'].'] Reset your password', '<html>
+	    <head>
+	    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	    </head>
+	    <body>
+	        <h2>Reset your password</h2>
+	        
+	        <p>Hello , we got a request to reset your '.$config['REPOSITORY_NAME'].' password , if you ignore this message , your password won\'t be changed.</p>
+	        <p>This link will expire in 30 min.</p>
+	        <a href="'.$config['REPOSITORY_URL'].'/recover?token='.$token.'">Click here to reset your password</a>
+	         
+	    </body>
+	    </html> ', $headers); 
+	        if ($mail == true) {
+	            $error = "false";
+	        } else {
+	            $error = "true";
+	        }
+	        
+	  }  else{
+  	$error="true";
+  }
+        return $error;
+    }
 
+
+     /**
+     * Send a mail to reset password
+     * @return true if error, else false
+     */
+    function Send_Validation_Mail($email,$token)
+    {      
+      	$connected=self::CheckSMTPstatus();
+	if ($connected===true) {
+	        $file = new File();
+	        $config=$file->ConfigFile();
+	        $headers = "From:<".$config['NO_REPLY_MAIL'].">\r\n";
+	        $headers .= "MIME-Version: 1.0\r\n";
+	        $headers .= "Content-Type: text/html; charset=utf-8\r\n";
+	        $mail = mail($email, '['.$config['REPOSITORY_NAME'].'] Validate your account', '<html>
+	    <head>
+	    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	    </head>
+	    <body>
+	        <h2>Reset your password</h2>
+	        
+	        <p>Hello , we got a request to validate your account on  '.$config['REPOSITORY_NAME'].'  </p>
+	        <p>This link will expire in 30 min, Please click on this link.</p>
+	        <a href="'.$config['REPOSITORY_URL'].'/activate_account?token='.$token.'">Click here to activate your account</a>
+	         
+	    </body>
+	    </html> ', $headers); 
+	        if ($mail == true) {
+	            $error = "false";
+	        } else {
+	            $error = "true";
+	        }
+	        
+	  }  else{
+  	$error="true";
+  }
+        return $error;
+    }
+
+
+
+ /**
+     * Send a mail to notify reset password
+     * @return true if error, else false
+     */
+    function Send_password_success($email)
+    {      
+      	$connected=self::CheckSMTPstatus();
+	if ($connected===true) {
+	        $file = new File();
+	        $config=$file->ConfigFile();
+	        $headers = "From:<".$config['NO_REPLY_MAIL'].">\r\n";
+	        $headers .= "MIME-Version: 1.0\r\n";
+	        $headers .= "Content-Type: text/html; charset=utf-8\r\n";
+	        $mail = mail($email, '['.$config['REPOSITORY_NAME'].'] Your password has been modified with success', '<html>
+	    <head>
+	    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	    </head>
+	    <body>
+	        <h2>Your password has been modified with success</h2>
+	     </body>
+	    </html> ', $headers); 
+	        if ($mail == true) {
+	            $error = "false";
+	        } else {
+	            $error = "true";
+	        }
+	        
+	  }  else{
+  	$error="true";
+  }
+        return $error;
+    }
+
+
+    /**
+     * Send a mail to notify admin validation account
+     */
+    function Send_mail_validation($email)
+    {      
+      	$connected=self::CheckSMTPstatus();
+	if ($connected===true) {
+	        $file = new File();
+	        $config=$file->ConfigFile();
+	        $headers = "From:<".$config['NO_REPLY_MAIL'].">\r\n";
+	        $headers .= "MIME-Version: 1.0\r\n";
+	        $headers .= "Content-Type: text/html; charset=utf-8\r\n";
+	        $admin = Users::where('type','=',"1")->get();
+	       foreach ($admin as $key => $value) {
+	        $mail = mail($value->mail, '['.$config['REPOSITORY_NAME'].'] Validation of account required!', '<html>
+	    <head>
+	    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	    </head>
+	    <body>
+	        <p>Hello, '.$email.' join '.$config['REPOSITORY_NAME'].', please approve or remove it. </p>
+	     </body>
+	    </html> ', $headers); 
+	    }
+	       
+	        
+	  }  else{
+  	$error="true";
+  }
+        return $error;
+    }
+
+
+
+     /**
+     * Send a mail to user to notify account activation
+     */
+    function Send_mail_account_activation($email)
+    {      
+      	$connected=self::CheckSMTPstatus();
+	if ($connected===true) {
+	        $file = new File();
+	        $config=$file->ConfigFile();
+	        $headers = "From:<".$config['NO_REPLY_MAIL'].">\r\n";
+	        $headers .= "MIME-Version: 1.0\r\n";
+	        $headers .= "Content-Type: text/html; charset=utf-8\r\n";
+	        $mail = mail($email, '['.$config['REPOSITORY_NAME'].'] Your account is now created!', '<html>
+	    <head>
+	    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	    </head>
+	    <body>
+	        <p>Hello your account is now validated by administrator, you can sign in to <a href="'.$config['REPOSITORY_URL'].'">'.$config['REPOSITORY_NAME'].'</a>. </p>
+	     </body>
+	    </html> ', $headers); 
+	    
+	       
+	        
+	  }  else{
+  	$error="true";
+  }
+        return $error;
+    }
+
+
+     /**
+     * Send a mail to user to notify account activation
+     */
+    function Send_mail_account_disable($email)
+    {      
+      	$connected=self::CheckSMTPstatus();
+	if ($connected===true) {
+	        $file = new File();
+	        $config=$file->ConfigFile();
+	        $headers = "From:<".$config['NO_REPLY_MAIL'].">\r\n";
+	        $headers .= "MIME-Version: 1.0\r\n";
+	        $headers .= "Content-Type: text/html; charset=utf-8\r\n";
+	        $mail = mail($email, '['.$config['REPOSITORY_NAME'].'] Your account is now disabled!', '<html>
+	    <head>
+	    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	    </head>
+	    <body>
+	        <p>Hello your account is now disabled by administrator, you can contact us to <a href="'.$config['REPOSITORY_URL'].'">'.$config['REPOSITORY_NAME'].'</a> for more information. </p>
+	     </body>
+	    </html> ', $headers); 
+	    
+	       
+	        
+	  }  else{
+  	$error="true";
+  }
+        return $error;
+    }
+
+     /**
+     * Send a mail to user to notify account activation
+     */
+    function Send_mail_account_removed($email)
+    {      
+      	$connected=self::CheckSMTPstatus();
+	if ($connected===true) {
+	        $file = new File();
+	        $config=$file->ConfigFile();
+	        $headers = "From:<".$config['NO_REPLY_MAIL'].">\r\n";
+	        $headers .= "MIME-Version: 1.0\r\n";
+	        $headers .= "Content-Type: text/html; charset=utf-8\r\n";
+	        $mail = mail($email, '['.$config['REPOSITORY_NAME'].'] Your account is now removed!', '<html>
+	    <head>
+	    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	    </head>
+	    <body>
+	        <p>Hello your account is now removed by administrator, you can contact us to <a href="'.$config['REPOSITORY_URL'].'">'.$config['REPOSITORY_NAME'].'</a> for more information. </p>
+	     </body>
+	    </html> ', $headers); 
+	    
+	       
+	        
+	  }  else{
+  	$error="true";
+  }
+        return $error;
+    }
 
 
 

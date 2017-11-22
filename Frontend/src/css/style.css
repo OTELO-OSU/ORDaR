@@ -19,6 +19,22 @@ font-size:18px
   cursor: pointer;
 }
 
+    #login  .grid {
+      height: 100%;
+    }
+   
+     #login.column {
+      max-width: 450px;
+    }
+
+       #signup  .grid {
+      height: 100%;
+    }
+   
+     #signup.column {
+      max-width: 450px;
+    }
+
 
 #date_end {
 display:none
@@ -34,6 +50,18 @@ display:none;
 height:20%;
 overflow-y:auto
 }
+
+.waitinglist{
+  height: 200px;
+  overflow-y: auto;
+
+}
+.userapprovedlist{
+  height: 200px;
+  overflow-y: auto;
+
+}
+
 
 #footer {
 background-color:#767676

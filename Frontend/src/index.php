@@ -6,6 +6,7 @@ use \search\controller\RequestController as RequestApi;
 use \search\controller\MailerController as Mailer;
 use \search\controller\DatasheetController as Datasheet;
 use \search\controller\FileController as File;
+use \search\controller\UserController as User;
 ini_set('display_errors',0);
 date_default_timezone_set('Europe/Paris');
 
@@ -21,7 +22,6 @@ $container['csrf'] = function ($c) {
        $loader = new Twig_Loader_Filesystem('search/templates');
         $twig = new Twig_Environment($loader);
         echo $twig->render('forbidden.html.twig');
-        return $next($request, $response);
     });
     return $guard;
 };
@@ -163,10 +163,11 @@ $app->get('/login', function (Request $req, Response $responseSlim) {
     $file = new File();
     $config=$file->ConfigFile();
     
-    $_SESSION['name'] = $_SERVER['HTTP_SN'];
+    /*$_SESSION['name'] = $_SERVER['HTTP_SN'];
     $_SESSION['firstname'] = $_SERVER['HTTP_GIVENNAME'];
     $_SESSION['mail'] = $_SERVER['HTTP_MAIL'];
-    $_SESSION['admin'] = "0";
+    $_SESSION['admin'] = "0";*/
+
       
 
     
@@ -183,14 +184,288 @@ $app->get('/login', function (Request $req, Response $responseSlim) {
 
     session_regenerate_id();
 
-    if ($_SESSION['HTTP_REFERER']) {
+    /*if ($_SESSION['HTTP_REFERER']) {
         return $responseSlim->withRedirect($_SESSION['HTTP_REFERER']);
     }
     else {
         return $responseSlim->withRedirect('accueil');
-    }
+    }*/
 
 })->add($mw);
+
+
+$app->post('/login', function (Request $req, Response $responseSlim) {
+    $loader = new Twig_Loader_Filesystem('search/templates');
+    $twig = new Twig_Environment($loader);
+    $mail = $req->getparam('email');
+    $password = $req->getparam('password');
+    $user = new User();
+    $error=$user->login($mail,$password);
+    if (!$error) {
+        return $responseSlim->withRedirect('accueil');
+    }
+    else{
+        echo $twig->render('login.html.twig',['error'=>$error]);
+    }
+
+});
+//Route permettant l'inscription 'd'un utilisateur
+$app->get('/signup', function (Request $req, Response $responseSlim) {
+    if (!@$_SESSION['name']) {
+        $nameKey = $this
+            ->csrf
+            ->getTokenNameKey();
+        $valueKey = $this
+            ->csrf
+            ->getTokenValueKey();
+    $namecsrf = $req->getAttribute($nameKey);
+    $valuecsrf = $req->getAttribute($valueKey);
+    $loader = new Twig_Loader_Filesystem('search/templates');
+    $twig = new Twig_Environment($loader);
+    echo $twig->render('signup.html.twig',['name_CSRF' => $namecsrf, 'value_CSRF' => $valuecsrf]);
+    }else{
+                return $responseSlim->withRedirect('accueil');
+
+    }
+
+
+})->add($mw)->add($container->get('csrf'));
+
+$app->post('/signup', function (Request $req, Response $responseSlim) {
+    $nameKey = $this
+            ->csrf
+            ->getTokenNameKey();
+        $valueKey = $this
+            ->csrf
+            ->getTokenValueKey();
+    $namecsrf = $req->getAttribute($nameKey);
+    $valuecsrf = $req->getAttribute($valueKey);
+    $loader = new Twig_Loader_Filesystem('search/templates');
+    $twig = new Twig_Environment($loader);
+    $name = $req->getparam('name');
+    $firstname = $req->getparam('firstname');
+    $mail = $req->getparam('email');
+    $password = $req->getparam('password');
+    $passwordconfirm = $req->getparam('password_confirm');
+    $user = new User();
+    $error=$user->signup($name,$firstname,$mail,$password,$passwordconfirm);
+    if (!$error) {
+        return $responseSlim->withRedirect('accueil');
+    }else{
+        echo $twig->render('signup.html.twig',['error'=>$error,'name_CSRF' => $nameKey, 'value_CSRF' => $valueKey]);
+    }
+
+})->add($container->get('csrf'));
+
+$app->get('/recover', function (Request $req, Response $responseSlim) {
+    if (!@$_SESSION['name']) {
+    $loader = new Twig_Loader_Filesystem('search/templates');
+    $twig = new Twig_Environment($loader);
+    $token = $req->getparam('token');
+    if ($token) {
+        $user = new User();
+        $result=$user->check_token($token);
+        if ($result==false) {
+            return $responseSlim->withRedirect('accueil');
+        }
+        else{
+            echo $twig->render('change_password.html.twig',['token'=>$token]);
+        }
+    }else{
+        echo $twig->render('recover.html.twig');
+    }
+    }
+    else{
+        return $responseSlim->withRedirect('accueil');
+
+    }
+})->add($mw);
+
+$app->post('/recover', function (Request $req, Response $responseSlim) {
+    $loader = new Twig_Loader_Filesystem('search/templates');
+    $twig = new Twig_Environment($loader);
+    $mail = $req->getparam('email');
+    $user = new User();
+    $error=$user->recover_send_mail($mail);
+    echo $twig->render('recover.html.twig',['error'=>$error,'post'=>'true']);
+
+})->add($mw);
+
+$app->post('/change_password', function (Request $req, Response $responseSlim) {
+    $loader = new Twig_Loader_Filesystem('search/templates');
+    $twig = new Twig_Environment($loader);
+    $token = $req->getparam('token');
+    $password = $req->getparam('password');
+    $passwordconfirm = $req->getparam('password_confirm');
+    $user = new User();
+    $error=$user->change_password($token,$password,$passwordconfirm);
+    echo $twig->render('change_password.html.twig',['error'=>$error,'token'=>$token,'post'=>'true']);
+})->add($mw);
+
+
+$app->get('/activate_account', function (Request $req, Response $responseSlim) {
+    if (!@$_SESSION['name']) {
+    $loader = new Twig_Loader_Filesystem('search/templates');
+    $twig = new Twig_Environment($loader);
+    $token = $req->getparam('token');
+    if ($token) {
+         $user = new User();
+         $error=$user->activate_account($token);
+         if ($error==false) {
+            return $responseSlim->withRedirect('accueil');
+         }
+         else{
+         echo $twig->render('validation_mail.html.twig');
+
+         }
+
+    }
+    else{
+      return $responseSlim->withRedirect('accueil');
+
+    }
+    }
+    else{
+      return $responseSlim->withRedirect('accueil');
+
+    }
+})->add($mw);
+
+$app->get('/myaccount', function (Request $req, Response $responseSlim) {
+    if (@$_SESSION['name']) {
+    $loader = new Twig_Loader_Filesystem('search/templates');
+    $twig = new Twig_Environment($loader);
+     $nameKey = $this
+            ->csrf
+            ->getTokenNameKey();
+        $valueKey = $this
+            ->csrf
+            ->getTokenValueKey();
+    $namecsrf = $req->getAttribute($nameKey);
+    $valuecsrf = $req->getAttribute($valueKey);
+    $user = new User();
+    $user=$user->getUserInfo($_SESSION['mail']);
+    echo $twig->render('myaccount.html.twig',['name'=>$user[0]->name,'firstname'=>$user[0]->firstname,'name_CSRF' => $namecsrf, 'value_CSRF' => $valuecsrf, 'mail' => $_SESSION['mail'],'admin'=>$_SESSION['admin']]);
+    }
+    else{
+        return $responseSlim->withRedirect('accueil');
+    }
+})->add($mw)->add($container->get('csrf'));
+
+$app->post('/myaccount', function (Request $req, Response $responseSlim) {
+    if (@$_SESSION['name']) {
+        $loader = new Twig_Loader_Filesystem('search/templates');
+        $twig = new Twig_Environment($loader);
+         $nameKey = $this
+            ->csrf
+            ->getTokenNameKey();
+        $valueKey = $this
+            ->csrf
+            ->getTokenValueKey();
+        $namecsrf = $req->getAttribute($nameKey);
+        $valuecsrf = $req->getAttribute($valueKey);
+        $name = $req->getparam('name');
+        $firstname = $req->getparam('firstname');
+        $user = new User();
+        $user->setUserInfo($_SESSION['mail'],$name,$firstname);
+        $user=$user->getUserInfo($_SESSION['mail']);
+        return $responseSlim->withRedirect('myaccount');
+    }
+})->add($mw)->add($container->get('csrf'));
+
+
+$app->post('/resetpassword', function (Request $req, Response $responseSlim) {
+    $loader = new Twig_Loader_Filesystem('search/templates');
+    $twig = new Twig_Environment($loader);
+    $mail = $_SESSION['mail'];
+    $user = new User();
+    $error=$user->recover_send_mail($mail);
+    echo $twig->render('recover.html.twig',['error'=>$error,'post'=>'true']);
+
+})->add($mw)->add($container->get('csrf'));
+
+
+//Route affichant les publication de l'utilisateur connecté
+$app->get('/listusers', function (Request $req, Response $responseSlim) {
+    if (@$_SESSION['admin']==1) {
+    $loader = new Twig_Loader_Filesystem('search/templates');
+    $twig = new Twig_Environment($loader);
+     $nameKey = $this
+            ->csrf
+            ->getTokenNameKey();
+        $valueKey = $this
+            ->csrf
+            ->getTokenValueKey();
+        $namecsrf = $req->getAttribute($nameKey);
+        $valuecsrf = $req->getAttribute($valueKey);
+    $user = new User();
+    $usersapproved=$user->getAllUsersApproved();
+    $userswaiting=$user->getAllUsersWaiting();
+    echo $twig->render('listusers.html.twig',['usersapproved'=>$usersapproved,'userswaiting'=>$userswaiting,'name_CSRF' => $namecsrf, 'value_CSRF' => $valuecsrf,'mail' => $_SESSION['mail'] ]);
+    }
+    else{
+        return $responseSlim->withRedirect('accueil');
+    }
+})->add($mw)->add($container->get('csrf'));
+
+$app->post('/approveuser', function (Request $req, Response $responseSlim) {
+    if (@$_SESSION['admin']==1) {
+    $loader = new Twig_Loader_Filesystem('search/templates');
+    $twig = new Twig_Environment($loader);
+    $email = $req->getparam('email');
+    $user = new User();
+    $error=$user->approveUser($email);
+    return $responseSlim->withRedirect('listusers');
+    }
+
+})->add($mw)->add($container->get('csrf'));
+
+$app->post('/disableuser', function (Request $req, Response $responseSlim) {
+    if (@$_SESSION['admin']==1) {
+    $loader = new Twig_Loader_Filesystem('search/templates');
+    $twig = new Twig_Environment($loader);
+    $email = $req->getparam('email');
+    $user = new User();
+    $error=$user->disableUser($email);
+    return $responseSlim->withRedirect('listusers');
+    }
+
+})->add($mw)->add($container->get('csrf'));
+
+
+$app->post('/removeuser', function (Request $req, Response $responseSlim) {
+    if (@$_SESSION['admin']==1) {
+    $loader = new Twig_Loader_Filesystem('search/templates');
+    $twig = new Twig_Environment($loader);
+    $email = $req->getparam('email');
+    $user = new User();
+    $error=$user->deleteUser($email);
+    return $responseSlim->withRedirect('listusers');
+    }
+
+})->add($mw)->add($container->get('csrf'));
+
+
+$app->post('/modifyuser', function (Request $req, Response $responseSlim) {
+    if (@$_SESSION['admin']==1) {
+    $loader = new Twig_Loader_Filesystem('search/templates');
+    $twig = new Twig_Environment($loader);
+    $email = $req->getparam('email');
+    $name = $req->getparam('name');
+    $firstname = $req->getparam('firstname');
+    $type = $req->getparam('type');
+    if ($type=="on") {
+        $type=1;
+    }
+    else{
+        $type=0;
+    }
+    $user = new User();
+    $error=$user->modifyUser($email,$name,$firstname,$type);
+    return $responseSlim->withRedirect('listusers');
+    }
+
+})->add($mw)->add($container->get('csrf'));
 
 //Route permettant la deconnexion d'un utilisateur
 $app->get('/logout', function (Request $req, Response $responseSlim) {

@@ -1,4 +1,56 @@
 
 {% include 'head.html.twig' %}
+<body>
 
+<div class="ui middle aligned center aligned grid">
+  <div class="column" id="login">
+  <div class="row"></div>
+    <h2 class="ui  image header">
+      <div class="content">
+        Log-in into your account
+      </div>
+    </h2>
+      {%if error%}
+    <div class="ui negative message">
+      <div class="header">
+       {{error}}
+      </div>
+</p></div>
+{%endif%}
+    <form class="ui large form login" method="post" action="/login">
+      <div class="ui error message"></div>
+      <div class="ui stacked segment">
+        <div class="field">
+          <div class="ui left icon input">
+            <i class="user icon"></i>
+            <input type="text" name="email" placeholder="E-mail address">
+          </div>
+        </div>
+        <div class="field">
+          <div class="ui left icon input">
+            <i class="lock icon"></i>
+            <input type="password" name="password" placeholder="Password">
+          </div>
+        </div>
+
+        <button type="submit" class="ui fluid large teal submit button">Login</button>
+      </div>
+
+
+    </form>
+
+    <div class="ui message">
+      Not a member ? <a href="/signup">Sign Up</a>
+    </div>
+     <div class="ui message">
+      Forgotten your password ? <a href="/recover">Reset</a>
+    </div>
+  </div>
+</div>
+
+</body>
+
+<script type="text/javascript">
+  APP.modules.account.check_login();
+</script>
 {% include 'footer.html.twig' %}
