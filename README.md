@@ -270,7 +270,21 @@ il doit vous retourner acknowledge:true.
 
 ![Alt text](/Img_doc/Mongoconnector.png?raw=true)
 
+**Configuration de l'authentification:**
+Configurer le fichier Frontend/AuthDB.ini:
 
+	driver = mysql
+	host = VOTRE_HOST
+	database = authentication
+	username = VOTRE_UTILISATEUR
+	password = VOTRE_MOT_DE_PASSE
+	charset = utf8
+	collation = utf8_unicode_ci
+
+Executez ensuite le script InstallAuthDB.php en CLI:
+
+	php InstallAuthDB.php
+La base est maintenant installé.
 
 # Organisation  <a name="organisation"></a>
 
