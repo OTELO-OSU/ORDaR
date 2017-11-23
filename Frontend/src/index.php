@@ -380,6 +380,7 @@ $app->post('/resetpassword', function (Request $req, Response $responseSlim) {
     $mail = $_SESSION['mail'];
     $user = new User();
     $error=$user->recover_send_mail($mail);
+    session_destroy();
     echo $twig->render('recover.html.twig',['error'=>$error,'post'=>'true']);
 
 })->add($mw)->add($container->get('csrf'));

@@ -19,7 +19,7 @@ class UserController
 	function __construct()
 		{
 			$ConnectDB= new ConnectDB();
-			$DBinstance=$ConnectDB->EloConfigure($_SERVER['DOCUMENT_ROOT'] . '/../mysql.ini');
+			$DBinstance=$ConnectDB->EloConfigure($_SERVER['DOCUMENT_ROOT'] . '/../AuthDB.ini');
 		}
 
 public function login($id,$password){
