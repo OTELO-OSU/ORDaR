@@ -53,6 +53,8 @@ Cette entrepôt vise à promouvoir l'accès ouvert: valoriser et partager les co
     -PHP libssh2
 
     -Mongo php driver
+    
+    -MYSQL
 
 
 Pour ubuntu 16.04(pour d’autre systèmes consulter le manuel de mongodb)
@@ -63,6 +65,11 @@ Pour ubuntu 16.04(pour d’autre systèmes consulter le manuel de mongodb)
     echo "deb [ arch=amd64,arm64 ] http://repo.mongodb.org/apt/ubuntu xenial/mongodb-org/3.4 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-3.4.list
     sudo apt-get update
     sudo apt-get install -y mongodb-org
+    
+    
+** Installation de mysql:**
+
+    apt-get install mysql-server mysql-client libmysqlclient15-dev mysql-common
 
 
 
@@ -129,7 +136,6 @@ Afin d'envoyer des mails, vous devez configurer un SMTP sur votre serveur.
     SSH_UNIXPASSWD=password
     SMTP=votre smtp
     DATASET_FILES_MAX_SIZE= Nombre d'espace à allouer (ex: 1G pour 1 gigas)
-    admin[]= l'adresse mail des administrateurs avec des doubles quotes séparé d'une virgule
     #ELASTICSEARCH CONFIG
     ESHOST=Host d'elasticsearch
     ESPORT=Port d'elasticsearch
@@ -490,7 +496,6 @@ Voici uen configuration de test, à vous de la modifier.
 	REPOSITORY_URL=http://example.fr
 	UPLOAD_FOLDER=/data/applis/ORDaR/Uploads/ NE PAS MODIFIER LE CHEMIN, il s'agit du chemin INTERNE du docker
 
-	ADMIN=admin@admin.fr
 	DATAFILE_UNIXUSER="owncloud"
 	NO_REPLY_MAIL="Noreply@ordar.fr"
 	SOCIAL_SHARING=true
