@@ -274,24 +274,13 @@ il doit vous retourner acknowledge:true.
 
 Demarrer le serveur mysql 
 
-Configurer le fichier Frontend/AuthDB.ini avec un utilisateur qui a les droits pour créé des bases et des tables:
-
-	driver = mysql
-	host = VOTRE_HOST
-	database = authentication
-	username = VOTRE_UTILISATEUR_ROOT
-	password = VOTRE_MOT_DE_PASSE_ROOT
-	charset = utf8
-	collation = utf8_unicode_ci
-
-Executez ensuite le script InstallAuthDB.php en CLI:
-
-	php InstallAuthDB.php
+Executez cette commande:
 	
+	mysql -h HOST-u USER -p PASSWORD < authentication.sql
 
 Créé un utilisateur avec des droit limité a la base authentification
 
-	CREATE USER 'USER'@'%' IDENTIFIED WITH mysql_native_password AS 'PASSWORD';GRANT SELECT, INSERT, UPDATE, DELETE, FILE ON *.* TO 'USER'@'%' REQUIRE NONE WITH MAX_QUERIES_PER_HOUR 0 MAX_CONNECTIONS_PER_HOUR 0 MAX_UPDATES_PER_HOUR 0 MAX_USER_CONNECTIONS 0;GRANT ALL PRIVILEGES ON `authentication`.* TO 'USER'@'%';
+	CREATE USER 'USER'@'localhost' IDENTIFIED WITH mysql_native_password AS 'PASSWORD';GRANT SELECT, INSERT, UPDATE, DELETE, FILE ON *.* TO 'USER'@'localhost' REQUIRE NONE WITH MAX_QUERIES_PER_HOUR 0 MAX_CONNECTIONS_PER_HOUR 0 MAX_UPDATES_PER_HOUR 0 MAX_USER_CONNECTIONS 0;GRANT ALL PRIVILEGES ON `authentication`.* TO 'USER'@'localhost';
 
 Une fois ceci fait,Editer le fichier Frontend/AuthDB.ini avec l'utilisateur précédemment crée:
 
@@ -302,7 +291,6 @@ Une fois ceci fait,Editer le fichier Frontend/AuthDB.ini avec l'utilisateur pré
 	password = VOTRE_MOT_DE_PASSE_LIMITE
 	charset = utf8
 	collation = utf8_unicode_ci
-
 
 	
 La base est maintenant installé.
