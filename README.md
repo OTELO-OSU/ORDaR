@@ -271,7 +271,8 @@ il doit vous retourner acknowledge:true.
 ![Alt text](/Img_doc/Mongoconnector.png?raw=true)
 
 **Configuration de l'authentification:**
-Demmarer le serveur mysql ,
+
+Demarrer le serveur mysql 
 
 Configurer le fichier Frontend/AuthDB.ini avec un utilisateur qui a les droits pour créé des bases et des tables:
 
