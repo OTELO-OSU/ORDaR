@@ -1489,15 +1489,15 @@
                       username: {
                           identifier: 'name',
                           rules: [{
-                              type: 'empty',
-                              prompt: 'Please enter your name'
+                              type: 'regExp[^[a-zA-ZÀ-ÿ][a-zA-ZÀ-ÿ -.,]*$]',
+                              prompt: 'Please enter a valid name'
                           }]
                       },
                       userfirstname: {
                           identifier: 'firstname',
-                          rules: [{
-                              type: 'empty',
-                              prompt: 'Please enter your firstname'
+                           rules: [{
+                              type: 'regExp[^[a-zA-ZÀ-ÿ][a-zA-ZÀ-ÿ -.,]*$]',
+                              prompt: 'Please enter a valid firstname'
                           }]
                       },
                       password: {
@@ -1576,15 +1576,15 @@
                       username: {
                           identifier: 'name',
                           rules: [{
-                              type: 'empty',
-                              prompt: 'Please enter your name'
+                              type: 'regExp[^[a-zA-ZÀ-ÿ][a-zA-ZÀ-ÿ -.,]*$]',
+                              prompt: 'Please enter a valid name'
                           }]
                       },
                       userfirstname: {
                           identifier: 'firstname',
-                          rules: [{
-                              type: 'empty',
-                              prompt: 'Please enter your firstname'
+                           rules: [{
+                              type: 'regExp[^[a-zA-ZÀ-ÿ][a-zA-ZÀ-ÿ -.,]*$]',
+                              prompt: 'Please enter a valid firstname'
                           }]
                       }
                   }
@@ -1624,8 +1624,10 @@
                   $(".modal.user .header").empty();
                   $(".modal.user .content").empty();
                   $(".modal.user .header").append('Modify informations: ' + mail);
-                  $(".modal.user .content").append('<form class="ui large form myaccount" method="post" action="/modifyuser"><input type="hidden" name="csrf_name" value="' + name_CSRF + '"><input type="hidden" name="csrf_value" value="' + value_CSRF + '"><input type="hidden" name="email" value="' + mail + '"> <div class="ui error message"></div> <div class="ui stacked segment"> <div class="field"> <div class="ui left icon input"> <i class="user icon"></i> <input type="text" name="name" value="' + name + '" placeholder="Name"> </div> </div> <div class="field"> <div class="ui left icon input"> <i class="user icon"></i> <input type="text" name="firstname" value="' + firstname + '" placeholder="Firstname"> </div> <div class="ui toggle checkbox"> <input type="checkbox" name="type" ' + type + '> <label>Administrator</label> </div></div> </div> <div class="actions"><div class="ui black deny button"> Cancel </div> <button class="ui submit red button" >Yes</button> </div></div> </form>');
+                  $(".modal.user .content").append('<form class="ui large form myaccount" method="post" action="/modifyuser"><input type="hidden" name="csrf_name" value="' + name_CSRF + '"><input type="hidden" name="csrf_value" value="' + value_CSRF + '"><input type="hidden" name="email" value="' + mail + '"> <div class="ui error message"></div> <div class="ui stacked segment"> <div class="field"> <div class="ui left icon input"> <i class="user icon"></i> <input type="text" name="name" value="' + escape(name) + '" placeholder="Name"> </div> </div> <div class="field"> <div class="ui left icon input"> <i class="user icon"></i> <input type="text" name="firstname" value="' + escape(firstname) + '" placeholder="Firstname"> </div> <div class="ui toggle checkbox"> <input type="checkbox" name="type" ' + type + '> <label>Administrator</label> </div></div> </div> <div class="actions"><div class="ui black deny button"> Cancel </div> <button class="ui submit red button" >Yes</button> </div></div> </form>');
                   $('.ui.modal.user').modal('show');
+                   APP.modules.account.check_myaccount();
+
 
               }
 
