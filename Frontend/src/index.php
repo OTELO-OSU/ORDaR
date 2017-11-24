@@ -237,7 +237,7 @@ $app->post('/login', function (Request $req, Response $responseSlim) {
 
 });
 
-$app->post('/loginCAS', function (Request $req, Response $responseSlim) {
+$app->get('/loginCAS', function (Request $req, Response $responseSlim) {
     $user = new User();
     $checkuser=$user->check_current_user($_SERVER['HTTP_MAIL']);
     if ($checkuser) {
