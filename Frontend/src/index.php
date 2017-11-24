@@ -200,22 +200,13 @@ $app->get('/login', function (Request $req, Response $responseSlim) {
        
     }*/
 
-    if (!$_SERVER['HTTP_MAIL']) {
         $loader = new Twig_Loader_Filesystem('search/templates');
         $twig = new Twig_Environment($loader);
         echo $twig->render('login.html.twig'); 
-    }
-    else{
-        $user = new User();
-        $checkuser=$user->check_current_user($_SERVER['HTTP_MAIL']);
-        if ($checkuser) {
-                $_SESSION['name'] = $checkuser->name;
-                $_SESSION['firstname'] = $checkuser->firstname;
-                $_SESSION['mail'] = $checkuser->mail;
-                $_SESSION['admin'] = $checkuser->type;
-                return $responseSlim->withRedirect('accueil');
-        }
-    }
+   
+   
+     
+    
    
 
     session_regenerate_id();
@@ -245,6 +236,22 @@ $app->post('/login', function (Request $req, Response $responseSlim) {
     }
 
 });
+
+$app->post('/loginCAS', function (Request $req, Response $responseSlim) {
+   $user = new User();
+        $checkuser=$user->check_current_user($_SERVER['HTTP_MAIL']);
+        if ($checkuser) {
+                $_SESSION['name'] = $checkuser->name;
+                $_SESSION['firstname'] = $checkuser->firstname;
+                $_SESSION['mail'] = $checkuser->mail;
+                $_SESSION['admin'] = $checkuser->type;
+        }
+                return $responseSlim->withRedirect('accueil');
+});
+
+
+
+
 //Route permettant l'inscription 'd'un utilisateur
 $app->get('/signup', function (Request $req, Response $responseSlim) {
     if (!@$_SESSION['name']) {
