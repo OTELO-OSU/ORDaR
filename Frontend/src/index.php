@@ -70,6 +70,26 @@ $mw=function ($request, $response, $next) {
 
 };
 
+$check_current_user=function ($request, $response, $next) {
+    $user = new User();
+    $checkuser=$user->check_current_user($_SESSION['mail']);
+    if ($checkuser) {
+          $response = $next($request, $response);
+                return $response;
+
+    }
+    else{
+          session_destroy();
+          $loader = new Twig_Loader_Filesystem('search/templates');
+          $twig = new Twig_Environment($loader);
+          $render= $twig->render('notfound.html.twig');
+          $response->write($render);
+          return $response;
+
+    }
+
+};
+
 session_start();
 
 $app->get('/error-401', function (Request $req, Response $responseSlim) {
@@ -350,7 +370,7 @@ $app->get('/myaccount', function (Request $req, Response $responseSlim) {
     else{
         return $responseSlim->withRedirect('accueil');
     }
-})->add($mw)->add($container->get('csrf'));
+})->add($mw)->add($container->get('csrf'))->add($check_current_user);
 
 $app->post('/myaccount', function (Request $req, Response $responseSlim) {
     if (@$_SESSION['name']) {
@@ -407,7 +427,7 @@ $app->get('/listusers', function (Request $req, Response $responseSlim) {
     else{
         return $responseSlim->withRedirect('accueil');
     }
-})->add($mw)->add($container->get('csrf'));
+})->add($mw)->add($container->get('csrf'))->add($check_current_user);
 
 $app->post('/approveuser', function (Request $req, Response $responseSlim) {
     if (@$_SESSION['admin']==1) {
@@ -490,7 +510,7 @@ $app->get('/mypublications', function (Request $req, Response $responseSlim) {
         return $responseSlim->withRedirect('accueil');
     }
 
-})->add($mw);
+})->add($mw)->add($check_current_user);
 
 //Route affichant le formulaire d'upload
 $app->get('/upload', function (Request $req, Response $responseSlim) {
@@ -522,7 +542,7 @@ $app->get('/upload', function (Request $req, Response $responseSlim) {
     }
 })
     ->setName('upload')->add($mw)
-    ->add($container->get('csrf'));
+    ->add($container->get('csrf'))->add($check_current_user);
 
 //Route receptionnant les données POST de l'upload
 $app->post('/upload', function (Request $req, Response $responseSlim) {

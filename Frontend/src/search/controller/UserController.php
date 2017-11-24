@@ -21,6 +21,12 @@ class UserController
 			$ConnectDB= new ConnectDB();
 			$DBinstance=$ConnectDB->EloConfigure($_SERVER['DOCUMENT_ROOT'] . '/../AuthDB.ini');
 		}
+public function check_current_user($email){
+	$verif=Users::find($email);
+	if ((count($verif)==1) && ($verif->status!=0)) {
+		return $verif;
+	}
+}
 
 public function login($id,$password){
 		$verif = Users::select('mail','mdp','name','firstname','status','mail_validation','type')->where('mail','=',$id)->get();
