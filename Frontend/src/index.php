@@ -177,13 +177,11 @@ $app->get('/searchresult', function (Request $req, Response $responseSlim) {
 
 //Route permettant la connexion d'un utilisateur
 $app->get('/login', function (Request $req, Response $responseSlim) {
-    $loader = new Twig_Loader_Filesystem('search/templates');
-    $twig = new Twig_Environment($loader);
-    echo $twig->render('login.html.twig');
-    $file = new File();
-    $config=$file->ConfigFile();
     
-    /*$_SESSION['name'] = $_SERVER['HTTP_SN'];
+   // $file = new File();
+    //$config=$file->ConfigFile();
+    
+   /* $_SESSION['name'] = $_SERVER['HTTP_SN'];
     $_SESSION['firstname'] = $_SERVER['HTTP_GIVENNAME'];
     $_SESSION['mail'] = $_SERVER['HTTP_MAIL'];
     $_SESSION['admin'] = "0";*/
@@ -192,7 +190,7 @@ $app->get('/login', function (Request $req, Response $responseSlim) {
 
     
    
-    foreach ($config["admin"] as $key => $value) {
+    /*foreach ($config["admin"] as $key => $value) {
         $array = explode(",", $value);
     }
     foreach ($array as $key => $value) {
@@ -200,7 +198,25 @@ $app->get('/login', function (Request $req, Response $responseSlim) {
             $_SESSION['admin'] = "1";
         }
        
+    }*/
+
+    if (!$_SERVER['HTTP_MAIL']) {
+        $loader = new Twig_Loader_Filesystem('search/templates');
+        $twig = new Twig_Environment($loader);
+        echo $twig->render('login.html.twig'); 
     }
+    else{
+        $user = new User();
+        $checkuser=$user->check_current_user($_SERVER['HTTP_MAIL']);
+        if ($checkuser) {
+                $_SESSION['name'] = $checkuser->name;
+                $_SESSION['firstname'] = $checkuser->firstname;
+                $_SESSION['mail'] = $checkuser->mail;
+                $_SESSION['admin'] = $checkuser->type;
+                return $responseSlim->withRedirect('accueil');
+        }
+    }
+   
 
     session_regenerate_id();
 
