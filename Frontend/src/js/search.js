@@ -1472,8 +1472,6 @@
           }
       }
   })()
-
-
   APP.modules.account = (function() {
       return {
           check_signup: function() {
@@ -1495,7 +1493,7 @@
                       },
                       userfirstname: {
                           identifier: 'firstname',
-                           rules: [{
+                          rules: [{
                               type: 'regExp[^[a-zA-ZÀ-ÿ][a-zA-ZÀ-ÿ -.,]*$]',
                               prompt: 'Please enter a valid firstname'
                           }]
@@ -1582,7 +1580,7 @@
                       },
                       userfirstname: {
                           identifier: 'firstname',
-                           rules: [{
+                          rules: [{
                               type: 'regExp[^[a-zA-ZÀ-ÿ][a-zA-ZÀ-ÿ -.,]*$]',
                               prompt: 'Please enter a valid firstname'
                           }]
@@ -1599,7 +1597,6 @@
                   $(".modal.user .header").append('Are you sure to approve ' + mail + '?  ');
                   $(".modal.user .content").append('<form class="ui form ' + action + ' " action="' + action + '" method="post"><input type="hidden" name="csrf_name" value="' + name_CSRF + '"><input type="hidden" name="csrf_value" value="' + value_CSRF + '"><input type="hidden" name="email" value="' + mail + '"> <div class="actions"> <div class="ui black deny button"> Cancel </div> <button class="ui submit green button" >Yes</button> </div> </form>');
                   $('.ui.modal.user').modal('show');
-
               } else if (action == 'disable') {
                   var action = "disableuser";
                   $(".modal.user .header").empty();
@@ -1607,7 +1604,6 @@
                   $(".modal.user .header").append('Are you sure to disable ' + mail + '?');
                   $(".modal.user .content").append('<form class="ui form ' + action + ' " action="' + action + '" method="post"><input type="hidden" name="csrf_name" value="' + name_CSRF + '"><input type="hidden" name="csrf_value" value="' + value_CSRF + '"><input type="hidden" name="email" value="' + mail + '"> <div class="actions"> <div class="ui black deny button"> Cancel </div> <button class="ui submit button" >Yes</button> </div> </form>');
                   $('.ui.modal.user').modal('show');
-
               } else if (action == 'remove') {
                   var action = "removeuser";
                   $(".modal.user .header").empty();
@@ -1615,9 +1611,7 @@
                   $(".modal.user .header").append('Are you sure to remove ' + mail + '?');
                   $(".modal.user .content").append('<form class="ui form ' + action + ' " action="' + action + '" method="post"><input type="hidden" name="csrf_name" value="' + name_CSRF + '"><input type="hidden" name="csrf_value" value="' + value_CSRF + '"><input type="hidden" name="email" value="' + mail + '"> <div class="actions"> <div class="ui black deny button"> Cancel </div> <button class="ui submit red button" >Yes</button> </div> </form>');
                   $('.ui.modal.user').modal('show');
-
               } else if (action == 'modify') {
-
                   if (type == "1") {
                       var type = 'checked'
                   }
@@ -1626,13 +1620,8 @@
                   $(".modal.user .header").append('Modify informations: ' + mail);
                   $(".modal.user .content").append('<form class="ui large form myaccount" method="post" action="/modifyuser"><input type="hidden" name="csrf_name" value="' + name_CSRF + '"><input type="hidden" name="csrf_value" value="' + value_CSRF + '"><input type="hidden" name="email" value="' + mail + '"> <div class="ui error message"></div> <div class="ui stacked segment"> <div class="field"> <div class="ui left icon input"> <i class="user icon"></i> <input type="text" name="name" value="' + escape(name) + '" placeholder="Name"> </div> </div> <div class="field"> <div class="ui left icon input"> <i class="user icon"></i> <input type="text" name="firstname" value="' + escape(firstname) + '" placeholder="Firstname"> </div> <div class="ui toggle checkbox"> <input type="checkbox" name="type" ' + type + '> <label>Administrator</label> </div></div> </div> <div class="actions"><div class="ui black deny button"> Cancel </div> <button class="ui submit red button" >Yes</button> </div></div> </form>');
                   $('.ui.modal.user').modal('show');
-                   APP.modules.account.check_myaccount();
-
-
+                  APP.modules.account.check_myaccount();
               }
-
-
-
           },
       }
   })()
