@@ -67,7 +67,7 @@ Pour ubuntu 16.04(pour d’autre systèmes consulter le manuel de mongodb)
     sudo apt-get install -y mongodb-org
     
     
-** Installation de mysql:**
+**Installation de mysql:**
 
     apt-get install mysql-server mysql-client libmysqlclient15-dev mysql-common
 
@@ -274,11 +274,12 @@ il doit vous retourner acknowledge:true.
 
 Demarrer le serveur mysql 
 
-Executez cette commande:
+
+Executez cette commande (requiert les droits admin):
 	
 	mysql -h HOST-u USER -p PASSWORD < authentication.sql
 
-Créé un utilisateur avec des droit limité a la base authentification
+Créé un utilisateur avec des droit limité à la base authentication (requiert les droits admin)
 
 	CREATE USER 'USER'@'localhost' IDENTIFIED WITH mysql_native_password AS 'PASSWORD';GRANT SELECT, INSERT, UPDATE, DELETE, FILE ON *.* TO 'USER'@'localhost' REQUIRE NONE WITH MAX_QUERIES_PER_HOUR 0 MAX_CONNECTIONS_PER_HOUR 0 MAX_UPDATES_PER_HOUR 0 MAX_USER_CONNECTIONS 0;GRANT ALL PRIVILEGES ON `authentication`.* TO 'USER'@'localhost';
 
