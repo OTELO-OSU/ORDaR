@@ -238,18 +238,22 @@ $app->post('/login', function (Request $req, Response $responseSlim) {
 });
 
 $app->post('/loginCAS', function (Request $req, Response $responseSlim) {
-   $user = new User();
-        $checkuser=$user->check_current_user($_SERVER['HTTP_MAIL']);
-        if ($checkuser) {
-                $_SESSION['name'] = $checkuser->name;
-                $_SESSION['firstname'] = $checkuser->firstname;
-                $_SESSION['mail'] = $checkuser->mail;
-                $_SESSION['admin'] = $checkuser->type;
-        }
-                return $responseSlim->withRedirect('accueil');
+    $user = new User();
+    $checkuser=$user->check_current_user($_SERVER['HTTP_MAIL']);
+    if ($checkuser) {
+        $_SESSION['name'] = $checkuser->name;
+        $_SESSION['firstname'] = $checkuser->firstname;
+        $_SESSION['mail'] = $checkuser->mail;
+        $_SESSION['admin'] = $checkuser->type;
+        return $responseSlim->withRedirect('accueil');
+    }
+    else{
+        $loader = new Twig_Loader_Filesystem('search/templates');
+        $twig = new Twig_Environment($loader);
+        $error="No account linked to this email! Please register";
+        echo $twig->render('login.html.twig',['error'=>$error]);
+    }
 });
-
-
 
 
 //Route permettant l'inscription 'd'un utilisateur
