@@ -513,7 +513,7 @@ L'administrateur peut aussi modifier et ajouter des fichiers (avec un minimum de
 # Docker  <a name="docker"></a>
 
 Pour utiliser Docker vous devez configurer le fichier Configure.env qui contient toutes les variable de configuration des différents services:
-Voici uen configuration de test, à vous de la modifier.
+Voici une configuration de test, à vous de la modifier.
 
 	#SPECIFIC ORDARUI
 	REPOSITORY_NAME=DOCKER-ORDAR
@@ -562,9 +562,19 @@ Voici uen configuration de test, à vous de la modifier.
 	GRANULARITY=YYYY-MM-DD
 	TOKENKEY="test"
 	SpecialSet="openaire"
+	
+	#MYSQL AUTH DB
+	DRIVER=mysql
+	HOSTMYSQL=mysql_db
+	MYSQL_ROOT_PASSWORD=root
+	MYSQL_DATABASE=authentication
+	MYSQL_USER=test2
+	MYSQL_PASSWORD=test
+	CHARSETMYSQL=utf8
+	COLLATIONMYSQL=utf8_unicode_ci
 
 
-Note: Les utilisateurs mongo sont créés automatiquement.
+Note: Les utilisateurs mongo et mysql sont créés automatiquement.
 
 Le service Ordar_script permet de mettre en place l'upload automatic des jeux de données d'un projet,
 pour cela configurer le fichier Docker/Ordar_script/config.ini avec les valeurs prédemment rentré.
@@ -629,10 +639,16 @@ Pour les lancer :
 	docker-compose start
 
 
-Il y a 2 volumes présent sur ce projet afin de garantir la persistance des données:
+Il y a 3 volumes présent sur ce projet afin de garantir la persistance des données:
 
 	- mongodb, pour la base de données
 	- elasticsearch, pour les données indexé par ES
+	- mysql , pour les comptes utilisateurs
+
+Une fois déployer, vous pouvez vous loguer avec un compte ADMIN générique afin de créer le votre, et ainsi supprimer celui ci.
+
+	Adresse mail : admin@admin.fr
+	Mot de passe: admin@ORDAR1
 
 Les fichiers de données sont stocké sur le systeme hôte et ensuite monté dans les différents container qui les utilisent.
 
