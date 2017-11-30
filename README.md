@@ -281,7 +281,7 @@ Executez cette commande (requiert les droits admin):
 
 Créé un utilisateur avec des droit limité à la base authentication (requiert les droits admin)
 
-	CREATE USER 'USER'@'localhost' IDENTIFIED WITH mysql_native_password AS 'PASSWORD';GRANT SELECT, INSERT, UPDATE, DELETE, FILE ON *.* TO 'USER'@'localhost' REQUIRE NONE WITH MAX_QUERIES_PER_HOUR 0 MAX_CONNECTIONS_PER_HOUR 0 MAX_UPDATES_PER_HOUR 0 MAX_USER_CONNECTIONS 0;GRANT ALL PRIVILEGES ON `authentication`.* TO 'USER'@'localhost';
+	CREATE USER 'USER'@'localhost' IDENTIFIED BY "PASSWORD";GRANT SELECT, INSERT, UPDATE, DELETE, FILE ON *.* TO 'USER'@'localhost';GRANT ALL PRIVILEGES ON `authentication`.* TO 'USER'@'localhost';
 
 Une fois ceci fait,Editer le fichier Frontend/AuthDB.ini avec l'utilisateur précédemment crée:
 
