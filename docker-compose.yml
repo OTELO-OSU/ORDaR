@@ -13,6 +13,17 @@ services:
      - "127.0.0.1:27018:27017"
     restart: unless-stopped
   
+
+  mysql_db:
+    image: mysql_ordar_img
+    build: ./Docker/MYSQL
+    container_name: mysql_ordar
+    env_file:
+     - Configure.env
+    volumes:
+     - mysql:/var/lib/mysql
+
+  
   elasticsearch:
     image: elasticsearch_ordar_img
     build: ./Docker/ElasticSearch
@@ -23,6 +34,7 @@ services:
      - number_of_replicas=0
     volumes:
      - elasticsearch:/usr/share/elasticsearch/data
+
 
   mongo-connector:
     image: mongo-connector_ordar_img
@@ -39,6 +51,7 @@ services:
      - mongo
     restart: always
 
+
   OrdarUI:
     image: ordar_ui_img
     build: .
@@ -46,15 +59,18 @@ services:
     env_file:
      - Configure.env
     depends_on:
+     - mysql_db
      - elasticsearch
      - mongo
     links:
+     - mysql_db
      - elasticsearch
      - mongo
     ports: 
      - "8084:80"
     volumes:
      - /testdata/:/data/applis/ORDaR/Uploads/
+
 
 
   OrdarOAIPMH:
@@ -68,7 +84,8 @@ services:
     links:
      - elasticsearch
     ports: 
-     - "127.0.0.1:8083:80"
+     - "127.0.0.1:8087:80"
+ 
 
   CheckEmbargoedDate:
     image: checkembargoeddate_img
@@ -80,6 +97,8 @@ services:
      - mongo
     links:
      - mongo
+
+
 
 # Ordar_script_mobised:
 #    image: ordar_script-mobised_img
@@ -101,4 +120,5 @@ services:
 volumes:
   mongodb: {}
   elasticsearch : {}
+  mysql: {} 
  

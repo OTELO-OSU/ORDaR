@@ -14,9 +14,9 @@ then
     exec mongod --replSet "rs0" --keyFile /data/db/keyfile --auth  --storageEngine wiredTiger
 
 else
-    exec mongod --replSet "rs0" --keyFile /data/db/keyfile --auth  --storageEngine wiredTiger&
     openssl rand -base64 756 > /data/db/keyfile
     chmod 600 /data/db/keyfile
+  exec mongod --replSet "rs0" --keyFile /data/db/keyfile --auth  --storageEngine wiredTiger&
     echo "Creating mongo database..."
     sleep 30s
 
