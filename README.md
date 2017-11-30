@@ -199,7 +199,7 @@ Voici un exemple de code pour configurer apache avec shibboleth:
 		ShibRequestSetting applicationId ordar
 	   </Location>
 
-	<Location /login>
+	<Location /loginCAS>
 		# Auth Shibb
 		AuthType shibboleth
 		ShibRequestSetting requireSession true
@@ -342,6 +342,17 @@ Avant un ajout d'un jeu de données ou modification d'un jeu existant, une véri
 Cette classe permet d'effectuer des actions de téléchargement, de preview en ligne de certains fichiers (extension disponible en preview : txt, png, jpg, gif, pdf.
 Elle permet aussi un export des métadonnées en différents format: Datacite, Dublincore, JSON , BibTex.
 
+-**UserController**: 
+
+Cette classe permet d'effectuer de gérer les compte utilisateurs (Ajout, Suppression, Modifiation).
+
+-**MailerController**: 
+
+Cette classe permet d'envoyer de smail à des utilisateurs ou aux admins.
+
+-**Schéma base de données authentification**:
+
+![Alt text](/Img_doc/schema_auth.png?raw=true)
 
 
 **Détails des différentes module JS:**
