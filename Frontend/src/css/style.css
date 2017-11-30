@@ -52,12 +52,12 @@ overflow-y:auto
 }
 
 .waitinglist{
-  height: 200px;
+  height: 250px;
   overflow-y: auto;
 
 }
 .userapprovedlist{
-  height: 200px;
+  height: 240px;
   overflow-y: auto;
 
 }
