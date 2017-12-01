@@ -1501,7 +1501,7 @@ class DatasheetController
                     }
 
                 }
-
+            
                 if ($maxsize <= $this->upload_max) {
                     if (count($intersect) != 0 and $data != 0) {
                         $merge = array_merge($intersect, $data);
