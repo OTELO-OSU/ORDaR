@@ -1313,11 +1313,15 @@
                                           }
                                           if (value == "MEASUREMENT") {
                                               if ($("input[name='measurement_nature[]']").val() != "") {
+                                                  if (values[1]!="") {
                                                   $("#measurements").append('<div class="three fields"> <div class="field"><label>Measurement nature</label><input type="text" value="' + values[1] + '" name="measurement_nature[]"  placeholder="Nature" ></div> <div class="field"><label>Measurement abbreviation</label><input type="text"  value="' + values[2] + '" name="measurement_abbreviation[]" data-validate="measurement_abbreviation" placeholder="Abbreviation" ></div> <div class="field"><label>Measurement unit(s)</label><input type="text"   value="' + values[3] + '" name="measurement_unit[]" data-validate="measurement_unit" id="units" placeholder="Unit(s)" ></div> <input type="checkbox" class="checker" /><label for="checker">No units</label><div class="ui icon delete center"><i class="remove icon"></i></div></div>');
+                                                  }
                                               } else {
+                                                if (values[1]!="") {
                                                   $("input[name='measurement_nature[]']").val(values[1]);
                                                   $("input[name='measurement_abbreviation[]']").val(values[2]);
                                                   $("input[name='measurement_unit[]']").val(values[3]);
+                                                }
                                               }
                                           }
                                           if (value == "SAMPLE KIND") {
@@ -1328,6 +1332,8 @@
                                               }
                                           }
                                           if (value == "SAMPLING DATE") {
+                                                  if (values[1]!="" && values[1]!="YYYY-MM-DD" ) {
+                                                    console.log(values[1])
                                               if ($("input[name='sampling_date[]']").val() != "") {
                                                   $("#sampling_date").append('        <div class="ui input"><input type="date"  class="date" value="' + values[1] + '" name="sampling_date[]" placeholder="Sampling date" ><div class="ui icon delete"><i class="remove icon"></i></div> </div>');
                                                   $(".date").datepicker({
@@ -1336,8 +1342,12 @@
                                               } else {
                                                   $("input[name='sampling_date[]']").val(values[1]);
                                               }
+                                                }
                                           }
                                           if (value == "SAMPLING_POINT") {
+                                          
+                                            if (values[1]!="") {
+
                                               $("#sampling_points").append('<div> <div class="field"><label>Name</label> <input type="text" name="sampling_point_name[]" value="' + values[1] + '" placeholder="Name" ></div> <div class="field"> <label>Coordinate reference system</label> <div class="ui input"> <div class="ui dropdown fluid search selection optgroup coordinate"> <input  type="hidden"  value="' + values[2] + '" name="sampling_point_coordinate_system[]"> <div class=" text">' + values[2] + '</div> <i class="dropdown icon"></i> <div class="menu"><div class="item">NTF meridian of Paris</div><div class="item">WGS84 Greenwich</div> <div class="item">ED50 Greenwich</div> <div class="item">NTF Lambert 1</div> <div class="item">NTF Lambert 2 extend</div> <div class="item">ED50 UTM 32</div> <div class="item">WGS84 UTM 32</div> <div class="item">RGF93 projection Lambert93</div> </div> </div> </div> </div> <div class="field"><label>Abbreviation</label><input type="text"  name="sampling_point_abbreviation[]"  value="' + values[3] + '" placeholder="abbreviation"></div> <div class="field"><label>Longitude</label><input type="text"   value="' + values[4] + '" name="sampling_point_longitude[]" placeholder="longitude" ></div> <div class="field"><label>Latitude</label><input type="text" data-content="Type a latitude in decimal format" step="any"  value="' + values[5] + '" name="sampling_point_latitude[]" placeholder="latitude"></div> <div class="field"><label>Elevation</label><input type="text"  name="sampling_point_elevation[]" value="' + values[6] + '" placeholder="elevation"></div> <div class="field"><label>Additionnal description</label><textarea name="sampling_point_description[]"   placeholder="Additionnal description">' + values[7] + '</textarea></div> <div id="deletesamplingpoint" class="ui icon delete"><i class="remove icon"></i></div></div>');
                                               $('.ui .dropdown.coordinate').dropdown({
                                                   allowAdditions: true
@@ -1357,6 +1367,7 @@
                                                       e.which == 8 || // delete key
                                                       /[0-9,-.]/.test(String.fromCharCode(e.which)); // numbers
                                               })
+                                            }
                                           }
                                           if (value == "SUPPLEMENTARY FIELDS") {
                                               if ($("input[name='supplementary_fields_key[]']").val() != "") {
