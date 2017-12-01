@@ -634,10 +634,6 @@ Un fois cela effectué, lancé docker-compose:
 
 Patientez  pendant les installations et les initialisations.
 
-Executez cette commande afin d'initialiser le mapping ElasticSearch: 
-
-	docker exec ordar_ui php ORDaR/Init_elasticsearch_index.php
-
 L'installation est terminé!
 
 Pour stopper les containers:
