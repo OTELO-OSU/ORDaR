@@ -1,4 +1,4 @@
-# Installation  <a name="installation"></a>
+# Installation  
 
 **Prérequis :**
 
