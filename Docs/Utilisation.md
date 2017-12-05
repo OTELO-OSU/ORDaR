@@ -99,6 +99,8 @@ La suppression entraîne la suppression TOTALE du jeu de données:
 
 **Enregistrement des DOIs:**
 
+L'enregistrement des DOIs necessite un compte sur https://mds.datacite.org/
+
 ![Alt text](/Img_doc/DOI_save.png?raw=true)
 
 
