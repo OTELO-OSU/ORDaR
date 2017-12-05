@@ -138,46 +138,6 @@ Afin d'envoyer des mails, vous devez configurer un SMTP sur votre serveur.
 
 
 	
-**Configuration de l'authentification:**
-
-L'authentification s'effectue via la route /login.
-Cette route recupère les variables contenu dans les headers HTTP d'un serveur d'authentification ( dans notre exemple shibboleth) et va assigné les variables de session php avec leurs valeurs.
-Variables utilisés:
-
-	-HTTP_SN
-	-HTTP_GIVENNAME
-	-HTTP_MAIL
-	
-Voici un schema explicatif du fonctionnement:
-
-![Alt text](/Img_doc/config_login.png?raw=true)
-
-
-Voici un exemple de code pour configurer apache avec shibboleth:
-
-	<Location />
-	     AuthType shibboleth
-	     Require shibboleth
-		ShibRequestSetting applicationId ordar
-	   </Location>
-
-	<Location /loginCAS>
-		# Auth Shibb
-		AuthType shibboleth
-		ShibRequestSetting requireSession true
-		ShibRequestSetting applicationId ordar
-
-		ShibUseHeaders On
-		ShibRequireSession On
-	       	AuthGroupFile /etc/ordar.conf #Ajout du fichier contenant les utilisateurs autorisés
-		Require group ordar
-
-	</Location>
-	
-Il faut ensuite modifier la route logout afin de se deconnecter du serveur single sign in (Shibboleth, CAS).
-Modifier le Redirect vers la route logout de votre service.
-
-
 **Demarrer la base mongo en mode replica set :**
     
     sudo mongod --replSet "rs0"
@@ -234,6 +194,7 @@ il doit vous retourner acknowledge:true.
 
 **Configuration de l'authentification:**
 
+
 Demarrer le serveur mysql 
 
 
@@ -257,6 +218,46 @@ Une fois ceci fait,Editer le fichier Frontend/AuthDB.ini avec l'utilisateur pré
 
 	
 La base est maintenant installé.
+
+L'authentification s'effectue via la route /login.
+On peut s'authentifier au compte utilisateur via l'authentification de l'application, necessitant une inscription de la part de l'utilisateur ou via le CAS de son etablissement. Pour cela l'administrateur devra importer les comptes utilisateurs a utiliser via le CAS ou l'utilisateur devra préalablement s'inscrire .
+
+L'authentification vers le CAS s'effectue via la route /loginCAS.
+Cette route recupère les variables contenu dans les headers HTTP d'un serveur d'authentification ( dans notre exemple shibboleth) et va assigné les variables de session php avec leurs valeurs.
+Variables utilisés:
+
+	-HTTP_SN
+	-HTTP_GIVENNAME
+	-HTTP_MAIL
+	
+Voici un schema explicatif du fonctionnement:
+
+![Alt text](/Img_doc/config_login.png?raw=true)
+
+
+Voici un exemple de code pour configurer apache avec shibboleth:
+
+	<Location />
+	     AuthType shibboleth
+	     Require shibboleth
+		ShibRequestSetting applicationId ordar
+	   </Location>
+
+	<Location /loginCAS>
+		# Auth Shibb
+		AuthType shibboleth
+		ShibRequestSetting requireSession true
+		ShibRequestSetting applicationId ordar
+
+		ShibUseHeaders On
+		ShibRequireSession On
+	       	AuthGroupFile /etc/ordar.conf #Ajout du fichier contenant les utilisateurs autorisés
+		Require group ordar
+
+	</Location>
+	
+Il faut ensuite modifier la route logout afin de se deconnecter du serveur single sign in (Shibboleth, CAS).
+Modifier le Redirect vers la route logout de votre service.
 
 
 
