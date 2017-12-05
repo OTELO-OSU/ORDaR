@@ -54,7 +54,7 @@ Mongo connector se charge ensuite d'indexer ces données.
 
 L'utilisateur recevra un mail avec le DOI qui a été attribué au jeu de données.
 
-**Importation d'un jeu de données via Ordar script (OTELoCloud):**
+**Importation d'un jeu de données via  harvester-geo-stations (OTELoCloud):**
 
 OTELO utilise des canevas afin que les chercheurs puissent créés des fichiers de données interroperable.
 
@@ -62,7 +62,7 @@ Un script d'importation se charge d'importer les données présente dans un doss
 Les métadonnées issues du feuillet INTRO du fichier excel sont importées dans la base Mongodb,
 Le feuillet DATA est converti en fichier csv et il est joint à ce jeux de données comme fichier.
 
-Vous trouverer le script d'importation ici : https://bitbucket.org/arnouldpy/ordar_scripts/
+Vous trouverer le script d'importation ici : https://bitbucket.org/arnouldpy/harvester-geo-stations/
 Le repository est privée, il sera necessaire de nous envoyer un message afin de répondre à votre demande.
 
 Le jeux de données est ajouté avec un statut Unpublished, il est accessible uniquement au propriétaire ou ses co-auteurs.
