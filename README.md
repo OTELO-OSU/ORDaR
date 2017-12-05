@@ -114,12 +114,12 @@ Voici une configuration de test, à vous de la modifier.
 
 Note: Les utilisateurs mongo et mysql sont créés automatiquement.
 
-Le service Ordar_script permet de mettre en place l'upload automatic des jeux de données d'un projet,
-pour cela configurer le fichier Docker/Ordar_script/config.ini avec les valeurs prédemment rentré.
+Le service  harvester-geo-stations permet de mettre en place l'upload automatic des jeux de données d'un projet,
+pour cela configurer le fichier Docker/harvester-geo-stations/config.ini avec les valeurs prédemment rentré.
 
 ATTENTION: Un projet = un service d'upload automatique!
 
-ATTENTION: Dans les services OrdarUI et  Ordar_scripts_mobised ( ou pour tout autre projet), il faut configurer les volumes afin de monter les fichiers Uploader et les jeux de donné présent sur OTELO-CLOUD.
+ATTENTION: Dans les services OrdarUI et  harvester-geo-stations, il faut configurer les volumes afin de monter les fichiers Uploader et les jeux de donné présent sur OTELO-CLOUD.
 Pour cela rendez-vous dans le fichier docker-compose.yml :
 
 Exemple pour le service Ordar_script_mobised
@@ -145,7 +145,7 @@ Remplacer TAILLESOUHAITE par une taille
 	RUN echo 'post_max_size = TAILLESOUHAITE' >> /usr/local/etc/php/php.ini
 
 
-Modifier le fichier Docker/Ordar_script/Dockerfile:
+Modifier le fichier Docker/harvester-geo-stations/Dockerfile:
 
 Ajouter votre access token bitbucket afin de pouvoir cloner le projet ordar_script
 
