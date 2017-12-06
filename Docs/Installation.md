@@ -248,13 +248,9 @@ Voici un exemple de code pour configurer apache avec shibboleth:
 		AuthType shibboleth
 		ShibRequestSetting requireSession true
 		ShibRequestSetting applicationId ordar
-
 		ShibUseHeaders On
 		ShibRequireSession On
-	       	AuthGroupFile /etc/ordar.conf #Ajout du fichier contenant les utilisateurs autorisés
-		Require group ordar
-
-	</Location>
+		</Location>
 	
 Il faut ensuite modifier la route logout afin de se deconnecter du serveur single sign in (Shibboleth, CAS).
 Modifier le Redirect vers la route logout de votre service.
