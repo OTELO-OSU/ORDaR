@@ -35,6 +35,8 @@ Toutes les métadonnées sont ouvertes et décrites dans les normes internationa
 Enfin, chaque ensemble de données est publié avec une licence Creative Common qui spécifie les termes de réutilisation juridique
 
 Cette entrepôt vise à promouvoir l'accès ouvert: valoriser et partager les connaissances.
+L'entrepôt supporte le protocole de moissonage de données OAI-PMH.
+Pour activer cette fonctionnalités il suffit de suivre la documentation à cette adresse: https://github.com/OTELO-OSU/ORDaR_OAI-PMH
 
 # Installation  <a name="installation"></a>
 
@@ -98,8 +100,9 @@ Voici une configuration de test, à vous de la modifier.
 	PROTOCOL_VERSION=3.0
 	ADMINMAIL=test@test.fr
 	GRANULARITY=YYYY-MM-DD
-	TOKENKEY="test"
-	SpecialSet="openaire"
+	TOKENKEY="test" #Clé a utiliser pour chiffrer les resumptionTokens
+	SpecialSet="openaire" #Set qui sera appliqué a tout les documents pour permettre d'etre recupérer par openaire ou autre. les valeurs doivent etre séparé par une virgule.
+
 	
 	#MYSQL AUTH DB
 	DRIVER=mysql
@@ -189,5 +192,6 @@ Une fois déployé, vous pouvez vous loguer avec un compte ADMIN générique afi
 
 Les fichiers de données sont stockés sur le systeme hôte et ensuite monté dans les différents container qui les utilisent.
 
+Le container OAI-PMH est activé par défaut, ce qui rends l'entrepôt de données moissonable, libre à vous de ne pas le demarrer si vous ne souhaitez pas mettre à disposition le protocole OAI-PMH.
 
 ATTENTION: Mongo-connector indexe 2 minutes après le lancement des conteneurs, ceci est du au demmarrage des différents services (mongo, elasticsearch)
