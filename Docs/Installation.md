@@ -79,25 +79,25 @@ Afin d'envoyer des mails, vous devez configurer un SMTP sur votre serveur.
 
     git clone https://github.com/arnouldpy/ORDaR.git
 
-    Rendez vous dans le dossier créé, une fois dans le dossier Ordar, exécuter :
+    Rendez vous dans le dossier créé, une fois dans le dossier Ordar, exécutez :
     php Init_elasticsearch_index.php 
     Ce fichier permet de définir le template que doit utiliser elasticsearch.
     
-    Vous pouvez créer le fichier config manuellement ou utiliser le script configure.sh qui permet de créer un fichier de config facilement et rapidement
+    Vous pouvez créer le fichier config manuellement ou utiliser le script configure.sh qui permet de créer un fichier de configuration facilement et rapidement
     
     Rendez vous dans Frontend/config.ini
-    REPOSITORY_NAME = Defini le nom du repository ainsi que le nom utilisé pour la generation des DOIs
+    REPOSITORY_NAME = Defini le nom du repository ainsi que le nom utilisé pour la generation des DOIs (après le prefix vous étant attribué)
     REPOSITORY_URL = Indiquer ici l'url sur lequel le projet sera hebergé
-    UPLOAD_FOLDER = défini ou les Uploads des utilisateurs vont être stockés, 
+    UPLOAD_FOLDER = défini l'emplacement des Uploads des utilisateurs, 
     choisissez un chemin et vérifier les permissions.
-    DATAFILE_UNIXUSER=Il s'agit du user a qui appartient les fichiers uploader ( niveau system de fichier).
+    DATAFILE_UNIXUSER=Il s'agit du user à qui appartient les fichiers uploader ( niveau système de fichier).
     NO_REPLY_MAIL=Mail de No-reply
     SOCIAL_SHARING=Activer l'option de partage sur les reseaux sociaux
-    SSH_HOST=Host ssh ou sont presente les données OTELO-CLOUD
+    SSH_HOST=Host ssh où sont presentes les données OTELO-CLOUD (espace collaboratif de stockage)
     SSH_UNIXUSER=USER ssh
     SSH_UNIXPASSWD=password
     SMTP=votre smtp
-    DATASET_FILES_MAX_SIZE= Nombre d'espace à allouer (ex: 1G pour 1 gigas)
+    DATASET_FILES_MAX_SIZE= Quantité d'espace à allouer (ex: 1G pour 1 gigas)
     #ELASTICSEARCH CONFIG
     ESHOST=Host d'elasticsearch
     ESPORT=Port d'elasticsearch
@@ -108,7 +108,7 @@ Afin d'envoyer des mails, vous devez configurer un SMTP sur votre serveur.
     username = Le username de votre BDD qui contiendra les jeux de données
     password = Le mot de passe de votre BDD qui contiendra les jeux de données
     #DOI BDD
-    DOI_PREFIX = Votre prefix DOI datacite
+    DOI_PREFIX = Votre prefix DOI fourni par datacite
     DOI_database = Le nom de votre BDD qui contiendra le numéro de DOI
     user_doi = Le username de votre BDD qui contiendra le numéro de DOI
     password_doi = Le mot de passe de votre BDD qui contiendra le numéro de DOI
@@ -117,7 +117,7 @@ Afin d'envoyer des mails, vous devez configurer un SMTP sur votre serveur.
 
 **Configuration apache2**
 
-    activer mode rewrite :
+    activer le module rewrite :
     sudo a2enmod rewrite
 
     Modifier la configuration apache:
@@ -132,7 +132,7 @@ Afin d'envoyer des mails, vous devez configurer un SMTP sur votre serveur.
 
 **Configuration php.ini:**
 
-	upload_max_filesize = 1G
+	upload_max_filesize = 1G (limitation des fichiers déposés à 1GB)
 
 	post_max_size = 1050M
 
@@ -153,9 +153,9 @@ Afin d'envoyer des mails, vous devez configurer un SMTP sur votre serveur.
 
     db.createUser({user: "USER",pwd: "PASSWORD",roles: [ { role: "backup", db: "admin" } ]})
 
-    Ensuite se connecter sur la base ORDaR et créer l'utilisateur qui pourra modifier les données:
+    Ensuite se connecter sur la base de données et créer l'utilisateur qui pourra modifier les données:
 
-        use ORDaR
+     ici:    use ORDaR
 
         db.createUser({user: "USER",pwd: "PASSWORD",roles: [ { role: "readWrite", db: "ORDaR" } ]})
 
@@ -178,7 +178,7 @@ Définissez un username, ainsi qu'un password.
 
 **Initialisation du mapping d'elasticsearch:**
 
-Afin d’initialiser le mapping, qui va permettre un bon fonctionnement des facettes de recherche, il faut lancer le script Init_elasticsearch_index.php.
+Afin d’initialiser le mapping, qui va définir les facettes de recherche à implémenter, il faut lancer le script Init_elasticsearch_index.php.
 il doit vous retourner acknowledge:true.
 
 
@@ -202,11 +202,11 @@ Executez cette commande (requiert les droits admin):
 	
 	mysql -h HOST-u USER -p PASSWORD < authentication.sql
 
-Créé un utilisateur avec des droit limité à la base authentication (requiert les droits admin)
+Créer un utilisateur avec des droit limité à la base authentication (requiert les droits admin)
 
 	CREATE USER 'USER'@'localhost' IDENTIFIED BY "PASSWORD";GRANT SELECT, INSERT, UPDATE, DELETE, FILE ON *.* TO 'USER'@'localhost';GRANT ALL PRIVILEGES ON `authentication`.* TO 'USER'@'localhost';
 
-Une fois ceci fait,Editer le fichier Frontend/AuthDB.ini avec l'utilisateur précédemment crée:
+Une fois ceci fait, Editer le fichier Frontend/AuthDB.ini avec l'utilisateur précédemment créé:
 
 	driver = mysql
 	host = VOTRE_HOST
@@ -217,13 +217,14 @@ Une fois ceci fait,Editer le fichier Frontend/AuthDB.ini avec l'utilisateur pré
 	collation = utf8_unicode_ci
 
 	
-La base est maintenant installé.
+La base est maintenant installée.
 
 L'authentification s'effectue via la route /login.
-On peut s'authentifier au compte utilisateur via l'authentification de l'application, necessitant une inscription de la part de l'utilisateur ou via le CAS de son etablissement. Pour cela l'administrateur devra importer les comptes utilisateurs a utiliser via le CAS ou l'utilisateur devra préalablement s'inscrire .
+On peut s'authentifier au compte utilisateur via l'authentification de l'application. Il faut préalablement avoir créé sont compte via la procédure "sign up". Il est également possible de se connecter via CAS et son fournisseur d'identité si l'administrateur a importer les comptes utilisateurs ou que l'utilisateur s'est préalablement inscrit.
 
 L'authentification vers le CAS s'effectue via la route /loginCAS.
-Cette route recupère les variables contenu dans les headers HTTP d'un serveur d'authentification ( dans notre exemple shibboleth) et va assigné les variables de session php avec leurs valeurs.
+Cette route recupère les variables contenu dans les headers HTTP fournit par le fournisseur d'identié et transmis par l'application par notre serveur shibboleth. Ces variables seront assignées aux variables de session php.
+
 Variables utilisés:
 
 	-HTTP_SN
