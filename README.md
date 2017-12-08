@@ -12,13 +12,13 @@ Sommaire:
 
 
 # Présentation <a name="presentation"></a>
-ORDaR est un entrepot de données developpé par et pour OTELO, celui-ci est entierement généralisable.
-Vous pouvez choisir le nom de l'entrepot avec le fichier de config detailler dans l'installation.
-Ainsi vous pouvez deployer facilement une instance de cette entrepot pour votre institution.
+ORDaR est un entrepôt de données développé par et pour OTELO, celui-ci est entièrement personnalisable.
+Vous pouvez choisir le nom de votre entrepot avec le fichier de config detaillé dans l'installation.
+Ainsi vous pouvez déployer facilement une instance de cette entrepot pour votre institution.
 
-ORDaR offre un environnement sécurisé et pérenne pour le dépôt de jeux de données et permet d'obtenir un DOI (Digital Object Identifier) pour publication ou datapaper.
+ORDaR offre un environnement sécurisé et pérenne (sous réserve du contrat de service de votre hebergeur et des procédures de sauvegarde mise en place) pour le dépôt de jeux de données et permet d'obtenir un DOI (Digital Object Identifier) pour vos publication ou datapaper.
 
-Les ensembles de données peuvent etre publiés dans ORDaR sous différents accées:
+Les jeux de données peuvent être publiés dans ORDaR avec différents droit d'accès:
 
 	 Ouvert: accès total (opendata)
 	 Fermé: Accès restreint aux seules métadonnées
@@ -114,15 +114,16 @@ Voici une configuration de test, à vous de la modifier.
 
 Note: Les utilisateurs mongo et mysql sont créés automatiquement.
 
-Le service  harvester-geo-stations permet de mettre en place l'upload automatic des jeux de données d'un projet,
+Le service  harvester-geo-stations (spécifique à OTELo) permet de mettre en place l'upload automatic des jeux de données d'un projet,
 pour cela configurer le fichier Docker/harvester-geo-stations/config.ini avec les valeurs prédemment rentré.
+Scripts privés disponible sur demande.
 
 ATTENTION: Un projet = un service d'upload automatique!
 
 ATTENTION: Dans les services OrdarUI et  harvester-geo-stations, il faut configurer les volumes afin de monter les fichiers Uploader et les jeux de donné présent sur OTELO-CLOUD.
 Pour cela rendez-vous dans le fichier docker-compose.yml :
 
-Exemple pour le service Ordar_script_mobised
+Exemple pour le service harvester-geo-stations
 
 	 volumes:
 	     - /data/applis/ORDaR/Uploads/:/data/applis/ORDaR/Uploads/  (Chemin machine hôte : Chemin du docker interne NE PAS MOFIFIER LE CHEMIN INTERNE)
@@ -133,11 +134,12 @@ Exemple pour le service OrdarUI
 	 volumes:
 	     - /data/applis/ORDaR/Uploads/:/data/applis/ORDaR/Uploads/  (Chemin machine hôte : Chemin du docker interne NE PAS MOFIFIER LE CHEMIN INTERNE)
 
-
+Configuration du relais mail :
 Modifier le fichier Docker/Apache_PHP/ssmtp.conf:
 
 	mailhub= ADRESSE DE VOTRE SMTP
 
+Paramétrage de la taille de fichier maximale au niveau php :
 Modifier le fichier Dockerfile a la racine du projet:
 Remplacer TAILLESOUHAITE par une taille
 
@@ -145,6 +147,7 @@ Remplacer TAILLESOUHAITE par une taille
 	RUN echo 'post_max_size = TAILLESOUHAITE' >> /usr/local/etc/php/php.ini
 
 
+Le script de moissonage harvester-geo-stations étant stocké sur un repository privé de bitbucket :
 Modifier le fichier Docker/harvester-geo-stations/Dockerfile:
 
 Ajouter votre access token bitbucket afin de pouvoir cloner le projet ordar_script
@@ -161,7 +164,7 @@ Un fois cela effectué, lancé docker-compose:
 
 Patientez  pendant les installations et les initialisations.
 
-L'installation est terminé!
+L'installation est terminée!
 
 Pour stopper les containers:
 
@@ -176,15 +179,15 @@ Pour les lancer :
 Il y a 3 volumes présent sur ce projet afin de garantir la persistance des données:
 
 	- mongodb, pour la base de données
-	- elasticsearch, pour les données indexé par ES
+	- elasticsearch, pour les données indexées par ES
 	- mysql , pour les comptes utilisateurs
 
-Une fois déployer, vous pouvez vous loguer avec un compte ADMIN générique afin de créer le votre, et ainsi supprimer celui ci.
+Une fois déployé, vous pouvez vous loguer avec un compte ADMIN générique afin de créer le votre, et par la suite supprimer celui ci.
 
 	Adresse mail : admin@admin.fr
 	Mot de passe: admin@ORDAR1
 
-Les fichiers de données sont stocké sur le systeme hôte et ensuite monté dans les différents container qui les utilisent.
+Les fichiers de données sont stockés sur le systeme hôte et ensuite monté dans les différents container qui les utilisent.
 
 
-ATTENTION: Mongo-connector indexe 2 minutes apres le lancement des conteneurs, ceci est du au demmarrage des différents services (mongo, elasticsearch)
+ATTENTION: Mongo-connector indexe 2 minutes après le lancement des conteneurs, ceci est du au demmarrage des différents services (mongo, elasticsearch)
