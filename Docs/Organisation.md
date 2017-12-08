@@ -5,12 +5,14 @@
 
 Ordar comporte 2 bases de données mongo:
 
-    - ORDAR
+    - ORDAR (le nom de votre Bdd: base de données principale)
     - DOI
     
- La base Ordar contient plusieurs collections, une depot manuel : Manual_Depot et plusieurs autres en fonction des projets importés avec ordar_script.
+ La base de données principale contient la collection: Manual_Depot 
+ Cette collection contient les jeux de données déposé lors d'un dépot manuel (via upload)
+ Dans le cas d'une implémentation des scripts de moissonage des jeux de données stockés sur l'espace collaboratif, d'autre collection pourront être créée du non de ces projets. Les scripts de moissonage, spécifique à OTELo sont disponible sur demande.
  
- La base DOI contient une seule collection, DOI, elle contient un document avec un ID REPOSITORYNAME-DOI, un ID est l’état du document (cet état permet de gérer des accès concurrents, locked/unlocked est positionné pour utiliser la ressource). 
+ La base DOI contient une seule collection: DOI, elle contient un document avec un ID REPOSITORYNAME-DOI, un ID étant l’état du document (cet état permet de gérer des accès concurrents. Un système de verrou locked/unlocked est positionné pour pouvoir utiliser la ressource). 
 
 
 **Organisation du code:**
@@ -30,12 +32,12 @@ Ordar comporte 2 bases de données mongo:
 
 -**RequestController**: 
 
-Cette classe va permettre d'effectuer les requêtes vers l'api ElasticSearch et récupérer les données pour les envoyer vers datacite puis envoi un mail à un administrateur.
+Cette classe va permettre d'effectuer les requêtes vers l'api ElasticSearch et récupérer les données pour ensuite les envoyer vers datacite. Un mail est envoyé à l'administrateur en fin de traitement.
 
 
 -**DatasheetController**: 
 
-Cette classe permet de gérer les datasets , créer , éditer, supprimer, générer un doi, envoyer un mail à un auteur.
+Cette classe permet de gérer les jeux de données , créer , éditer, supprimer, générer un doi, envoyer un mail à un auteur.
 Avant un ajout d'un jeu de données ou modification d'un jeu existant, une vérification de disponibilité du service Datacite est effectué.
 
 
@@ -43,11 +45,11 @@ Avant un ajout d'un jeu de données ou modification d'un jeu existant, une véri
 -**FileController**: 
 
 Cette classe permet d'effectuer des actions de téléchargement, de preview en ligne de certains fichiers (extension disponible en preview : txt, png, jpg, gif, pdf.
-Elle permet aussi un export des métadonnées en différents format: Datacite, Dublincore, JSON , BibTex.
+Elle permet aussi un export des métadonnées en différents formats: Datacite, Dublincore, JSON , BibTex.
 
 -**UserController**: 
 
-Cette classe permet d'effectuer de gérer les comptes utilisateurs (Ajout, Suppression, Modifiation).
+Cette classe permet de gérer les comptes utilisateurs (Ajout, Suppression, Modifiation).
 
 -**MailerController**: 
 
