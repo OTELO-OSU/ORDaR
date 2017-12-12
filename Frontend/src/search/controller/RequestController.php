@@ -38,6 +38,7 @@ class RequestController
             CURLOPT_POSTFIELDS     => $postcontent,
         );
         $response                   = self::Curlrequest($url, $curlopt);
+        return $response;
     }
 
     /**
