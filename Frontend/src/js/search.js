@@ -1543,7 +1543,7 @@
               sessionStorage.setItem('mail',$("input[name='email']").val());
               sessionStorage.setItem('firstname',$("input[name='firstname']").val());
               sessionStorage.setItem('name',$("input[name='name']").val());
-              window.location.replace("https://orcid.org/oauth/authorize?client_id=APP-QIXDVD1QKBIS90UX&response_type=code&scope=/authenticate&redirect_uri="+location.host+"/signup");
+              window.location.replace("https://orcid.org/oauth/authorize?client_id=APP-QIXDVD1QKBIS90UX&response_type=code&scope=/authenticate&redirect_uri=https://"+location.host+"/signup");
               }
 
               );
