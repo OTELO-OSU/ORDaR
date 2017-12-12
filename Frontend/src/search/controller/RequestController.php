@@ -25,8 +25,9 @@ class RequestController
 
  public function get_ORCID_ID($code,$action)
     {
+        $config = $file->ConfigFile();
         $url = "https://orcid.org/oauth/token";
-        $postcontent="client_id=APP-QIXDVD1QKBIS90UX&client_secret=9e0da9a0-7898-4d09-9647-dc9c784eb637&grant_type=authorization_code&code=".$code."&redirect_uri=https://beta-ordar.otelo.univ-lorraine.fr/".$action;
+        $postcontent="client_id=APP-QIXDVD1QKBIS90UX&client_secret=9e0da9a0-7898-4d09-9647-dc9c784eb637&grant_type=authorization_code&code=".$code."&redirect_uri=".$config['REPOSITORY_URL']."/".$action;
         $curlopt = array(
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING       => "",
