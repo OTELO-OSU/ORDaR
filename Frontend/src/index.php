@@ -248,7 +248,7 @@ $app->get('/signup', function (Request $req, Response $responseSlim) {
         if ($code) {
 
             $request    = new RequestApi();
-            $orcid= $request->get_ORCID_ID($code);
+            $orcid= $request->get_ORCID_ID($code,"signup");
             $orcid=json_decode($orcid,true);
             
         }
@@ -374,7 +374,7 @@ $app->get('/myaccount', function (Request $req, Response $responseSlim) {
             $orcid=$user[0]->ORCID_ID;
         if ($code) {
             $request    = new RequestApi();
-            $orcid= $request->get_ORCID_ID($code);
+            $orcid= $request->get_ORCID_ID($code,'myaccount');
             $orcid=json_decode($orcid,true);
             $orcid=$orcid['orcid'];
         }
