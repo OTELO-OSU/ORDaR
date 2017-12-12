@@ -1527,14 +1527,23 @@
               });
 
               if (sessionStorage.getItem('mail')) {
-              $("input[name='email']").val(sessionStorage.getItem('mail'));
-
+                $("input[name='email']").val(sessionStorage.getItem('mail'));
+                sessionStorage.removeItem('mail')
+              }
+               if (sessionStorage.getItem('name')) {
+                $("input[name='name']").val(sessionStorage.getItem('name'));
+                sessionStorage.removeItem('name')
+              }
+               if (sessionStorage.getItem('firstname')) {
+                $("input[name='firstname']").val(sessionStorage.getItem('firstname'));
+                sessionStorage.removeItem('firstname')
               }
 
               $('#connect-orcid-button').click(function(){
-              var email=sessionStorage.setItem('mail',$("input[name='email']").val());
+              sessionStorage.setItem('mail',$("input[name='email']").val());
+              sessionStorage.setItem('firstname',$("input[name='firstname']").val());
+              sessionStorage.setItem('name',$("input[name='name']").val());
               window.location.replace("https://orcid.org/oauth/authorize?client_id=APP-QIXDVD1QKBIS90UX&response_type=code&scope=/authenticate&redirect_uri=https://beta-ordar.otelo.univ-lorraine.fr/signup");
-
               }
 
               );
@@ -1611,15 +1620,14 @@
                               prompt: 'Please enter a valid firstname'
                           }]
                       },
-                       userfirstname: {
-                          identifier: 'orcid',
-                          rules: [{
-                              type: 'regExp[/(\\d{4})-(\\d{4})-(\\d{4})-(\\d{3}[0-9X])$/g]',
-                              prompt: 'Please enter a valid ORCID ID'
-                          }]
-                      }
+                    
                   }
               });
+               $('#connect-orcid-button').click(function(){
+              window.location.replace("https://orcid.org/oauth/authorize?client_id=APP-QIXDVD1QKBIS90UX&response_type=code&scope=/authenticate&redirect_uri=https://beta-ordar.otelo.univ-lorraine.fr/myaccount");
+              }
+
+              );
           },
           check_clicked: function(e, name_CSRF, value_CSRF, name, firstname, mail, type) {
               var action = e.target.name;

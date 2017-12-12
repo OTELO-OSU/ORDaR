@@ -246,7 +246,7 @@ $app->get('/signup', function (Request $req, Response $responseSlim) {
         $valuecsrf = $req->getAttribute($valueKey);
         $code            = $req->getparam('code');
         if ($code) {
-            
+
             $request    = new RequestApi();
             $orcid= $request->get_ORCID_ID($code);
             $orcid=json_decode($orcid,true);
@@ -369,8 +369,17 @@ $app->get('/myaccount', function (Request $req, Response $responseSlim) {
         $namecsrf  = $req->getAttribute($nameKey);
         $valuecsrf = $req->getAttribute($valueKey);
         $user      = new User();
+        $code            = $req->getparam('code');
         $user      = $user->getUserInfo($_SESSION['mail']);
-        echo $twig->render('myaccount.html.twig', ['name' => $user[0]->name, 'firstname' => $user[0]->firstname,'orcid' => $user[0]->ORCID_ID, 'name_CSRF' => $namecsrf, 'value_CSRF' => $valuecsrf, 'mail' => $_SESSION['mail'], 'admin' => $_SESSION['admin']]);
+            $orcid=$user[0]->ORCID_ID;
+        if ($code) {
+            $request    = new RequestApi();
+            $orcid= $request->get_ORCID_ID($code);
+            $orcid=json_decode($orcid,true);
+            $orcid=$orcid['orcid'];
+        }
+        
+        echo $twig->render('myaccount.html.twig', ['name' => $user[0]->name, 'firstname' => $user[0]->firstname,'orcid' => $orcid, 'name_CSRF' => $namecsrf, 'value_CSRF' => $valuecsrf, 'mail' => $_SESSION['mail'], 'admin' => $_SESSION['admin']]);
     } else {
         return $responseSlim->withRedirect('accueil');
     }

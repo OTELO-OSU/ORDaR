@@ -47,10 +47,12 @@
             <input type="text" name="firstname" value="{{firstname}}" placeholder="Firstname">
           </div>
         </div>
-         <div class="field">
+        <div id="connect-orcid-button" ><img id="orcid-id-logo" src="https://orcid.org/sites/default/files/images/orcid_24x24.png" width='24' height='24' alt="ORCID logo"/>Get your ORCID iD</div>
+        <div class="field">
           <div class="ui left icon input">
-            <i class="user icon"></i>
-            <input type="text" name="orcid" value="{{orcid}}" placeholder="ORCID ID">
+            <i class="lock icon"></i>
+           
+        <input type="text" name="orcid" value="{{orcid}}" placeholder="ORCID_ID" readonly="">
           </div>
         </div>
         <button type="submit" class="ui fluid large teal submit button">Update my account</button>
@@ -79,4 +81,32 @@
 <script type="text/javascript">
   APP.modules.account.check_myaccount();
 </script>
+<style type="text/css">
+  #connect-orcid-button{
+  border: 1px solid #D3D3D3;
+  padding: .3em;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 1px 1px 3px #999;
+  cursor: pointer;
+  color: #999;
+  font-weight: bold;
+  font-size: .8em;
+  line-height: 24px;
+  vertical-align: middle;
+}
+
+#connect-orcid-button:hover{
+  border: 1px solid #338caf;
+  color: #338caf;
+}
+
+#orcid-id-logo{
+  display: block;
+  margin: 0 .5em 0 0;
+  padding: 0;
+  float: left;
+}
+
+</style>
 {% include 'footer.html.twig' %}
