@@ -3,7 +3,6 @@ namespace search\controller;
 
 use \search\controller\FileController as File;
 use \search\controller\MailerController as Mailer;
-
 ini_set('memory_limit', '-1');
 class RequestController
 {
