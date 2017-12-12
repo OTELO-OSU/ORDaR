@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : localhost
--- Généré le :  jeu. 30 nov. 2017 à 11:48
+-- Généré le :  mar. 12 déc. 2017 à 13:46
 -- Version du serveur :  5.7.20-0ubuntu0.16.04.1
--- Version de PHP :  7.1.12-1+ubuntu16.04.1+deb.sury.org+1
+-- Version de PHP :  5.6.32-1+ubuntu16.04.1+deb.sury.org+1
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -21,8 +21,6 @@ SET time_zone = "+00:00";
 --
 -- Base de données :  `authentication`
 --
-CREATE DATABASE IF NOT EXISTS `authentication` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
-USE `authentication`;
 
 -- --------------------------------------------------------
 
@@ -52,13 +50,6 @@ CREATE TABLE `mail_validation` (
   `updated_at` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
---
--- Déchargement des données de la table `mail_validation`
---
-
-INSERT INTO `mail_validation` (`mail`, `token`, `datetime`, `created_at`, `updated_at`) VALUES
-('admin@admin.fr', 'd97823835cbfc218984773d54f87744be4ab7d1a6eff97c0f86d8a41de995cc6', '2017-11-30 11:32:29', '2017-11-30', '2017-11-30');
-
 -- --------------------------------------------------------
 
 --
@@ -73,6 +64,7 @@ CREATE TABLE `users` (
   `status` tinyint(1) NOT NULL DEFAULT '0',
   `mail_validation` tinyint(1) NOT NULL DEFAULT '0',
   `type` int(11) NOT NULL,
+  `ORCID_ID` varchar(20) DEFAULT NULL,
   `created_at` date NOT NULL,
   `updated_at` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -81,8 +73,8 @@ CREATE TABLE `users` (
 -- Déchargement des données de la table `users`
 --
 
-INSERT INTO `users` (`name`, `firstname`, `mail`, `mdp`, `status`, `mail_validation`, `type`, `created_at`, `updated_at`) VALUES
-('Admin', 'Admin', 'admin@admin.fr', '$2y$10$jPFYnh8ShDAYEsVxxXm8WuTJO61/.8932ssqDEHhy.3jruX63xI6G', 1, 1, 1, '2017-11-30', '2017-11-30');
+INSERT INTO `users` (`name`, `firstname`, `mail`, `mdp`, `status`, `mail_validation`, `type`, `ORCID_ID`, `created_at`, `updated_at`) VALUES
+('Admin', 'Admin', 'admin@admin.fr', '$2y$10$jPFYnh8ShDAYEsVxxXm8WuTJO61/.8932ssqDEHhy.3jruX63xI6G', 1, 1, 1, '0000-0000-0000-0001', '2017-11-30', '2017-12-12');
 
 --
 -- Index pour les tables déchargées
