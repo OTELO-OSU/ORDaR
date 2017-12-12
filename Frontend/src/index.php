@@ -248,12 +248,12 @@ $app->get('/signup', function (Request $req, Response $responseSlim) {
         if ($code) {
             $request    = new RequestApi();
             $orcid= $request->get_ORCID_ID($code);
-            $orcid=json_encode($orcid);
-            var_dump($orcid);
+            $orcid=json_decode($orcid);
+            
         }
         $loader    = new Twig_Loader_Filesystem('search/templates');
         $twig      = new Twig_Environment($loader);
-        echo $twig->render('signup.html.twig', ['name_CSRF' => $namecsrf, 'value_CSRF' => $valuecsrf]);
+        echo $twig->render('signup.html.twig', ['name_CSRF' => $namecsrf, 'value_CSRF' => $valuecsrf,'orcid' => $orcid['orcid'],]);
     } else {
         return $responseSlim->withRedirect('accueil');
 
