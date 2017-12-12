@@ -246,6 +246,7 @@ $app->get('/signup', function (Request $req, Response $responseSlim) {
         $valuecsrf = $req->getAttribute($valueKey);
         $code            = $req->getparam('code');
         if ($code) {
+            
             $request    = new RequestApi();
             $orcid= $request->get_ORCID_ID($code);
             $orcid=json_decode($orcid,true);
