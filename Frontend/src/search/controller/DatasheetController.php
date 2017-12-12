@@ -6,6 +6,8 @@ use MongoClient;
 use \search\controller\FileController as File;
 use \search\controller\MailerController as Mailer;
 use \search\controller\RequestController as RequestApi;
+use \search\controller\UserController as User;
+
 
 class DatasheetController
 {
@@ -685,11 +687,31 @@ class DatasheetController
                         if (!filter_var($value, FILTER_VALIDATE_EMAIL)) {
                             $error = "Warning author mail invalid ";
                         }
-
                         $array["FILE_CREATOR"][$key]["MAIL"] = htmlspecialchars($value, ENT_QUOTES);
+                         $user          = new User();
+                         $orcid=$user->getOrcid_id($value);
+                         if ($orcid) {
+                            $array["FILE_CREATOR"][$key]["ORCID"]= $orcid;
+                            $nameidentifier=$creator->addChild('nameIdentifier', $orcid);
+                            $nameidentifier->addAttribute('schemeURI', 'http://orcid.org/');
+                            $nameidentifier->addAttribute('nameIdentifierScheme', 'ORCID');
+                         }
+
+
+
                     }
                 } else {
                     $array["FILE_CREATOR"][0]["MAIL"] = htmlspecialchars($value[0], ENT_QUOTES);
+                    $user          = new User();
+                    $orcid=$user->getOrcid_id($value);
+                    if ($orcid) {
+                        $array["FILE_CREATOR"][0]["ORCID"]= $orcid;
+                        $nameidentifier=$creator->addChild('nameIdentifier', $orcid);
+                        $nameidentifier->addAttribute('schemeURI', 'http://orcid.org/');
+                        $nameidentifier->addAttribute('nameIdentifierScheme', 'ORCID');
+                     }
+
+
                 }
             }
             if ($key == "keywords") {

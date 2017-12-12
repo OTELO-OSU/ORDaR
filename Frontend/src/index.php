@@ -418,7 +418,6 @@ $app->post('/resetpassword', function (Request $req, Response $responseSlim) {
 
 })->add($mw)->add($container->get('csrf'));
 
-//Route affichant les publication de l'utilisateur connecté
 $app->get('/listusers', function (Request $req, Response $responseSlim) {
     if (@$_SESSION['admin'] == 1) {
         $loader  = new Twig_Loader_Filesystem('search/templates');

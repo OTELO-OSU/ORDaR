@@ -239,7 +239,11 @@
                   <h4><i class="user icon"></i>Authors:</h4>
                   <ul id="authors">
                      {% for author in authors %}
-                     <li><a onclick="APP.modules.send_email.send_email('{{doi}}','{{author.NAME}}','{{ author.FIRST_NAME}}')">{{author.NAME}} {{ author.FIRST_NAME}}</a></li>
+                     <li><a onclick="APP.modules.send_email.send_email('{{doi}}','{{author.NAME}}','{{ author.FIRST_NAME}}')">{{author.NAME}} {{ author.FIRST_NAME}}</a> 
+
+                     {%if author.ORCID %}<a href="https://orcid.org/{{author.ORCID}}" target="_blank"><img id="orcid-id-logo" src="https://orcid.org/sites/default/files/images/orcid_24x24.png" width='24' height='24' alt="ORCID logo"/></a>
+                     {%endif%}
+                     </li>
                      {% endfor %}
                   </ul>
                   </div>

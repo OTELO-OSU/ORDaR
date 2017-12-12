@@ -196,6 +196,13 @@ class UserController
         }
     }
 
+     public function getOrcid_id($email)
+    {
+        $verif                 = Users::select('ORCID_ID')->where('mail', '=', $email)->get();
+        return $verif[0]->ORCID_ID;
+
+    }
+
     public function getUserInfo($email)
     {
         $verif                 = Users::select('name', 'firstname','ORCID_ID')->where('mail', '=', $email)->get();
