@@ -25,6 +25,7 @@ class RequestController
 
  public function get_ORCID_ID($code,$action)
     {
+        $file   = new File();
         $config = $file->ConfigFile();
         $url = "https://orcid.org/oauth/token";
         $postcontent="client_id=".$config['ORCID_client_id']."&client_secret=".$config['ORCID_client_secret']."&grant_type=authorization_code&code=".$code."&redirect_uri=".$config['REPOSITORY_URL']."/".$action;
