@@ -1595,6 +1595,13 @@
                               type: 'regExp[^[a-zA-ZÀ-ÿ][a-zA-ZÀ-ÿ -.,]*$]',
                               prompt: 'Please enter a valid firstname'
                           }]
+                      },
+                       userfirstname: {
+                          identifier: 'orcid',
+                          rules: [{
+                              type: 'regExp[/(\\d{4})-(\\d{4})-(\\d{4})-(\\d{3}[0-9X])$/g]',
+                              prompt: 'Please enter a valid ORCID ID'
+                          }]
                       }
                   }
               });

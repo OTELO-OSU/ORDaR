@@ -198,18 +198,19 @@ class UserController
 
     public function getUserInfo($email)
     {
-        $verif                 = Users::select('name', 'firstname')->where('mail', '=', $email)->get();
+        $verif                 = Users::select('name', 'firstname','ORCID_ID')->where('mail', '=', $email)->get();
         $_SESSION['name']      = $verif[0]->name;
         $_SESSION['firstname'] = $verif[0]->firstname;
         return $verif;
 
     }
 
-    public function setUserInfo($email, $name, $firstname)
+    public function setUserInfo($email, $name, $firstname,$ORCID_ID)
     {
         $verif            = Users::find($email);
         $verif->name      = $name;
         $verif->firstname = $firstname;
+        $verif->ORCID_ID = $ORCID_ID;
         if ($verif->save()) {
             return true;
         } else {

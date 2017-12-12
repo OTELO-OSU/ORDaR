@@ -244,6 +244,12 @@ $app->get('/signup', function (Request $req, Response $responseSlim) {
             ->getTokenValueKey();
         $namecsrf  = $req->getAttribute($nameKey);
         $valuecsrf = $req->getAttribute($valueKey);
+        $code            = $req->getparam('code');
+        if ($code) {
+            $request    = new RequestApi();
+            $orcid= $request->get_ORCID_ID($code);
+            var_dump($orcid);
+        }
         $loader    = new Twig_Loader_Filesystem('search/templates');
         $twig      = new Twig_Environment($loader);
         echo $twig->render('signup.html.twig', ['name_CSRF' => $namecsrf, 'value_CSRF' => $valuecsrf]);
@@ -362,7 +368,7 @@ $app->get('/myaccount', function (Request $req, Response $responseSlim) {
         $valuecsrf = $req->getAttribute($valueKey);
         $user      = new User();
         $user      = $user->getUserInfo($_SESSION['mail']);
-        echo $twig->render('myaccount.html.twig', ['name' => $user[0]->name, 'firstname' => $user[0]->firstname, 'name_CSRF' => $namecsrf, 'value_CSRF' => $valuecsrf, 'mail' => $_SESSION['mail'], 'admin' => $_SESSION['admin']]);
+        echo $twig->render('myaccount.html.twig', ['name' => $user[0]->name, 'firstname' => $user[0]->firstname,'orcid' => $user[0]->ORCID_ID, 'name_CSRF' => $namecsrf, 'value_CSRF' => $valuecsrf, 'mail' => $_SESSION['mail'], 'admin' => $_SESSION['admin']]);
     } else {
         return $responseSlim->withRedirect('accueil');
     }
@@ -382,8 +388,9 @@ $app->post('/myaccount', function (Request $req, Response $responseSlim) {
         $valuecsrf = $req->getAttribute($valueKey);
         $name      = $req->getparam('name');
         $firstname = $req->getparam('firstname');
+        $ORCID_ID = $req->getparam('orcid');
         $user      = new User();
-        $user->setUserInfo($_SESSION['mail'], $name, $firstname);
+        $user->setUserInfo($_SESSION['mail'], $name, $firstname,$ORCID_ID);
         $user = $user->getUserInfo($_SESSION['mail']);
         return $responseSlim->withRedirect('myaccount');
     }
