@@ -248,7 +248,7 @@ $app->get('/signup', function (Request $req, Response $responseSlim) {
         if ($code) {
             $request    = new RequestApi();
             $orcid= $request->get_ORCID_ID($code);
-            $orcid=json_decode($orcid);
+            $orcid=json_decode($orcid,true);
             
         }
         $loader    = new Twig_Loader_Filesystem('search/templates');
