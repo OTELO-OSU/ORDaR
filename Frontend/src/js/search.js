@@ -1525,6 +1525,16 @@
                       }
                   }
               });
+              $('#connect-orcid-button').click(function(){
+              var email= $("input[name='email']").val();
+              window.location.replace("https://orcid.org/oauth/authorize?client_id=APP-QIXDVD1QKBIS90UX&response_type=code&scope=/authenticate&redirect_uri=https://beta-ordar.otelo.univ-lorraine.fr/signup");
+              $("input[name='email']").val(email);
+
+              }
+
+              );
+
+
           },
           check_login: function() {
               $('.login').form({

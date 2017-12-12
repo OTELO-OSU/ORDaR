@@ -26,7 +26,7 @@ class RequestController
 
  public function get_ORCID_ID($code)
     {
-        $url = curl_init("https://orcid.org/oauth/token");
+        $url = "https://orcid.org/oauth/token";
         $postcontent="client_id=APP-QIXDVD1QKBIS90UX&client_secret=9e0da9a0-7898-4d09-9647-dc9c784eb637&grant_type=authorization_code&code=".$code."&redirect_uri=https://beta-ordar.otelo.univ-lorraine.fr/signup";
         $curlopt = array(
             CURLOPT_RETURNTRANSFER => true,
@@ -38,7 +38,6 @@ class RequestController
             CURLOPT_POSTFIELDS     => $postcontent,
         );
         $response                   = self::Curlrequest($url, $curlopt);
-        var_dump($response);
     }
 
     /**

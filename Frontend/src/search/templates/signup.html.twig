@@ -51,7 +51,15 @@
             <input type="password" name="password_confirm" placeholder="Confirm password">
           </div>
         </div>
-        <button id="connect-orcid-button" onclick="openORCID()"><img id="orcid-id-logo" src="https://orcid.org/sites/default/files/images/orcid_24x24.png" width='24' height='24' alt="ORCID logo"/>Create or Connect your ORCID iD</button>
+        <div id="connect-orcid-button" ><img id="orcid-id-logo" src="https://orcid.org/sites/default/files/images/orcid_24x24.png" width='24' height='24' alt="ORCID logo"/>Create or Connect your ORCID iD</div>
+        <div class="field">
+          <div class="ui left icon input">
+            <i class="lock icon"></i>
+           
+        <input type="text" name="orcid_id" value="{{orcid_id}}" placeholder="ORCID_ID" disabled="">
+          </div>
+        </div>
+
 
         <input type="hidden" name="csrf_name" value="{{name_CSRF}}">
         <input type="hidden" name="csrf_value" value="{{value_CSRF}}">
@@ -72,11 +80,8 @@
 
 <script type="text/javascript">
   APP.modules.account.check_signup();
-var oauthWindow;
 
-function openORCID() {
-    var oauthWindow = window.open("https://orcid.org/oauth/authorize?client_id=APP-QIXDVD1QKBIS90UX&response_type=code&scope=/authenticate&redirect_uri=https://beta-ordar.otelo.univ-lorraine.fr/signup");
-}
+
 </script>
 <style type="text/css">
   #connect-orcid-button{
