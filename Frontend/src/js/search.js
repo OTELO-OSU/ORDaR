@@ -1624,7 +1624,7 @@
                   }
               });
                $('#connect-orcid-button').click(function(){
-              window.location.replace("https://orcid.org/oauth/authorize?client_id=APP-QIXDVD1QKBIS90UX&response_type=code&scope=/authenticate&redirect_uri="+location.host+"/myaccount");
+              window.location.replace("https://orcid.org/oauth/authorize?client_id=APP-QIXDVD1QKBIS90UX&response_type=code&scope=/authenticate&redirect_uri=https://"+location.host+"/myaccount");
               }
 
               );
