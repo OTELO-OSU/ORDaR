@@ -1526,7 +1526,7 @@
                   }
               });
 
-              if (sessionStorage.getItem('mail');) {
+              if (sessionStorage.getItem('mail')) {
               $("input[name='email']").val(sessionStorage.getItem('mail'));
 
               }
