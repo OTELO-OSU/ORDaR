@@ -28,7 +28,9 @@ foreach ($csv as $key => $value) {
 	$date=date('Y-m-d');
 	$stmt->bindParam(':created_at', $date);
 	$stmt->bindParam(':updated_at', $date);
-	$stmt->execute();
+	if ($value[1]!="" and $value[2]!="") {
+		$stmt->execute();
+	}
 }
 echo "All users are successfully imported ! \n";
 
