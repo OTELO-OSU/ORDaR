@@ -657,8 +657,7 @@ class DatasheetController
                         }
                         $array["FILE_CREATOR"][$keys]["NAME"] = htmlspecialchars($value, ENT_QUOTES);
                         $author_displayname[]                 = htmlspecialchars($value, ENT_QUOTES) . " " . $author_firstname[$keys];
-                        $creator                              = $creators->addChild('creator');
-                        $creator->addChild('creatorName', htmlspecialchars($value, ENT_QUOTES) . " " . $author_firstname[$keys]);
+                        
 
                     }
                 } else {
@@ -690,6 +689,8 @@ class DatasheetController
                         $array["FILE_CREATOR"][$key]["MAIL"] = htmlspecialchars($value, ENT_QUOTES);
                          $user          = new User();
                          $orcid=$user->getOrcid_id($value);
+                         $creator                              = $creators->addChild('creator');
+                        $creator->addChild('creatorName', $array["FILE_CREATOR"][$key]["DISPLAY_NAME"]);
                          if ($orcid) {
                             $array["FILE_CREATOR"][$key]["ORCID"]= $orcid;
                             $nameidentifier=$creator->addChild('nameIdentifier', $orcid);
