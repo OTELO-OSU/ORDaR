@@ -15,7 +15,6 @@ foreach ($csv as $key => $value) {
 	$stmt->bindParam(':firstname', $value[2]);
 	$stmt->bindParam(':mail', $value[0]);
 	$mdp=bin2hex(openssl_random_pseudo_bytes(16));
-	echo $mdp ."\n";
 	$mdp=password_hash($mdp, PASSWORD_DEFAULT);
 	$stmt->bindParam(':mdp', $mdp);
 	$status="1";
