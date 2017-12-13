@@ -113,6 +113,10 @@ Voici une configuration de test, à vous de la modifier.
 	MYSQL_PASSWORD=test
 	CHARSETMYSQL=utf8
 	COLLATIONMYSQL=utf8_unicode_ci
+	
+	#ORCID
+	ORCID_client_id="Your key"
+	ORCID_client_secret="Your secret"
 
 
 Note: Les utilisateurs mongo et mysql sont créés automatiquement.
