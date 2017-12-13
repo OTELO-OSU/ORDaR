@@ -256,5 +256,13 @@ Voici un exemple de code pour configurer apache avec shibboleth:
 Il faut ensuite modifier la route logout afin de se deconnecter du serveur single sign in (Shibboleth, CAS).
 Modifier le Redirect vers la route logout de votre service.
 
+**Importer des utilisateurs en masse:**
 
+Vous devez au préalable avoir un fichier csv d'utilisateurs avec ces colonnes:
+
+	MAIL		NAME		FIRSTNAME
+
+
+Ensuite, il suffit d'executer le script php PopulateAuthDB.php avec en parametre le nom du fichier CSV.
+Les utilisateurs sont créés avec un mot de passe aléatoire, dans le cas d'une connexion avec le CAS, le compte est utilisable dés à présent, sinon  pour l'authentification traditionnel l'utilisateur doit effectuer une demande de réinitialisation de mot de passe.
 
