@@ -403,7 +403,8 @@ $app->post('/myaccount', function (Request $req, Response $responseSlim) {
         $user      = new User();
         $user->setUserInfo($_SESSION['mail'], $name, $firstname,$ORCID_ID);
         $user = $user->getUserInfo($_SESSION['mail']);
-        return $responseSlim->withRedirect('myaccount');
+                echo $twig->render('myaccount.html.twig', ['message'=> "Account updated successufully",'name' => $user[0]->name, 'firstname' => $user[0]->firstname,'orcid' => $ORCID_ID, 'name_CSRF' => $namecsrf, 'value_CSRF' => $valuecsrf, 'mail' => $_SESSION['mail'], 'admin' => $_SESSION['admin']]);
+
     }
 })->add($mw)->add($container->get('csrf'));
 

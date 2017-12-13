@@ -28,6 +28,12 @@
 
 {%endif%}
 {%endif%}
+{%if message%}
+<div class="ui positive message">
+      <div class="header">
+{{message}}</div>
+</div>
+{%endif%}
 
   {%if admin%}
         <a href="listusers"><button type="submit" class="ui fluid large black submit button">Go to administration panel</button></a>
