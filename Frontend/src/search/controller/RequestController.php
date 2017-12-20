@@ -204,10 +204,10 @@ class RequestController
         $response                   = self::Curlrequest($url, $curlopt);
         $response                   = json_decode($response, true);
         foreach ($response["hits"]["hits"] as $key => $value) {
-            $responses["hits"]["hits"][$key]["clientip"]  = $value["_source"]["clientip"];
+            $responses[$key]  = $value["_source"]["clientip"];
         }
         ;
-        $array=array_unique($responses["hits"]["hits"]);
+        $array=array_unique($responses);
         $responses=count($array);
         return $responses;
     }
