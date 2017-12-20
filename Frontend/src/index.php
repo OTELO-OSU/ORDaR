@@ -640,6 +640,11 @@ $app->get('/record', function (Request $req, Response $responseSlim) {
     $response = $request->get_info_for_dataset($id);
     if (isset($response['_source']['DATA'])) {
         $files = $response['_source']['DATA']['FILES'];
+        $doc = split("/", $response['_id']);
+        foreach ($files as $key => $value) {
+           $number=$request->requestDownloadnumber("files/".$doc[1]."/".$value['DATA_URL']);
+           $files[$key]['download_number']=$number;
+        }
     } else {
         $files = null;
     }

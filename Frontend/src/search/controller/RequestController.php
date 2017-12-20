@@ -176,6 +176,44 @@ class RequestController
         $info    = curl_getinfo($ch);
         curl_close($ch);
     }
+
+  
+    public function requestDownloadnumber($query)
+    {
+        $file   = new File();
+        $config = $file->ConfigFile();
+
+        if (!empty($query)) { //Si des facets sont coché
+            $query = rawurlencode($query); // on encode au format URL
+        } else {
+            $query = "*";
+        }
+        
+        $bdd     = strtolower($config['authSource']);
+        $url     = 'http://' . $config['ESHOST'] . '/logstash-*/_search?q="' . $query .'"';
+        $curlopt = array(
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_PORT           => $config['ESPORT'],
+            CURLOPT_ENCODING       => "",
+            CURLOPT_MAXREDIRS      => 10,
+            CURLOPT_TIMEOUT        => 40,
+            CURLOPT_HTTP_VERSION   => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST  => "GET",
+            CURLOPT_POSTFIELDS     => $postcontent,
+        );
+        $response                   = self::Curlrequest($url, $curlopt);
+        $response                   = json_decode($response, true);
+        foreach ($response["hits"]["hits"] as $key => $value) {
+            $responses["hits"]["hits"][$key]["clientip"]  = $value["_source"]["clientip"];
+        }
+        ;
+        $array=array_unique($responses);
+        $responses=count($array);
+        return $responses;
+    }
+
+
+
     /**
      * Make a request to elasticsearch API in admin MODE (View ALL)
      * @return data of request
