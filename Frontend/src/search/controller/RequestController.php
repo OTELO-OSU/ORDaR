@@ -207,7 +207,7 @@ class RequestController
             $responses["hits"]["hits"][$key]["clientip"]  = $value["_source"]["clientip"];
         }
         ;
-        $array=array_unique($responses);
+        $array=array_unique($responses["hits"]["hits"]);
         $responses=count($array);
         return $responses;
     }
