@@ -57,7 +57,7 @@ L'utilisateur recevra une confirmation par mail de son dépot avec le DOI qui a 
 
 **Importation d'un jeu de données via  harvester-geo-stations (OTELoCloud) Spécifique à OTELo:**
 
-OTELO utilise des canevas afin que les chercheurs puissent créés des fichiers de données interroperable.
+OTELO utilise des canevas afin que les chercheurs puissent créer des fichiers de données interroperables.
 
 Un script d'importation se charge d'importer les données présentes dans un dossier spécifiques de l'espace collaboratif de stockage:
 Les métadonnées issues du feuillet INTRO du fichier excel sont importées dans la base Mongodb,
