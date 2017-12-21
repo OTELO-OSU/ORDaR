@@ -5,9 +5,9 @@
 Sommaire:
 =================
 * [Présentation](#presentation)
-* [Installation](#installation)
-* [Organisation](#organisation)
-* [Utilisation](#utilisation)
+* [Installation](/Docs/Installation.md)
+* [Organisation](/Docs/Organisation.md)
+* [Utilisation](/Docs/Utilisation.md)
 * [Docker](#docker)
 
 
@@ -38,17 +38,7 @@ Cette entrepôt vise à promouvoir l'accès ouvert: valoriser et partager les co
 L'entrepôt supporte le protocole de moissonage de données OAI-PMH.
 Pour activer cette fonctionnalités il suffit de suivre la documentation à cette adresse: https://github.com/OTELO-OSU/ORDaR_OAI-PMH
 
-# Installation  <a name="installation"></a>
 
-* [Installation](/Docs/Installation.md)
-
-# Organisation  <a name="organisation"></a>
-
-* [Organisation](/Docs/Organisation.md)
-
-# Utilisation  <a name="utilisation"></a>
-
-* [Utilisation](/Docs/Utilisation.md)
 
 # Docker  <a name="docker"></a>
 

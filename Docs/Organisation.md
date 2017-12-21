@@ -9,8 +9,8 @@ Ordar comporte 2 bases de données mongo:
     - DOI
     
  La base de données principale contient la collection: Manual_Depot 
- Cette collection contient les jeux de données déposé lors d'un dépot manuel (via upload)
- Dans le cas d'une implémentation des scripts de moissonage des jeux de données stockés sur l'espace collaboratif, d'autre collection pourront être créée du non de ces projets. Les scripts de moissonage, spécifique à OTELo sont disponible sur demande.
+ Cette collection contient les jeux de données déposés lors d'un dépot manuel (via upload)
+ Dans le cas d'une implémentation des scripts de moissonage des jeux de données stockés sur l'espace collaboratif, d'autre collection pourront être créées du nom de ces projets. Les scripts de moissonage, spécifiques à OTELo sont disponibles sur demande.
  
  La base DOI contient une seule collection: DOI, elle contient un document avec un ID REPOSITORYNAME-DOI, un ID étant l’état du document (cet état permet de gérer des accès concurrents. Un système de verrou locked/unlocked est positionné pour pouvoir utiliser la ressource). 
 
