@@ -36,6 +36,21 @@ services:
      - elasticsearch:/usr/share/elasticsearch/data
 
 
+  logstash:
+    image: logstash_ordar_img
+    build: ./Docker/Logstash
+    container_name: logstash_ordar
+    volumes:
+     - /var/log/apache2/access.log:/var/log/apache2/access.log
+
+  kibana:
+    image: kibana_ordar_img
+    build: ./Docker/Kibana
+    container_name: kibana_ordar
+    environment:
+      ELASTICSEARCH_URL: http://elasticsearch:9200
+
+
   mongo-connector:
     image: mongo-connector_ordar_img
     build: ./Docker/MongoConnector
