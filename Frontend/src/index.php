@@ -944,4 +944,4 @@ $app->get('/export/{format}', function (Request $req, Response $responseSlim, $a
 
 });
 
-$app->run();
+@$app->run();

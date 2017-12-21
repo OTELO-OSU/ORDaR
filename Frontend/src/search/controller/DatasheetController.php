@@ -1764,6 +1764,10 @@ class DatasheetController
                 $collectionObject->remove(array(
                     '_id' => $doi,
                 )); //Suppresion dans la base mongo
+                 $id = split("/", $doi);
+                 $id = $id[1];
+                unlink($UPLOAD_FOLDER . $doi . '/changelog/'. $id.'.changelog');
+                rmdir($UPLOAD_FOLDER . $doi.'/changelog');
                 rmdir($UPLOAD_FOLDER . $doi); //Suppresion du dossier
                 $request = new RequestApi();
                 $request->Inactivate_doi($doi); //Désactivation du DOi aupres de datacite
@@ -1814,7 +1818,6 @@ class DatasheetController
                         // close the stream
                         fclose($stream);
                         // print the response
-                        var_dump($data);
                         if ($data != '') {
                             $state = "fail_ssh";
                         }
