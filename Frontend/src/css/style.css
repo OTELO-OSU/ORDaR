@@ -244,3 +244,11 @@ li::before {
 #file-select-button{
   margin-top: 3%;
 }
+
+.exposant {
+position: relative;
+bottom: 25px;
+font-size: .9em;
+text-decoration:none;
+color: grey;
+}

@@ -284,12 +284,13 @@
                         <div class="ui red message">Restricted access</div>
                         {% else %}
                         <div class="ui list">
+                           <br>
                            {% for filename in files %}
                            <div class="item">
                               <div class="content">
                                  <i class="file icon"></i>
                                  <a href="files/{{id}}/{{filename.DATA_URL}}">{{filename.DATA_URL}}</a><a href="files/{{id}}/{{filename.DATA_URL}}"><input value="Download" type="button" class="ui right floated button" ></a><input value="Preview" onclick="APP.modules.preview.previewdocument('preview/{{id}}/{{filename.DATA_URL}}')" type="button" class="ui right floated button" >
-                                    <div class="ui grey label" data-position="right center" data-tooltip="Number of download"> <i class="download icon"></i>{{filename.download_number}}</div>
+                                   <a href="files/{{id}}/{{filename.DATA_URL}}">{{filename.DATA_URL}} <sup class="exposant"   title="Number of download"> <i class="download icon"></i>{{filename.download_number}}</sup></a>
 
                               </div>
                            </div>
@@ -301,12 +302,13 @@
                         <div class="ui red message">Restricted access</div>
                         {% else %}
                         <div class="ui list">
+                           <br>
                            {% for filename in files %}
                            <div class="item">
                               <div class="content">
                               <i class="file icon"></i>
                                  <a href="files/{{id}}/{{filename.DATA_URL}}">{{filename.DATA_URL}}</a><a href="files/{{id}}/{{filename.DATA_URL}}"><input value="Download" type="button" class="ui right floated button" ></a><input value="Preview"onclick="APP.modules.preview.previewdocument('preview/{{id}}/{{filename.DATA_URL}}')" type="button" class="ui right floated button" >
-                                    <div class="ui grey label" data-position="right center" data-tooltip="Number of download"> <i class="download icon"></i>{{filename.download_number}}</div>
+                                   <a href="files/{{id}}/{{filename.DATA_URL}}">{{filename.DATA_URL}} <sup class="exposant"   title="Number of download"> <i class="download icon"></i>{{filename.download_number}}</sup></a>
 
                               </div>
                            </div>
@@ -336,12 +338,12 @@
                            <div class="item">        
                               <div class="content">
                               <i class="file icon"></i>
-                                 <a href="files/{{id}}/{{filename.DATA_URL}}">{{filename.DATA_URL}}</a>
+                                
                                  
                                  
                               <a href="files/{{id}}/{{filename.DATA_URL}}"><input value="Download" type="button" class="ui right floated button" ></a><input value="Preview" onclick="APP.modules.preview.previewdocument('preview/{{id}}/{{filename.DATA_URL}}')" type="button" class="ui right floated button" >
-                                 <div class="ui grey label" data-position="right center" data-tooltip="Number of download"> <i class="download icon"></i>{{filename.download_number}}</div>
 
+                                 <a href="files/{{id}}/{{filename.DATA_URL}}">{{filename.DATA_URL}} <sup class="exposant"   title="Number of download"> <i class="download icon"></i>{{filename.download_number}}</sup></a>
                               </div>
                            </div>
                            {% endfor %}
