@@ -56,6 +56,9 @@ class FileController
             foreach ($response['_source']['INTRO']['FILE_CREATOR'] as $key => $value) {
                 $creator = $creators->addChild('creator');
                 $creator->addChild('creatorName', $value['DISPLAY_NAME']);
+                if ($value['ORCID']) {
+                $creator->addChild('nameIdentifier', $value['ORCID']);
+                }
             }
             $titles = $sxe->addChild('titles');
 
@@ -99,6 +102,9 @@ class FileController
             $identifier = $sxe->addChild('dc:dc:identifier', $response['_id']);
             foreach ($response['_source']['INTRO']['FILE_CREATOR'] as $key => $value) {
                 $sxe->addChild('dc:dc:creator', $value['DISPLAY_NAME']);
+                if ($value['ORCID']) {
+                $sxe->addChild('dc:dc:nameIdentifier', $value['ORCID']);
+                }
             }
 
             $sxe->addChild('dc:dc:title', $response['_source']['INTRO']['TITLE']);
@@ -129,8 +135,12 @@ class FileController
     {
         if (isset($response['_source']['INTRO'])) {
             $authors = null;
+            $orcid= null;
             foreach ($response['_source']['INTRO']['FILE_CREATOR'] as $key => $value) {
                 $authors .= $value['DISPLAY_NAME'] . ",";
+                if ($value['ORCID']) {
+                $orcid  .= $value['ORCID'] . ",";
+                }
             }
             $title       = $response['_source']['INTRO']['TITLE'];
             $description = $response['_source']['INTRO']['DATA_DESCRIPTION'];
@@ -140,6 +150,7 @@ class FileController
             $bibtex      = "
              @data{
               author       = {" . $authors . "},
+              nameidentifier = {" . $orcid . "},
               title        = {{" . $title . "}},
               description  = {{" . $description . "}},
               publisher    = {{" . $publisher . "}},
