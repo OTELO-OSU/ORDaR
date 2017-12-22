@@ -115,6 +115,8 @@ Le service  harvester-geo-stations (spécifique à OTELo) permet de mettre en pl
 pour cela configurer le fichier Docker/harvester-geo-stations/config.ini avec les valeurs prédemment rentré.
 Scripts privés disponible sur demande.
 
+Pour utiliser ORCID, vous devez configurer lla variable client ID et secret dans le fichier config, vous devez aussi modifier la valuer clientid (ligne 1546 et 1627) dans le fichier search.js.
+
 ATTENTION: Un projet = un service d'upload automatique!
 
 ATTENTION: Dans les services OrdarUI et  harvester-geo-stations, il faut configurer les volumes afin de monter les fichiers Uploader et les jeux de donné présent sur OTELO-CLOUD.
