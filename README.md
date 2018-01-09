@@ -22,6 +22,12 @@ ORDaR offre un environnement sécurisé et pérenne (sous réserve du contrat de
 
 Cette entrepôt vise à promouvoir l'accès ouvert: valoriser et partager les connaissances.
 
+**Aspect de générale de l’application :**
+
+Pour l’aspect, le framework Semantic UI a été choisi pour sa simplicité d’utilisation et sa bonne documentation. Il permet de réaliser des interfaces graphiques responsives légères et rapides.
+
+![Alt text](/Img_doc/Ordar_accueil.png?raw=true)
+
 
 # Fonctionalités <a name="fonctionalite"></a>
 
