@@ -107,8 +107,4 @@ Cette classe permet d'envoyer des mails à des utilisateurs ou aux admins.
                 FILETYPE:Extension du fichier
 
 
-**Aspect de générale de l’application :**
 
-Pour l’aspect, le framework Semantic UI a été choisi pour sa simplicité d’utilisation et sa bonne documentation. Il permet de réaliser des interfaces graphiques responsives légères et rapides.
-
-![Alt text](/Img_doc/Ordar_accueil.png?raw=true)
