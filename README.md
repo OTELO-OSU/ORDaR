@@ -23,7 +23,7 @@ ORDaR offre un environnement sécurisé et pérenne (sous réserve du contrat de
 	Cette entrepôt vise à promouvoir l'accès ouvert: valoriser et partager les connaissances.
 
 
-**Aspect de générale de l’application :**
+**Aspect général de l’application :**
 
 ![Alt text](/Img_doc/Ordar_accueil.png?raw=true)
 
