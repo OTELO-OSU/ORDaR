@@ -5,7 +5,7 @@ Nous fournissons dans le dépot, les fichiers de configuration nécessaire au d�
 ### Première étape : installer docker sur votre machine :
 	https://docs.docker.com/engine/installation/
 
-### Deuxieme etape : cloner le depot sur votre système avec git
+### Deuxieme étape : cloner le depot sur votre système avec git
 
 		git clone https://github.com/OTELO-OSU/ORDaR.git
 		
@@ -31,10 +31,11 @@ Voici une configuration de test, à vous de l'adapter.
 		SOCIAL_SHARING=true
 		
 		############ SPECIFIQUE AU SCRIPT DE MOISSONNAGE (ne pas implémenter) ##################
-		SSH_HOST=IPofservice
-		SSH_UNIXUSER=user
-		SSH_UNIXPASSWD=pass
-
+		#SSH_HOST=IPofservice
+		#SSH_UNIXUSER=user
+		#SSH_UNIXPASSWD=pass
+		##############################
+		
 		#L'adresse de votre relais de messagerie
 		SMTP="smtp-int.univ-lorraine.fr"
 		# Valeur maximale pour 1 jeux de données (pouvant être constitué de plusieurs fichiers)
@@ -91,7 +92,8 @@ Voici une configuration de test, à vous de l'adapter.
 		MYSQL_PASSWORD=test
 		CHARSETMYSQL=utf8
 		COLLATIONMYSQL=utf8_unicode_ci	
-	Note 1 : pour plus d'information sur cette partie se reporter à la section "configuration de l'authentification" dans Installation (hors docker)
+	Note 1 : pour plus d'information sur cette partie se reporter à la section 
+	"configuration de l'authentification" dans Installation (hors docker)
 	Note 2: Les utilisateurs mongo et mysql sont créés automatiquement.
 
 	
@@ -102,7 +104,7 @@ Voici une configuration de test, à vous de l'adapter.
 	dans le fichier Frontend/src/js/search.js.
 	
 
-### Quatrième étape (informations): passage en revue du fichier docker-compose.yml (servant à générer les images)
+### Quatrième étape : passage en revue du fichier docker-compose.yml (servant à générer les images)
 
 
 
