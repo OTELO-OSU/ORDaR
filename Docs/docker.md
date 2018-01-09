@@ -50,7 +50,7 @@ Voici une configuration de test, à vous de l'adapter.
 		#DATACITE CREDENTIALS
 		AUTH_CONFIG_DATACITE="YOUR SECRETS CREDENTIALS HERE"
 		
-	Note : La clef permettant à l'application de se connecter à DataCite pour l'enregistrement / Mise à jour des DOI
+	Note : La clef permettant à l'application de se connecter à DataCite pour l'enregistrement des DOI
 
 		#MONGO CONFIG
 		HOST_MONGO=mongo
