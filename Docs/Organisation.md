@@ -1,9 +1,9 @@
 # Organisation  
 
 
-**Organisation des bases de données mongo et mysql :**
+## Organisation des bases de données mongo et mysql :
 
-Ordar comporte 2 bases de données mongo:
+**Ordar comporte 2 bases de données mongo:**
 
     - ORDAR (le nom de votre Bdd: base de données principale)
     - DOI
@@ -14,7 +14,7 @@ Ordar comporte 2 bases de données mongo:
  
  La base DOI contient une seule collection: DOI, elle contient un document avec un ID REPOSITORYNAME-DOI, un ID étant l’état du document (cet état permet de gérer des accès concurrents. Un système de verrou locked/unlocked est positionné pour pouvoir utiliser la ressource). 
 
-ORDaR comporte une base de données mysql pour la gestion des utilisateurs :
+**RDaR comporte une base de données mysql pour la gestion des utilisateurs :**
 
 ***Schéma base de données authentification***:
 
