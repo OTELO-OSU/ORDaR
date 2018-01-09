@@ -7,9 +7,10 @@ Sommaire:
 * [Présentation](#presentation)
 * [Fonctionalités](#Fonctionalités)
 * [Installation (non docker)](/Docs/Installation.md)
-* [Organisation (code et Bdd)](/Docs/Organisation.md)
+* [Installation docker](/Docs/docker.md)
 * [Utilisation](/Docs/Utilisation.md)
-* [Docker](#docker)
+* [Organisation (code et Bdd)](/Docs/Organisation.md)
+
 
 
 # Présentation <a name="presentation"></a>
