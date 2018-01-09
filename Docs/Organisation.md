@@ -10,11 +10,12 @@
     
  La base de données principale contient la collection: Manual_Depot 
  Cette collection contient les jeux de données déposés lors d'un dépot manuel (via upload)
- Dans le cas d'une implémentation des scripts de moissonage des jeux de données stockés sur l'espace collaboratif, d'autre collection pourront être créées du nom de ces projets. Les scripts de moissonage, spécifiques à OTELo sont disponibles sur demande.
+ 
+ Dans le cas d'une implémentation des scripts de moissonage d'un espace collaboratif, d'autre collection pourront être créées du nom de ces projets. Les scripts de moissonage, spécifiques à OTELo sont disponibles sur demande.
  
  **Détails des clés mongo:**
  
-    _id: DOI
+    _id: 
     INTRO:
             TITLE: Titre
             LANGUAGE: Langage
