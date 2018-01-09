@@ -5,6 +5,7 @@
 Sommaire:
 =================
 * [Présentation](#presentation)
+* [Fonctionalités](#Fonctionalités)
 * [Installation](/Docs/Installation.md)
 * [Organisation](/Docs/Organisation.md)
 * [Utilisation](/Docs/Utilisation.md)
@@ -18,27 +19,45 @@ Vous pouvez ainsi déployer facilement une instance de cette entrepot pour votre
 
 ORDaR offre un environnement sécurisé et pérenne (sous réserve du contrat de service de votre hebergeur et des procédures de sauvegarde mise en place) pour le dépôt de jeux de données et permet d'obtenir un DOI (Digital Object Identifier) pour vos publication ou datapaper.
 
-Les jeux de données peuvent être publiés dans l'entrepot selon différents droit d'accès:
+
+Cette entrepôt vise à promouvoir l'accès ouvert: valoriser et partager les connaissances.
+
+
+# Fonctionalités <a name="fonctionalite"></a>
+
+- Deux profils utilisateurs :
+	* Admin (droit de lecture et ecriture sur tous les jeux de données)
+	* User (droit de lecture et ecriture sur les jeux de données déposés par le User)
+
+- Possiblité de lier son compte avec son Orcid id
+
+- Dépots de jeux de données suivant différents niveaux de droit d'accès:
 
 	 Ouvert: accès total (opendata)
 	 Fermé: Accès restreint aux seules métadonnées
 	 Embargo: accès restreint aux métadonnées seulement jusqu'à la date de publication fixée par le producteur du jeux de données
 	 
+	 
+- Attribution d'une licence Creative Common v4 sur les jeux de données publié.
 
-Toutes les métadonnées sont ouvertes et décrites dans les normes internationales, elles sont téléchargeables en 4 formats:
+- Attribution d'un DOI (Digital Object Identifier) pour vos jeux de données publié.
+
+- Signalement des jeux de données via les réseaux sociaux : facebook / linkedIn / tweeter
+
+- Mise à jour possible des métadonnées de vos jeux de données (avec suivi des modifications)
+
+- Accessiblité des métadonnées dans les normes internationales, téléchargeables en 4 formats:
 
 	 Datacite
 	 BibteX
 	 JSON
 	 DublinCore
 	 
-Enfin, une licence Creative Common v4 est apposé sur chaque jeu de données publié.
+- Prévisualisation des jeux de données (pour les formats ascii, pdf, jpg, png)
 
-Cette entrepôt vise à promouvoir l'accès ouvert: valoriser et partager les connaissances.
-L'entrepôt supporte le protocole de moissonage de données OAI-PMH.
-Pour activer cette fonctionnalités il suffit de suivre la documentation à cette adresse: https://github.com/OTELO-OSU/ORDaR_OAI-PMH
+- Visualisation cartographique (dans le cas données geospatialisées)
 
-
+- Suivi du nombre de téléchargement des jeux de données.
 
 # Docker  <a name="docker"></a>
 
