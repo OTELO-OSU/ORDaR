@@ -2,14 +2,14 @@
 
 Nous fournissons dans le dépot, les fichiers de configuration nécessaire au déploiement docker d'une instance ORDaR.
 
-##Première étape : installer docker sur votre machine :
+## Première étape : installer docker sur votre machine :
 	https://docs.docker.com/engine/installation/
 
-##Deuxieme etape : cloner le depot sur votre système avec git
+## Deuxieme etape : cloner le depot sur votre système avec git
 
 		git clone https://github.com/OTELO-OSU/ORDaR.git
 		
-##Troisème étape : Adapter les fichiers configuration :
+## Troisème étape : Adapter les fichiers configuration :
 
 		
 Vous devez configurer le fichier Configure.env qui contient toutes les variable de configuration des différents services docker :
