@@ -12,15 +12,50 @@
  Cette collection contient les jeux de données déposés lors d'un dépot manuel (via upload)
  Dans le cas d'une implémentation des scripts de moissonage des jeux de données stockés sur l'espace collaboratif, d'autre collection pourront être créées du nom de ces projets. Les scripts de moissonage, spécifiques à OTELo sont disponibles sur demande.
  
+ **Détails des clés mongo:**
+ 
+    _id: DOI
+    INTRO:
+            TITLE: Titre
+            LANGUAGE: Langage
+            FILE_CREATOR:   
+                        FIRST_NAME: Prénom
+                        NAME: Nom
+                        DISPLAY_NAME: Prénom et nom
+                        MAIL: Mail du créateur
+            DATA_DESCRIPTION: Description des données
+            PUBLISHER: Editeur
+            SCIENTIFIC_FIELD: Champs scientifiques
+            INSTITUTION: Institutions
+            METHODOLOGY:
+                        NAME:Nom
+                        DESCRIPTION:Description
+            MEASUREMENT:
+                        NATURE
+                        ABBREVIATION
+                        UNIT
+           LICENSE:Licence
+           ACCESS_RIGHT:Droits d'accés
+           METADATA_DATE:Date de dernieres modifications des metadonnées
+           CREATION_DATE:Date de création initiale du jeu de données 
+           UPLOAD_DATE:Date d'ajout dans l'entrepot
+           PUBLICATION_DATE:Date dde publication des données
+	   SUPPLEMENTARY_FIELDS:Ajout de metadonné spécifiques par l'utilisateur
+    DATA:
+          FILES:
+                DATA_URL:Denomination du fichier
+                FILETYPE:Extension du fichier
+
+ 
  La base DOI contient une seule collection: DOI, elle contient un document avec un ID REPOSITORYNAME-DOI, un ID étant l’état du document (cet état permet de gérer des accès concurrents. Un système de verrou locked/unlocked est positionné pour pouvoir utiliser la ressource). 
 
-**RDaR comporte une base de données mysql pour la gestion des utilisateurs :**
+**ORDaR comporte une base de données mysql pour la gestion des utilisateurs :**
 
 ***Schéma base de données authentification***:
 
 ![Alt text](/Img_doc/schema_auth.png?raw=true)
 
-**Organisation du code:**
+## Organisation du code:
 
     --src
         --search
@@ -75,39 +110,7 @@ Cette classe permet d'envoyer des mails à des utilisateurs ou aux admins.
         - send_email (Affichage d'un modal permettant d'envoyer un message à un auteur (contact depuis un jeu de données) ou aux administrateurs (contact depuis le footer de l'application)
 	-changelog (Affichage sous forme de modal du changelog)
 	-account (Verification Frontend des champs saisi)
- **Détails des clés mongo:**
+	
  
-    _id: DOI
-    INTRO:
-            TITLE: Titre
-            LANGUAGE: Langage
-            FILE_CREATOR:   
-                        FIRST_NAME: Prénom
-                        NAME: Nom
-                        DISPLAY_NAME: Prénom et nom
-                        MAIL: Mail du créateur
-            DATA_DESCRIPTION: Description des données
-            PUBLISHER: Editeur
-            SCIENTIFIC_FIELD: Champs scientifiques
-            INSTITUTION: Institutions
-            METHODOLOGY:
-                        NAME:Nom
-                        DESCRIPTION:Description
-            MEASUREMENT:
-                        NATURE
-                        ABBREVIATION
-                        UNIT
-           LICENSE:Licence
-           ACCESS_RIGHT:Droits d'accés
-           METADATA_DATE:Date de dernieres modifications des metadonnées
-           CREATION_DATE:Date de création initiale du jeu de données 
-           UPLOAD_DATE:Date d'ajout dans l'entrepot
-           PUBLICATION_DATE:Date dde publication des données
-	   SUPPLEMENTARY_FIELDS:Ajout de metadonné spécifiques par l'utilisateur
-    DATA:
-          FILES:
-                DATA_URL:Denomination du fichier
-                FILETYPE:Extension du fichier
-
 
 
