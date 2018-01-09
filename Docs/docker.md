@@ -1,30 +1,56 @@
-# Docker  <a name="docker"></a>
+# Installation avec Docker  <a name="docker"></a>
 
-Pour utiliser Docker vous devez configurer le fichier Configure.env qui contient toutes les variable de configuration des différents services:
-Voici une configuration de test, à vous de la modifier.
+Nous fournissons dans le dépot, les fichiers de configuration nécessaire au déploiement docker d'une instance ORDaR.
+
+Première étape : installer docker sur votre machine :
+	https://docs.docker.com/engine/installation/
+
+Deuxieme etape : cloner le depot sur votre système avec git
+
+		git clone https://github.com/OTELO-OSU/ORDaR.git
+		
+Troisème étape : Adapter les fichiers configuration :
+
+		
+Vous devez configurer le fichier Configure.env qui contient toutes les variable de configuration des différents services docker :
+
+Voici une configuration de test, à vous de l'adapter.
 
 	#SPECIFIC ORDARUI
 	REPOSITORY_NAME=DOCKER-ORDAR
-	REPOSITORY_URL=http://example.fr
-	UPLOAD_FOLDER=/data/applis/ORDaR/Uploads/ NE PAS MODIFIER LE CHEMIN, il s'agit du chemin INTERNE du docker
-
-	DATAFILE_UNIXUSER="owncloud"
+Defini le nom du repository ainsi que le nom utilisé pour la generation des DOIs (après le prefix vous étant attribué)
+	REPOSITORY_URL=https://test-ordar.univ-lorraine.fr
+Indiquer ici l'url sur lequel le projet sera hebergé
+	UPLOAD_FOLDER=/data/applis/ORDaR/Uploads/
+défini l'emplacement des Uploads des utilisateurs (A ne pas modifier)
+	DATAFILE_UNIXUSER="toto"
+Il s'agit du user à qui appartient les fichiers uploader (niveau système de fichier).
 	NO_REPLY_MAIL="Noreply@ordar.fr"
+Mail de No-reply
 	SOCIAL_SHARING=true
-
-	#DOI CONFIG
-	DOI_PREFIX=10.5072
-	DOI_database=DOI
-	user_doi=test4
-	password_doi=test4
+Activation/désactivation du partage via les réseaux sociaux
+	
+	##SPECIFIC AU SCRIPT DE MOISSONNAGE (ne pas implémenter)
 	SSH_HOST=IPofservice
 	SSH_UNIXUSER=user
 	SSH_UNIXPASSWD=pass
-	SMTP=votre SMTP
-	DATASET_FILES_MAX_SIZE= Taille des fichiers maximum par dataset  
-	#DATACITE CREDENTIALS
 
+	SMTP="smtp-int.univ-lorraine.fr"
+L'adresse de votre relais de messagerie
+	DATASET_FILES_MAX_SIZE=1G
+Valeur maximale pour 1 jeux de données (pouvant être constitué de plusieurs fichiers)
+	
+	#DOI CONFIG
+	DOI_PREFIX=XX.XXXX
+Votre Préfix DOI
+	DOI_database=DOI
+	user_doi=test4
+	password_doi=test4
+
+	
+	#DATACITE CREDENTIALS
 	AUTH_CONFIG_DATACITE="YOUR SECRETS CREDENTIALS HERE"
+La clef permettant à l'application de se connecter à DataCite pour l'enregistrement / Mise à jour des DOI
 
 	#MONGO CONFIG
 	HOST_MONGO=mongo
@@ -38,6 +64,7 @@ Voici une configuration de test, à vous de la modifier.
 	PASSWORD_BACKUP=test3
 
 
+
 	#ELASTICSEARCH
 	ESHOST=elasticsearch
 	ESPORT=9200
@@ -48,10 +75,11 @@ Voici une configuration de test, à vous de la modifier.
 	PROTOCOL_VERSION=3.0
 	ADMINMAIL=test@test.fr
 	GRANULARITY=YYYY-MM-DD
-	TOKENKEY="test" #Clé a utiliser pour chiffrer les resumptionTokens
-	SpecialSet="openaire" #Set qui sera appliqué a tout les documents pour permettre d'etre recupérer par openaire ou autre. les valeurs doivent etre séparé par une virgule.
+	TOKENKEY="test"
+	SpecialSet="openaire"
 
-	
+Note: Pour plus de détails sur le fonctionnement de cette partie : https://github.com/OTELO-OSU/ORDaR_OAI-PMH 
+
 	#MYSQL AUTH DB
 	DRIVER=mysql
 	HOSTMYSQL=mysql_db
@@ -60,20 +88,25 @@ Voici une configuration de test, à vous de la modifier.
 	MYSQL_USER=test2
 	MYSQL_PASSWORD=test
 	CHARSETMYSQL=utf8
-	COLLATIONMYSQL=utf8_unicode_ci
+	COLLATIONMYSQL=utf8_unicode_ci	
+Note 1 : pour plus d'information sur cette partie se reporter à la section "configuration de l'authentification" dans Installation (hors docker)
+Note 2: Les utilisateurs mongo et mysql sont créés automatiquement.
+
 	
 	#ORCID
 	ORCID_client_id="Your key"
 	ORCID_client_secret="Your secret"
+Note : Pour utiliser ORCID, vous devez aussi modifier la valuer clientid (ligne 1546 et 1627) dans le fichier Frontend/src/js/search.js.
+	
+
+Quatrième étape (informations): passage en revue du fichier docker-compose.yml (servant à générer les images)
 
 
-Note: Les utilisateurs mongo et mysql sont créés automatiquement.
 
 Le service  harvester-geo-stations (spécifique à OTELo) permet de mettre en place l'upload automatic des jeux de données d'un projet,
 pour cela configurer le fichier Docker/harvester-geo-stations/config.ini avec les valeurs prédemment rentré.
 Scripts privés disponible sur demande.
 
-Pour utiliser ORCID, vous devez configurer lla variable client ID et secret dans le fichier config, vous devez aussi modifier la valuer clientid (ligne 1546 et 1627) dans le fichier search.js.
 
 ATTENTION: Un projet = un service d'upload automatique!
 
@@ -115,7 +148,7 @@ Ajouter votre access token bitbucket afin de pouvoir cloner le projet ordar_scri
 	-> générer votre token : 
 	curl https://bitbucket.org/site/oauth2/access_token -d grant_type=client_credentials -u key:secret
 
-Un fois cela effectué, lancé docker-compose:
+Un fois cela effectué, lancer docker-compose:
 
 	docker-compose up
 
