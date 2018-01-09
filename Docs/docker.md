@@ -79,7 +79,8 @@ Voici une configuration de test, à vous de l'adapter.
 		TOKENKEY="test"
 		SpecialSet="openaire"
 
-	Note: Pour plus de détails sur le fonctionnement de cette partie : https://github.com/OTELO-OSU/ORDaR_OAI-PMH 
+	Note: Pour plus de détails sur le fonctionnement de cette partie : 
+		https://github.com/OTELO-OSU/ORDaR_OAI-PMH 
 
 		#MYSQL AUTH DB
 		DRIVER=mysql
@@ -97,7 +98,8 @@ Voici une configuration de test, à vous de l'adapter.
 		#ORCID
 		ORCID_client_id="Your key"
 		ORCID_client_secret="Your secret"
-	Note : Pour utiliser ORCID, vous devez aussi modifier la valuer clientid (ligne 1546 et 1627) dans le fichier Frontend/src/js/search.js.
+	Note : Pour utiliser ORCID, vous devez aussi modifier la valuer clientid (ligne 1546 et 1627) 
+	dans le fichier Frontend/src/js/search.js.
 	
 
 ### Quatrième étape (informations): passage en revue du fichier docker-compose.yml (servant à générer les images)
