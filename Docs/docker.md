@@ -18,8 +18,8 @@ Voici une configuration de test, à vous de l'adapter.
 
 		#SPECIFIC ORDARUI
 		REPOSITORY_NAME=DOCKER-ORDAR
-		
-	Defini le nom du repository ainsi que le nom utilisé pour la generation des DOIs (après le prefix vous étant attribué)
+				Defini le nom du repository ainsi que le nom utilisé pour la generation des DOIs (après le prefix vous étant attribué)
+			
 		REPOSITORY_URL=https://test-ordar.univ-lorraine.fr
 	Indiquer ici l'url sur lequel le projet sera hebergé
 	
