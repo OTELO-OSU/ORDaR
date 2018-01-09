@@ -16,39 +16,32 @@ Vous devez configurer le fichier Configure.env qui contient toutes les variable 
 
 Voici une configuration de test, à vous de l'adapter.
 
-		############ SPECIFIC ORDARUI ##############
+		############ SPECIFIQUE ORDARUI ##############
 		
-		***Defini le nom du repository ainsi que le nom utilisé pour la generation des DOIs (après le prefix vous étant attribué)***	
+		#Defini le nom du repository ainsi que le nom utilisé pour la generation des DOIs 
 		REPOSITORY_NAME=DOCKER-ORDAR
-		#Indiquer ici l'url sur lequel le projet sera hebergé
+		#url du projet
 		REPOSITORY_URL=https://test-ordar.univ-lorraine.fr
-	
+		#défini l'emplacement des Uploads des utilisateurs (A ne pas modifier)
 		UPLOAD_FOLDER=/data/applis/ORDaR/Uploads/
-	défini l'emplacement des Uploads des utilisateurs (A ne pas modifier)
-	
+		#user à qui appartient les fichiers uploader (niveau système de fichier).
 		DATAFILE_UNIXUSER="toto"
-	Il s'agit du user à qui appartient les fichiers uploader (niveau système de fichier).
-	
 		NO_REPLY_MAIL="Noreply@ordar.fr"
-	Mail de No-reply
-	
+		#Activation/désactivation du partage via les réseaux sociaux	
 		SOCIAL_SHARING=true
-	Activation/désactivation du partage via les réseaux sociaux
-	
-		##SPECIFIQUE AU SCRIPT DE MOISSONNAGE (ne pas implémenter)
+		
+		############ SPECIFIQUE AU SCRIPT DE MOISSONNAGE (ne pas implémenter) ##################
 		SSH_HOST=IPofservice
 		SSH_UNIXUSER=user
 		SSH_UNIXPASSWD=pass
 
+		#L'adresse de votre relais de messagerie
 		SMTP="smtp-int.univ-lorraine.fr"
-	L'adresse de votre relais de messagerie
-	
+		# Valeur maximale pour 1 jeux de données (pouvant être constitué de plusieurs fichiers)
 		DATASET_FILES_MAX_SIZE=1G
-	Valeur maximale pour 1 jeux de données (pouvant être constitué de plusieurs fichiers)
 	
 		#DOI CONFIG
 		DOI_PREFIX=XX.XXXX
-	Votre Préfix DOI
 		DOI_database=DOI
 		user_doi=test4
 		password_doi=test4
@@ -56,7 +49,8 @@ Voici une configuration de test, à vous de l'adapter.
 	
 		#DATACITE CREDENTIALS
 		AUTH_CONFIG_DATACITE="YOUR SECRETS CREDENTIALS HERE"
-	La clef permettant à l'application de se connecter à DataCite pour l'enregistrement / Mise à jour des DOI
+		
+	Note : La clef permettant à l'application de se connecter à DataCite pour l'enregistrement / Mise à jour des DOI
 
 		#MONGO CONFIG
 		HOST_MONGO=mongo
@@ -81,6 +75,7 @@ Voici une configuration de test, à vous de l'adapter.
 		PROTOCOL_VERSION=3.0
 		ADMINMAIL=test@test.fr
 		GRANULARITY=YYYY-MM-DD
+		# clef de chiffrement
 		TOKENKEY="test"
 		SpecialSet="openaire"
 
