@@ -13,12 +13,12 @@ Sommaire:
 
 # Présentation <a name="presentation"></a>
 ORDaR est un entrepôt de données développé par et pour OTELO, celui-ci est entièrement personnalisable.
-Vous pouvez choisir le nom de votre entrepot avec le fichier de config detaillé dans l'installation.
-Ainsi vous pouvez déployer facilement une instance de cette entrepot pour votre institution.
+A l'installation, vous pouvez choisir le nom de votre entrepot grâce au fichier de configuration detaillé dans la rubrique : [Installation](/Docs/Installation.md).
+Vous pouvez ainsi déployer facilement une instance de cette entrepot pour votre institution.
 
 ORDaR offre un environnement sécurisé et pérenne (sous réserve du contrat de service de votre hebergeur et des procédures de sauvegarde mise en place) pour le dépôt de jeux de données et permet d'obtenir un DOI (Digital Object Identifier) pour vos publication ou datapaper.
 
-Les jeux de données peuvent être publiés dans ORDaR avec différents droit d'accès:
+Les jeux de données peuvent être publiés dans l'entrepot selon différents droit d'accès:
 
 	 Ouvert: accès total (opendata)
 	 Fermé: Accès restreint aux seules métadonnées
@@ -32,7 +32,7 @@ Toutes les métadonnées sont ouvertes et décrites dans les normes internationa
 	 JSON
 	 DublinCore
 	 
-Enfin, chaque ensemble de données est publié avec une licence Creative Common qui spécifie les termes de réutilisation juridique
+Enfin, une licence Creative Common v4 est apposé sur chaque jeu de données publié.
 
 Cette entrepôt vise à promouvoir l'accès ouvert: valoriser et partager les connaissances.
 L'entrepôt supporte le protocole de moissonage de données OAI-PMH.
