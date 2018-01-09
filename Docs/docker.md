@@ -2,104 +2,104 @@
 
 Nous fournissons dans le dépot, les fichiers de configuration nécessaire au déploiement docker d'une instance ORDaR.
 
-Première étape : installer docker sur votre machine :
+##Première étape : installer docker sur votre machine :
 	https://docs.docker.com/engine/installation/
 
-Deuxieme etape : cloner le depot sur votre système avec git
+##Deuxieme etape : cloner le depot sur votre système avec git
 
 		git clone https://github.com/OTELO-OSU/ORDaR.git
 		
-Troisème étape : Adapter les fichiers configuration :
+##Troisème étape : Adapter les fichiers configuration :
 
 		
 Vous devez configurer le fichier Configure.env qui contient toutes les variable de configuration des différents services docker :
 
 Voici une configuration de test, à vous de l'adapter.
 
-	#SPECIFIC ORDARUI
-	REPOSITORY_NAME=DOCKER-ORDAR
-Defini le nom du repository ainsi que le nom utilisé pour la generation des DOIs (après le prefix vous étant attribué)
-	REPOSITORY_URL=https://test-ordar.univ-lorraine.fr
-Indiquer ici l'url sur lequel le projet sera hebergé
-	UPLOAD_FOLDER=/data/applis/ORDaR/Uploads/
-défini l'emplacement des Uploads des utilisateurs (A ne pas modifier)
-	DATAFILE_UNIXUSER="toto"
-Il s'agit du user à qui appartient les fichiers uploader (niveau système de fichier).
-	NO_REPLY_MAIL="Noreply@ordar.fr"
-Mail de No-reply
-	SOCIAL_SHARING=true
-Activation/désactivation du partage via les réseaux sociaux
+		#SPECIFIC ORDARUI
+		REPOSITORY_NAME=DOCKER-ORDAR
+	Defini le nom du repository ainsi que le nom utilisé pour la generation des DOIs (après le prefix vous étant attribué)
+		REPOSITORY_URL=https://test-ordar.univ-lorraine.fr
+	Indiquer ici l'url sur lequel le projet sera hebergé
+		UPLOAD_FOLDER=/data/applis/ORDaR/Uploads/
+	défini l'emplacement des Uploads des utilisateurs (A ne pas modifier)
+		DATAFILE_UNIXUSER="toto"
+	Il s'agit du user à qui appartient les fichiers uploader (niveau système de fichier).
+		NO_REPLY_MAIL="Noreply@ordar.fr"
+	Mail de No-reply
+		SOCIAL_SHARING=true
+	Activation/désactivation du partage via les réseaux sociaux
 	
-	##SPECIFIC AU SCRIPT DE MOISSONNAGE (ne pas implémenter)
-	SSH_HOST=IPofservice
-	SSH_UNIXUSER=user
-	SSH_UNIXPASSWD=pass
+		##SPECIFIQUE AU SCRIPT DE MOISSONNAGE (ne pas implémenter)
+		SSH_HOST=IPofservice
+		SSH_UNIXUSER=user
+		SSH_UNIXPASSWD=pass
 
-	SMTP="smtp-int.univ-lorraine.fr"
-L'adresse de votre relais de messagerie
-	DATASET_FILES_MAX_SIZE=1G
-Valeur maximale pour 1 jeux de données (pouvant être constitué de plusieurs fichiers)
+		SMTP="smtp-int.univ-lorraine.fr"
+	L'adresse de votre relais de messagerie
+		DATASET_FILES_MAX_SIZE=1G
+	Valeur maximale pour 1 jeux de données (pouvant être constitué de plusieurs fichiers)
 	
-	#DOI CONFIG
-	DOI_PREFIX=XX.XXXX
-Votre Préfix DOI
-	DOI_database=DOI
-	user_doi=test4
-	password_doi=test4
-
-	
-	#DATACITE CREDENTIALS
-	AUTH_CONFIG_DATACITE="YOUR SECRETS CREDENTIALS HERE"
-La clef permettant à l'application de se connecter à DataCite pour l'enregistrement / Mise à jour des DOI
-
-	#MONGO CONFIG
-	HOST_MONGO=mongo
-	PORT_MONGO=27017
-	BDDNAME=ORDaR
-	SUPER_USER_NAME=test
-	SUPER_USER_PASSWORD=test
-	USER_READWRITE=test2
-	PASSWORD_READWRITE=test2
-	USER_BACKUP=test3
-	PASSWORD_BACKUP=test3
-
-
-
-	#ELASTICSEARCH
-	ESHOST=elasticsearch
-	ESPORT=9200
-
-
-	#SPECIFIC OAI PMH
-	REPOSITORY_URL_OAI=test
-	PROTOCOL_VERSION=3.0
-	ADMINMAIL=test@test.fr
-	GRANULARITY=YYYY-MM-DD
-	TOKENKEY="test"
-	SpecialSet="openaire"
-
-Note: Pour plus de détails sur le fonctionnement de cette partie : https://github.com/OTELO-OSU/ORDaR_OAI-PMH 
-
-	#MYSQL AUTH DB
-	DRIVER=mysql
-	HOSTMYSQL=mysql_db
-	MYSQL_ROOT_PASSWORD=root
-	MYSQL_DATABASE=authentication
-	MYSQL_USER=test2
-	MYSQL_PASSWORD=test
-	CHARSETMYSQL=utf8
-	COLLATIONMYSQL=utf8_unicode_ci	
-Note 1 : pour plus d'information sur cette partie se reporter à la section "configuration de l'authentification" dans Installation (hors docker)
-Note 2: Les utilisateurs mongo et mysql sont créés automatiquement.
+		#DOI CONFIG
+		DOI_PREFIX=XX.XXXX
+	Votre Préfix DOI
+		DOI_database=DOI
+		user_doi=test4
+		password_doi=test4
 
 	
-	#ORCID
-	ORCID_client_id="Your key"
-	ORCID_client_secret="Your secret"
-Note : Pour utiliser ORCID, vous devez aussi modifier la valuer clientid (ligne 1546 et 1627) dans le fichier Frontend/src/js/search.js.
+		#DATACITE CREDENTIALS
+		AUTH_CONFIG_DATACITE="YOUR SECRETS CREDENTIALS HERE"
+	La clef permettant à l'application de se connecter à DataCite pour l'enregistrement / Mise à jour des DOI
+
+		#MONGO CONFIG
+		HOST_MONGO=mongo
+		PORT_MONGO=27017
+		BDDNAME=ORDaR
+		SUPER_USER_NAME=test
+		SUPER_USER_PASSWORD=test
+		USER_READWRITE=test2
+		PASSWORD_READWRITE=test2
+		USER_BACKUP=test3
+		PASSWORD_BACKUP=test3
+
+
+
+		#ELASTICSEARCH
+		ESHOST=elasticsearch
+		ESPORT=9200
+
+
+		#SPECIFIC OAI PMH
+		REPOSITORY_URL_OAI=test
+		PROTOCOL_VERSION=3.0
+		ADMINMAIL=test@test.fr
+		GRANULARITY=YYYY-MM-DD
+		TOKENKEY="test"
+		SpecialSet="openaire"
+
+	Note: Pour plus de détails sur le fonctionnement de cette partie : https://github.com/OTELO-OSU/ORDaR_OAI-PMH 
+
+		#MYSQL AUTH DB
+		DRIVER=mysql
+		HOSTMYSQL=mysql_db
+		MYSQL_ROOT_PASSWORD=root
+		MYSQL_DATABASE=authentication
+		MYSQL_USER=test2
+		MYSQL_PASSWORD=test
+		CHARSETMYSQL=utf8
+		COLLATIONMYSQL=utf8_unicode_ci	
+	Note 1 : pour plus d'information sur cette partie se reporter à la section "configuration de l'authentification" dans Installation (hors docker)
+	Note 2: Les utilisateurs mongo et mysql sont créés automatiquement.
+
+	
+		#ORCID
+		ORCID_client_id="Your key"
+		ORCID_client_secret="Your secret"
+	Note : Pour utiliser ORCID, vous devez aussi modifier la valuer clientid (ligne 1546 et 1627) dans le fichier Frontend/src/js/search.js.
 	
 
-Quatrième étape (informations): passage en revue du fichier docker-compose.yml (servant à générer les images)
+## Quatrième étape (informations): passage en revue du fichier docker-compose.yml (servant à générer les images)
 
 
 
