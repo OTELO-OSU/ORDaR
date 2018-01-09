@@ -1,7 +1,7 @@
 # Organisation  
 
 
-**Organisation des bases de données mongo:**
+**Organisation des bases de données mongo et mysql :**
 
 Ordar comporte 2 bases de données mongo:
 
@@ -14,6 +14,11 @@ Ordar comporte 2 bases de données mongo:
  
  La base DOI contient une seule collection: DOI, elle contient un document avec un ID REPOSITORYNAME-DOI, un ID étant l’état du document (cet état permet de gérer des accès concurrents. Un système de verrou locked/unlocked est positionné pour pouvoir utiliser la ressource). 
 
+ORDaR comporte une base de données mysql pour la gestion des utilisateurs :
+
+***Schéma base de données authentification***:
+
+![Alt text](/Img_doc/schema_auth.png?raw=true)
 
 **Organisation du code:**
 
@@ -55,9 +60,7 @@ Cette classe permet de gérer les comptes utilisateurs (Ajout, Suppression, Modi
 
 Cette classe permet d'envoyer des mails à des utilisateurs ou aux admins.
 
-**Schéma base de données authentification**:
 
-![Alt text](/Img_doc/schema_auth.png?raw=true)
 
 
 **Détails des différentes module JS:**
