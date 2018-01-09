@@ -18,15 +18,20 @@ Voici une configuration de test, à vous de l'adapter.
 
 		#SPECIFIC ORDARUI
 		REPOSITORY_NAME=DOCKER-ORDAR
+		
 	Defini le nom du repository ainsi que le nom utilisé pour la generation des DOIs (après le prefix vous étant attribué)
 		REPOSITORY_URL=https://test-ordar.univ-lorraine.fr
 	Indiquer ici l'url sur lequel le projet sera hebergé
+	
 		UPLOAD_FOLDER=/data/applis/ORDaR/Uploads/
 	défini l'emplacement des Uploads des utilisateurs (A ne pas modifier)
+	
 		DATAFILE_UNIXUSER="toto"
 	Il s'agit du user à qui appartient les fichiers uploader (niveau système de fichier).
+	
 		NO_REPLY_MAIL="Noreply@ordar.fr"
 	Mail de No-reply
+	
 		SOCIAL_SHARING=true
 	Activation/désactivation du partage via les réseaux sociaux
 	
@@ -37,6 +42,7 @@ Voici une configuration de test, à vous de l'adapter.
 
 		SMTP="smtp-int.univ-lorraine.fr"
 	L'adresse de votre relais de messagerie
+	
 		DATASET_FILES_MAX_SIZE=1G
 	Valeur maximale pour 1 jeux de données (pouvant être constitué de plusieurs fichiers)
 	
