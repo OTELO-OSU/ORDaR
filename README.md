@@ -49,7 +49,7 @@ ORDaR offre un environnement sécurisé et pérenne (sous réserve du contrat de
 
 - Attribution d'un DOI (Digital Object Identifier) pour vos jeux de données publié.
 
-- Signalement des jeux de données via les réseaux sociaux : ![Alt text](/Img_doc/fb2_icon.png?raw=true)facebook / linkedIn / tweeter
+- Signalement des jeux de données via les réseaux sociaux : ![Alt text](/Img_doc/fb3_icon.png?raw=true)facebook / linkedIn / tweeter
 
 - Mise à jour possible des métadonnées de vos jeux de données (avec suivi des modifications)
 
