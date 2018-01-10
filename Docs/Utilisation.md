@@ -115,7 +115,7 @@ NB: En statut unpublished l'id du fichier est provisoire (aucun DOI n'est attrib
 
 
 
-** NOTES DIVERSES : **
+**NOTES DIVERSES :**
 
 ***Enregistrement des DOIs:***
 
