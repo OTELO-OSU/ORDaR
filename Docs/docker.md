@@ -130,14 +130,14 @@ Modifier le fichier Docker/Apache_PHP/ssmtp.conf:
 
 #### Parametrage de votre php max file size (serveur Hôte)
 Paramétrage de la taille de fichier maximale au niveau php (Host) :
-Modifier le fichier Dockerfile a la racine du projet:
+Modifier le fichier Dockerfile à la racine du projet:
 
 Remplacer TAILLESOUHAITE par une taille
 
 	RUN echo 'upload_max_filesize = TAILLESOUHAITE' >> /usr/local/etc/php/php.ini
 	RUN echo 'post_max_size = TAILLESOUHAITE' >> /usr/local/etc/php/php.ini
 
-### Quatrième étape : passage en revue du fichier [docker-compose.yml](/docker-compose.yml) (servant à générer les images)
+### Quatrième étape : passage en revue du fichier [docker-compose.yml](/docker-compose.yml)
 
 voici les différents services qui seront créés pour l'installation :
 
@@ -194,7 +194,7 @@ Pour les lancer :
 	docker-compose start
 
 
-Il y a 3 volumes présent sur ce projet afin de garantir la persistance des données:
+Il y a 3 volumes présent sur ce projet afin de garantir la persistance des données (volume docker):
 
 	- mongodb, pour la base de données
 	- elasticsearch, pour les données indexées par ES
