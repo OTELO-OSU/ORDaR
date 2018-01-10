@@ -12,7 +12,7 @@ Nous fournissons dans le dépot, les fichiers de configuration nécessaires au d
 ### Troisème étape : Adapter les fichiers de configuration :
 
 #### Fichier Configure.env		
-Vous devez configurer le fichier Configure.env qui contient toutes les variable de configuration des différents services docker :
+Vous devez configurer le fichier Configure.env qui contient toutes les variable de configuration des différents services docker (sauf docker apache) :
 
 Voici une configuration de test, à vous de l'adapter.
 
