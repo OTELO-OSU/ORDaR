@@ -225,7 +225,7 @@ La base est maintenant installée.
 L'authentification s'effectue via la route /login.
 On peut s'authentifier au compte utilisateur via l'authentification de l'application. Il faut préalablement avoir créé son compte via la procédure "sign up". 
 
-L'application propose par défaut une alternative de login via votre fournisseur d'identité et son Central Authentication Service (CAS) (si vous en possédez un). 
+L'application propose également une alternative de login via votre fournisseur d'identité et son Central Authentication Service (CAS) (si vous en possédez un et que vous faites parti de federation education recherche). 
 Dans ce cas, il est nécessaire de déclarer un Service Provider :
 
 	https://federation.renater.fr/registry
@@ -236,7 +236,7 @@ ou d'en installer un :
 
 
 L'authentification vers le CAS s'effectue via la route /loginCAS.
-Cette route recupère les variables contenu dans les headers HTTP fournit par le fournisseur d'identié et transmis par l'application par votre serveur shibboleth. Ces variables seront assignées aux variables de session php.
+Cette route recupère les variables contenu dans les headers HTTP fournit par le fournisseur d'identié et transmis par votre serveur shibboleth à l'application. Ces variables seront assignées aux variables de session php.
 
 Variables utilisés:
 
@@ -277,5 +277,5 @@ Vous devez au préalable avoir un fichier csv d'utilisateurs avec ces colonnes:
 
 
 Ensuite, il suffit d'executer le script php PopulateAuthDB.php avec en parametre le nom du fichier CSV.
-Les utilisateurs sont créés avec un mot de passe aléatoire, dans le cas d'une connexion avec le CAS, le compte est utilisable dés à présent, sinon  pour l'authentification traditionnel l'utilisateur doit effectuer une demande de réinitialisation de mot de passe.
+Les utilisateurs sont créés avec un mot de passe aléatoire, dans le cas d'une connexion avec le CAS, le compte est utilisable dés à présent, sinon  pour l'authentification traditionnelle l'utilisateur doit effectuer une demande de réinitialisation de mot de passe.
 
