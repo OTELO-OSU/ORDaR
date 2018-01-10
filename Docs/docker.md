@@ -141,7 +141,7 @@ Remplacer TAILLESOUHAITE par une taille
 
 voici les différents services qui seront créés pour l'installation :
 
-- Mongo (base mongodb hebergeant les jeux de données)
+- Mongo (base mongodb hebergeant les jeux de données et metadonnées)
 
 - Mysql_db (base de données pour l'authentification utilisateurs)
 
