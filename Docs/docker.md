@@ -161,21 +161,7 @@ voici les différents services qui seront créés pour l'installation :
 
 - harvester-geo-stations (script de moissonage des espaces collaboratif : Spécifique OTELo)
 
-Le service  harvester-geo-stations permet de mettre en place l'upload automatic des jeux de données d'un projet,
-pour cela configurer le fichier Docker/harvester-geo-stations/config.ini avec les valeurs prédemment rentré.
-Scripts privés disponible sur demande.
--> ATTENTION: Un projet = un service d'upload automatique!
 
-Le script de moissonage harvester-geo-stations étant stocké sur un repository privé de bitbucket :
-Modifier le fichier Docker/harvester-geo-stations/Dockerfile:
-
-Ajouter votre access token bitbucket afin de pouvoir cloner le projet ordar_script
-
-	pour créer votre access token (valable 1 heure), se rendre sur le compte bitbucket :settings : OAuth
-	copier votre "key" et votre "secret"
-	
-	-> générer votre token : 
-	curl https://bitbucket.org/site/oauth2/access_token -d grant_type=client_credentials -u key:secret
 
 #### ATTENTION: Dans les services OrdarUI et  harvester-geo-stations, il faut configurer les volumes afin de monter les fichiers déposé et les jeux de donné issu de l'espace collaboratif (si activation du service)
 Pour cela rendez-vous dans le fichier docker-compose.yml :
