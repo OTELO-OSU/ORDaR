@@ -163,7 +163,7 @@ voici les différents services qui seront créés pour l'installation :
 
 
 
-#### ATTENTION: Dans les services OrdarUI et  harvester-geo-stations, il faut configurer les volumes afin de monter les fichiers déposé et les jeux de donné issu de l'espace collaboratif (si activation du service)
+#### ATTENTION: Dans le services OrdarUI et  harvester-geo-stations, il faut configurer les volumes afin de monter les fichiers déposé et les jeux de donné issu de l'espace collaboratif (si activation du service)
 Pour cela rendez-vous dans le fichier docker-compose.yml :
 
 Exemple pour le service harvester-geo-stations
