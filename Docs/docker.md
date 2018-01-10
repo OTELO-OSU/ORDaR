@@ -50,9 +50,12 @@ Voici une configuration de test, à vous de l'adapter.
 	
 		#DATACITE CREDENTIALS
 		AUTH_CONFIG_DATACITE="YOUR SECRETS CREDENTIALS HERE"
-		
-	Note : La clef permettant à l'application de se connecter à DataCite pour l'enregistrement des DOI
-
+	
+	#############	
+	# Note : La clef permettant à l'application de se connecter à DataCite pour l'enregistrement des DOI
+	# est obtenu grace à la commande : "echo login_datacite:mdp_datacite | base64"
+	#############
+	
 		#MONGO CONFIG
 		HOST_MONGO=mongo
 		PORT_MONGO=27017
@@ -80,8 +83,10 @@ Voici une configuration de test, à vous de l'adapter.
 		TOKENKEY="test"
 		SpecialSet="openaire"
 
-	Note: Pour plus de détails sur le fonctionnement de cette partie : 
-		https://github.com/OTELO-OSU/ORDaR_OAI-PMH 
+	#############
+	# Note: Pour plus de détails sur le fonctionnement de cette partie : 
+	# https://github.com/OTELO-OSU/ORDaR_OAI-PMH 
+	#############
 
 		#MYSQL AUTH DB
 		DRIVER=mysql
@@ -92,16 +97,24 @@ Voici une configuration de test, à vous de l'adapter.
 		MYSQL_PASSWORD=test
 		CHARSETMYSQL=utf8
 		COLLATIONMYSQL=utf8_unicode_ci	
-	Note 1 : pour plus d'information sur cette partie se reporter à la section 
-	"configuration de l'authentification" dans Installation (hors docker)
-	Note 2: Les utilisateurs mongo et mysql sont créés automatiquement.
-
+	
+	#############
+	# Note 1 : pour plus d'information sur cette partie se reporter à la section 
+	# "configuration de l'authentification" dans Installation (hors docker)
+	# Note 2: Les utilisateurs mongo et mysql sont créés automatiquement.
+	#############
 	
 		#ORCID
 		ORCID_client_id="Your key"
 		ORCID_client_secret="Your secret"
-	Note : Pour utiliser ORCID, vous devez aussi modifier la valuer clientid (ligne 1546 et 1627) 
-	dans le fichier Frontend/src/js/search.js.
+		
+	###########
+	# Pour utiliser ORCID, vous devez aussi modifier la valuer clientid (ligne 1546 et 1627) 
+	# dans le fichier Frontend/src/js/search.js.
+	#Pour générer vos clientid et secret aller dans "developer tool" de votre profil orcid
+	# -> declarer les url suivantes : https://votre_entrepot.fr/signup et
+	# https://votre_entrepot.fr/myaccount
+	###################
 	
 
 ### Quatrième étape : passage en revue du fichier docker-compose.yml (servant à générer les images)
