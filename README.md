@@ -18,7 +18,7 @@ ORDaR est un entrepôt de données développé par et pour OTELo, toutefois celu
 A l'installation, vous pouvez choisir le nom de votre entrepot grâce au fichier de configuration detaillé dans la rubrique : [Installation](/Docs/Installation.md) mais nous vous invitons à choisir la solution de déploiement via [Docker](#docker).
 Vous pouvez ainsi déployer facilement une instance de cette entrepot pour votre institution.
 
-ORDaR offre un environnement sécurisé et pérenne (sous réserve du contrat de service de votre hebergeur et des procédures de sauvegarde mises en place) pour le dépôt de jeux de données et permet d'attribuer un DOI (Digital Object Identifier) pour vos publication ou datapaper (sous reserve de posseder un compte chez datacite, pour la france cf [INIST](http://www.inist.fr).
+ORDaR offre un environnement sécurisé et pérenne (sous réserve du contrat de service de votre hebergeur et des procédures de sauvegarde mises en place) pour le dépôt de jeux de données et permet d'attribuer un DOI (Digital Object Identifier) pour vos publication ou datapaper (sous reserve de posseder un compte chez datacite, pour la france cf [INIST](http://www.inist.fr) ).
 
 
 	Cette entrepôt vise à promouvoir l'accès ouvert: valoriser et partager les connaissances.
