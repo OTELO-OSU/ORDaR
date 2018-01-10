@@ -80,7 +80,9 @@ Afin d'envoyer des mails, vous devez configurer un SMTP sur votre serveur.
     git clone https://github.com/arnouldpy/ORDaR.git
 
 Rendez vous dans le dossier créé, une fois dans le dossier Ordar, exécutez :
+    
     php Init_elasticsearch_index.php 
+    
 Ce fichier permet de définir le template que doit utiliser elasticsearch.
     
 Vous pouvez créer le fichier config manuellement ou utiliser le script configure.sh qui permet de créer un fichier de configuration facilement et rapidement
