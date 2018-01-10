@@ -30,6 +30,7 @@ Le script Check_Embargoed_access.php doit être exécuté une fois par jour afin
 
 
 **Rechercher un jeu de données:**
+
 L'utilisateur peut effectuer une recherche par mot clé, il peut utiliser des opérateurs logique tels que AND et OR.
 Une recherche peut etre effectuée uniquement sur un champs spécifique, voici une liste des champs interogeable et comment effectué cette recherche:
 
@@ -54,7 +55,9 @@ Seules les facettes Access right ont l’opérateur OR
 Lors de la sélection de plusieurs facettes, l'opérateur de recherche est AND. 
 
 
-**Insertion d'un nouveau jeu de données:**
+**Ajout d'un nouveau jeu de données:**
+
+Aller dans l'onglet : "Upload"
 
 Avant tout dépot de jeu de données une vérification de disponibilité de l'API datacite est effectuée.
 
@@ -64,28 +67,7 @@ Un numéro de DOI sera attribué au jeu de données.
 
 Les informations sont ensuite traitées et insérées en base de données.
 
-Mongo connector se charge ensuite de synchroniser le contenu de la base avec elasticsearch (indexation des données).
-
 L'utilisateur recevra une confirmation par mail de son dépot avec le DOI qui a été attribué au jeu de données.
-
-**Importation d'un jeu de données via  harvester-geo-stations (OTELoCloud) Spécifique à OTELo:**
-
-OTELO utilise des canevas afin que les chercheurs puissent créer des fichiers de données interroperables.
-
-Un script d'importation se charge d'importer les données présentes dans un dossier spécifiques de l'espace collaboratif de stockage:
-Les métadonnées issues du feuillet INTRO du fichier excel sont importées dans la base Mongodb,
-Le feuillet DATA est converti en fichier csv et il est joint à ce jeux de données comme fichier.
-
-Vous trouverer le script d'importation ici : https://bitbucket.org/arnouldpy/harvester-geo-stations/
-Le repository est privée, vous pouvez nous contacter pour plus de détails.
-
-Le jeux de données est ajouté avec un statut Unpublished à la  base de données, il est accessible uniquement pour le propriétaire ou ses co-auteurs.
-L'auteur peut choisir de le publier ou de le supprimer.
-Si le jeu de données est supprimé ou publié, le fichier xlsx (de l'espace collaboratif de stockage) est automatiquement supprimé du repertoire source. Dans le cas d'une publication, le jeu de données supprimé de l'espace collaboratif de stockage est remplacé par un fichier Html contenant un lien vers le jeu de données publié sur l'entrepot.
-
-De plus, lors de la publication, l'utilisateur recevra un mail avec le DOI qui a été attribué au jeu de données. 
-
-NB: En statut unpublished l'id du fichier est provisoire (aucun DOI n'est attribué).
 
 **Création d'un fichier brouillon dit "Draft":**
 
@@ -112,15 +94,36 @@ La suppression entraîne la suppression TOTALE du jeu de données:
 ![Alt text](/Img_doc/Diagram_ORDAR.png?raw=true)
 
 
+**Importation d'un jeu de données via  harvester-geo-stations (OTELoCloud) Spécifique à OTELo:**
 
-**Enregistrement des DOIs:**
+OTELO utilise des canevas afin que les chercheurs puissent créer des fichiers de données interroperables.
+
+Un script d'importation se charge d'importer les données présentes dans un dossier spécifiques de l'espace collaboratif de stockage:
+Les métadonnées issues du feuillet INTRO du fichier excel sont importées dans la base Mongodb,
+Le feuillet DATA est converti en fichier csv et il est joint à ce jeux de données comme fichier.
+
+Vous trouverer le script d'importation ici : https://bitbucket.org/arnouldpy/harvester-geo-stations/
+Le repository est privée, vous pouvez nous contacter pour plus de détails.
+
+Le jeux de données est ajouté avec un statut Unpublished à la  base de données, il est accessible uniquement pour le propriétaire ou ses co-auteurs.
+L'auteur peut choisir de le publier ou de le supprimer.
+Si le jeu de données est supprimé ou publié, le fichier xlsx (de l'espace collaboratif de stockage) est automatiquement supprimé du repertoire source. Dans le cas d'une publication, le jeu de données supprimé de l'espace collaboratif de stockage est remplacé par un fichier Html contenant un lien vers le jeu de données publié sur l'entrepot.
+
+De plus, lors de la publication, l'utilisateur recevra un mail avec le DOI qui a été attribué au jeu de données. 
+
+NB: En statut unpublished l'id du fichier est provisoire (aucun DOI n'est attribué).
+
+
+
+** NOTES DIVERSES : **
+***Enregistrement des DOIs:***
 
 L'enregistrement des DOIs nécessite un compte sur https://mds.datacite.org/ (pour la france, contacter http://wwww.inist.fr)
 
 ![Alt text](/Img_doc/DOI_save.png?raw=true)
 
 
-**Mode Administrateur:**
+***Mode Administrateur:***
 
 Il existe un mode administrateur qui permet de visualiser tous les jeux de données, même les données "Unpublished".
 L'administrateur peut visualiser, modifier, et supprimer un jeu de données, même si celui ci a été publié.
