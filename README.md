@@ -45,9 +45,9 @@ ORDaR offre un environnement sécurisé et pérenne (sous réserve du contrat de
 	* Embargo: accès restreint aux métadonnées seulement jusqu'à la date de publication fixée par le producteur du jeux de données
 	 
 	 
-- Attribution d'une licence Creative Common v4 sur les jeux de données publié. ![Alt text](/Img_doc/cc2_icon.png?raw=true)
+- Attribution d'une licence Creative Common v4 sur les jeux de données publiés. ![Alt text](/Img_doc/cc2_icon.png?raw=true)
 
-- Attribution d'un DOI (Digital Object Identifier) pour vos jeux de données publié. ![Alt text](/Img_doc/datacite2.png?raw=true)
+- Attribution d'un DOI (Digital Object Identifier) pour vos jeux de données publiés. ![Alt text](/Img_doc/datacite2.png?raw=true)
 
 - Signalement des jeux de données via les réseaux sociaux : ![Alt text](/Img_doc/fb3_icon.png?raw=true) ![Alt text](/Img_doc/tweeter2_icon.png?raw=true) ![Alt text](/Img_doc/linkedin2_icon.png?raw=true)
 
