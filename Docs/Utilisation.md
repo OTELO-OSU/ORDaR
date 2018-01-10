@@ -24,8 +24,8 @@ Un jeu de données à un accès défini: il peut être :
     - Embargoed(métadonnées uniquement accessibles, les fichiers seront publié et disponible à une date fournie par le publiant).
     - Unpublished (fichier importé de l'espace collaboratif de stockage avec un script d'import que le propriétaire peut publier quand il le souhaite suivant les trois modes précedent).
 
+NOTE : Modification du statut Embargoed -> Open:
 
-**Modification du statut Embargoed -> Open:**
 Le script Check_Embargoed_access.php doit être exécuté une fois par jour afin de changer les statuts des jeux de données arrivé à échéance: des lors que la date du jour est égale à la date de l'embargo, le jeu de données est modifié en statut Open.
 
 
