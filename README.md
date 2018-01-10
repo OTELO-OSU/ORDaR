@@ -14,7 +14,7 @@ Sommaire:
 
 
 # Présentation <a name="presentation"></a>
-ORDaR est un entrepôt de données développé par et pour OTELO, celui-ci est entièrement personnalisable.
+ORDaR est un entrepôt de données développé par et pour OTELo, toutefois celui-ci est entièrement personnalisable et peut être déployé dans votre organisation.
 A l'installation, vous pouvez choisir le nom de votre entrepot grâce au fichier de configuration detaillé dans la rubrique : [Installation](/Docs/Installation.md) mais nous vous invitons à choisir la solution de déploiement via [Docker](#docker).
 Vous pouvez ainsi déployer facilement une instance de cette entrepot pour votre institution.
 
@@ -49,7 +49,7 @@ ORDaR offre un environnement sécurisé et pérenne (sous réserve du contrat de
 
 - Attribution d'un DOI (Digital Object Identifier) pour vos jeux de données publié.
 
-- Signalement des jeux de données via les réseaux sociaux : facebook / linkedIn / tweeter
+- Signalement des jeux de données via les réseaux sociaux : ![Alt text](/Img_doc/fb_icon.png?raw=true)facebook / linkedIn / tweeter
 
 - Mise à jour possible des métadonnées de vos jeux de données (avec suivi des modifications)
 
