@@ -159,23 +159,18 @@ voici les différents services qui seront créés pour l'installation :
 
 - CheckEmbargoedDate (script de verification des dates d'embargo (passage en open access) lancé tout les jour à 00h01)
 
-- harvester-geo-stations (script de moissonage des espaces collaboratif : Spécifique OTELo)
+- [harvester-geo-stations](/Docs/harvester-geo-stations.md) (script de moissonage des espaces collaboratif : Spécifique OTELo)
 
 
 
-#### ATTENTION: Dans le services OrdarUI et  harvester-geo-stations, il faut configurer les volumes afin de monter les fichiers déposé et les jeux de donné issu de l'espace collaboratif (si activation du service)
+#### ATTENTION: Dans le services OrdarUI, il faut configurer les volumes afin de monter le repertoire du docker interne (la ou les fichiers seront déposés) sur un file systemes de la machine Hôte.
+
 Pour cela rendez-vous dans le fichier docker-compose.yml :
-
-Exemple pour le service harvester-geo-stations
-
-	 volumes:
-	     - /data/applis/ORDaR/Uploads/:/data/applis/ORDaR/Uploads/  (Chemin machine hôte : Chemin du docker interne NE PAS MOFIFIER LE CHEMIN INTERNE)
-     - /data/applis/ORDaR/excel/:/data/applis/ORDaR/excel/ (Chemin machine hôte : Chemin du docker interne NE PAS MOFIFIER LE CHEMIN INTERNE)
 
 Exemple pour le service OrdarUI
 	 
 	 volumes:
-	     - /data/applis/ORDaR/Uploads/:/data/applis/ORDaR/Uploads/  (Chemin machine hôte : Chemin du docker interne NE PAS MOFIFIER LE CHEMIN INTERNE)
+	     - /applis/ORDaR/data/Uploads/:/data/applis/ORDaR/Uploads/  (Chemin machine hôte : Chemin du docker interne NE PAS MOFIFIER LE CHEMIN INTERNE)
 
 
 
