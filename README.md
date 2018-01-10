@@ -15,6 +15,7 @@ Sommaire:
 
 # Présentation <a name="presentation"></a>
 ORDaR est un entrepôt de données développé par et pour OTELo, toutefois celui-ci est entièrement personnalisable et peut être déployé dans votre organisation.
+
 A l'installation, vous pouvez choisir le nom de votre entrepot grâce au fichier de configuration detaillé dans la rubrique : [Installation](/Docs/Installation.md) mais nous vous invitons à choisir la solution de déploiement via [Docker](#docker).
 Vous pouvez ainsi déployer facilement une instance de cet entrepot pour votre institution.
 
