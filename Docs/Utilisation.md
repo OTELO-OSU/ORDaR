@@ -1,5 +1,18 @@
 # Utilisation  
 
+**Création / Gestion des utilisateurs:**
+
+l'application propose une procédure d'inscription : "sign up"
+
+
+
+Celle-ci permet de faire son inscription avec validation de la demande par token mail, un mail de création est envoyé aux administrateurs de l'application.
+
+Une fois votre compte créé, il doit être activé par un administrateur qui a été précedement notifié.
+Une fois activé, vous pouvez déposer des jeux de données sur la plateforme
+
+A noter : vous pouvez modifier votre profil via : "myaccount" et pourquoi pas saisir votre orcid_id ci cela n'a pas été fait lors de votre inscription.
+
 **Définition d'un jeu de données:**
 
 Un jeu de données est un ensemble constitué de métadonnées et de fichiers données.
