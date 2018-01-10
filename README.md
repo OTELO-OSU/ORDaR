@@ -64,5 +64,5 @@ ORDaR offre un environnement sécurisé et pérenne (sous réserve du contrat de
 
 - Visualisation cartographique (dans le cas données geospatialisées)
 
-- Suivi du nombre de téléchargement des jeux de données.
+- Suivi du nombre de téléchargement des jeux de données. ![Alt text](/Img_doc/download2.png?raw=true)
 
