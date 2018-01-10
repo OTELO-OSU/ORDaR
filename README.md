@@ -36,7 +36,7 @@ ORDaR offre un environnement sécurisé et pérenne (sous réserve du contrat de
 	* Admin (droit de lecture et ecriture sur tous les jeux de données)
 	* User (droit de lecture et ecriture sur les jeux de données déposés par le User)
 
-- Possiblité de lier son compte avec son Orcid id
+- Possiblité de lier son compte avec son Orcid id ![Alt text](/Img_doc/orcid2_id.png?raw=true)
 
 - Dépots de jeux de données suivant différents niveaux de droit d'accès:
 
@@ -45,20 +45,20 @@ ORDaR offre un environnement sécurisé et pérenne (sous réserve du contrat de
 	 Embargo: accès restreint aux métadonnées seulement jusqu'à la date de publication fixée par le producteur du jeux de données
 	 
 	 
-- Attribution d'une licence Creative Common v4 sur les jeux de données publié.
+- Attribution d'une licence Creative Common v4 sur les jeux de données publié. ![Alt text](/Img_doc/cc2_icon.png?raw=true)
 
-- Attribution d'un DOI (Digital Object Identifier) pour vos jeux de données publié.
+- Attribution d'un DOI (Digital Object Identifier) pour vos jeux de données publié. ![Alt text](/Img_doc/datacite2icon.png?raw=true)
 
-- Signalement des jeux de données via les réseaux sociaux : ![Alt text](/Img_doc/fb3_icon.png?raw=true)facebook / linkedIn / tweeter
+- Signalement des jeux de données via les réseaux sociaux : ![Alt text](/Img_doc/fb3_icon.png?raw=true) ![Alt text](/Img_doc/tweeter2_icon.png?raw=true) ![Alt text](/Img_doc/linkedin2_icon.png?raw=true)
 
 - Mise à jour possible des métadonnées de vos jeux de données (avec suivi des modifications)
 
 - Accessiblité des métadonnées dans les normes internationales, téléchargeables en 4 formats:
 
-	 Datacite
-	 BibteX
-	 JSON
-	 DublinCore
+	*  Datacite
+	*  BibteX
+	*  JSON
+	*  DublinCore
 	 
 - Prévisualisation des jeux de données (pour les formats ascii, pdf, jpg, png)
 
