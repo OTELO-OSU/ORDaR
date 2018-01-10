@@ -9,7 +9,7 @@ Nous fournissons dans le dépot, les fichiers de configuration nécessaire au d�
 
 		git clone https://github.com/OTELO-OSU/ORDaR.git
 		
-### Troisème étape : Adapter les fichiers configuration :
+### Troisème étape : Adapter les fichiers de configuration :
 
 #### Fichier Configure.env		
 Vous devez configurer le fichier Configure.env qui contient toutes les variable de configuration des différents services docker :
@@ -122,7 +122,7 @@ Modifier le fichier Docker/Apache_PHP/ssmtp.conf:
 
 	mailhub= ADRESSE DE VOTRE SMTP
 
-#### Parametrage de votre php max file size
+#### Parametrage de votre php max file size (serveur Hôte)
 Paramétrage de la taille de fichier maximale au niveau php (Host) :
 Modifier le fichier Dockerfile a la racine du projet:
 
@@ -133,16 +133,45 @@ Remplacer TAILLESOUHAITE par une taille
 
 ### Quatrième étape : passage en revue du fichier docker-compose.yml (servant à générer les images)
 
+voici les différents services qui seront créés pour l'installation :
 
+- Mongo (base mongodb hebergeant les jeux de données)
 
-Le service  harvester-geo-stations (spécifique à OTELo) permet de mettre en place l'upload automatic des jeux de données d'un projet,
+- Mysql_db (base de données pour l'authentification utilisateurs)
+
+- Elasticsearch (moteur de recherche et d'indexation)
+
+- logstash (centralise et parse les logs d'accès)
+
+- kibana (Exploration et visualisation des logs d'accès : accès par défaut restreint en local)
+
+- mongoconnector (synchronise la base mongo avec le moteur d'indexation elasticsearch)
+
+- OrdarUI (interface de l'application ORDaR)
+
+- OrdarOAIPMH (permet de rendre l'entrepot moissonable selon le protocole OAIPMH : activé par défaiut)
+
+- CheckEmbargoedDate (script de verification des dates d'embargo (passage en open access) lancé tout les jour à 00h01)
+
+- harvester-geo-stations (script de moissonage des espaces collaboratif : Spécifique OTELo)
+
+Le service  harvester-geo-stations permet de mettre en place l'upload automatic des jeux de données d'un projet,
 pour cela configurer le fichier Docker/harvester-geo-stations/config.ini avec les valeurs prédemment rentré.
 Scripts privés disponible sur demande.
+-> ATTENTION: Un projet = un service d'upload automatique!
 
+Le script de moissonage harvester-geo-stations étant stocké sur un repository privé de bitbucket :
+Modifier le fichier Docker/harvester-geo-stations/Dockerfile:
 
-ATTENTION: Un projet = un service d'upload automatique!
+Ajouter votre access token bitbucket afin de pouvoir cloner le projet ordar_script
 
-ATTENTION: Dans les services OrdarUI et  harvester-geo-stations, il faut configurer les volumes afin de monter les fichiers Uploader et les jeux de donné présent sur OTELO-CLOUD.
+	pour créer votre access token (valable 1 heure), se rendre sur le compte bitbucket :settings : OAuth
+	copier votre "key" et votre "secret"
+	
+	-> générer votre token : 
+	curl https://bitbucket.org/site/oauth2/access_token -d grant_type=client_credentials -u key:secret
+
+#### ATTENTION: Dans les services OrdarUI et  harvester-geo-stations, il faut configurer les volumes afin de monter les fichiers Uploader et les jeux de donné présent sur OTELO-CLOUD.
 Pour cela rendez-vous dans le fichier docker-compose.yml :
 
 Exemple pour le service harvester-geo-stations
@@ -157,20 +186,6 @@ Exemple pour le service OrdarUI
 	     - /data/applis/ORDaR/Uploads/:/data/applis/ORDaR/Uploads/  (Chemin machine hôte : Chemin du docker interne NE PAS MOFIFIER LE CHEMIN INTERNE)
 
 
-
-
-
-
-Le script de moissonage harvester-geo-stations étant stocké sur un repository privé de bitbucket :
-Modifier le fichier Docker/harvester-geo-stations/Dockerfile:
-
-Ajouter votre access token bitbucket afin de pouvoir cloner le projet ordar_script
-
-	pour créer votre access token (valable 1 heure), se rendre sur le compte bitbucket :settings : OAuth
-	copier votre "key" et votre "secret"
-	
-	-> générer votre token : 
-	curl https://bitbucket.org/site/oauth2/access_token -d grant_type=client_credentials -u key:secret
 
 ### Cinquième et dernière étape :
 
