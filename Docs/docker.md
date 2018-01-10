@@ -11,7 +11,7 @@ Nous fournissons dans le dépot, les fichiers de configuration nécessaire au d�
 		
 ### Troisème étape : Adapter les fichiers configuration :
 
-		
+#### Fichier Configure.env		
 Vous devez configurer le fichier Configure.env qui contient toutes les variable de configuration des différents services docker :
 
 Voici une configuration de test, à vous de l'adapter.
@@ -116,6 +116,20 @@ Voici une configuration de test, à vous de l'adapter.
 	# https://votre_entrepot.fr/myaccount
 	###################
 	
+#### Fichier ssmtp.conf pour apache
+Configuration du relais mail :
+Modifier le fichier Docker/Apache_PHP/ssmtp.conf:
+
+	mailhub= ADRESSE DE VOTRE SMTP
+
+#### Parametrage de votre php max file size
+Paramétrage de la taille de fichier maximale au niveau php (Host) :
+Modifier le fichier Dockerfile a la racine du projet:
+
+Remplacer TAILLESOUHAITE par une taille
+
+	RUN echo 'upload_max_filesize = TAILLESOUHAITE' >> /usr/local/etc/php/php.ini
+	RUN echo 'post_max_size = TAILLESOUHAITE' >> /usr/local/etc/php/php.ini
 
 ### Quatrième étape : passage en revue du fichier docker-compose.yml (servant à générer les images)
 
@@ -142,17 +156,9 @@ Exemple pour le service OrdarUI
 	 volumes:
 	     - /data/applis/ORDaR/Uploads/:/data/applis/ORDaR/Uploads/  (Chemin machine hôte : Chemin du docker interne NE PAS MOFIFIER LE CHEMIN INTERNE)
 
-Configuration du relais mail :
-Modifier le fichier Docker/Apache_PHP/ssmtp.conf:
 
-	mailhub= ADRESSE DE VOTRE SMTP
 
-Paramétrage de la taille de fichier maximale au niveau php :
-Modifier le fichier Dockerfile a la racine du projet:
-Remplacer TAILLESOUHAITE par une taille
 
-	RUN echo 'upload_max_filesize = TAILLESOUHAITE' >> /usr/local/etc/php/php.ini
-	RUN echo 'post_max_size = TAILLESOUHAITE' >> /usr/local/etc/php/php.ini
 
 
 Le script de moissonage harvester-geo-stations étant stocké sur un repository privé de bitbucket :
@@ -166,7 +172,9 @@ Ajouter votre access token bitbucket afin de pouvoir cloner le projet ordar_scri
 	-> générer votre token : 
 	curl https://bitbucket.org/site/oauth2/access_token -d grant_type=client_credentials -u key:secret
 
-Un fois cela effectué, lancer docker-compose:
+### Cinquième et dernière étape :
+
+Lancer docker-compose:
 
 	docker-compose up
 
