@@ -30,7 +30,7 @@ ORDaR offre un environnement sécurisé et pérenne (sous réserve du contrat de
 ![Alt text](/Img_doc/ordar_search.png?raw=true)
 
 
-# Fonctionalités <a name="fonctionalite"></a>
+# Fonctionalités <a name="Fonctionalité"></a>
 
 - Deux profils utilisateurs :
 	* Admin (droit de lecture et ecriture sur tous les jeux de données)
