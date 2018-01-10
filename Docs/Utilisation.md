@@ -4,7 +4,7 @@
 
 l'application propose une procédure d'inscription : "sign up"
 
-![Alt text](/Img_doc/signup.png?raw=true)
+        ![Alt text](/Img_doc/signup.png?raw=true)
 
 Celle-ci permet de faire son inscription avec validation de la demande par token mail, un mail de création est envoyé aux administrateurs de l'application.
 
