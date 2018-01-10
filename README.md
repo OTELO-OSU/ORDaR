@@ -1,6 +1,5 @@
 ![Alt text](/Frontend/src/img/logo.png?raw=true)
 
-# ORDaR
 
 Sommaire:
 =================
