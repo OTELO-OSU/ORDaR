@@ -205,7 +205,7 @@ Executez cette commande (requiert les droits admin):
 	
 	mysql -h HOST-u USER -p PASSWORD < authentication.sql
 
-Créer un utilisateur avec des droit limité à la base authentication (requiert les droits admin)
+Créer un utilisateur avec des droits limités à la base authentication (requiert les droits admin)
 
 	CREATE USER 'USER'@'localhost' IDENTIFIED BY "PASSWORD";GRANT SELECT, INSERT, UPDATE, DELETE, FILE ON *.* TO 'USER'@'localhost';GRANT ALL PRIVILEGES ON `authentication`.* TO 'USER'@'localhost';
 
@@ -223,10 +223,20 @@ Une fois ceci fait, Editer le fichier Frontend/AuthDB.ini avec l'utilisateur pr�
 La base est maintenant installée.
 
 L'authentification s'effectue via la route /login.
-On peut s'authentifier au compte utilisateur via l'authentification de l'application. Il faut préalablement avoir créé sont compte via la procédure "sign up". Il est également possible de se connecter via CAS et son fournisseur d'identité si l'administrateur a importer les comptes utilisateurs ou que l'utilisateur s'est préalablement inscrit.
+On peut s'authentifier au compte utilisateur via l'authentification de l'application. Il faut préalablement avoir créé son compte via la procédure "sign up". 
+
+L'application propose par défaut une alternative de login via votre fournisseur d'identité et son Central Authentication Service (CAS) (si vous en possédez un). 
+Dans ce cas, il est nécessaire de déclarer un Service Provider :
+
+	https://federation.renater.fr/registry
+
+ou d'en installer un : 
+
+	https://services.renater.fr/federation/docs/installation/sp
+
 
 L'authentification vers le CAS s'effectue via la route /loginCAS.
-Cette route recupère les variables contenu dans les headers HTTP fournit par le fournisseur d'identié et transmis par l'application par notre serveur shibboleth. Ces variables seront assignées aux variables de session php.
+Cette route recupère les variables contenu dans les headers HTTP fournit par le fournisseur d'identié et transmis par l'application par votre serveur shibboleth. Ces variables seront assignées aux variables de session php.
 
 Variables utilisés:
 
