@@ -137,7 +137,7 @@ Remplacer TAILLESOUHAITE par une taille
 	RUN echo 'upload_max_filesize = TAILLESOUHAITE' >> /usr/local/etc/php/php.ini
 	RUN echo 'post_max_size = TAILLESOUHAITE' >> /usr/local/etc/php/php.ini
 
-### Quatrième étape : passage en revue du fichier docker-compose.yml (servant à générer les images)
+### Quatrième étape : passage en revue du fichier [docker-compose.yml](/docker-compose.yml) (servant à générer les images)
 
 voici les différents services qui seront créés pour l'installation :
 
