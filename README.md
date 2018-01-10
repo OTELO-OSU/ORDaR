@@ -40,9 +40,9 @@ ORDaR offre un environnement sécurisé et pérenne (sous réserve du contrat de
 
 - Dépots de jeux de données suivant différents niveaux de droit d'accès:
 
-	 Ouvert: accès total (opendata)
-	 Fermé: Accès restreint aux seules métadonnées
-	 Embargo: accès restreint aux métadonnées seulement jusqu'à la date de publication fixée par le producteur du jeux de données
+	* Ouvert: accès total (opendata)
+	* Fermé: Accès restreint aux seules métadonnées
+	* Embargo: accès restreint aux métadonnées seulement jusqu'à la date de publication fixée par le producteur du jeux de données
 	 
 	 
 - Attribution d'une licence Creative Common v4 sur les jeux de données publié. ![Alt text](/Img_doc/cc2_icon.png?raw=true)
