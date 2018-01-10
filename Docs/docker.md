@@ -1,6 +1,6 @@
 # Installation avec Docker  <a name="docker"></a>
 
-Nous fournissons dans le dépot, les fichiers de configuration nécessaire au déploiement docker d'une instance ORDaR.
+Nous fournissons dans le dépot, les fichiers de configuration nécessaires au déploiement docker d'une instance ORDaR.
 
 ### Première étape : installer docker sur votre machine :
 	https://docs.docker.com/engine/installation/
