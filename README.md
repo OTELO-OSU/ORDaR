@@ -27,6 +27,7 @@ ORDaR offre un environnement sécurisé et pérenne (sous réserve du contrat de
 **Aspect général de l’application :**
 
 ![Alt text](/Img_doc/Ordar_accueil.png?raw=true)
+![Alt text](/Img_doc/ordar_search.png?raw=true)
 
 
 # Fonctionalités <a name="fonctionalite"></a>
