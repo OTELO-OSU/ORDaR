@@ -79,13 +79,14 @@ Afin d'envoyer des mails, vous devez configurer un SMTP sur votre serveur.
 
     git clone https://github.com/arnouldpy/ORDaR.git
 
-    Rendez vous dans le dossier créé, une fois dans le dossier Ordar, exécutez :
+Rendez vous dans le dossier créé, une fois dans le dossier Ordar, exécutez :
     php Init_elasticsearch_index.php 
-    Ce fichier permet de définir le template que doit utiliser elasticsearch.
+Ce fichier permet de définir le template que doit utiliser elasticsearch.
     
-    Vous pouvez créer le fichier config manuellement ou utiliser le script configure.sh qui permet de créer un fichier de configuration facilement et rapidement
+Vous pouvez créer le fichier config manuellement ou utiliser le script configure.sh qui permet de créer un fichier de configuration facilement et rapidement
     
-    Rendez vous dans Frontend/config.ini
+Rendez vous dans Frontend/config.ini :
+
     REPOSITORY_NAME = Defini le nom du repository ainsi que le nom utilisé pour la generation des DOIs (après le prefix vous étant attribué)
     REPOSITORY_URL = Indiquer ici l'url sur lequel le projet sera hebergé
     UPLOAD_FOLDER = défini l'emplacement des Uploads des utilisateurs, 
