@@ -88,7 +88,7 @@ La suppression entraîne la suppression TOTALE du jeu de données:
 
 -l'entrée en base de données
 
-dans le cas de l'implémentation du service de moissonage OTELo harvester-geo-stations (cf ci-dessous)
+dans le cas de l'implémentation du service de moissonage OTELo harvester-geo-stations (cf ci-après)
 le fichier original et le CSV de l'espace collaboratif de stockage sont supprimés.
 
 ![Alt text](/Img_doc/Diagram_ORDAR.png?raw=true)
