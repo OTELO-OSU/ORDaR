@@ -116,6 +116,7 @@ NB: En statut unpublished l'id du fichier est provisoire (aucun DOI n'est attrib
 
 
 ** NOTES DIVERSES : **
+
 ***Enregistrement des DOIs:***
 
 L'enregistrement des DOIs nécessite un compte sur https://mds.datacite.org/ (pour la france, contacter http://wwww.inist.fr)
