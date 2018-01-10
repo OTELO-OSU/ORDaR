@@ -21,7 +21,7 @@ Vous pouvez ainsi déployer facilement une instance de cet entrepot pour votre i
 ORDaR offre un environnement sécurisé et pérenne (sous réserve du contrat de service de votre hebergeur et des procédures de sauvegarde mises en place) pour le dépôt de jeux de données et permet d'attribuer un DOI (Digital Object Identifier) pour vos publication ou datapaper (sous reserve de posseder un compte chez datacite, pour la france cf [INIST](http://www.inist.fr) ).
 
 
-	Cette entrepôt vise à promouvoir l'accès ouvert: valoriser et partager les connaissances.
+		Cet entrepôt vise à promouvoir l'accès ouvert: valoriser et partager les connaissances.
 
 
 **Aspect général de l’application :**
