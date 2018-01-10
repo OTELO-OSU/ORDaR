@@ -13,22 +13,6 @@ Une fois activé, vous pouvez déposer des jeux de données sur la plateforme
 
 A noter : vous pouvez modifier votre profil via : "myaccount" et pourquoi pas saisir votre orcid_id ci cela n'a pas été fait lors de votre inscription.
 
-**Définition d'un jeu de données:**
-
-Un jeu de données est un ensemble constitué de métadonnées et de fichiers données.
-Les métadonnées contiennent des champs obligatoires et facultatifs.
-Un jeu de données à un accès défini: il peut être :
-
-    - Open(libre de consultation).
-    - Closed(Seulement les métadonnées sont accessibles).
-    - Embargoed(métadonnées uniquement accessibles, les fichiers seront publié et disponible à une date fournie par le publiant).
-    - Unpublished (fichier importé de l'espace collaboratif de stockage avec un script d'import que le propriétaire peut publier quand il le souhaite suivant les trois modes précedent).
-
-NOTE : Modification du statut Embargoed -> Open:
-
-Le script Check_Embargoed_access.php doit être exécuté une fois par jour afin de changer les statuts des jeux de données arrivé à échéance: des lors que la date du jour est égale à la date de l'embargo, le jeu de données est modifié en statut Open.
-
-
 **Rechercher un jeu de données:**
 
 L'utilisateur peut effectuer une recherche par mot clé, il peut utiliser des opérateurs logique tels que AND et OR.
@@ -54,6 +38,20 @@ Seules les facettes Access right ont l’opérateur OR
 
 Lors de la sélection de plusieurs facettes, l'opérateur de recherche est AND. 
 
+**Statut d'un jeu de données:**
+
+Un jeu de données est un ensemble constitué de métadonnées et de fichiers données.
+Les métadonnées contiennent des champs obligatoires et facultatifs.
+Un jeu de données à un accès défini: il peut être :
+
+    - Open(libre de consultation).
+    - Closed(Seulement les métadonnées sont accessibles).
+    - Embargoed(métadonnées uniquement accessibles, les fichiers seront publié et disponible à une date fournie par le publiant).
+    - Unpublished (fichier importé de l'espace collaboratif de stockage avec un script d'import que le propriétaire peut publier quand il le souhaite suivant les trois modes précedent).
+
+NOTE : Modification du statut Embargoed -> Open:
+
+Le script Check_Embargoed_access.php doit être exécuté une fois par jour afin de changer les statuts des jeux de données arrivé à échéance: des lors que la date du jour est égale à la date de l'embargo, le jeu de données est modifié en statut Open.
 
 **Ajout d'un nouveau jeu de données:**
 
@@ -71,34 +69,36 @@ L'utilisateur recevra une confirmation par mail de son dépot avec le DOI qui a 
 
 **Création d'un fichier brouillon dit "Draft":**
 
-L'utilisateur peut créer un fichier brouillons , il doit renseigner au minimum le titre ainsi que le langage.
+L'utilisateur peut créer un fichier brouillons s'il ne souhaitent pas aller jusqu'au bout de son dépot.
+Pour cela, il doit renseigner au minimum le titre ainsi que le langage.
 Une fois créé le fichier apparait dans la section "my dataset" uniquement pour l'utilisateur qui a créé ce jeu de données, il peut l'éditer puis le publier ou le supprimer à tout moment.
 
-**Modification d'un jeu de données existant:**
+**Modification d'un jeu de données existant :**
 
+La modification d'un jeu de données concerne uniquement les métadonnées de celui-ci.
 L'utilisateur se rend sur le jeu de donnée à modifier, il clique sur edit, un formulaire apparaît avec les métadonnées présentes en base de données, l'utilisateur peut les modifier, il ne peut pas modifier ou ajouter des fichiers.
 
 
 **Suppression d'un jeu de données:**
 
-Un jeu de données peut être uniquement supprimé si il a un statut unpublished, c'est à dire sans DOI.
+Un jeu de données peut être uniquement supprimé si il a un statut unpublished ou draft, c'est à dire sans DOI.
 La suppression entraîne la suppression TOTALE du jeu de données:
 
--Le fichier original (dans l'espace collaboratif de stockage)
-
--Le csv généré
+-Le fichier original 
 
 -l'entrée en base de données
 
+dans le cas de l'implémentation du service de moissonage OTELo harvester-geo-stations (cf ci-dessous)
+le fichier original et le CSV de l'espace collaboratif de stockage sont supprimés.
 
 ![Alt text](/Img_doc/Diagram_ORDAR.png?raw=true)
 
 
 **Importation d'un jeu de données via  harvester-geo-stations (OTELoCloud) Spécifique à OTELo:**
 
-OTELO utilise des canevas afin que les chercheurs puissent créer des fichiers de données interroperables.
+OTELO utilise des canevas (CSV) afin que les chercheurs puissent créer des fichiers de données interroperables.
 
-Un script d'importation se charge d'importer les données présentes dans un dossier spécifiques de l'espace collaboratif de stockage:
+Un script d'importation se charge d'importer les données présentes dans le dossier de l'espace collaboratif de stockage:
 Les métadonnées issues du feuillet INTRO du fichier excel sont importées dans la base Mongodb,
 Le feuillet DATA est converti en fichier csv et il est joint à ce jeux de données comme fichier.
 
