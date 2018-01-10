@@ -13,3 +13,14 @@ Ajouter votre access token bitbucket afin de pouvoir cloner le projet ordar_scri
 	
 	-> générer votre token : 
 	curl https://bitbucket.org/site/oauth2/access_token -d grant_type=client_credentials -u key:secret
+	
+	#### ATTENTION: Dans le services harvester-geo-stations, il faut configurer les volumes afin de monter 
+	les jeux de donnés issus de l'espace collaboratif 
+	
+Pour cela rendez-vous dans le fichier docker-compose.yml de la racine du projet :
+
+Exemple pour le service harvester-geo-stations
+
+	 volumes:
+	     - /data/applis/ORDaR/Uploads/:/data/applis/ORDaR/Uploads/  (Chemin machine hôte : Chemin du docker interne NE PAS MOFIFIER LE CHEMIN INTERNE)
+     - /data/applis/ORDaR/excel/:/data/applis/ORDaR/excel/ (Chemin machine hôte : Chemin du docker interne NE PAS MOFIFIER LE CHEMIN INTERNE)
