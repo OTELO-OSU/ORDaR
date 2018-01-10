@@ -177,7 +177,7 @@ Ajouter votre access token bitbucket afin de pouvoir cloner le projet ordar_scri
 	-> générer votre token : 
 	curl https://bitbucket.org/site/oauth2/access_token -d grant_type=client_credentials -u key:secret
 
-#### ATTENTION: Dans les services OrdarUI et  harvester-geo-stations, il faut configurer les volumes afin de monter les fichiers Uploader et les jeux de donné présent sur OTELO-CLOUD.
+#### ATTENTION: Dans les services OrdarUI et  harvester-geo-stations, il faut configurer les volumes afin de monter les fichiers déposé et les jeux de donné issu de l'espace collaboratif (si activation du service)
 Pour cela rendez-vous dans le fichier docker-compose.yml :
 
 Exemple pour le service harvester-geo-stations
