@@ -200,13 +200,13 @@ Il y a 3 volumes présent sur ce projet afin de garantir la persistance des donn
 	- elasticsearch, pour les données indexées par ES
 	- mysql , pour les comptes utilisateurs
 
-Une fois déployé, vous pouvez vous loguer avec un compte ADMIN générique afin de créer le votre, et par la suite supprimer celui ci.
+Une fois déployé, vous pouvez vous loguer avec un compte ADMIN générique afin de créer le votre, par la suite vous pouvez supprimer celui ci.
 
 	Adresse mail : admin@admin.fr
 	Mot de passe: admin@ORDAR1
 
-Les fichiers de données sont stockés sur le systeme hôte et ensuite monté dans les différents container qui les utilisent.
+Les fichiers de données sont stockés sur le systeme hôte et ensuite montés dans les différents container qui les utilisent.
 
-Le container OAI-PMH est activé par défaut, ce qui rends l'entrepôt de données moissonable, libre à vous de ne pas le demarrer si vous ne souhaitez pas mettre à disposition le protocole OAI-PMH.
+Le container OAI-PMH est activé par défaut, ce qui rend l'entrepôt de données moissonable, libre à vous de ne pas le demarrer si vous ne souhaitez pas mettre à disposition le protocole OAI-PMH.
 
-ATTENTION: Mongo-connector indexe 2 minutes après le lancement des conteneurs, ceci est du au demmarrage des différents services (mongo, elasticsearch)
+ATTENTION: Mongo-connector indexe 2 minutes après le lancement des conteneurs, ceci est du au démarrage des différents services (mongo, elasticsearch)
