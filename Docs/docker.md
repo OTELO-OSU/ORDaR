@@ -163,7 +163,7 @@ voici les différents services qui seront créés pour l'installation :
 
 
 
-#### ATTENTION: Dans le services OrdarUI, il faut configurer les volumes afin de monter le repertoire du docker interne (la ou les fichiers seront déposés) sur un file systemes de la machine Hôte.
+#### ATTENTION: Dans le services OrdarUI, il faut configurer les volumes afin de mapper le repertoire du docker interne (la ou les fichiers seront déposés) sur un file systemes de la machine Hôte (pour garantir la persistance en cas de destruction du conteneur).
 
 Pour cela rendez-vous dans le fichier docker-compose.yml :
 
