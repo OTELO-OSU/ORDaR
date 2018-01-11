@@ -25,6 +25,7 @@ Voici une configuration de test, à vous de l'adapter.
 		REPOSITORY_URL=https://test-ordar.univ-lorraine.fr
 		
 		#défini l'emplacement des Uploads des utilisateurs (A ne pas modifier)
+		## si volonté de modifier : adapter Dockerfile et docker-compose.yml en conséquence
 		UPLOAD_FOLDER=/data/applis/ORDaR/Uploads/
 		
 		#user à qui appartient les fichiers uploader (niveau système de fichier).
