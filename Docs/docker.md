@@ -163,16 +163,24 @@ voici les différents services qui seront créés pour l'installation :
 
 
 
-#### ATTENTION: Dans le services OrdarUI, il faut configurer les volumes afin de mapper le repertoire du docker interne (la ou les fichiers seront déposés) sur un file systemes de la machine Hôte (pour garantir la persistance en cas de destruction du conteneur).
+#### ATTENTION: 
+
+#### Dans le services OrdarUI, il faut configurer les volumes afin de mapper le repertoire du docker interne (la ou les fichiers seront déposés) sur un file systemes de la machine Hôte (pour garantir la persistance en cas de destruction du conteneur).
 
 Pour cela rendez-vous dans le fichier docker-compose.yml :
 
-Exemple pour le service OrdarUI
+Exemple pour les upload et logs apache du service OrdarUI 
 	 
 	 volumes:
 	     - /applis/ORDaR/data/Uploads/:/data/applis/ORDaR/Uploads/  (Chemin machine hôte : Chemin du docker interne NE PAS MOFIFIER LE CHEMIN INTERNE)
+	     - /applis/ORDaR/log/apache2/:/var/log/apache2/  (Chemin machine hôte : Chemin du docker interne NE PAS MOFIFIER LE CHEMIN INTERNE)
 
+#### Dans le service logstash, il faut configurer le volume pour pointer sur les logs apaches générées :
 
+Pour cela rendez-vous dans le fichier docker-compose.yml :
+
+	volumes:
+	    - /applis/ORDaR/log/apache2/:/var/log/apache2/  (Chemin machine hôte : Chemin du docker interne NE PAS MOFIFIER LE CHEMIN INTERNE)
 
 ### Cinquième et dernière étape :
 
