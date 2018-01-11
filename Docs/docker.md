@@ -44,7 +44,7 @@ Voici une configuration de test, à vous de l'adapter.
 		#L'adresse de votre relais de messagerie
 		SMTP="smtp-int.univ-lorraine.fr"
 		
-		# Valeur maximale pour 1 jeux de données (pouvant être constitué de plusieurs fichiers)
+		# Taille maximale pour les fichiers d'un jeux de données
 		DATASET_FILES_MAX_SIZE=1G
 	
 		#DOI CONFIG
@@ -128,8 +128,8 @@ Modifier le fichier Docker/Apache_PHP/ssmtp.conf:
 
 	mailhub= ADRESSE DE VOTRE SMTP
 
-#### Parametrage de votre php max file size (serveur Hôte)
-Paramétrage de la taille de fichier maximale au niveau php (Host) :
+#### Parametrage de votre php max file size (Service Ordar_ui)
+Paramétrage de la taille de fichier maximale au niveau php :
 Modifier le fichier Dockerfile à la racine du projet:
 
 Remplacer TAILLESOUHAITE par une taille
