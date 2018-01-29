@@ -21,7 +21,7 @@ Voici une configuration de test, à vous de l'adapter.
 		#Defini le nom du repository ainsi que le nom utilisé pour la generation des DOIs 
 		REPOSITORY_NAME=DOCKER-ORDAR
 		
-		#url du projet
+		#url du projet (si installation locale ajouter n°port :8084)
 		REPOSITORY_URL=https://test-ordar.univ-lorraine.fr
 		
 		#défini l'emplacement des Uploads des utilisateurs (A ne pas modifier)
