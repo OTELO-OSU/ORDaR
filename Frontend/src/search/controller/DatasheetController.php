@@ -138,7 +138,7 @@ class DatasheetController
     {
         $file     = new File();
         $config   = $file->ConfigFile();
-        $url      = $config['REPOSITORY_URL'] . "/" . $newdoi;
+        $url      = $config['REPOSITORY_URL'] . "/record?id=" .$config['DOI_PREFIX'].'/'. $newdoi;
         $filename = $datafile . ".html";
 
         $ip         = $config["SSH_HOST"];
