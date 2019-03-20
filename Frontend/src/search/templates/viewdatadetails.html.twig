@@ -129,8 +129,12 @@
                {%endfor%}
                {%for key,item in supplementary_fields|reverse%}
                {%if "REFERENT" in key%}
+               {%for key,item2 in item%}
+               {%for key,item in item2%}
                <h4 class="ui  header">{{key}}:</h4>
                <p>{{item}}</p>
+               {%endfor%}
+               {%endfor%}
                {%endif%}
                {%endfor%}
                {%for key,item in supplementary_fields|reverse%}
