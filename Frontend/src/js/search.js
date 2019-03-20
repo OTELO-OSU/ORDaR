@@ -277,7 +277,7 @@
                           color = "orange";
                       }
                       if (type == "Unpublished") {
-                          color = "grey";
+                          color = "yellow";
                       }
                       if (type == "" || type == " ") {} else {
                           $('#accesright').append('<label  class="item" for="' + type + 'accessright"> <input onclick="APP.modules.search.checkCheckbox()" id="' + type + 'accessright" name="accessright" value="' + type + '" type="checkbox"> <div class="ui ' + color + ' horizontal label">' + type + '</div>' + count + '</label>')
