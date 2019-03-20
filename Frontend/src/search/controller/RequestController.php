@@ -371,7 +371,7 @@ class RequestController
 
         }';
         $bdd = strtolower($config['authSource']);
-        $url = 'http://' . $config['ESHOST'] . '/' . $bdd . '/_search?q=' . $query . '%20AND%20NOT%20INTRO.ACCESS_RIGHT:Unpublished%20AND%20NOT%20INTRO.ACCESS_RIGHT:Draft&size=10&from=' . $from;
+        $url = 'http://' . $config['ESHOST'] . '/' . $bdd . '/_search?q=' . $query . '%20AND%20NOT%20INTRO.ACCESS_RIGHT:Draft&size=10&from=' . $from;
 
         $curlopt = array(
             CURLOPT_RETURNTRANSFER => true,
@@ -678,7 +678,8 @@ class RequestController
                 if ($found == "true") {
                     return $response;
                 } else {
-                    return false;
+                    unset($response['_source']['DATA']);
+                    return $response;
                 }
             } elseif ($response["_source"]["INTRO"]["ACCESS_RIGHT"] == "Draft") {
                 $found = "false";
