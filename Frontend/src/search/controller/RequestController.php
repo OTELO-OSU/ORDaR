@@ -279,7 +279,7 @@ class RequestController
             }
         }';
         $bdd     = strtolower($config['authSource']);
-        $url     = 'http://' . $config['ESHOST'] . '/' . $bdd . '/_search?q=' . $query . '%20AND%20NOT%20INTRO.MEASUREMENT.ABBREVIATION:*_RAW%20AND%20NOT%20DATA.FILES.DATA_URL:*_RAW.XLSX&size=10&from=' . $from;
+        $url     = 'http://' . $config['ESHOST'] . '/' . $bdd . '/_search?q=' . $query . '%20AND%20NOT%20INTRO.MEASUREMENT.ABBREVIATION:*_RAW%20AND%20NOT%20DATA.FILES.DATA_URL:*_RAW.XLSX%20AND%20NOT%20INTRO.ACCESS_RIGHT:Awaiting&size=10&from=' . $from;
         $curlopt = array(
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_PORT           => $config['ESPORT'],
@@ -371,7 +371,7 @@ class RequestController
 
         }';
         $bdd = strtolower($config['authSource']);
-        $url = 'http://' . $config['ESHOST'] . '/' . $bdd . '/_search?q=' . $query . '%20AND%20NOT%20INTRO.ACCESS_RIGHT:Draft&size=10&from=' . $from;
+        $url = 'http://' . $config['ESHOST'] . '/' . $bdd . '/_search?q=' . $query . '%20AND%20NOT%20INTRO.ACCESS_RIGHT:Draft%20AND%20NOT%20INTRO.ACCESS_RIGHT:Awaiting&size=10&from=' . $from;
 
         $curlopt = array(
             CURLOPT_RETURNTRANSFER => true,
@@ -576,11 +576,11 @@ class RequestController
         $bdd = strtolower($config['authSource']);
         if ($query == "null") {
             // SI pas de facets
-            $url = 'http://' . $config['ESHOST'] . '/' . $bdd . '/_search?q=INTRO.FILE_CREATOR.MAIL:' . $author_mail . '%20AND%20NOT%20INTRO.MEASUREMENT.ABBREVIATION:*_RAW%20AND%20NOT%20DATA.FILES.DATA_URL:*_RAW.XLSX&size=10&from=' . $from;
+            $url = 'http://' . $config['ESHOST'] . '/' . $bdd . '/_search?q=INTRO.FILE_CREATOR.MAIL:' . $author_mail . '%20AND%20NOT%20INTRO.MEASUREMENT.ABBREVIATION:*_RAW%20AND%20NOT%20DATA.FILES.DATA_URL:*_RAW.XLSX%20AND%20NOT%20INTRO.ACCESS_RIGHT:Awaiting&size=10&from=' . $from;
         } else {
             // Sinon on recher avec les facets
             $query = rawurlencode($query);
-            $url   = 'http://' . $config['ESHOST'] . '/' . $bdd . '/_search?q=' . $query . '%20AND%20(INTRO.FILE_CREATOR.MAIL:' . $author_mail . ')%20AND%20NOT%20INTRO.MEASUREMENT.ABBREVIATION:*_RAW%20AND%20NOT%20DATA.FILES.DATA_URL:*_RAW.XLSX&size=10&from=' . $from;
+            $url   = 'http://' . $config['ESHOST'] . '/' . $bdd . '/_search?q=' . $query . '%20AND%20(INTRO.FILE_CREATOR.MAIL:' . $author_mail . ')%20AND%20NOT%20INTRO.MEASUREMENT.ABBREVIATION:*_RAW%20AND%20NOT%20DATA.FILES.DATA_URL:*_RAW.XLSX%20AND%20NOT%20INTRO.ACCESS_RIGHT:Awaiting&size=10&from=' . $from;
         }
         $curlopt = array(
             CURLOPT_RETURNTRANSFER => true,
