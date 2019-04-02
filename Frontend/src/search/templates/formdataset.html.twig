@@ -619,7 +619,7 @@
         <div class="active content" >
         <div id="supplementary_fields">
         {%for key,item in supplementary_fields%}
-        {%if "REFERENT" not in key and "OPERATOR" not in key%}
+        {%if "REFERENT" not in key and "OPERATOR" not in key and "CORE_DETAILS" not in key%}
         <div class="two fields"  >
             <div class="field"><label>Key</label><input type="text" value="{{key}}" name="supplementary_fields_key[]"  placeholder="Key" ></div>
             <div class="field"><label>Value</label><input type="text" value="{{item}}" name="supplementary_fields_value[]"  placeholder="Value"></div>
@@ -629,11 +629,28 @@
         {%endfor%}
           {%for key,item in supplementary_fields%}
         {%if "REFERENT" in key%}
+        {%for key2,item2 in item%}
+        {%for key2,item2 in item2%}
         <div class="two fields"  >
-            <div class="field"><label>Key</label><input type="text" value="{{key}}" name="supplementary_fields_key[]"  placeholder="Key" ></div>
-            <div class="field"><label>Value</label><input type="text" value="{{item}}" name="supplementary_fields_value[]"  placeholder="Value"></div>
+            <div class="field"><label>Key</label><input type="text" value="{{key2}}" name="supplementary_fields_key[]"  placeholder="Key" ></div>
+            <div class="field"><label>Value</label><input type="text" value="{{item2}}" name="supplementary_fields_value[]"  placeholder="Value"></div>
             <div class="ui icon delete center"><i class="remove icon"></i></div>
         </div>
+          {%endfor%}
+            {%endfor%}
+        {%endif%}
+        {%endfor%}
+        {%for key,item in supplementary_fields%}
+        {%if "CORE_DETAILS" in key%}
+        {%for key2,item2 in item%}
+        {%for key2,item2 in item2%}
+        <div class="two fields"  >
+            <div class="field"><label>Key</label><input type="text" value="{{key2}}" name="supplementary_fields_key[]"  placeholder="Key" ></div>
+            <div class="field"><label>Value</label><input type="text" value="{{item2}}" name="supplementary_fields_value[]"  placeholder="Value"></div>
+            <div class="ui icon delete center"><i class="remove icon"></i></div>
+        </div>
+          {%endfor%}
+            {%endfor%}
         {%endif%}
         {%endfor%}
           {%for key,item in supplementary_fields%}

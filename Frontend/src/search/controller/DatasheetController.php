@@ -561,10 +561,24 @@ class DatasheetController
             }
 
             if ($key == "supplementary_fields_value") {
+
                 if (count($value) > 1) {
+                    $i=-1;
                     foreach ($value as $key => $value) {
                         if ($_POST['supplementary_fields_key'][$key] != null) {
+                            if ($_POST['supplementary_fields_key'][$key]=='NAME_REFERENT' or $_POST['supplementary_fields_key'][$key]=='MAIL_REFERENT' or $_POST['supplementary_fields_key'][$key]=='FIRST_NAME_REFERENT') {
+                                   
+                                if ($_POST['supplementary_fields_key'][$key]=='NAME_REFERENT') {
+                                    $i++;
+                                }
+                            $array["SUPPLEMENTARY_FIELDS"]['REFERENT'][$i][$_POST['supplementary_fields_key'][$key]] = htmlspecialchars($value, ENT_QUOTES);
+                            }elseif($_POST['supplementary_fields_key'][$key]=='CORE' or $_POST['supplementary_fields_key'][$key]=='DEPTH' or $_POST['supplementary_fields_key'][$key]=='DIP' or $_POST['supplementary_fields_key'][$key]=='AZIMUT' ){
+                              $array["SUPPLEMENTARY_FIELDS"]['CORE_DETAILS'][0][$_POST['supplementary_fields_key'][$key]] = htmlspecialchars($value, ENT_QUOTES);
+                            }
+                            else{
+
                             $array["SUPPLEMENTARY_FIELDS"][$_POST['supplementary_fields_key'][$key]] = htmlspecialchars($value, ENT_QUOTES);
+                            }
                         }
                     }
                 } else {
@@ -1674,7 +1688,16 @@ class DatasheetController
                     //rename($UPLOAD_FOLDER . $doi . '/' . $doi . '_DATA.csv', $UPLOAD_FOLDER . "/" . $config["DOI_PREFIX"] . "/" . $newdoi . "/" . $doi . '_DATA.csv');
                     //
                     foreach ($value['DATA']['FILES'] as $key => $value) {
+                         if ($key == 0) {
+                             if (file_exists($UPLOAD_FOLDER . $doi . '/' . $value['DATA_URL'])) {
                         rename($UPLOAD_FOLDER . $doi . '/' . $value['DATA_URL'], $UPLOAD_FOLDER . "/" . $config["DOI_PREFIX"] . "/" . $newdoi . "/" . $value['DATA_URL']);
+                        }
+                        else{
+                             rename($value['ORIGINAL_DATA_URL'], $UPLOAD_FOLDER . "/" . $config["DOI_PREFIX"] . "/" . $newdoi . "/" . $value['DATA_URL']);
+                        }
+                        }else{
+                            rename($value['ORIGINAL_DATA_URL'], $UPLOAD_FOLDER . "/" . $config["DOI_PREFIX"] . "/" . $newdoi . "/" . $value['DATA_URL']);
+                        }
                     }
 
                     rmdir($UPLOAD_FOLDER . $doi);
@@ -1693,7 +1716,11 @@ class DatasheetController
                         $DATA  = $value["DATA"];
                         foreach ($DATA['FILES'] as $key => $value) {
                             if ($key == 0) {
+                                if (file_exists($UPLOAD_FOLDER . "/" . $config["DOI_PREFIX"] . "/" . $newdoi . "/" . $doi . '_DATA.csv')) {
                                 $DATA['FILES'][0]['ORIGINAL_DATA_URL'] = $UPLOAD_FOLDER . "/" . $config["DOI_PREFIX"] . "/" . $newdoi . "/" . $doi . '_DATA.csv';
+                                }else{
+                                    $DATA['FILES'][0]['ORIGINAL_DATA_URL'] = $UPLOAD_FOLDER . "/" . $config["DOI_PREFIX"] . "/" . $newdoi . "/" . $value['DATA_URL'];
+                                }
                             } else {
                                 $DATA['FILES'][$key]['ORIGINAL_DATA_URL'] = $UPLOAD_FOLDER . "/" . $config["DOI_PREFIX"] . "/" . $newdoi . "/" . $value['DATA_URL'];
                             }

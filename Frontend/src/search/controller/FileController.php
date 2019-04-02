@@ -19,7 +19,21 @@ class FileController
             if (strstr($doi, $config['REPOSITORY_NAME']) !== false) {
                 $file = $UPLOAD_FOLDER . $DOI_PREFIX . "/" . $doi . "/" . $filename;
             } else {
+                if ($response['_source']['INTRO']['ACCESS_RIGHT']=='Unpublished') {
+                    $file = $UPLOAD_FOLDER .'/'.$response['_type'].'/'. $doi . "/" . $filename;
+                }else{
                 $file = $UPLOAD_FOLDER . $doi . "/" . $filename;
+                    
+                }
+            }
+            if (!file_exists($file)) {
+                foreach ($response['_source']['DATA'] as $key => $value) {
+                    foreach ($value as $key2 => $value2) {
+                   if ($value2['DATA_URL']==$filename) {
+                    $file=$value2['ORIGINAL_DATA_URL'];
+                   }
+                    }
+                }
             }
             if (file_exists($file)) {
                 header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
@@ -180,7 +194,21 @@ class FileController
             if (strstr($doi, $config['REPOSITORY_NAME']) !== false) {
                 $file = $UPLOAD_FOLDER . $DOI_PREFIX . "/" . $doi . "/" . $filename;
             } else {
+                 if ($response['_source']['INTRO']['ACCESS_RIGHT']=='Unpublished') {
+                    $file = $UPLOAD_FOLDER .'/'.$response['_type'].'/'. $doi . "/" . $filename;
+                }else{
                 $file = $UPLOAD_FOLDER . $doi . "/" . $filename;
+                    
+                }
+            }
+              if (!file_exists($file)) {
+                foreach ($response['_source']['DATA'] as $key => $value) {
+                    foreach ($value as $key2 => $value2) {
+                   if ($value2['DATA_URL']==$filename) {
+                    $file=$value2['ORIGINAL_DATA_URL'];
+                   }
+                    }
+                }
             }
             header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
             header("Content-Disposition: inline; filename='" . $filename . "'");

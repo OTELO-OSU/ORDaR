@@ -122,13 +122,21 @@
                  </div>
                  <div class="content">
                {%for key,item in supplementary_fields|reverse%}
-               {%if "REFERENT" not in key and "OPERATOR" not in key%}
+               {%if "REFERENT" not in key and "OPERATOR" not in key and "CORE" not in key%}
                <h4 class="ui  header">{{key}}:</h4>
                <p>{{item}}</p>
                {%endif%}
                {%endfor%}
                {%for key,item in supplementary_fields|reverse%}
                {%if "REFERENT" in key%}
+               {%for key,item2 in item%}
+               {%for key,item in item2%}
+               <h4 class="ui  header">{{key}}:</h4>
+               <p>{{item}}</p>
+               {%endfor%}
+               {%endfor%}
+               {%endif%}
+               {%if "CORE_DETAILS" in key%}
                {%for key,item2 in item%}
                {%for key,item in item2%}
                <h4 class="ui  header">{{key}}:</h4>
