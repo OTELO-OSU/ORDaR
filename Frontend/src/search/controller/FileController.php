@@ -20,13 +20,14 @@ class FileController
                 $file = $UPLOAD_FOLDER . $DOI_PREFIX . "/" . $doi . "/" . $filename;
             } else {
                 if ($response['_source']['INTRO']['ACCESS_RIGHT']=='Unpublished') {
-                    $file = $UPLOAD_FOLDER .'/'.$response['_type'].'/'. $doi . "/" . $filename;
+                    $file = $UPLOAD_FOLDER .'/'.$response['_type'].'/'. $response['_source']['INTRO']['SUPPLEMENTARY_FIELDS']['SAMPLE_NAME'] .'_META'. "/" . $filename;
                 }else{
                 $file = $UPLOAD_FOLDER . $doi . "/" . $filename;
                     
                 }
             }
-            if (!file_exists($file)) {
+         
+            if (file_exists($file)==false) {
                 foreach ($response['_source']['DATA'] as $key => $value) {
                     foreach ($value as $key2 => $value2) {
                    if ($value2['DATA_URL']==$filename) {
@@ -195,13 +196,14 @@ class FileController
                 $file = $UPLOAD_FOLDER . $DOI_PREFIX . "/" . $doi . "/" . $filename;
             } else {
                  if ($response['_source']['INTRO']['ACCESS_RIGHT']=='Unpublished') {
-                    $file = $UPLOAD_FOLDER .'/'.$response['_type'].'/'. $doi . "/" . $filename;
+                   $file = $UPLOAD_FOLDER .'/'.$response['_type'].'/'. $response['_source']['INTRO']['SUPPLEMENTARY_FIELDS']['SAMPLE_NAME'] .'_META'. "/" . $filename;
+
                 }else{
                 $file = $UPLOAD_FOLDER . $doi . "/" . $filename;
                     
                 }
             }
-              if (!file_exists($file)) {
+              if (file_exists($file)==false) {
                 foreach ($response['_source']['DATA'] as $key => $value) {
                     foreach ($value as $key2 => $value2) {
                    if ($value2['DATA_URL']==$filename) {

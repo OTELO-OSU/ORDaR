@@ -279,6 +279,7 @@ class RequestController
             }
         }';
         $bdd     = strtolower($config['authSource']);
+
         $url     = 'http://' . $config['ESHOST'] . '/' . $bdd . '/_search?q=' . $query . '%20AND%20NOT%20INTRO.MEASUREMENT.ABBREVIATION:*_RAW%20AND%20NOT%20DATA.FILES.DATA_URL:*_RAW.XLSX%20AND%20NOT%20INTRO.ACCESS_RIGHT:Awaiting&size=10&from=' . $from;
         $curlopt = array(
             CURLOPT_RETURNTRANSFER => true,
@@ -315,8 +316,10 @@ class RequestController
     {
         $file        = new File();
         $config      = $file->ConfigFile();
-        $query       = str_replace('+', '%20', $query);
         $query       = str_replace(' ', '%20', $query);
+        $query       = str_replace('+', '%20', $query);
+        //$query=rawurlencode($query); 
+       // var_dump($query);
         $postcontent = '{
 
             "sort": { "INTRO.METADATA_DATE": { "order": "desc" }} ,
