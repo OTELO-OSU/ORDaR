@@ -280,7 +280,7 @@ class RequestController
         }';
         $bdd     = strtolower($config['authSource']);
 
-        $url     = 'http://' . $config['ESHOST'] . '/' . $bdd . '/_search?q=' . $query . '%20AND%20NOT%20INTRO.MEASUREMENT.ABBREVIATION:*_RAW%20AND%20NOT%20DATA.FILES.DATA_URL:*_RAW.XLSX%20AND%20NOT%20INTRO.ACCESS_RIGHT:Awaiting&size=10&from=' . $from;
+        $url     = 'http://' . $config['ESHOST'] . '/' . $bdd . '/_search?q=(' . $query . ')%20AND%20NOT%20INTRO.MEASUREMENT.ABBREVIATION:*_RAW%20AND%20NOT%20DATA.FILES.DATA_URL:*_RAW.XLSX%20AND%20NOT%20INTRO.ACCESS_RIGHT:Awaiting&size=10&from=' . $from;
         $curlopt = array(
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_PORT           => $config['ESPORT'],
@@ -319,7 +319,7 @@ class RequestController
         $query       = str_replace(' ', '%20', $query);
         $query       = str_replace('+', '%20', $query);
         //$query=rawurlencode($query); 
-       // var_dump($query);
+        //var_dump($query);
         $postcontent = '{
 
             "sort": { "INTRO.METADATA_DATE": { "order": "desc" }} ,
@@ -374,7 +374,7 @@ class RequestController
 
         }';
         $bdd = strtolower($config['authSource']);
-        $url = 'http://' . $config['ESHOST'] . '/' . $bdd . '/_search?q=' . $query . '%20AND%20NOT%20INTRO.ACCESS_RIGHT:Draft%20AND%20NOT%20INTRO.ACCESS_RIGHT:Awaiting&size=10&from=' . $from;
+        $url = 'http://' . $config['ESHOST'] . '/' . $bdd . '/_search?q=(' . $query . ')%20AND%20NOT%20INTRO.ACCESS_RIGHT:Draft%20AND%20NOT%20INTRO.ACCESS_RIGHT:Awaiting&size=10&from=' . $from;
 
         $curlopt = array(
             CURLOPT_RETURNTRANSFER => true,
