@@ -19,7 +19,7 @@ class FileController
             if (strstr($doi, $config['REPOSITORY_NAME']) !== false) {
                 $file = $UPLOAD_FOLDER . $DOI_PREFIX . "/" . $doi . "/" . $filename;
             } else {
-                if ($response['_source']['INTRO']['ACCESS_RIGHT']=='Unpublished') {
+                if ($response['_source']['INTRO']['ACCESS_RIGHT']=='Unpublished' && file_exists($UPLOAD_FOLDER .'/'.$response['_type'].'/'. $response['_source']['INTRO']['SUPPLEMENTARY_FIELDS']['SAMPLE_NAME'] .'_META'. "/" . $filename)) {
                     $file = $UPLOAD_FOLDER .'/'.$response['_type'].'/'. $response['_source']['INTRO']['SUPPLEMENTARY_FIELDS']['SAMPLE_NAME'] .'_META'. "/" . $filename;
                 }else{
                 $file = $UPLOAD_FOLDER . $doi . "/" . $filename;
