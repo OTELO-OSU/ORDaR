@@ -1,5 +1,6 @@
 FROM php:5.6.30-apache
-RUN apt-get update
+RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 0C49F3730359A14518585931BC711F9BA15703C6
+RUN apt update ; exit 0
 RUN apt-get install  php5-curl git -y
 RUN a2enmod rewrite 
 WORKDIR /var/www/html
