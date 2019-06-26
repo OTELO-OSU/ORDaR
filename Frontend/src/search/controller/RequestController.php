@@ -301,9 +301,10 @@ class RequestController
             $responses["hits"]["hits"][$key]["_index"] = $value["_index"];
             $responses["hits"]["hits"][$key]["_id"]    = $value["_id"];
             $responses["hits"]["hits"][$key]["_type"]  = $value["_type"];
-
+	    $responses["hits"]["hits"][$key]['FILE_CREATOR'] = array_unique($value["_source"]["INTRO"]['FILE_CREATOR'],SORT_REGULAR);
         }
         ;
+
         $responses = json_encode($responses);
         return $responses;
     }
@@ -391,12 +392,18 @@ class RequestController
         $responses["hits"]["total"] = $response["hits"]["total"];
         $responses['aggregations']  = $response['aggregations'];
         foreach ($response["hits"]["hits"] as $key => $value) {
+	    
             $responses["hits"]["hits"][$key]           = $value["_source"]["INTRO"];
             $responses["hits"]["hits"][$key]["_index"] = $value["_index"];
             $responses["hits"]["hits"][$key]["_id"]    = $value["_id"];
             $responses["hits"]["hits"][$key]["_type"]  = $value["_type"];
+
+
+	    $responses["hits"]["hits"][$key]['FILE_CREATOR'] = array_unique($value["_source"]["INTRO"]['FILE_CREATOR'],SORT_REGULAR);
+
         }
         ;
+
         $responses = json_encode($responses);
         return $responses;
     }
