@@ -114,6 +114,7 @@
                      <h3 class="ui  header">Publisher:</h3>
                      <p>{{publisher}}</p>
                   {%endif%}
+{% if accessright != "Unpublished"%}
                {%if supplementary_fields %}
                 <div class="ui fluid styled accordion">
                  <div class=" title">
@@ -153,6 +154,7 @@
                {%endfor%}
                </div>
                </div>
+               {%endif%}
                {%endif%}
                </div>
             </div>
