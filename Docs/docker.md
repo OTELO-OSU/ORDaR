@@ -43,7 +43,7 @@ Voici une configuration de test, à vous de l'adapter.
 		##############################
 		
 		#L'adresse de votre relais de messagerie
-		SMTP="smtp-int.univ-lorraine.fr"
+		SMTP=smtp-int.univ-lorraine.fr
 		
 		# Taille maximale pour les fichiers d'un jeux de données
 		DATASET_FILES_MAX_SIZE=1G
