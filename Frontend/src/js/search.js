@@ -1209,7 +1209,7 @@
                   $('#inputs #filenamemetadata').remove();
                   var files = evt.target.files; // FileList object
                   var file = files[0];
-                  if (file['type'] == 'text/csv') {
+                  if (file['type'] === 'text/csv' || file['type'] === 'application/vnd.ms-excel') {
                       var reader = new FileReader();
                       reader.readAsText(file);
                       reader.onload = function(event) {
