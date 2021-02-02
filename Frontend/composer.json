@@ -1,6 +1,6 @@
 {
     "require": {
-     "illuminate/database": "5.0.*",
+     "illuminate/database": "6.20.*",
         "twig/twig": "^1.18",
 	"slim/csrf": "*",
         "slim/slim": "^3.8"
