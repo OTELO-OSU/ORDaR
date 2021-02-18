@@ -48,12 +48,31 @@ class RequestController
      */
     public function Check_status_datacite()
     {
-        $handle = curl_init("https://mds.datacite.org");
-        curl_setopt($handle, CURLOPT_RETURNTRANSFER, true);
-        $response = curl_exec($handle);
-        $httpCode = curl_getinfo($handle, CURLINFO_HTTP_CODE);
-        curl_close($handle);
+        /**
+	 * $handle = curl_init("https://mds.datacite.org");
+         * curl_setopt($handle, CURLOPT_RETURNTRANSFER, true);
+         * $response = curl_exec($handle);
+         * $httpCode = curl_getinfo($handle, CURLINFO_HTTP_CODE);
+         * curl_close($handle);
+         * return $httpCode;
+	*/
+	$ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, 'https://mds.datacite.org/metadata/10.24396/ORDAR-20/');
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_ENCODING, "");
+        curl_setopt($ch, CURLOPT_MAXREDIRS, 10);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 5);
+        curl_setopt($ch, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_1);
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+                "authorization: Basic SU5JU1QuT1RFTE86MHTigqxsbw==",
+                'Content-Type: text/xml',
+            ));
+        $response = curl_exec($ch);
+        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
         return $httpCode;
+
     }
     /**
      * Check if DOI already exist
