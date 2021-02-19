@@ -30,9 +30,15 @@ class DatasheetController
         $config = $file->ConfigFile();
 
         if (empty($config['username']) && empty($config['password'])) {
-            $this->db = new MongoClient("mongodb://" . $config['host'] . ':' . $config['port']);
+            //$this->db = new MongoClient("mongodb://" . $config['host'] . ':' . $config['port']);
+            $this->db = new \MongoDB\Driver\Manager("mongodb://" . $config['host'] . ':' . $config['port']);
         } else {
-            $this->db = new MongoClient("mongodb://" . $config['host'] . ':' . $config['port'], array(
+            //$this->db = new MongoClient("mongodb://" . $config['host'] . ':' . $config['port'], array(
+            //    'authSource' => $config['authSource'],
+            //    'username'   => $config['username'],
+            //    'password'   => $config['password'],
+            //));
+            $this->db = new \MongoDB\Driver\Manager("mongodb://" . $config['host'] . ':' . $config['port'], array(
                 'authSource' => $config['authSource'],
                 'username'   => $config['username'],
                 'password'   => $config['password'],
@@ -51,32 +57,51 @@ class DatasheetController
         $file   = new File();
         $config = $file->ConfigFile();
 
-        $dbdoi = new MongoClient("mongodb://" . $config['host'] . ':' . $config['port'], array(
+        //$dbdoi = new MongoClient("mongodb://" . $config['host'] . ':' . $config['port'], array(
+        //    'authSource' => $config['DOI_database'],
+        //    'username'   => $config['user_doi'],
+        //    'password'   => $config['password_doi'],
+        //));
+        $dbdoi = new \MongoDB\Driver\Manager("mongodb://" . $config['host'] . ':' . $config['port'], array(
             'authSource' => $config['DOI_database'],
             'username'   => $config['user_doi'],
             'password'   => $config['password_doi'],
         ));
-        $collection = $dbdoi->selectCollection($config['DOI_database'], "DOI");
-        if ($collection->count() == 1) {
+
+        //$collection = $dbdoi->selectCollection($config['DOI_database'], "DOI");
+        $query = new \MongoDB\Driver\Query([], []);
+        $cursor = $dbdoi->executeQuery($config['DOI_database'] . '.DOI', $query);
+        $tcursor = $cursor->toArray();
+        $coll_count = count($tcursor);
+
+        //if ($collection->count() == 1) {
+        if ($coll_count == 1) {
 //Verification du statut de la variable DOI (si UNLOCKED on peut y acceder)
             $maxTries = 3;
             for ($try = 1; $try <= $maxTries; $try++) {
-                $query = array(
-                    'STATE' => 'UNLOCKED',
-                );
+                //$query = array(
+                //    'STATE' => 'UNLOCKED',
+                //);
 
-                $cursor = $collection->find($query);
-                $count  = $cursor->count();
-                if ($count == 1) {
-                    foreach ($cursor as $key => $value) {
-                        $update = $collection->update(array(
-                            "_id" => $value['_id'],
-                        ), array(
-                            '$set' => array(
-                                "STATE" => "LOCKED",
-                            ),
-                        ));
-                        $DOI    = $value['ID'];
+                //$cursor = $collection->find($query);
+                //$count  = $cursor->count();
+                //if ($count == 1) {
+		if ( $tcursor[0]->STATE == 'UNLOCKED') {
+                    //foreach ($cursor as $key => $value) {
+                    foreach ($tcursor as $tc) {
+                        //$update = $collection->update(array(
+                        //    "_id" => $value['_id'],
+                        //), array(
+                        //    '$set' => array(
+                        //        "STATE" => "LOCKED",
+                        //    ),
+                        //));
+                        $insRec       = new \MongoDB\Driver\BulkWrite;
+                        $insRec->update(['_id'=>$tc->_id],['$set' =>['STATE' =>'LOCKED']], ['multi' => false, 'upsert' => false]);
+                        $writeConcern = new \MongoDB\Driver\WriteConcern(\MongoDB\Driver\WriteConcern::MAJORITY, 1000);
+                        $resbw        = $dbdoi->executeBulkWrite($config['DOI_database'] . '.DOI', $insRec, $writeConcern);
+                        //$DOI    = $value['ID'];
+                        $DOI    = $tc->ID;
                         $NewDOI = ++$DOI;
                     }
                     $result = $NewDOI;
@@ -84,32 +109,46 @@ class DatasheetController
                 } else {
                     $result = false;
                 }
-                sleep(3);
 
             }
             return $result;
         } else {
-            $cursor = $collection->insert(array(
-                '_id'   => $config['REPOSITORY_NAME'] . "-DOI",
-                'ID'    => 0,
-                'STATE' => "UNLOCKED",
-            ));
+            // création de l'enregistrement
+            //$cursor = $collection->insert(array(
+            //    '_id'   => $config['REPOSITORY_NAME'] . "-DOI",
+            //    'ID'    => 0,
+            //    'STATE' => "UNLOCKED",
+            //));
+            $insRec       = new \MongoDB\Driver\BulkWrite(['ordered' => false]);
+            $insRec->insert(['_id' => $config['REPOSITORY_NAME'] . "-DOI", 'ID'=>0, 'STATE'=>'UNLOCKED']);
+            $writeConcern = new \MongoDB\Driver\WriteConcern(\MongoDB\Driver\WriteConcern::MAJORITY, 1000);
+            $reswc        = $dbdoi->executeBulkWrite($config['DOI_database'] . '.DOI', $insRec, $writeConcern);
 
-            $query = array(
-                'STATE' => 'UNLOCKED',
-            );
-            $cursor = $collection->find($query);
-            $count  = $cursor->count();
-            if ($count == 1) {
-                foreach ($cursor as $key => $value) {
-                    $update = $collection->update(array(
-                        "_id" => $value['_id'],
-                    ), array(
-                        '$set' => array(
-                            "STATE" => "LOCKED",
-                        ),
-                    ));
-                    $DOI    = $value['ID'];
+            //$query = array(
+            //    'STATE' => 'UNLOCKED',
+            //);
+            //$cursor = $collection->find($query);
+            //$count  = $cursor->count();
+            $query = new \MongoDB\Driver\Query(['STATE' => 'LOCKED']);
+            $cursor = $dbdoi->executeQuery($config['REPOSITORY_NAME'] . ".DOI", $query);
+            $tcursor = $cursor->toArray();
+            //if ($count == 1) {
+            if (count($tcursor) == 1) {
+                //foreach ($cursor as $key => $value) {
+                foreach ($tcursor as $tc) {
+                    //$update = $collection->update(array(
+                    //    "_id" => $value['_id'],
+                    //), array(
+                    //    '$set' => array(
+                    //        "STATE" => "LOCKED",
+                    //    ),
+                    //));
+                    $insRec       = new \MongoDB\Driver\BulkWrite;
+                    $insRec->update(['_id'=>$tc->_id],['$set' =>['STATE' =>'LOCKED']], ['multi' => false, 'upsert' => false]);
+                    $writeConcern = new \MongoDB\Driver\WriteConcern(\MongoDB\Driver\WriteConcern::MAJORITY, 1000);
+                    $resbw        = $dbdoi->executeBulkWrite($config['DOI_database'] . '.DOI', $insRec, $writeConcern);
+                    //$DOI    = $value['ID'];
+                    $DOI    = $tc->ID;
                     $NewDOI = ++$DOI;
                 }
                 return $NewDOI;
@@ -123,12 +162,17 @@ class DatasheetController
         $file   = new File();
         $config = $file->ConfigFile();
 
-        $collectionObject = $this->db->selectCollection($config["authSource"], $collection);
-        $query            = array(
-            '_id' => $doi,
-        );
-        $cursor = $collectionObject->find($query);
-        if ($cursor->count() == 0) {
+        //$collectionObject = $this->db->selectCollection($config["authSource"], $collection);
+        //$query            = array(
+        //    '_id' => $doi,
+        //);
+        //$cursor = $collectionObject->find($query);
+        $query = new \MongoDB\Driver\Query(['_id' => $doi]);
+        $cursor = $this->db->executeQuery($config['authSource'] . '.' . $collection, $query);
+        $tcursor = $cursor->toArray();
+
+        //if ($cursor->count() == 0) {
+        if (count($tcursor) == 0) {
             $error = false;
         }
         return $error;
@@ -158,37 +202,55 @@ class DatasheetController
         $file   = new File();
         $config = $file->ConfigFile();
 
-        $dbdoi = new MongoClient("mongodb://" . $config['host'] . ':' . $config['port'], array(
+        //$dbdoi = new MongoClient("mongodb://" . $config['host'] . ':' . $config['port'], array(
+        //    'authSource' => $config['DOI_database'],
+        //    'username'   => $config['user_doi'],
+        //    'password'   => $config['password_doi'],
+        //));
+        $dbdoi = new \MongoDB\Driver\Manager("mongodb://" . $config['host'] . ':' . $config['port'], array(
             'authSource' => $config['DOI_database'],
             'username'   => $config['user_doi'],
             'password'   => $config['password_doi'],
         ));
-        $collection = $dbdoi->selectCollection($config['DOI_database'], "DOI");
-        $query      = array(
-            'STATE' => 'LOCKED',
-        );
-        $cursor = $collection->find($query);
-        $count  = $cursor->count();
-        if ($count == 1) {
-            foreach ($cursor as $key => $value) {
-                $update = $collection->update(array(
-                    "_id" => $value['_id'],
-                ), array(
-                    '$set' => array(
-                        "STATE" => "LOCKED",
-                    ),
-                ));
-                $DOI = ++$value['ID'];
-
+        //$collection = $dbdoi->selectCollection($config['DOI_database'], "DOI");
+        //$query      = array(
+        //    'STATE' => 'LOCKED',
+        //);
+        //$cursor = $collection->find($query);
+        //$count  = $cursor->count();
+        $query = new \MongoDB\Driver\Query(['STATE' => 'LOCKED']);
+        $cursor = $dbdoi->executeQuery($config['DOI_database'] . ".DOI", $query);
+        $tcursor = $cursor->toArray();
+        //if ($count == 1) {
+        if (count($tcursor) == 1) {
+            //foreach ($cursor as $key => $value) {
+            foreach ($tcursor as $tc) {
+                //$update = $collection->update(array(
+                //    "_id" => $value['_id'],
+                //), array(
+                //    '$set' => array(
+                //        "STATE" => "LOCKED",
+                //    ),
+                //));
+                $insRec       = new \MongoDB\Driver\BulkWrite;
+                $insRec->update(['_id'=>$tc->_id],['$set' =>['STATE' =>'LOCKED']], ['multi' => false, 'upsert' => false]);
+                $writeConcern = new \MongoDB\Driver\WriteConcern(\MongoDB\Driver\WriteConcern::MAJORITY, 1000);
+                $resbw        = $dbdoi->executeBulkWrite($config['DOI_database'] . '.DOI', $insRec, $writeConcern);
+                //$DOI = ++$value['ID'];
+                $DOI    = ++$tc->ID;
             }
         }
-        $update = $collection->update(array(
-            "_id" => $config['REPOSITORY_NAME'] . "-DOI",
-        ), array(
-            '$set' => array(
-                "ID" => $DOI,
-            ),
-        ));
+        //$update = $collection->update(array(
+        //    "_id" => $config['REPOSITORY_NAME'] . "-DOI",
+        //), array(
+        //    '$set' => array(
+        //        "ID" => $DOI,
+        //    ),
+        //));
+        $insRec       = new \MongoDB\Driver\BulkWrite;
+        $insRec->update(['_id'=>$config['REPOSITORY_NAME'] . "-DOI"],['$set' =>['ID' =>$DOI]], ['multi' => false, 'upsert' => false]);
+        $writeConcern = new \MongoDB\Driver\WriteConcern(\MongoDB\Driver\WriteConcern::MAJORITY, 1000);
+        $resbw        = $dbdoi->executeBulkWrite($config['DOI_database'] . '.DOI', $insRec, $writeConcern);
         self::UnlockDOI();
 
     }
@@ -198,19 +260,28 @@ class DatasheetController
         $file   = new File();
         $config = $file->ConfigFile();
 
-        $dbdoi = new MongoClient("mongodb://" . $config['host'] . ':' . $config['port'], array(
+        //$dbdoi = new MongoClient("mongodb://" . $config['host'] . ':' . $config['port'], array(
+        //    'authSource' => $config['DOI_database'],
+        //    'username'   => $config['user_doi'],
+        //    'password'   => $config['password_doi'],
+        //));
+        $dbdoi = new \MongoDB\Driver\Manager("mongodb://" . $config['host'] . ':' . $config['port'], array(
             'authSource' => $config['DOI_database'],
             'username'   => $config['user_doi'],
             'password'   => $config['password_doi'],
         ));
-        $collection = $dbdoi->selectCollection($config['DOI_database'], "DOI");
-        $update     = $collection->update(array(
-            "_id" => $config['REPOSITORY_NAME'] . "-DOI",
-        ), array(
-            '$set' => array(
-                "STATE" => "UNLOCKED",
-            ),
-        ));
+        //$collection = $dbdoi->selectCollection($config['DOI_database'], "DOI");
+        //$update     = $collection->update(array(
+        //    "_id" => $config['REPOSITORY_NAME'] . "-DOI",
+        //), array(
+        //    '$set' => array(
+        //        "STATE" => "UNLOCKED",
+        //    ),
+        //));
+        $insRec       = new \MongoDB\Driver\BulkWrite;
+        $insRec->update(['_id'=>$config['REPOSITORY_NAME'] . "-DOI"],['$set' =>['STATE' =>'UNLOCKED']], ['multi' => false, 'upsert' => false]);
+        $writeConcern = new \MongoDB\Driver\WriteConcern(\MongoDB\Driver\WriteConcern::MAJORITY, 1000);
+        $resbw        = $dbdoi->executeBulkWrite($config['DOI_database'] . '.DOI', $insRec, $writeConcern);
     }
 
     public function Postprocessing($POST, $method, $doi, $db, $collection)
@@ -224,20 +295,28 @@ class DatasheetController
             $query        = array(
                 '_id' => $doi,
             );
-            $collectionObject = $this->db->selectCollection($config["authSource"], $collection);
-            $cursor           = $collectionObject->find($query);
-            foreach ($cursor as $key => $value) {
-                $access_right = $value['INTRO']['ACCESS_RIGHT'];
+            //$collectionObject = $this->db->selectCollection($config["authSource"], $collection);
+            //$cursor           = $collectionObject->find($query);
+            $drvquery = new \MongoDB\Driver\Query($query);
+            $cursor = $this->db->executeQuery($config['authSource'] . '.' . $collection, $drvquery);
+            $tcursor = $cursor->toArray();
+            //foreach ($cursor as $key => $value) {
+            foreach ($tcursor as $tc) {
+                //$access_right = $value['INTRO']['ACCESS_RIGHT'];
+                $access_right = $tc->INTRO->ACCESS_RIGHT;
             }
             if ($access_right == "Draft") {
 //verification que c'est un draft si créé
                 return self::ManageDraft($db, $array);
-            } elseif ($cursor->count() == 0) {
+            //} elseif ($cursor->count() == 0) {
+            } elseif (count($tcursor) == 0) {
 //Creation d'un nouveau draft
                 return self::ManageDraft($db, $array);
             }
         }
         if (array_key_exists('publish', $POST)) {
+//SPH var_dump('doi:');
+//SPH var_dump($doi);
 //Si on publie le jeu de données
             $array = self::Postprocessing_publish($POST, $method, $doi, "Publish");
             if ($method == "Edit") {
@@ -902,23 +981,37 @@ class DatasheetController
             $query = array(
                 '_id' => $doi,
             );
-            $collectionObject = $this->db->selectCollection($config["authSource"], $collection);
-            $cursor           = $collectionObject->find($query);
+            //$collectionObject = $this->db->selectCollection($config["authSource"], $collection);
+            $collectionObject = array($config["authSource"], $collection);
+            //$cursor           = $collectionObject->find($query);
+            $drvQuery = new \MongoDB\Driver\Query($query, []);
+            $cursor = $this->db->executeQuery($config["authSource"] . '.' . $collection, $drvQuery);
+            $tcursor = $cursor->toArray();
+            $cursor_count = count($tcursor);
+
             $tmparray         = array();
-            if ($cursor->count() == 1) {
+            //if ($cursor->count() == 1) {
+            if ($cursor_count == 1) {
 //Verification si le draft existe deja
                 $maxsize = 0;
-                foreach ($cursor as $key => $value) {
-                    if ($value['INTRO']["UPLOAD_DATE"]) {
-                        $array['dataform']['UPLOAD_DATE'] = $value['INTRO']['UPLOAD_DATE']; //Mise a jour de la date d'upload
+                //foreach ($cursor as $key => $value) {
+                foreach ($tcursor as $tc) {
+                    //if ($value['INTRO']["UPLOAD_DATE"]) {
+                    if ($tc->INTRO->UPLOAD_DATE) {
+                        //$array['dataform']['UPLOAD_DATE'] = $value['INTRO']['UPLOAD_DATE']; //Mise a jour de la date d'upload
+                        $array['dataform']['UPLOAD_DATE'] = $tc->INTRO->UPLOAD_DATE; //Mise a jour de la date d'upload
                     }
-                    if ($value['INTRO']["CREATION_DATE"]) {
-                        $array['dataform']['CREATION_DATE'] = $value['INTRO']['CREATION_DATE']; //Mise a jour de la date de creation
+                    //if ($value['INTRO']["CREATION_DATE"]) {
+                    //    $array['dataform']['CREATION_DATE'] = $value['INTRO']['CREATION_DATE']; //Mise a jour de la date de creation
+                    if ($tc->INTRO->CREATION_DATE) {
+                        $array['dataform']['CREATION_DATE'] = $tc->INTRO->CREATION_DATE; //Mise a jour de la date de creation
                     }
                 }
-                foreach ($cursor as $key => $value) {
+                //foreach ($cursor as $key => $value) {
+                foreach ($tcursor as $tc) {
 //Recuperation des fichies de données dans la base
-                    foreach ($value["DATA"]["FILES"] as $key => $value) {
+                    // foreach ($value["DATA"]["FILES"] as $key => $value) {
+                    foreach ($tc->DATA->FILES as $key => $value) {
                         $tmparray[] = $value;
                     }
                 }
@@ -927,9 +1020,11 @@ class DatasheetController
                 foreach ($tmparray as $key => $value) {
 //On parcourt les fichiers de la base
                     foreach ($array['file_already_uploaded'] as $key => $value2) { //On parcout ceux du formulaire pour voir les suppression eventuels
-                        if ($value['DATA_URL'] == $value2['DATA_URL']) {
+                        //if ($value['DATA_URL'] == $value2['DATA_URL']) {
+                        if ($value->DATA_URL == $value2['DATA_URL']) {
                             $intersect[] = $value;
-                            $maxsize += filesize($UPLOAD_FOLDER . $doi . '/' . $value['DATA_URL']);
+                            //$maxsize += filesize($UPLOAD_FOLDER . $doi . '/' . $value['DATA_URL']);
+                            $maxsize += filesize($UPLOAD_FOLDER . $doi . '/' . $value->DATA_URL);
                         }
                     }
                 }
@@ -962,7 +1057,8 @@ class DatasheetController
                                                 $filetypes = 'unknow';
                                             }
                                             $data[$i]["FILETYPE"] = $filetypes;
-                                            $collectionObject     = $this->db->selectCollection($config["authSource"], $collection);
+                                            //$collectionObject     = $this->db->selectCollection($config["authSource"], $collection);
+                                            $collectionObject = array($config["authSource"], $collection);
                                         } else {
                                             $returnarray[] = "false";
                                             $returnarray[] = $array['dataform'];
@@ -997,7 +1093,8 @@ class DatasheetController
                 $merge = array_map("unserialize", array_unique(array_map("serialize", $merge))); // on dedoublonne les tableaux
                 mkdir($UPLOAD_FOLDER . "/" . $doi . "/tmp"); //Creation d'un dossier temporaire de tri
                 foreach ($merge as $key => $value) {
-                    rename($UPLOAD_FOLDER . "/" . $doi . "/" . $value['DATA_URL'], $UPLOAD_FOLDER . "/" . $doi . "/tmp/" . $value['DATA_URL']);
+                    //rename($UPLOAD_FOLDER . "/" . $doi . "/" . $value['DATA_URL'], $UPLOAD_FOLDER . "/" . $doi . "/tmp/" . $value['DATA_URL']);
+                    rename($UPLOAD_FOLDER . "/" . $doi . "/" . $value->DATA_URL, $UPLOAD_FOLDER . "/" . $doi . "/tmp/" . $value->DATA_URL);
                 }
                 $files = glob($UPLOAD_FOLDER . "/" . $doi . "/*"); // get all file names
                 foreach ($files as $file) {
@@ -1008,7 +1105,8 @@ class DatasheetController
                     // delete file
                 }
                 foreach ($merge as $key => $value) {
-                    rename($UPLOAD_FOLDER . "/" . $doi . "/tmp/" . $value['DATA_URL'], $UPLOAD_FOLDER . "/" . $doi . "/" . $value['DATA_URL']);
+                    //rename($UPLOAD_FOLDER . "/" . $doi . "/tmp/" . $value['DATA_URL'], $UPLOAD_FOLDER . "/" . $doi . "/" . $value['DATA_URL']);
+                    rename($UPLOAD_FOLDER . "/" . $doi . "/tmp/" . $value->DATA_URL, $UPLOAD_FOLDER . "/" . $doi . "/" . $value->DATA_URL);
                 }
                 rmdir($UPLOAD_FOLDER . "/" . $doi . "/tmp/");
 
@@ -1018,9 +1116,13 @@ class DatasheetController
                         "DATA.FILES" => $merge,
                     ),
                 ); //Json a envoyer a mongo
-                $collectionObject->update(array(
-                    '_id' => $doi,
-                ), $json); //Mise a jour de la base
+                //$collectionObject->update(array(
+                //    '_id' => $doi,
+                //), $json); //Mise a jour de la base
+                $insRec       = new \MongoDB\Driver\BulkWrite;
+                $insRec->update(['_id' => $doi], $json, ['multi' => false, 'upsert' => false]);
+                $writeConcern = new \MongoDB\Driver\WriteConcern(\MongoDB\Driver\WriteConcern::MAJORITY, 1000);
+                $resbw        = $this->db->executeBulkWrite($collectionObject[0] . '.' . $collectionObject[1], $insRec, $writeConcern);
                 return $array['message'] = '   <div class="ui message grey"  style="display: block;">Draft edited! </div>';
 
             } else {
@@ -1030,6 +1132,8 @@ class DatasheetController
                 $maxsize                            = 0;
                 if ($_FILES['file']['name'][0] != "") {
 //Check des fichier uploader
+// SPH
+//var_dump($_FILES);
                     for ($i = 0; $i < count($_FILES['file']['name']); $i++) {
                         $size = $_FILES["file"]["size"][$i];
                         $maxsize += $size;
@@ -1053,7 +1157,8 @@ class DatasheetController
                                         $filetypes = 'unknow';
                                     }
                                     $data['FILES'][$i]["FILETYPE"] = $filetypes;
-                                    $collectionObject              = $this->db->selectCollection($config["authSource"], $collection);
+                                    //$collectionObject              = $this->db->selectCollection($config["authSource"], $collection);
+                                    $collectionObject = array($config["authSource"], $collection);
                                 } else {
                                     $returnarray[] = "false";
                                     $returnarray[] = $array['dataform'];
@@ -1072,7 +1177,8 @@ class DatasheetController
                     $data["FILES"] = null;
                 }
 
-                $collectionObject = $this->db->selectCollection($config["authSource"], $collection);
+                //$collectionObject = $this->db->selectCollection($config["authSource"], $collection);
+                $collectionObject = array($config["authSource"], $collection);
 
                 $json = array(
                     '_id'   => $doi,
@@ -1080,7 +1186,11 @@ class DatasheetController
                     "DATA"  => $data,
                 );
 
-                $collectionObject->insert($json); // on insert le nouveau Draft
+                //$collectionObject->insert($json); // on insert le nouveau Draft
+                $insRec       = new \MongoDB\Driver\BulkWrite(['ordered' => false]);
+		$insRec->insert($json);
+		$writeConcern = new \MongoDB\Driver\WriteConcern(\MongoDB\Driver\WriteConcern::MAJORITY, 1000);
+		$result       = $this->db->executeBulkWrite($collectionObject[0] . '.' . $collectionObject[1], $insRec, $writeConcern);
                 return $array['message'] = '   <div class="ui message grey"  style="display: block;">Draft created! </div>';
 
             }
@@ -1149,7 +1259,8 @@ class DatasheetController
                                         }
                                         $data["FILES"][$i]["FILETYPE"] = $filetypes;
                                         $collection                    = "Manual_Depot";
-                                        $collectionObject              = $this->db->selectCollection($config["authSource"], $collection);
+                                        //$collectionObject              = $this->db->selectCollection($config["authSource"], $collection);
+                                        $collectionObject = array($config["authSource"], $collection);
                                         $json                          = array(
                                             '_id'   => $doi,
                                             "INTRO" => $array['dataform'],
@@ -1175,7 +1286,11 @@ class DatasheetController
                     if ($request == "true") {
                         // si datacite reponds et enregistre les données
                         self::Increment_DOI($doi);
-                        $collectionObject->insert($json); // on insert dans la base
+                        //$collectionObject->insert($json); // on insert dans la base
+                        $insRec       = new \MongoDB\Driver\BulkWrite(['ordered' => false]);
+                        $insRec->insert($json);
+                        $writeConcern = new \MongoDB\Driver\WriteConcern(\MongoDB\Driver\WriteConcern::MAJORITY, 1000);
+                        $result       = $this->db->executeBulkWrite($collectionObject[0] . '.' . $collectionObject[1], $insRec, $writeConcern);
                         $Mail = new Mailer();
                         $Mail->Send_Mail_To_uploader($array['dataform']['FILE_CREATOR'], $array['dataform']['TITLE'], $doi, $array['dataform']['DATA_DESCRIPTION']); // Envoie d'un mail au auteurs du jeu de données
                         return $array['message'] = '   <div class="ui message green"  style="display: block;">Dataset created!</div>';
@@ -1266,7 +1381,8 @@ class DatasheetController
         }
 
         foreach ($New as $Key => $Value) {
-            if (!isset($Old[$Key])) {
+            //if (!isset($Old[$Key])) {
+            if (!isset($Old->$Key)) {
                 $Diff[$Key] = self::Singular(ComparedValue::TYPE_ADDED, $Value);
             }
         }
@@ -1310,20 +1426,31 @@ class DatasheetController
         $data             = null;
         $config           = $file->ConfigFile();
         $UPLOAD_FOLDER    = $config["UPLOAD_FOLDER"];
-        $collectionObject = $db->selectCollection($config["authSource"], $collection);
+        //$collectionObject = $db->selectCollection($config["authSource"], $collection);
+        $collectionObject = array($config["authSource"], $collection);
         $query            = array(
             '_id' => $doi,
         );
-        $cursor = $collectionObject->find($query);
-        foreach ($cursor as $key => $value) {
-            if ($value['INTRO']["UPLOAD_DATE"]) {
-                $array['dataform']['UPLOAD_DATE'] = $value['INTRO']['UPLOAD_DATE'];
+        //$cursor = $collectionObject->find($query);
+        $drvquery = new \MongoDB\Driver\Query($query);
+        $cursor = $db->executeQuery($config['authSource'] . "." . $collection, $drvquery);
+        $tcursor = $cursor->toArray();
+        //foreach ($cursor as $key => $value) {
+        foreach ($tcursor as $tc) {
+            //if ($value['INTRO']["UPLOAD_DATE"]) {
+            //    $array['dataform']['UPLOAD_DATE'] = $value['INTRO']['UPLOAD_DATE'];
+            if ($tc->INTRO->UPLOAD_DATE) {
+                $array['dataform']['UPLOAD_DATE'] = $tc->INTRO->UPLOAD_DATE;
             }
-            if ($value['INTRO']["CREATION_DATE"]) {
-                $array['dataform']['CREATION_DATE'] = $value['INTRO']['CREATION_DATE'];
+            //if ($value['INTRO']["CREATION_DATE"]) {
+            //    $array['dataform']['CREATION_DATE'] = $value['INTRO']['CREATION_DATE'];
+            if ($tc->INTRO->CREATION_DATE) {
+                $array['dataform']['CREATION_DATE'] = $tc->INTRO->CREATION_DATE;
             }
-            if ($value['INTRO']["PUBLICATION_DATE"]) {
-                $array['dataform']['PUBLICATION_DATE'] = $value['INTRO']['PUBLICATION_DATE'];
+            //if ($value['INTRO']["PUBLICATION_DATE"]) {
+            //    $array['dataform']['PUBLICATION_DATE'] = $value['INTRO']['PUBLICATION_DATE'];
+            if ($tc->INTRO->PUBLICATION_DATE) {
+                $array['dataform']['PUBLICATION_DATE'] = $tc->INTRO->PUBLICATION_DATE;
             }
         }
 
@@ -1331,7 +1458,9 @@ class DatasheetController
             //Si une erreur est detecté
             return $array;
         } else {
-            $collectionObject = $db->selectCollection($config["authSource"], $collection);
+            //$collectionObject = $db->selectCollection($config["authSource"], $collection);
+            $collectionObject = array($config["authSource"], $collection);
+
             if (strstr($doi, $config['REPOSITORY_NAME']) !== false) {
                 //Edition Si un DOI perrene est assigné
 
@@ -1340,10 +1469,16 @@ class DatasheetController
                     $query = array(
                         '_id' => $doi,
                     );
-                    $cursor   = $collectionObject->find($query);
+                    //$cursor   = $collectionObject->find($query);
+                    $drvQuery = new \MongoDB\Driver\Query($query, []);
+                    $cursor = $this->db->executeQuery($collectionObject[0] . '.' . $collectionObject[1], $drvQuery);
+                    $tcursor = $cursor->toArray();
+
                     $tmparray = array();
-                    foreach ($cursor as $key => $value) {
-                        foreach ($value["DATA"]["FILES"] as $key => $value) {
+                    //foreach ($cursor as $key => $value) {
+                    foreach ($tcursor as $tc) {
+                        //foreach ($value["DATA"]["FILES"] as $key => $value) {
+                        foreach ($tc->DATA->FILES as $key => $value) {
                             $tmparray[] = $value;
                         }
                     }
@@ -1351,7 +1486,8 @@ class DatasheetController
                     $intersect = array();
                     foreach ($tmparray as $key => $value) {
                         foreach ($array['file_already_uploaded'] as $key => $value2) {
-                            if ($value['DATA_URL'] == $value2['DATA_URL']) {
+                            //if ($value['DATA_URL'] == $value2['DATA_URL']) {
+                            if ($value->DATA_URL == $value2['DATA_URL']) {
                                 $intersect[] = $value;
                             }
                         }
@@ -1376,7 +1512,8 @@ class DatasheetController
                                     $filetypes = 'unknow';
                                 }
                                 $data[$i]["FILETYPE"] = $filetypes;
-                                $collectionObject     = $this->db->selectCollection($config["authSource"], $collection);
+                                //$collectionObject     = $this->db->selectCollection($config["authSource"], $collection);
+                                $collectionObject = array($config["authSource"], $collection);
                             } else {
                                 $returnarray[] = "false";
                                 $returnarray[] = $array['dataform'];
@@ -1399,7 +1536,8 @@ class DatasheetController
                     $merge = array_map("unserialize", array_unique(array_map("serialize", $merge)));
                     mkdir($UPLOAD_FOLDER . "/" . $doi . "/tmp");
                     foreach ($merge as $key => $value) {
-                        rename($UPLOAD_FOLDER . "/" . $doi . "/" . $value['DATA_URL'], $UPLOAD_FOLDER . "/" . $doi . "/tmp/" . $value['DATA_URL']);
+                        //rename($UPLOAD_FOLDER . "/" . $doi . "/" . $value['DATA_URL'], $UPLOAD_FOLDER . "/" . $doi . "/tmp/" . $value['DATA_URL']);
+                        rename($UPLOAD_FOLDER . "/" . $doi . "/" . $value->DATA_URL, $UPLOAD_FOLDER . "/" . $doi . "/tmp/" . $value->DATA_URL);
                     }
                     $files = glob($UPLOAD_FOLDER . "/" . $doi . "/*"); // get all file names
                     foreach ($files as $file) {
@@ -1410,7 +1548,8 @@ class DatasheetController
                         // delete file
                     }
                     foreach ($merge as $key => $value) {
-                        rename($UPLOAD_FOLDER . "/" . $doi . "/tmp/" . $value['DATA_URL'], $UPLOAD_FOLDER . "/" . $doi . "/" . $value['DATA_URL']);
+                        //rename($UPLOAD_FOLDER . "/" . $doi . "/tmp/" . $value['DATA_URL'], $UPLOAD_FOLDER . "/" . $doi . "/" . $value['DATA_URL']);
+                        rename($UPLOAD_FOLDER . "/" . $doi . "/tmp/" . $value->DATA_URL, $UPLOAD_FOLDER . "/" . $doi . "/" . $value->DATA_URL);
                     }
                     rmdir($UPLOAD_FOLDER . "/" . $doi . "/tmp/");
 
@@ -1438,19 +1577,27 @@ class DatasheetController
                     $query = array(
                         '_id' => $doi,
                     );
-                    $cursor = $collectionObject->find($query);
-                    foreach ($cursor as $key => $value) {
-                        $arr2 = $value['INTRO'];
+                    //$cursor = $collectionObject->find($query);
+                    $drvquery = new \MongoDB\Driver\Query($query);
+                    $cursor = $this->db->executeQuery($collectionObject[0] . '.' . $collectionObject[1], $drvquery);
+                    $tcursor = $cursor->toArray();
+                    //foreach ($cursor as $key => $value) {
+                    foreach ($tcursor as $tc) {
+                        $arr2 = $tc->INTRO;
                     }
 
                     $arr1         = $json['$set']['INTRO'];
                     $diff         = self::diff($arr2, $arr1);
                     $uploadfolder = $UPLOAD_FOLDER . "/" . $doi;
                     self::WriteChangelog($diff, $uploadfolder, $doi);
-
-                    $collectionObject->update(array(
-                        '_id' => $doi,
-                    ), $json);
+                    //$collectionObject->update(array(
+                    //    '_id' => $doi,
+                    //), $json);
+                    $insRec       = new \MongoDB\Driver\BulkWrite;
+                    //$insRec->update(['_id' => $doi],['$set' => $json], ['multi' => false, 'upsert' => false]);
+                    $insRec->update(['_id' => $doi], $json, ['multi' => false, 'upsert' => false]);
+                    $writeConcern = new \MongoDB\Driver\WriteConcern(\MongoDB\Driver\WriteConcern::MAJORITY, 1000);
+                    $resbw        = $this->db->executeBulkWrite($collectionObject[0] . '.' . $collectionObject[1], $insRec, $writeConcern);
                     return $array['message'] = '   <div class="ui message green"  style="display: block;">Dataset edited!</div>';
                 } else {
                     $array['error'] = "Unable to send metadata to Datacite";
@@ -1481,17 +1628,27 @@ class DatasheetController
                     '_id' => $doi,
                 );
                 $doi              = $array['doi'];
-                $collectionObject = $this->db->selectCollection($config["authSource"], $collection);
-                $cursor           = $collectionObject->find($query);
+                //$collectionObject = $this->db->selectCollection($config["authSource"], $collection);
+                $collectionObject = array($config["authSource"], $collection);
+                //$cursor           = $collectionObject->find($query);
+                $drvQuery = new \MongoDB\Driver\Query([]);
+                $cursor = $this->db->executeQuery($config["authSource"] . '.' . $collection, $drvQuery);
+                $tcursor = $cursor->toArray();
 
-                foreach ($cursor as $key => $value) {
-                    if ($value['INTRO']["UPLOAD_DATE"]) {
-                        $array['dataform']['UPLOAD_DATE'] = $value['INTRO']['UPLOAD_DATE'];
+                //foreach ($cursor as $key => $value) {
+                foreach ($tcursor as $tc) {
+                    //if ($value['INTRO']["UPLOAD_DATE"]) {
+                    //    $array['dataform']['UPLOAD_DATE'] = $value['INTRO']['UPLOAD_DATE'];
+                    if ($tc->INTRO->UPLOAD_DATE) {
+                        $array['dataform']['UPLOAD_DATE'] = $tc->INTRO->UPLOAD_DATE;
                     }
-                    if ($value['INTRO']["CREATION_DATE"]) {
-                        $array['dataform']['CREATION_DATE'] = $value['INTRO']['CREATION_DATE'];
+                    //if ($value['INTRO']["CREATION_DATE"]) {
+                    //    $array['dataform']['CREATION_DATE'] = $value['INTRO']['CREATION_DATE'];
+                    if ($tc->INTRO->CREATION_DATE) {
+                        $array['dataform']['CREATION_DATE'] = $tc->INTRO->CREATION_DATE;
                     }
-                    foreach ($value["DATA"]["FILES"] as $key => $value) {
+                    //foreach ($value["DATA"]["FILES"] as $key => $value) {
+                    foreach ($tc->DATA->FILES as $key => $value) {
                         $tmparray[] = $value;
                     }
                 }
@@ -1499,9 +1656,11 @@ class DatasheetController
                 $intersect = array();
                 foreach ($tmparray as $key => $value) {
                     foreach ($array['file_already_uploaded'] as $key => $value2) {
-                        if ($value['DATA_URL'] == $value2['DATA_URL']) {
+                        //if ($value['DATA_URL'] == $value2['DATA_URL']) {
+                        if ($value->DATA_URL == $value2['DATA_URL']) {
                             $intersect[] = $value;
-                            $size        = filesize($UPLOAD_FOLDER . "/" . $doi . "/" . $value['DATA_URL']);
+                            //$size        = filesize($UPLOAD_FOLDER . "/" . $doi . "/" . $value['DATA_URL']);
+                            $size        = filesize($UPLOAD_FOLDER . "/" . $doi . "/" . $value->DATA_URL);
                             $maxsize += $size;
                         }
                     }
@@ -1528,7 +1687,8 @@ class DatasheetController
                                     $filetypes = 'unknow';
                                 }
                                 $data[$i]["FILETYPE"] = $filetypes;
-                                $collectionObject     = $this->db->selectCollection($config["authSource"], $collection);
+                                //$collectionObject     = $this->db->selectCollection($config["authSource"], $collection);
+                                $collectionObject = array($config["authSource"], $collection);
                             } else {
                                 $returnarray[] = "false";
                                 $returnarray[] = $array['dataform'];
@@ -1556,7 +1716,8 @@ class DatasheetController
                         $merge = array_map("unserialize", array_unique(array_map("serialize", $merge)));
                         mkdir($UPLOAD_FOLDER . "/" . $doi . "/tmp");
                         foreach ($merge as $key => $value) {
-                            rename($UPLOAD_FOLDER . "/" . $doi . "/" . $value['DATA_URL'], $UPLOAD_FOLDER . "/" . $doi . "/tmp/" . $value['DATA_URL']);
+                            //rename($UPLOAD_FOLDER . "/" . $doi . "/" . $value['DATA_URL'], $UPLOAD_FOLDER . "/" . $doi . "/tmp/" . $value['DATA_URL']);
+                            rename($UPLOAD_FOLDER . "/" . $doi . "/" . $value->DATA_URL, $UPLOAD_FOLDER . "/" . $doi . "/tmp/" . $value->DATA_URL);
                         }
                         $files = glob($UPLOAD_FOLDER . "/" . $doi . "/*"); // get all file names
                         foreach ($files as $file) {
@@ -1567,47 +1728,69 @@ class DatasheetController
                             // delete file
                         }
                         foreach ($merge as $key => $value) {
-                            rename($UPLOAD_FOLDER . "/" . $doi . "/tmp/" . $value['DATA_URL'], $UPLOAD_FOLDER . "/" . $doi . "/" . $value['DATA_URL']);
+                            //rename($UPLOAD_FOLDER . "/" . $doi . "/tmp/" . $value['DATA_URL'], $UPLOAD_FOLDER . "/" . $doi . "/" . $value['DATA_URL']);
+                            rename($UPLOAD_FOLDER . "/" . $doi . "/tmp/" . $value->DATA_URL, $UPLOAD_FOLDER . "/" . $doi . "/" . $value->DATA_URL);
                         }
                         rmdir($UPLOAD_FOLDER . "/" . $doi . "/tmp/");
                         mkdir($UPLOAD_FOLDER . "/" . $config["DOI_PREFIX"] . "/" . $newdoi, 0777, true);
+// SPH
                         $query = array(
                             '_id' => $doi,
                         );
-                        $cursor = $collectionObject->find($query);
+                        //$cursor = $collectionObject->find($query);
+                        $drvQuery = new \MongoDB\Driver\Query($query);
+                        $cursor = $this->db->executeQuery($collectionObject[0] . '.' . $collectionObject[1], $drvQuery);
+                        $tcursor = $cursor->toArray();
 
                         foreach ($merge as $key => $value) {
-                            rename($UPLOAD_FOLDER . $doi . '/' . $value['DATA_URL'], $UPLOAD_FOLDER . "/" . $config["DOI_PREFIX"] . "/" . $newdoi . "/" . $value['DATA_URL']);
+                            //rename($UPLOAD_FOLDER . $doi . '/' . $value['DATA_URL'], $UPLOAD_FOLDER . "/" . $config["DOI_PREFIX"] . "/" . $newdoi . "/" . $value['DATA_URL']);
+                            rename($UPLOAD_FOLDER . $doi . '/' . $value->DATA_URL, $UPLOAD_FOLDER . "/" . $config["DOI_PREFIX"] . "/" . $newdoi . "/" . $value->DATA_URL);
                         }
                         rmdir($UPLOAD_FOLDER . $doi);
-                        $collectionObject->update(array(
-                            '_id' => $doi,
-                        ), array(
-                            '$set' => array(
-                                "INTRO" => $array['dataform'],
-                            ),
-                        ));
-                        $olddata = $collectionObject->find(array(
-                            '_id' => $doi,
-                        ));
-                        foreach ($olddata as $key => $value) {
-                            $INTRO = $value["INTRO"];
-                            $DATA  = $value["DATA"];
+                        //$collectionObject->update(array(
+                        //    '_id' => $doi,
+                        //), array(
+                        //    '$set' => array(
+                        //        "INTRO" => $array['dataform'],
+                        //    ),
+                        //));
+                        $insRec       = new \MongoDB\Driver\BulkWrite;
+                        $insRec->update(['_id' => $doi],['$set' => array("INTRO" => $array['dataform'])], ['multi' => false, 'upsert' => false]);
+                        $writeConcern = new \MongoDB\Driver\WriteConcern(\MongoDB\Driver\WriteConcern::MAJORITY, 1000);
+                        $resbw        = $this->db->executeBulkWrite($collectionObject[0] . '.' . $collectionObject[1], $insRec, $writeConcern);
+                        //$olddata = $collectionObject->find(array(
+                        //    '_id' => $doi,
+                        //));
+                        $drvQuery = new \MongoDB\Driver\Query(array('_id' => $doi));
+                        $cursor = $this->db->executeQuery($collectionObject[0] . '.' . $collectionObject[1], $drvQuery);
+                        $olddata = $cursor->toArray();
+                        //foreach ($olddata as $key => $value) {
+                        foreach ($olddata as $olddata_e) {
+                            $INTRO = $olddata_e->INTRO;
+                            $DATA  = $olddata_e->DATA;
                         }
-                        $collectionObject->remove(array(
-                            '_id' => $doi,
-                        ));
+                        //$collectionObject->remove(array(
+                        //    '_id' => $doi,
+                        //));
+                        $insRec       = new \MongoDB\Driver\BulkWrite;
+                        $insRec->delete(['_id' => $doi], ['multi' => false, 'upsert' => false]);
+                        $writeConcern = new \MongoDB\Driver\WriteConcern(\MongoDB\Driver\WriteConcern::MAJORITY, 1000);
+                        $resbw        = $this->db->executeBulkWrite($collectionObject[0] . '.' . $collectionObject[1], $insRec, $writeConcern);
                         $newfiles['FILES'] = $merge;
                     } else {
                         self::UnlockDOI();
                         $array['error'] = "Unable to send metadata to Datacite";
                         return $array;
                     }
-                    $collectionObject->insert(array(
-                        '_id'   => $config["DOI_PREFIX"] . "/" . $newdoi,
-                        "INTRO" => $INTRO,
-                        "DATA"  => $newfiles,
-                    ));
+                    //$collectionObject->insert(array(
+                    //    '_id'   => $config["DOI_PREFIX"] . "/" . $newdoi,
+                    //    "INTRO" => $INTRO,
+                    //    "DATA"  => $newfiles,
+                    //));
+                    $insRec       = new \MongoDB\Driver\BulkWrite(['ordered' => false]);
+                    $insRec->insert(['_id'   => $config["DOI_PREFIX"] . "/" . $newdoi, "INTRO" => $INTRO, "DATA"  => $newfiles]);
+                    $writeConcern = new \MongoDB\Driver\WriteConcern(\MongoDB\Driver\WriteConcern::MAJORITY, 1000);
+                    $result       = $this->db->executeBulkWrite($collectionObject[0] . '.' . $collectionObject[1], $insRec, $writeConcern);
                     self::Increment_DOI($doi);
                     $Mailer = new Mailer();
                     $Mailer->Send_Mail_To_uploader($array['dataform']['FILE_CREATOR'], $array['dataform']['TITLE'], $config["DOI_PREFIX"] . "/" . $newdoi, $array['dataform']['DATA_DESCRIPTION']);
@@ -1649,9 +1832,16 @@ class DatasheetController
                     $query = array(
                         '_id' => $doi,
                     );
-                    $cursor = $collectionObject->find($query);
-                    foreach ($cursor as $key => $value) {
-                        $ORIGINAL_DATA_URL = $value["DATA"]["FILES"][0]["ORIGINAL_DATA_URL"];
+                    //$cursor = $collectionObject->find($query);
+                    $drvquery = new \MongoDB\Driver\Query($query);
+                    $cursor = $this->db->executeQuery($collectionObject[0] . '.' . $collectionObject[1], $drvquery);
+                    $tcursor = $cursor->toArray();
+                    //foreach ($cursor as $key => $value) {
+                    //    $ORIGINAL_DATA_URL = $value["DATA"]["FILES"][0]["ORIGINAL_DATA_URL"];
+                    //}
+                    foreach ($tcursor as $tc) {
+                        $ORIGINAL_DATA_URL = $tc->DATA->FILES[0]->ORIGINAL_DATA_URL;
+			$value_DATA_FILES = $tc->DATA->FILES;
                     }
                     //unlink($ORIGINAL_DATA_URL);
                     //exec("sudo -u ".$config["DATAFILE_UNIXUSER"]." rm ".$ORIGINAL_DATA_URL);
@@ -1687,54 +1877,81 @@ class DatasheetController
                     }
                     //rename($UPLOAD_FOLDER . $doi . '/' . $doi . '_DATA.csv', $UPLOAD_FOLDER . "/" . $config["DOI_PREFIX"] . "/" . $newdoi . "/" . $doi . '_DATA.csv');
                     //
-                    foreach ($value['DATA']['FILES'] as $key => $value) {
+// SPH
+                    //foreach ($value['DATA']['FILES'] as $key => $value) {
+                    foreach ($value_DATA_FILES as $key => $value) {
                          if ($key == 0) {
-                             if (file_exists($UPLOAD_FOLDER . $doi . '/' . $value['DATA_URL'])) {
-                        rename($UPLOAD_FOLDER . $doi . '/' . $value['DATA_URL'], $UPLOAD_FOLDER . "/" . $config["DOI_PREFIX"] . "/" . $newdoi . "/" . $value['DATA_URL']);
+                             //if (file_exists($UPLOAD_FOLDER . $doi . '/' . $value['DATA_URL'])) {
+                             if (file_exists($UPLOAD_FOLDER . $doi . '/' . $value->DATA_URL)) {
+                        //rename($UPLOAD_FOLDER . $doi . '/' . $value['DATA_URL'], $UPLOAD_FOLDER . "/" . $config["DOI_PREFIX"] . "/" . $newdoi . "/" . $value['DATA_URL']);
+                        rename($UPLOAD_FOLDER . $doi . '/' . $value->DATA_URL, $UPLOAD_FOLDER . "/" . $config["DOI_PREFIX"] . "/" . $newdoi . "/" . $value->DATA_URL);
                         }
                         else{
-                             rename($value['ORIGINAL_DATA_URL'], $UPLOAD_FOLDER . "/" . $config["DOI_PREFIX"] . "/" . $newdoi . "/" . $value['DATA_URL']);
+                             //rename($value['ORIGINAL_DATA_URL'], $UPLOAD_FOLDER . "/" . $config["DOI_PREFIX"] . "/" . $newdoi . "/" . $value['DATA_URL']);
+                             rename($value->ORIGINAL_DATA_URL, $UPLOAD_FOLDER . "/" . $config["DOI_PREFIX"] . "/" . $newdoi . "/" . $value->DATA_URL);
                         }
                         }else{
-                            rename($value['ORIGINAL_DATA_URL'], $UPLOAD_FOLDER . "/" . $config["DOI_PREFIX"] . "/" . $newdoi . "/" . $value['DATA_URL']);
+                            //rename($value['ORIGINAL_DATA_URL'], $UPLOAD_FOLDER . "/" . $config["DOI_PREFIX"] . "/" . $newdoi . "/" . $value['DATA_URL']);
+                            rename($value->ORIGINAL_DATA_URL, $UPLOAD_FOLDER . "/" . $config["DOI_PREFIX"] . "/" . $newdoi . "/" . $value->DATA_URL);
                         }
                     }
 
                     rmdir($UPLOAD_FOLDER . $doi);
-                    $collectionObject->update(array(
-                        '_id' => $doi,
-                    ), array(
-                        '$set' => array(
-                            "INTRO" => $array['dataform'],
-                        ),
-                    ));
-                    $olddata = $collectionObject->find(array(
-                        '_id' => $doi,
-                    ));
-                    foreach ($olddata as $key => $value) {
-                        $INTRO = $value["INTRO"];
-                        $DATA  = $value["DATA"];
+                    //$collectionObject->update(array(
+                    //    '_id' => $doi,
+                    //), array(
+                    //    '$set' => array(
+                    //        "INTRO" => $array['dataform'],
+                    //    ),
+                    //));
+                    $insRec       = new \MongoDB\Driver\BulkWrite;
+                    $insRec->update(['_id' => $doi],['$set' =>["INTRO" => $array['dataform']]], ['multi' => false, 'upsert' => false]);
+                    $writeConcern = new \MongoDB\Driver\WriteConcern(\MongoDB\Driver\WriteConcern::MAJORITY, 1000);
+                    $resbw        = $this->db->executeBulkWrite($collectionObject[0] . '.' . $collectionObject[1], $insRec, $writeConcern);
+                    //$olddata = $collectionObject->find(array(
+                    //    '_id' => $doi,
+                    //));
+                    $query = new \MongoDB\Driver\Query(['_id' => $doi]);
+                    $cursor = $this->db->executeQuery($config['authSource'] . '.' . $collection, $query);
+                    $olddata = $cursor->toArray();
+                    //foreach ($olddata as $key => $value) {
+                    foreach ($olddata as $elem) {
+                        //$INTRO = $value["INTRO"];
+                        //$DATA  = $value["DATA"];
+                        $INTRO = $elem->INTRO;
+                        $DATA  = $elem->DATA;
                         foreach ($DATA['FILES'] as $key => $value) {
                             if ($key == 0) {
                                 if (file_exists($UPLOAD_FOLDER . "/" . $config["DOI_PREFIX"] . "/" . $newdoi . "/" . $doi . '_DATA.csv')) {
                                 $DATA['FILES'][0]['ORIGINAL_DATA_URL'] = $UPLOAD_FOLDER . "/" . $config["DOI_PREFIX"] . "/" . $newdoi . "/" . $doi . '_DATA.csv';
                                 }else{
-                                    $DATA['FILES'][0]['ORIGINAL_DATA_URL'] = $UPLOAD_FOLDER . "/" . $config["DOI_PREFIX"] . "/" . $newdoi . "/" . $value['DATA_URL'];
+                                    //$DATA['FILES'][0]['ORIGINAL_DATA_URL'] = $UPLOAD_FOLDER . "/" . $config["DOI_PREFIX"] . "/" . $newdoi . "/" . $value['DATA_URL'];
+                                    $DATA['FILES'][0]['ORIGINAL_DATA_URL'] = $UPLOAD_FOLDER . "/" . $config["DOI_PREFIX"] . "/" . $newdoi . "/" . $value->DATA_URL;
                                 }
                             } else {
-                                $DATA['FILES'][$key]['ORIGINAL_DATA_URL'] = $UPLOAD_FOLDER . "/" . $config["DOI_PREFIX"] . "/" . $newdoi . "/" . $value['DATA_URL'];
+                                //$DATA['FILES'][$key]['ORIGINAL_DATA_URL'] = $UPLOAD_FOLDER . "/" . $config["DOI_PREFIX"] . "/" . $newdoi . "/" . $value['DATA_URL'];
+                                $DATA['FILES'][$key]['ORIGINAL_DATA_URL'] = $UPLOAD_FOLDER . "/" . $config["DOI_PREFIX"] . "/" . $newdoi . "/" . $value->DATA_URL;
                             }
 
                         }
                     }
-                    $collectionObject->remove(array(
-                        '_id' => $doi,
-                    ));
-                    $collectionObject->insert(array(
-                        '_id'   => $config["DOI_PREFIX"] . "/" . $newdoi,
-                        "INTRO" => $INTRO,
-                        "DATA"  => $DATA,
-                    ));
+                    //$collectionObject->remove(array(
+                    //    '_id' => $doi,
+                    //));
+                    $insRec       = new \MongoDB\Driver\BulkWrite;
+                    $insRec->delete(['_id' => $doi], ['multi' => false, 'upsert' => false]);
+                    $writeConcern = new \MongoDB\Driver\WriteConcern(\MongoDB\Driver\WriteConcern::MAJORITY, 1000);
+                    $resbw        = $this->db->executeBulkWrite($collectionObject[0] . '.' . $collectionObject[1], $insRec, $writeConcern);
+                    //$collectionObject->insert(array(
+                    //    '_id'   => $config["DOI_PREFIX"] . "/" . $newdoi,
+                    //    "INTRO" => $INTRO,
+                    //    "DATA"  => $DATA,
+                    //));
+                    $insRec       = new \MongoDB\Driver\BulkWrite(['ordered' => false]);
+                    $insRec->insert(['_id'   => $config["DOI_PREFIX"] . "/" . $newdoi, "INTRO" => $INTRO, "DATA"  => $DATA]);
+                    $writeConcern = new \MongoDB\Driver\WriteConcern(\MongoDB\Driver\WriteConcern::MAJORITY, 1000);
+                    $result       = $this->db->executeBulkWrite($collectionObject[0] . '.' . $collectionObject[1], $insRec, $writeConcern);
+
                     self::Increment_DOI($doi);
                     $Mail = new Mailer();
                     $Mail->Send_Mail_To_uploader($array['dataform']['FILE_CREATOR'], $array['dataform']['TITLE'], $config["DOI_PREFIX"] . "/" . $newdoi, $array['dataform']['DATA_DESCRIPTION']);
@@ -1765,33 +1982,48 @@ class DatasheetController
             return "false";
         }
         $db               = self::connect_tomongo();
-        $collectionObject = $this->db->selectCollection($config["authSource"], $collection);
+        //$collectionObject = $this->db->selectCollection($config["authSource"], $collection);
+	$collectionObject = array($config["authSource"], $collection);
         $query            = array(
             '_id' => $doi,
         );
         if (strstr($doi, $config['REPOSITORY_NAME']) !== false) {
 //si jeu de données publié
             if ($_SESSION['admin'] == 1) { //check admin
-                $cursor = $collectionObject->find($query);
-                foreach ($cursor as $key => $value) {
-                    foreach ($value["DATA"]["FILES"] as $key => $value) {
-                        $data_url = $value["DATA_URL"];
+                //$cursor = $collectionObject->find($query);
+                $drvQuery = new \MongoDB\Driver\Query($query, []);
+                $cursor = $this->db->executeQuery($collectionObject[0] . '.' . $collectionObject[1], $drvQuery);
+                $tcursor = $cursor->toArray();
+                //foreach ($cursor as $key => $value) {
+                foreach ($tcursor as $tc) {
+                    //foreach ($value["DATA"]["FILES"] as $key => $value) {
+                    foreach ($tc->DATA->FILES as $key => $value) {
+                        //$data_url = $value["DATA_URL"];
+                        $data_url = $value->DATA_URL;
                         unlink($UPLOAD_FOLDER . $doi . '/' . $data_url); //remove datafile
-                        if ($value["ORIGINAL_DATA_URL"]) {
+                        //if ($value["ORIGINAL_DATA_URL"]) {
+                        if ($value->ORIGINAL_DATA_URL) {
                             $ip         = $config["SSH_HOST"];
                             $connection = \ssh2_connect($ip);
                             $user       = $config["SSH_UNIXUSER"];
                             $pass       = $config["SSH_UNIXPASSWD"];
                             $auth       = \ssh2_auth_password($connection, $user, $pass);
-                            $stream     = \ssh2_exec($connection, 'sudo -u ' . $config["DATAFILE_UNIXUSER"] . ' rm ' . $value["ORIGINAL_DATA_URL"] . '.html', false);
+                            //$stream     = \ssh2_exec($connection, 'sudo -u ' . $config["DATAFILE_UNIXUSER"] . ' rm ' . $value["ORIGINAL_DATA_URL"] . '.html', false);
+                            $stream     = \ssh2_exec($connection, 'sudo -u ' . $config["DATAFILE_UNIXUSER"] . ' rm ' . $value->ORIGINAL_DATA_URL . '.html', false);
 
                         }
                     }
                 }
-                $collectionObject->remove(array(
-                    '_id' => $doi,
-                )); //Suppresion dans la base mongo
-                 $id = split("/", $doi);
+                //$collectionObject->remove(array(
+                //    '_id' => $doi,
+                //)); //Suppresion dans la base mongo
+                $insRec       = new \MongoDB\Driver\BulkWrite;
+                $insRec->delete(['_id' => $doi], ['multi' => false, 'upsert' => false]);
+                $writeConcern = new \MongoDB\Driver\WriteConcern(\MongoDB\Driver\WriteConcern::MAJORITY, 1000);
+                $resbw        = $this->db->executeBulkWrite($collectionObject[0] . '.' . $collectionObject[1], $insRec, $writeConcern);
+
+                 // $id = split("/", $doi); // fonction split supprimée après php 7.3
+                 $id = explode("/", $doi);
                  $id = $id[1];
                 unlink($UPLOAD_FOLDER . $doi . '/changelog/'. $id.'.changelog');
                 rmdir($UPLOAD_FOLDER . $doi.'/changelog');
@@ -1807,16 +2039,25 @@ class DatasheetController
         } else {
 // si draft ou unpublished
             $db               = self::connect_tomongo();
-            $collectionObject = $this->db->selectCollection($config["authSource"], $collection);
+            //$collectionObject = $this->db->selectCollection($config["authSource"], $collection);
+            $collectionObject = array($config["authSource"], $collection);
             $query            = array(
                 '_id' => $doi,
             );
-            $cursor = $collectionObject->find($query);
+            //$cursor = $collectionObject->find($query);
+            $drvQuery = new \MongoDB\Driver\Query($query, []);
+            $cursor = $this->db->executeQuery($collectionObject[0] . '.' . $collectionObject[1], $drvQuery);
+            $tcursor = $cursor->toArray();
+
             $state  = "true";
-            foreach ($cursor as $key => $values) {
-                foreach ($values["DATA"]["FILES"] as $key => $value) {
-                    $ORIGINAL_DATA_URL = $value["ORIGINAL_DATA_URL"];
-                    $data_url          = $value["DATA_URL"];
+            //foreach ($cursor as $key => $values) {
+            foreach ($tcursor as $tc) {
+                //foreach ($values["DATA"]["FILES"] as $key => $value) {
+                foreach ($tc->DATA->FILES as $key => $value) {
+                    //$ORIGINAL_DATA_URL = $value["ORIGINAL_DATA_URL"];
+                    $ORIGINAL_DATA_URL = $value->ORIGINAL_DATA_URL;
+                    //$data_url          = $value["DATA_URL"];
+                    $data_url          = $value->DATA_URL;
                     unlink($UPLOAD_FOLDER . $doi . '/' . $data_url); //remove datafile
                 }
                 if (strstr($doi, 'Draft') == false) {
@@ -1834,7 +2075,8 @@ class DatasheetController
                         if ($auth == false) {
                             $state = "fail_ssh";
                         }
-                        $stream = \ssh2_exec($connection, 'sudo -u ' . $config["DATAFILE_UNIXUSER"] . ' rm ' . $values["DATA"]["FILES"][0]['ORIGINAL_DATA_URL'], false);
+                        //$stream = \ssh2_exec($connection, 'sudo -u ' . $config["DATAFILE_UNIXUSER"] . ' rm ' . $values["DATA"]["FILES"][0]['ORIGINAL_DATA_URL'], false);
+                        $stream = \ssh2_exec($connection, 'sudo -u ' . $config["DATAFILE_UNIXUSER"] . ' rm ' . $tc->DATA->FILES[0]->ORIGINAL_DATA_URL, false);
                         stream_set_timeout($stream, 3);
                         stream_set_blocking($stream, true);
                         // read the output into a variable
@@ -1854,9 +2096,14 @@ class DatasheetController
                 }
             }
             if ($state == "true") {
-                $collectionObject->remove(array(
-                    '_id' => $doi,
-                )); //Suppresion de la base mongo
+                //$collectionObject->remove(array(
+                //    '_id' => $doi,
+                //)); //Suppresion de la base mongo
+                $insRec       = new \MongoDB\Driver\BulkWrite;
+                $insRec->delete(['_id' => $doi], ['multi' => false, 'upsert' => false]);
+                $writeConcern = new \MongoDB\Driver\WriteConcern(\MongoDB\Driver\WriteConcern::MAJORITY, 1000);
+                $resbw        = $this->db->executeBulkWrite($collectionObject[0] . '.' . $collectionObject[1], $insRec, $writeConcern);
+
                 rmdir($UPLOAD_FOLDER . $doi); //remove empty folder
             }
             return $state;

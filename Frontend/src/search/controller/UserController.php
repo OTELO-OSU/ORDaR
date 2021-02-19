@@ -120,22 +120,39 @@ class UserController
         $verif = Users::select('mail')->where('mail', '=', $email)->get();
         if (count($verif) != 0) {
             $verif2 = LostPassword::select('token', 'mail', "datetime")->where('mail', '=', $email)->get();
-            if (count($verif2) != 0) {
-                $token           = bin2hex(openssl_random_pseudo_bytes(32));
-                $verif           = LostPassword::find($verif2[0]->mail);
-                $verif->token    = $token;
-                $verif->datetime = date("Y-m-d H:i:s");
-                $verif->save();
-                $mailer = new Mailer();
-                $mailer->Send_Reset_Mail($email, $token);
-            } else {
+            //if (count($verif2) != 0) {
+            //    $token           = bin2hex(openssl_random_pseudo_bytes(32));
+            //    $verif           = LostPassword::find($verif2[0]->mail);
+            //    $verif->token    = $token;
+            //    $verif->datetime = date("Y-m-d H:i:s");
+            //    $verif->save();
+            //    $mailer = new Mailer();
+            //    $mailer->Send_Reset_Mail($email, $token);
+            //} else {
+            //    $token                  = bin2hex(openssl_random_pseudo_bytes(32));
+            //    $lostpassword           = new LostPassword;
+            //    $lostpassword->mail     = $verif[0]->mail;
+            //    $lostpassword->token    = $token;
+            //    $lostpassword->datetime = date("Y-m-d H:i:s");
+            //    $lostpassword->save();
+            //}
+            if (count($verif2) == 0) {
                 $token                  = bin2hex(openssl_random_pseudo_bytes(32));
                 $lostpassword           = new LostPassword;
                 $lostpassword->mail     = $verif[0]->mail;
                 $lostpassword->token    = $token;
                 $lostpassword->datetime = date("Y-m-d H:i:s");
                 $lostpassword->save();
+            } else {
+                $token           = bin2hex(openssl_random_pseudo_bytes(32));
+                $verif           = LostPassword::find($verif2[0]->mail);
+                $verif->token    = $token;
+                $verif->datetime = date("Y-m-d H:i:s");
+                $verif->save();
             }
+            $mailer = new Mailer();
+            $mailer->Send_Reset_Mail($email, $token);
+
             return "Please check your email and click on the link to reset your password";
         } else {
             return "Mail not found in our database";

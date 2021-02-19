@@ -551,6 +551,7 @@ $app->get('/upload', function (Request $req, Response $responseSlim) {
 
 //Route receptionnant les données POST de l'upload
 $app->post('/upload', function (Request $req, Response $responseSlim) {
+var_dump($_POST);
     $loader  = new Twig_Loader_Filesystem('search/templates');
     $twig    = new Twig_Environment($loader);
     $nameKey = $this
@@ -640,7 +641,8 @@ $app->get('/record', function (Request $req, Response $responseSlim) {
     $response = $request->get_info_for_dataset($id);
     if (isset($response['_source']['DATA'])) {
         $files = $response['_source']['DATA']['FILES'];
-        $doc = split("/", $response['_id']);
+        //$doc = split("/", $response['_id']); # fonction split supprimée après php 7.3
+        $doc = explode("/", $response['_id']);
         foreach ($files as $key => $value) {
            $number=$request->requestDownloadnumber("files/".$doc[1]."/".$value['DATA_URL']);
            $files[$key]['download_number']=$number;
@@ -655,7 +657,8 @@ $app->get('/record', function (Request $req, Response $responseSlim) {
 
     } else {
         if (strstr($id, $config['REPOSITORY_NAME']) !== false) {
-            $id = split("/", $response['_id']);
+            // $id = split("/", $response['_id']); # fonction split supprimée après php 7.3
+            $id = explode("/", $response['_id']);
             $id = $id[1];
         } else {
             $id = $id;
@@ -681,6 +684,7 @@ $app->get('/editrecord', function (Request $req, Response $responseSlim) {
     $namecsrf          = $req->getAttribute($nameKey);
     $valuecsrf         = $req->getAttribute($valueKey);
     $doi_already_exist = $request->Check_if_DOI_exist();
+//var_dump('SPH:', $doi_already_exist);
     if ($status == 200 && $doi_already_exist == false) {
         $id       = $req->getparam('id');
         $response = $request->get_info_for_dataset($id);
@@ -905,15 +909,17 @@ $app->get('/export/{format}', function (Request $req, Response $responseSlim, $a
             $twig   = new Twig_Environment($loader);
             echo $twig->render('notfound.html.twig');
         } else {
-            header("Content-type: text/xml");
             header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
+            //header("Content-type: text/xml");
             print $file->asXML();
+            return $responseSlim->withHeader("Content-type", "text/xml");
         }
 
     } elseif ($format == "json") {
         $file = $file->export_to_datacite_xml($response);
         $file = json_decode(json_encode($file), 1);
-        print json_encode($file);
+        //print json_encode($file);
+	return $responseSlim->write(json_encode($file));
 
     } elseif ($format == "bibtex") {
         $file = $file->export_to_Bibtex($response);
@@ -923,8 +929,9 @@ $app->get('/export/{format}', function (Request $req, Response $responseSlim, $a
             echo $twig->render('notfound.html.twig');
         } else {
             print $file;
-            header("Content-type: text");
+            //header("Content-type: text");
             header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
+            return $responseSlim->withHeader("Content-type", "text");
         }
 
     } elseif ($format == "dublincore") {
@@ -934,13 +941,15 @@ $app->get('/export/{format}', function (Request $req, Response $responseSlim, $a
             $twig   = new Twig_Environment($loader);
             echo $twig->render('notfound.html.twig');
         } else {
-            header("Content-type: text/xml");
+            //header("Content-type: text/xml");
             header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
             print $file->asXML();
+            return $responseSlim->withHeader("Content-type", "text/xml");
         }
 
     }
-    return @$responseSlim->withBody();
+    //return @$responseSlim->withBody();
+    return @$responseSlim;
 
 });
 

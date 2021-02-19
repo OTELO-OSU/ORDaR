@@ -48,31 +48,35 @@ class RequestController
      */
     public function Check_status_datacite()
     {
-        /**
-	 * $handle = curl_init("https://mds.datacite.org");
-         * curl_setopt($handle, CURLOPT_RETURNTRANSFER, true);
-         * $response = curl_exec($handle);
-         * $httpCode = curl_getinfo($handle, CURLINFO_HTTP_CODE);
-         * curl_close($handle);
-         * return $httpCode;
-	*/
-	$ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, 'https://mds.datacite.org/metadata/10.24396/ORDAR-20/');
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_ENCODING, "");
-        curl_setopt($ch, CURLOPT_MAXREDIRS, 10);
-        curl_setopt($ch, CURLOPT_TIMEOUT, 5);
-        curl_setopt($ch, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_1);
-        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-                "authorization: Basic ----- A CHANGER -------",
+        $file   = new File();
+        $config = $file->ConfigFile();
+
+        //$handle = curl_init("https://mds.test.datacite.org");
+        //$handle = curl_init("https://mds.datacite.org/metadata/10.24396/ORDAR-20");
+        //curl_setopt($handle, CURLOPT_RETURNTRANSFER, true);
+        //$response = curl_exec($handle);
+        //$httpCode = curl_getinfo($handle, CURLINFO_HTTP_CODE);
+        //curl_close($handle);
+ 	$ch = curl_init();
+	curl_setopt($ch, CURLOPT_URL, 'https://mds.datacite.org/metadata/10.24396/ORDAR-20/');
+	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+	curl_setopt($ch, CURLOPT_ENCODING, "");
+	curl_setopt($ch, CURLOPT_MAXREDIRS, 10);
+	curl_setopt($ch, CURLOPT_TIMEOUT, 5);
+	curl_setopt($ch, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_1);
+	curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
+	//curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+        //        "authorization: Basic SU5JU1QuT1RFTE86T3Tigqxsbw==",
+        //        'Content-Type: text/xml',
+        //    ));
+	curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+                "authorization: " . $config['Auth_config_datacite'],
                 'Content-Type: text/xml',
             ));
         $response = curl_exec($ch);
         $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         curl_close($ch);
         return $httpCode;
-
     }
     /**
      * Check if DOI already exist
@@ -82,40 +86,71 @@ class RequestController
     {
         $file   = new File();
         $config = $file->ConfigFile();
-        $dbdoi  = new \MongoClient("mongodb://" . $config['host'] . ':' . $config['port'], array(
+        //$dbdoi  = new \MongoClient("mongodb://" . $config['host'] . ':' . $config['port'], array(
+        //    'authSource' => $config['DOI_database'],
+        //    'username'   => $config['user_doi'],
+        //    'password'   => $config['password_doi'],
+        //));
+        $dbdoi = new \MongoDB\Driver\Manager("mongodb://" . $config['host'] . ':' . $config['port'], array(
             'authSource' => $config['DOI_database'],
             'username'   => $config['user_doi'],
             'password'   => $config['password_doi'],
         ));
-        $collection = $dbdoi->selectCollection($config['DOI_database'], "DOI");
+        //$collection = $dbdoi->selectCollection($config['DOI_database'], "DOI");
         $query      = array(
             '_id' => $config['REPOSITORY_NAME'] . "-DOI",
         );
-        $cursor = $collection->find($query);
-        if ($collection->count() != 1) {
-            $cursor = $collection->insert(array(
+        //$cursor = $collection->find($query);
+        $drvquery = new \MongoDB\Driver\Query($query, []);
+
+	$cursor = $dbdoi->executeQuery($config['DOI_database'] . '.DOI', $drvquery);
+	$tcursor = $cursor->toArray();
+        $coll_count = count($tcursor);
+        //if ($collection->count() != 1) {
+        if ($coll_count != 1) {
+            //$cursor = $collection->insert(array(
+            //    '_id'   => $config['REPOSITORY_NAME'] . "-DOI",
+            //    'ID'    => 0,
+            //    'STATE' => "UNLOCKED",
+            //));
+	    $cursor = new \MongoDB\Driver\BulkWrite;
+	    $cursor->insert(array(
                 '_id'   => $config['REPOSITORY_NAME'] . "-DOI",
                 'ID'    => 0,
                 'STATE' => "UNLOCKED",
             ));
+	    $writeConcern = new \MongoDB\Driver\WriteConcern(\MongoDB\Driver\WriteConcern::MAJORITY, 1000);
+
+            $result       = $dbdoi->executeBulkWrite($config['DOI_database'], $cursor, $writeConcern);
 
         }
-        $collection = $dbdoi->selectCollection($config['DOI_database'], "DOI");
+        //$collection = $dbdoi->selectCollection($config['DOI_database'], "DOI");
+	$cursor = $dbdoi->executeQuery($config['DOI_database'] . '.DOI', $drvquery);
 
-        if ($collection->count() == 1) {
-            $query = array(
-                'STATE' => 'UNLOCKED',
-            );
-            $cursor = $collection->find($query);
-            $count  = $cursor->count();
+	$tcursor = $cursor->toArray();
+        $coll_count = count($tcursor);
+        //if ($collection->count() == 1) {
+        if ($coll_count == 1) {
+            //$query = array(
+            //    'STATE' => 'UNLOCKED',
+            //);
+            //$cursor = $collection->find($query);
+            //$count  = $cursor->count();
+	    $query = new \MongoDB\Driver\Query(array('STATE' => 'UNLOCKED', []));
+           $cursor = $dbdoi->executeQuery($config['DOI_database'] . '.DOI', $query);
+	    $tcursor = $cursor->toArray();
+           $count = count($tcursor);
+
             if ($count == 1) {
-                foreach ($cursor as $key => $value) {
+                //foreach ($cursor as $key => $value) {
+                foreach ($tcursor as $key => $value) {
                     $DOI    = $value['ID'];
                     $NewDOI = ++$DOI;
                 }
             }
         }
-        $url     = "https://mds.datacite.org/metadata/" . $config['DOI_PREFIX'] . "/" . $config['REPOSITORY_NAME'] . "-" . $NewDOI;
+
+        $url     = "https://mds.test.datacite.org/metadata/" . $config['DOI_PREFIX'] . "/" . $config['REPOSITORY_NAME'] . "-" . $NewDOI;
         $curlopt = array(
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING       => "",
@@ -136,7 +171,7 @@ class RequestController
         $DOI_exist = curl_exec($ch);
         $info      = curl_getinfo($ch);
         curl_close($ch);
-        $url     = "https://mds.datacite.org/doi/" . $config['DOI_PREFIX'] . "/" . $config['REPOSITORY_NAME'] . "-" . $NewDOI;
+        $url     = "https://mds.test.datacite.org/doi/" . $config['DOI_PREFIX'] . "/" . $config['REPOSITORY_NAME'] . "-" . $NewDOI;
         $curlopt = array(
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING       => "",
@@ -164,6 +199,7 @@ class RequestController
         } else {
             return false;
         }
+
     }
     /**
      * Desactivate DOI in Datacite
@@ -173,7 +209,7 @@ class RequestController
     {
         $file    = new File();
         $config  = $file->ConfigFile();
-        $url     = "https://mds.datacite.org/metadata/" . $doi;
+        $url     = "https://mds.test.datacite.org/metadata/" . $doi;
         $curlopt = array(
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING       => "",
@@ -320,10 +356,9 @@ class RequestController
             $responses["hits"]["hits"][$key]["_index"] = $value["_index"];
             $responses["hits"]["hits"][$key]["_id"]    = $value["_id"];
             $responses["hits"]["hits"][$key]["_type"]  = $value["_type"];
-	    $responses["hits"]["hits"][$key]['FILE_CREATOR'] = array_unique($value["_source"]["INTRO"]['FILE_CREATOR'],SORT_REGULAR);
+
         }
         ;
-
         $responses = json_encode($responses);
         return $responses;
     }
@@ -411,18 +446,12 @@ class RequestController
         $responses["hits"]["total"] = $response["hits"]["total"];
         $responses['aggregations']  = $response['aggregations'];
         foreach ($response["hits"]["hits"] as $key => $value) {
-	    
             $responses["hits"]["hits"][$key]           = $value["_source"]["INTRO"];
             $responses["hits"]["hits"][$key]["_index"] = $value["_index"];
             $responses["hits"]["hits"][$key]["_id"]    = $value["_id"];
             $responses["hits"]["hits"][$key]["_type"]  = $value["_type"];
-
-
-	    $responses["hits"]["hits"][$key]['FILE_CREATOR'] = array_unique($value["_source"]["INTRO"]['FILE_CREATOR'],SORT_REGULAR);
-
         }
         ;
-
         $responses = json_encode($responses);
         return $responses;
     }
@@ -435,7 +464,7 @@ class RequestController
     {
         $file    = new File();
         $config  = $file->ConfigFile();
-        $url     = "https://mds.datacite.org/metadata/" . $doi;
+        $url     = "https://mds.test.datacite.org/metadata/" . $doi;
         $curlopt = array(
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING       => "",
@@ -465,7 +494,7 @@ class RequestController
         $DOI_exist = curl_exec($ch);
         $info      = curl_getinfo($ch);
         curl_close($ch);
-        $url     = "https://mds.datacite.org/doi/" . $doi;
+        $url     = "https://mds.test.datacite.org/doi/" . $doi;
         $curlopt = array(
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING       => "",
@@ -489,7 +518,7 @@ class RequestController
         if ($XMLondatacite == $XML && $URLisgeneratedinfo['http_code'] == 200) {
             return "true";
         } else {
-            $url     = "https://mds.datacite.org/metadata/";
+            $url     = "https://mds.test.datacite.org/metadata/";
             $curlopt = array(
                 CURLOPT_RETURNTRANSFER => true,
                 CURLOPT_ENCODING       => "",
@@ -515,7 +544,7 @@ class RequestController
                 $url_doi = urlencode($config['REPOSITORY_URL'] . "/record?id=" . $doi);
                 $curl    = curl_init();
                 curl_setopt_array($curl, array(
-                    CURLOPT_URL            => "https://mds.datacite.org/doi",
+                    CURLOPT_URL            => "https://mds.test.datacite.org/doi",
                     CURLOPT_RETURNTRANSFER => true,
                     CURLOPT_ENCODING       => "",
                     CURLOPT_MAXREDIRS      => 10,
