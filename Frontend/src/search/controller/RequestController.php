@@ -65,7 +65,7 @@ class RequestController
         curl_setopt($ch, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_1);
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
         curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-                "authorization: Basic SU5JU1QuT1RFTE86MHTigqxsbw==",
+                "authorization: Basic ----- A CHANGER -------",
                 'Content-Type: text/xml',
             ));
         $response = curl_exec($ch);
