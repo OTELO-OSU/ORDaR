@@ -551,7 +551,6 @@ $app->get('/upload', function (Request $req, Response $responseSlim) {
 
 //Route receptionnant les données POST de l'upload
 $app->post('/upload', function (Request $req, Response $responseSlim) {
-var_dump($_POST);
     $loader  = new Twig_Loader_Filesystem('search/templates');
     $twig    = new Twig_Environment($loader);
     $nameKey = $this
